@@ -1,0 +1,6 @@
+tr:hover {background-color: #ddd;}
+td, th {
+    border: 1px solid grey
+}
+th { background-color: #ffd78c; }
+tr:nth-child(even){background-color: #f2f2f2;}

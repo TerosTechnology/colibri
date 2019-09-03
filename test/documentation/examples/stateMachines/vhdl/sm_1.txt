@@ -1,0 +1,6 @@
+ST_S1 => ST_S2:  (i_input1='1') ;
+ST_S1 => ST_S1: ;
+ST_S2 => ST_S3:  (i_input1='0') and (i_input2='1');
+ST_S2 => ST_S3:  (asdfasd) ;
+ST_S2 => ST_S2: ;
+ST_S3 => ST_S1: ;

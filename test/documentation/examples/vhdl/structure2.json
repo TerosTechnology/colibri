@@ -1,0 +1,55 @@
+{
+  "libraries":
+    [
+      { "name": "ieee.std_logic_1164.all", "index": 291 },
+      { "name": "ieee.numeric_std.all", "index": 291 }
+    ],
+
+  "entity": { "name": "example_vhdl", "index": 348 },
+  "architecture": { "name": "rtl", "index": 348 },
+
+  "generics":
+  [
+    { "name": "g_GENERIC_0",
+      "type": "integer",
+      "index": 546
+    },
+    { "name": "g_GENERIC_1",
+      "type": "integer",
+      "index": 546
+    }
+  ],
+  "ports":
+  [
+    { "name": "clk",
+      "direction": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "rst",
+      "direction": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "inc",
+      "direction": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "dec",
+      "direction": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "val",
+      "direction": "out",
+      "type": "std_logic_vector(g_GENERIC_0-1 downto 0)",
+      "index": 546
+    },
+    { "name": "cry",
+      "direction": "out",
+      "type": "std_logic_vector(10 downto 0)",
+      "index": 546
+    }
+  ]
+}

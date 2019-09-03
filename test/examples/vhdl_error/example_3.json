@@ -1,0 +1,121 @@
+{
+  "GHDL":
+  [
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [11,10]
+      },
+      "description": "unit \"axil_pkg\" not found in library \"work\""
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [12,10]
+      },
+      "description": "unit \"axi_pkg\" not found in library \"work\""
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [13,10]
+      },
+      "description": "unit \"axi_pkg\" not found in library \"work\""
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [14,10]
+      },
+      "description": "unit \"axi_dma_regs_pkg\" not found in library \"work\""
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [20,20]
+      },
+      "description": "no declaration for \"axil_m2s_t\""
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [21,21]
+      },
+      "description": "no declaration for \"axil_s2m_t\""
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [33,14]
+      },
+      "description": "entity 'axi_dma_regs' was not analysed"
+    }
+  ],
+  "MODELSIM":
+  [
+    { "severity": "error",
+      "location": {
+        "file": "example_3.vhd",
+        "position": [11,0]
+      },
+      "description": "(vcom-1195) Cannot find expanded name \"work.axil_pkg\"."
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_3.vhd",
+        "position": [11,0]
+      },
+      "description": "Unknown expanded name."
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_3.vhd",
+        "position": [12,0]
+      },
+      "description": "(vcom-1195) Cannot find expanded name \"work.axi_pkg\"."
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_3.vhd",
+        "position": [12,0]
+      },
+      "description": "Unknown expanded name."
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_3.vhd",
+        "position": [13,0]
+      },
+      "description": "(vcom-1195) Cannot find expanded name \"work.axi_pkg\"."
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_3.vhd",
+        "position": [13,0]
+      },
+      "description": "Unknown expanded name."
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_3.vhd",
+        "position": [14,0]
+      },
+      "description": "(vcom-1195) Cannot find expanded name \"work.axi_dma_regs_pkg\"."
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_3.vhd",
+        "position": [14,0]
+      },
+      "description": "Unknown expanded name."
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_3.vhd",
+        "position": [16,0]
+      },
+      "description": "VHDL Compiler exiting"
+    }
+  ]
+
+}

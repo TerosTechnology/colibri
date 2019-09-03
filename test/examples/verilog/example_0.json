@@ -1,0 +1,164 @@
+{
+  "libraries":
+    [
+    ],
+
+  "entity": { "name": "uart", "index": 348 },
+
+  "generics":
+  [
+  ],
+  "ports":
+  [
+    { "name": "reset",
+      "kind": "input",
+      "type": "",
+      "index": 546
+    },
+    { "name": "txclk",
+      "kind": "input",
+      "type": "",
+      "index": 546
+    },
+    { "name": "ld_tx_data",
+      "kind": "input",
+      "type": "",
+      "index": 546
+    },
+    { "name": "tx_data",
+      "kind": "input",
+      "type": "[7:0]",
+      "index": 546
+    },
+    { "name": "tx_enable",
+      "kind": "input",
+      "type": "",
+      "index": 546
+    },
+    { "name": "tx_out",
+      "kind": "output",
+      "type": "",
+      "index": 546
+    },
+    { "name": "tx_empty",
+      "kind": "output",
+      "type": "",
+      "index": 546
+    },
+    { "name": "rxclk",
+      "kind": "input",
+      "type": "",
+      "index": 546
+    },
+    { "name": "uld_rx_data",
+      "kind": "input",
+      "type": "",
+      "index": 546
+    },
+    { "name": "rx_data",
+      "kind": "output",
+      "type": "[7:0]",
+      "index": 546
+    },
+    { "name": "rx_enable",
+      "kind": "input",
+      "type": "",
+      "index": 546
+    },
+    { "name": "rx_in",
+      "kind": "input",
+      "type": "",
+      "index": 546
+    },
+    { "name": "rx_empty",
+      "kind": "output",
+      "type": "",
+      "index": 546
+    }
+  ],
+
+  "regs":
+  [
+    { "name": "tx_reg",
+      "kind": "reg",
+      "type": "[7:0]",
+      "index": 546
+    },
+    { "name": "tx_empty",
+      "kind": "reg",
+      "type": "",
+      "index": 546
+    },
+    { "name": "tx_over_run",
+      "kind": "reg",
+      "type": "",
+      "index": 546
+    },
+    { "name": "tx_cnt",
+      "kind": "reg",
+      "type": "[3:0]",
+      "index": 546
+    },
+    { "name": "tx_out",
+      "kind": "reg",
+      "type": "",
+      "index": 546
+    },
+    { "name": "rx_reg",
+      "kind": "reg",
+      "type": "[7:0]",
+      "index": 546
+    },
+    { "name": "rx_data",
+      "kind": "reg",
+      "type": "[7:0]",
+      "index": 546
+    },
+    { "name": "rx_sample_cnt",
+      "kind": "reg",
+      "type": "[3:0]",
+      "index": 546
+    },
+    { "name": "rx_cnt",
+      "kind": "reg",
+      "type": "[3:0]",
+      "index": 546
+    },
+    { "name": "rx_frame_err",
+      "kind": "reg",
+      "type": "",
+      "index": 546
+    },
+    { "name": "rx_over_run",
+      "kind": "reg",
+      "type": "",
+      "index": 546
+    },
+    { "name": "rx_empty",
+      "kind": "reg",
+      "type": "",
+      "index": 546
+    },
+    { "name": "rx_d1",
+      "kind": "reg",
+      "type": "",
+      "index": 546
+    },
+    { "name": "rx_d2",
+      "kind": "reg",
+      "type": "",
+      "index": 546
+    },
+    { "name": "rx_busy",
+      "kind": "reg",
+      "type": "",
+      "index": 546
+    }
+  ],
+  "nets":
+  [
+  ],
+  "constants":
+  [
+  ]
+}

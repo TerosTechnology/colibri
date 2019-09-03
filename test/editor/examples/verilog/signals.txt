@@ -1,0 +1,13 @@
+reg  reset;
+reg  txclk;
+reg  ld_tx_data;
+reg [7:0] tx_data;
+reg  tx_enable;
+reg  tx_out;
+reg  tx_empty;
+reg  rxclk;
+reg  uld_rx_data;
+reg [7:0] rx_data;
+reg  rx_enable;
+reg  rx_in;
+reg  rx_empty;

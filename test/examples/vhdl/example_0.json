@@ -1,0 +1,70 @@
+{
+  "libraries":
+    [
+      { "name": "IEEE.std_logic_1164.all", "index": 291 },
+      { "name": "IEEE.numeric_std.all", "index": 291 },
+      { "name": "PoC.utils.all", "index": 291 }
+    ],
+
+  "entity": { "name": "arith_counter_bcd", "index": 348 },
+  "architecture": { "name": "rtl", "index": 348 },
+
+  "generics":
+  [
+    { "name": "DIGITS",
+      "kind": "positive",
+      "type": "",
+      "index": 546
+    }
+  ],
+  "ports":
+  [
+    { "name": "clk",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "rst",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "inc",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "val",
+      "kind": "out",
+      "type": "T_BCD_VECTOR(DIGITS-1 downto 0)",
+      "index": 546
+    }
+  ],
+  "signals":
+  [
+    { "name": "p",
+      "kind": "unsigned(DIGITS-1 downto 0)",
+      "type": "",
+      "index": 546
+    },
+    { "name": "c",
+      "kind": "unsigned(DIGITS   downto 0)",
+      "type": "",
+      "index": 546
+    },
+    { "name": "cnt_r",
+      "kind": "T_BCD",
+      "type": "",
+      "index": 546
+    }
+  ],
+  "constants":
+  [
+  ],
+  "types":
+  [
+  ],
+  "process":
+  [
+  ]
+}
