@@ -45,14 +45,14 @@ function diagramGenerator(structure,bn){
     canvas.rect(width-4,high+offset/2).fill(genBox).move(locx+2,locy+2)
     //write generics
     for (let i = 0; i < generics[0].length; i++) {
-      locy=size*i
+      locy=size*i+offset/2
       var textleft=canvas.text(generics[kind][i]).move(locx-text_space-text_space_pin,locy).font({family:   font, size: size, anchor:   'end'})
       var textleft=canvas.text(generics[name][i]).move(locx+text_space,locy).font({family:   font, size: size, anchor:   'start'})
-      var pins=canvas.line(locx-text_space,0, locx, 0 ).move(locx-text_space,locy+size*3/4).stroke({ color: 'black', width: size/4, linecap: 'rec' })
+      var pins=canvas.line(locx-text_space,0, locx, 0 ).move(locx-text_space,locy+size*2/4).stroke({ color: 'black', width: size/4, linecap: 'rec' })
     }
   }
   //ports square
-  locy=high+offset+separator
+  locy=high+offset/2+separator
   high = size*Math.max(inPorts[0].length,outPorts[0].length)
   var recta = canvas.rect(width,high+offset).fill(border).move(locx,locy)
   canvas.rect(width-4,high+offset/2).fill(portBox).move(locx+2,locy+2)
@@ -61,13 +61,13 @@ function diagramGenerator(structure,bn){
     locy=size*generics[0].length+offset+size*i+separator
     var textleft = canvas.text(inPorts[kind][i]).move(locx-text_space-text_space_pin,locy).font({family:   font, size: size, anchor:   'end'})
     var textleft = canvas.text(inPorts[name][i]).move(locx+text_space,locy).font({family:   font, size: size, anchor:   'start'})
-    var pins=canvas.line(locx-text_space,0, locx, 0 ).move(locx-text_space,locy+size*3/4).stroke({ color: 'black', width: size/4, linecap: 'rec' })
+    var pins=canvas.line(locx-text_space,0, locx, 0 ).move(locx-text_space,locy+size*2/4).stroke({ color: 'black', width: size/4, linecap: 'rec' })
   }
   for (let i = 0; i < outPorts[0].length; i++) {
     locy=size*generics[0].length+offset+size*i+separator
     var textright= canvas.text(outPorts[kind][i]).move(locx+width+text_space+text_space_pin,locy).font({family:   font, size: size, anchor:   'start'})
     var textright= canvas.text(outPorts[name][i]).move(locx+width-text_space,locy).font({family:   font, size: size, anchor:   'end'})
-    var pins=canvas.line(locx-text_space,0, locx, 0 ).move(locx+width,locy+size*3/4).stroke({ color: 'black', width: size/4, linecap: 'rec' })
+    var pins=canvas.line(locx-text_space,0, locx, 0 ).move(locx+width,locy+size*2/4).stroke({ color: 'black', width: size/4, linecap: 'rec' })
   }
 
   return canvas.svg();
