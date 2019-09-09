@@ -49,14 +49,15 @@ class VhdlParser extends BaseParser {
     if (items == null) {
       return []
     }
-    return this.getItem(items[1]+";", items['index'], this.REGEX['PORT']);
+    alert(items[1].replace("--", ";")+";")
+    return this.getItem(items[1].replace(/--/gi, ";")+";", items['index'], this.REGEX['PORT']);
   }
   getGenerics(str) {
     var items = this.REGEX['GENERICS0'].exec(str);
     if (items == null) {
       return []
     }
-    return this.getItemGeneric(items[1].replace("--", ";") + ';'+";", items['index'], this.REGEX['GENERIC']);
+    return this.getItemGeneric(items[1].replace(/--/gi, ";")+";", items['index'], this.REGEX['GENERIC']);
   }
   getSignals(str) {
     return this.getItem(str, 0, this.REGEX['SIGNAL']);
