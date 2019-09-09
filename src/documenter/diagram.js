@@ -1,9 +1,13 @@
 function diagramGenerator(structure,bn){
   const fs       = require('fs');
   const window   = require('svgdom')
-  const SVG      = require('svg.js')(window)
-  const document = window.document
-  const canvas = SVG(document.documentElement)
+  const SVG      = require('svg.js')
+
+  var ns = 'http://www.w3.org/2000/svg'
+  var div = document.getElementById('drawing')
+  var svg = document.createElementNS(ns, 'svg')
+  const canvas = SVG(svg)
+
   var border  = 'black'
   var genBox  = '#bdecb6'  //'blue'
   var portBox = '#fdfd96'  //'red'
