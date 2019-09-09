@@ -116,9 +116,6 @@ class VhdlParser extends BaseParser {
   }
 }
 
-module.exports = VhdlParser
-
-
 module.exports = {
   VhdlParser: VhdlParser
 }
