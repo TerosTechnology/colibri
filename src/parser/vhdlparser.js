@@ -49,14 +49,14 @@ class VhdlParser extends BaseParser {
     if (items == null) {
       return []
     }
-    return this.getItem(items[1], items['index'], this.REGEX['PORT']);
+    return this.getItem(items[1].replace(/--/gi, ";")+";", items['index'], this.REGEX['PORT']);
   }
   getGenerics(str) {
     var items = this.REGEX['GENERICS0'].exec(str);
     if (items == null) {
       return []
     }
-    return this.getItem(items[1].replace("--", ";") + ';', items['index'], this.REGEX['GENERIC']);
+    return this.getItemGeneric(items[1].replace(/--/gi, ";")+";", items['index'], this.REGEX['GENERIC']);
   }
   getSignals(str) {
     return this.getItem(str, 0, this.REGEX['SIGNAL']);
@@ -86,8 +86,26 @@ class VhdlParser extends BaseParser {
         for (let line of Array.from(resultItems[1].split(','))) {
           let item = {
             'name': line,
-            'kind': resultItems[2],
+            'direction': resultItems[2],
             'type': resultItems[3],
+            'index': resultItems['index'] + offset
+          };
+          items.push(item);
+        }
+      }
+    }
+    return items;
+  }
+  getItemGeneric(str, offset, regex) {
+    var resultItems = true;
+    var items = [];
+    while (resultItems) {
+      resultItems = regex.exec(str);
+      if (resultItems) {
+        for (let line of Array.from(resultItems[1].split(','))) {
+          let item = {
+            'name': line,
+            'type': resultItems[2],
             'index': resultItems['index'] + offset
           };
           items.push(item);
@@ -98,4 +116,6 @@ class VhdlParser extends BaseParser {
   }
 }
 
-module.exports = VhdlParser
+module.exports = {
+  VhdlParser: VhdlParser
+}

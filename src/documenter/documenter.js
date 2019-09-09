@@ -41,6 +41,10 @@ class BaseStructure {
   getHtmlDoc(md) {
     var html = `
     <style>
+    h1,h2,h3,svg,table {margin-left:5%;}
+    div.template { background-color: white;position:absolute; }
+    td,th,h1,h2,h3 {color: black;}
+    h1,h2 {font-weight:bold;}
     svg {width: 100%;}
     tr:hover {background-color: #ddd;}
     td, th {
@@ -49,6 +53,7 @@ class BaseStructure {
     th { background-color: #ffd78c;}
     tr:nth-child(even){background-color: #f2f2f2;}
     </style>
+    <div class='template' style="overflow-y:auto;height:100%;width:100%" >
     `
     var mdDoc = md;
     var showdown = require('showdown');
@@ -57,6 +62,7 @@ class BaseStructure {
       tables: true
     });
     html += converter.makeHtml(mdDoc);
+    html += `<\div`
     return html;
   }
 
