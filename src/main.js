@@ -4,5 +4,5 @@ exports.Documenter = require('./documenter/documenter');
 exports.VhdlParser     = require('./parser/vhdlparser');
 exports.VerilogParser     = require('./parser/verilogparser');
 // exports.Linter    = require('./linter/linter');
-// exports.StateMachineVhdl = require('./documentation/stateMachineVhdl');
-// exports.StateMachineVerilog = require('./documentation/stateMachineVerilog');
+exports.StateMachineVhdl = require('./documenter/vhdldocumenter');
+exports.StateMachineVerilog = require('./documenter/verilogdocumenter');
