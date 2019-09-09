@@ -1,6 +1,5 @@
 function diagramGenerator(structure,bn){
   const fs       = require('fs');
-  const window   = require('svgdom')
   const SVG      = require('svg.js')
 
   var ns = 'http://www.w3.org/2000/svg'

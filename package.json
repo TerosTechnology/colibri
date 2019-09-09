@@ -2,6 +2,7 @@
   "name": "jsteros",
   "version": "0.0.2",
   "description": "Backend for terosHDL IDE",
+  "main": "src/main.js",
   "scripts": {
     "testEditor": "cd test;cd editor; node tbVerilog; node tbVhdl; node component",
     "testDocumentation": "cd test;cd documentation; node documentation; node stateMachine",
@@ -12,6 +13,7 @@
   "dependencies": {
     "markdown-pdf" : ">=10.0.0",
     "svg.js" : "2.5",
+    "svgdom" : "x",
     "showdown": ">=1.9.0",
     "shelljs": ">=0.8.3",
     "state-machine-cat": ">=4.1.0",
