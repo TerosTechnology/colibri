@@ -49,7 +49,6 @@ class VhdlParser extends BaseParser {
     if (items == null) {
       return []
     }
-    alert(items[1].replace("--", ";")+";")
     return this.getItem(items[1].replace(/--/gi, ";")+";", items['index'], this.REGEX['PORT']);
   }
   getGenerics(str) {
