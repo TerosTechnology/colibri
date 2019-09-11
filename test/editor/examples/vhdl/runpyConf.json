@@ -1,0 +1,12 @@
+{
+  "src":
+    ["../examples/vhdl/example_1.vhd"],
+  "tb": ["./examples/vhdl/tbVhdlVunit.vhd"],
+  "lang": ["vhdl"],
+  "config": { "name": "test_1", "filename": "filename", "complex": 1, "poscheck": 1, "precheck": 1 },
+  "flags":  { "disableIeeeWarnings": 1, "synopsysLibraries": 1, "pslSupport": 1, "coverageReport": 1 },
+  "libraries": { "xilibIseGhdlPath": "xilibIseGhdlPath",
+                 "xilibVivadoGhdlPath": "xilibVivadoGhdlPath",
+                 "xilibVivadoModelsimPath": "xilibVivadoModelsimPath",
+                 "xilibVivadoModelsimPath": "xilibVivadoModelsimPath"}
+}
