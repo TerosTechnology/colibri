@@ -9,3 +9,11 @@ var runpy = new runpyfile.runpy(structure);
 
 // runpy.generate();
 console.log(runpy.generate());
+
+fs.writeFile("./run.py", runpy.generate(), function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+});
