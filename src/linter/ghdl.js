@@ -15,4 +15,6 @@ class Ghdl extends BaseLinter {
   }
 }
 
-module.exports = Ghdl
+module.exports = {
+  Ghdl: Ghdl
+}
