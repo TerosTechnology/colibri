@@ -9,3 +9,5 @@ src/db/resources/configuration.json
 *.html
 *.project
 *.pdf
+*.cf
+*.o
