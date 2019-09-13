@@ -10,13 +10,16 @@ class runpy {
     this.setLang()
     this.separator()
     this.checkSimulator()
+    this.checkCov()
     this.separator()
     this.vunitInstance()
     this.separator()
     this.addSrc()
     this.addTb()
     this.separator()
+    this.flags()
     this.run()
+    this.coverageOut()
     return this.str_out;
   }
 
@@ -72,6 +75,29 @@ class runpy {
     this.str_out += '  ui.main()\n'
     this.str_out += 'except SystemExit as exc:\n'
     this.str_out += '  all_ok = exc.code == 0\n'
+  }
+  flags(){
+    let synopsys_var = ' '
+    let psl_var      = ' '
+    this.str_out += '\n#Simulators flags.\n'
+    this.str_out += 'if(code_coverage==True):\n'
+    this.str_out += '  ' + this.str.config["name"] + '_src_lib.add_compile_option   ("ghdl.flags"     , [ '+synopsys_var+'"-fprofile-arcs","-ftest-coverage"'+ psl_var+'])\n'
+    this.str_out += '  ' + this.str.config["name"] + '_tb_lib.add_compile_option    ("ghdl.flags"     , [ '+synopsys_var+'"-fprofile-arcs","-ftest-coverage"'+ psl_var+'])\n'
+    this.str_out += '  ui.set_sim_option("ghdl.elab_flags"      , ['+synopsys_var+'"-Wl,-lgcov"'+psl_var+'])\n'
+    this.str_out += 'ui.set_sim_option("modelsim.init_files.after_load" ,["modelsim.do"])\n'
+  }
+  checkCov(){
+    this.str_out += '\n#Check GHDL backend.\n'
+    this.str_out += 'code_coverage=False\ntry:\n  if( GHDLInterface.determine_backend("")=="gcc" or  GHDLInterface.determine_backend("")=="GCC"):\n    code_coverage=True\n  else:\n    code_coverage=False\nexcept:\n  print("")\n'
+  }
+  coverageOut(){
+    this.str_out += '\n#Code coverage.\n'
+    this.str_out += 'if all_ok:\n'
+    this.str_out += '  if(code_coverage==True):\n'
+    for(var x=0;x<this.str.src.length;x++){
+      this.str_out +=  '    subprocess.call(["lcov", "--capture", "--directory", "' + path.splitext(path.basename(this.str.src[x]))[0] + '.gcda", "--output-file",  "code_' + str(x)+ '.info" ])\n'
+    }
+
   }
 }
 
