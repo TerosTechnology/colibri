@@ -95,9 +95,17 @@ class runpy {
     this.str_out += 'if all_ok:\n'
     this.str_out += '  if(code_coverage==True):\n'
     for(var x=0;x<this.str.src.length;x++){
-      this.str_out +=  '    subprocess.call(["lcov", "--capture", "--directory", "' + path.splitext(path.basename(this.str.src[x]))[0] + '.gcda", "--output-file",  "code_' + str(x)+ '.info" ])\n'
+      this.str_out +=  '    subprocess.call(["lcov", "--capture", "--directory", "' + this.path.basename(this.str.src[x]).split(".")[0] + '.gcda", "--output-file",  "code_' + x.toString()+ '.info" ])\n'
     }
-
+    this.str_out += '    subprocess.call(["genhtml"'
+    for(var x=0;x<this.str.src.length;x++){
+      this.str_out +=  ',"code_' + x.toString()+ '.info"'
+    }
+    this.str_out +=  ',"--output-directory", "'+this.str.config["codeCovPath"]+'"])\n'
+    this.str_out +=  '  else:\n'
+    this.str_out +=  '    exit(0)\n'
+    this.str_out +=  'else:\n'
+    this.str_out +=  '  exit(1)\n'
   }
 }
 
