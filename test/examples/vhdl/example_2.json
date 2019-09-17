@@ -1,0 +1,119 @@
+{
+  "libraries":
+    [
+      { "name": "ieee.std_logic_1164.all", "index": 291 },
+      { "name": "ieee.numeric_std.all", "index": 291 }
+    ],
+
+  "entity": { "name": "axi_burst_gen", "index": 348 },
+  "architecture": { "name": "a", "index": 348 },
+
+  "generics":
+  [
+    { "name": "max_burst_length",
+      "kind": "natural range 1 to 256",
+      "type": "",
+      "index": 546
+    },
+    { "name": "z_5",
+      "kind": "natural range 1 to 256",
+      "type": "",
+      "index": 546
+    },
+    { "name": "bytes_per_beat",
+      "kind": "natural",
+      "type": "",
+      "index": 546
+    }
+  ],
+  "ports":
+  [
+    { "name": "clk",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "start",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "start_addr",
+      "kind": "in",
+      "type": "std_logic_vector(31 downto 0)",
+      "index": 546
+    },
+    { "name": "num_bytes",
+      "kind": "in",
+      "type": "std_logic_vector(31 downto 0)",
+      "index": 546
+    },
+    { "name": "burst_valid",
+      "kind": "out",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "burst_ready",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "burst_addr",
+      "kind": "out",
+      "type": "std_logic_vector(31 downto 0)",
+      "index": 546
+    },
+    { "name": "burst_length",
+      "kind": "out",
+      "type": "natural range 1 to max_burst_length",
+      "index": 546
+    },
+    { "name": "burst_last",
+      "kind": "out",
+      "type": "std_logic",
+      "index": 546
+    }
+  ],
+  "signals":
+  [
+    { "name": "state",
+      "kind": "state_t",
+      "type": "",
+      "index": 546
+    },
+    { "name": "addr",
+      "kind": "unsigned(start_addr'range)",
+      "type": "",
+      "index": 546
+    },
+    { "name": "remaining_bytes",
+      "kind": "unsigned(start_addr'range)",
+      "type": "",
+      "index": 546
+    }
+  ],
+  "constants":
+  [
+    { "name": "c4kbyte",
+      "kind": "natural",
+      "type": "",
+      "index": 546
+    }
+  ],
+  "types":
+  [
+    { "name": "state_t",
+      "kind": "(idle,compute_burst_length0,compute_burst_length1,compute_is_last,await_accept)",
+      "type": "",
+      "index": 546
+    }
+  ],
+  "process":
+  [
+    { "name": "main",
+      "kind": "",
+      "type": "",
+      "index": 546
+    }
+  ]
+}

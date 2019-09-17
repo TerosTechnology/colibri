@@ -1,0 +1,154 @@
+{
+  "libraries":
+    [
+      { "name": "IEEE.std_logic_1164.all", "index": 291 },
+      { "name": "IEEE.std_logic_arith.all", "index": 291 }
+    ],
+
+  "entity": { "name": "FIR_filter", "index": 348 },
+  "architecture": { "name": "BEH", "index": 348 },
+
+  "generics":
+  [
+  ],
+  "ports":
+  [
+    { "name": "rst",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "clk",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "coef_ld",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "start",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "o_enable",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "bypass",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "Yn_in",
+      "kind": "in",
+      "type": "std_logic_vector(15 downto 0)",
+      "index": 546
+    },
+    { "name": "Xn_in",
+      "kind": "in",
+      "type": "std_logic_vector(15 downto 0)",
+      "index": 546
+    },
+    { "name": "Xn_out",
+      "kind": "out",
+      "type": "std_logic_vector(3 downto 0)",
+      "index": 546
+    },
+    { "name": "Yn_out",
+      "kind": "out",
+      "type": "std_logic_vector(15 downto 0)",
+      "index": 546
+    }
+  ],
+  "signals":
+  [
+    { "name": "REG1",
+      "kind": "klx4",
+      "type": "",
+      "index": 546
+    },
+    { "name": "REG2",
+      "kind": "klx4",
+      "type": "",
+      "index": 546
+    },
+    { "name": "COEF",
+      "kind": "klx4",
+      "type": "",
+      "index": 546
+    },
+    { "name": "MULT8",
+      "kind": "kx8",
+      "type": "",
+      "index": 546
+    },
+    { "name": "MULT16",
+      "kind": "kx16",
+      "type": "",
+      "index": 546
+    },
+    { "name": "SUM",
+      "kind": "klx16",
+      "type": "",
+      "index": 546
+    },
+    { "name": "Xn_tmp",
+      "kind": "bit4",
+      "type": "",
+      "index": 546
+    },
+    { "name": "Yn_tmp",
+      "kind": "bit16",
+      "type": "",
+      "index": 546
+    }
+  ],
+  "constants":
+  [
+    { "name": "k",
+      "kind": "integer",
+      "type": "",
+      "index": 546
+    }
+  ],
+  "types":
+  [
+    { "name": "klx4",
+      "kind": "array (K downto 0) of bit4",
+      "type": "",
+      "index": 546
+    },
+    { "name": "kx8",
+      "kind": "array (K-1 downto 0) of bit8",
+      "type": "",
+      "index": 546
+    },
+    { "name": "klx8",
+      "kind": "is array (K downto 0) of bit8",
+      "type": "",
+      "index": 546
+    },
+    { "name": "kx16",
+      "kind": "array (K-1 downto 0) of bit16",
+      "type": "",
+      "index": 546
+    },
+    { "name": "klx16",
+      "kind": "is array (K downto 0) of bit16",
+      "type": "",
+      "index": 546
+    }
+  ],
+  "process":
+  [
+    { "name": "stages",
+      "kind": "",
+      "type": "",
+      "index": 546
+    }
+  ]
+}

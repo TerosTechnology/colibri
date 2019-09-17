@@ -1,0 +1,104 @@
+{
+  "libraries":
+    [
+      { "name": "ieee.std_logic_1164.all", "index": 291 },
+      { "name": "ieee.numeric_std.all", "index": 291 }
+    ],
+
+  "entity": { "name": "arith_counter_gray", "index": 348 },
+  "architecture": { "name": "rtl", "index": 348 },
+
+  "generics":
+  [
+    { "name": "BITS",
+      "kind": "positive",
+      "type": "",
+      "index": 546
+    },
+    { "name": "INIT",
+      "kind": "natural",
+      "type": "",
+      "index": 546
+    }
+  ],
+  "ports":
+  [
+    { "name": "clk",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "rst",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "inc",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "dec",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "val",
+      "kind": "out",
+      "type": "std_logic_vector(BITS-1 downto 0)",
+      "index": 546
+    },
+    { "name": "cry",
+      "kind": "out",
+      "type": "std_logic",
+      "index": 546
+    }
+  ],
+  "signals":
+  [
+    { "name": "gray_cnt_r",
+      "kind": "unsigned(BITS-1 downto 0)",
+      "type": "",
+      "index": 546
+    },
+    { "name": "gray_cnt_nxt",
+      "kind": "unsigned(BITS-1 downto 0)",
+      "type": "",
+      "index": 546
+    },
+    { "name": "en",
+      "kind": "std_logic",
+      "type": "",
+      "index": 546
+    },
+    { "name": "par_r",
+      "kind": "std_logic",
+      "type": "",
+      "index": 546
+    },
+    { "name": "par_nxt",
+      "kind": "std_logic",
+      "type": "",
+      "index": 546
+    }
+  ],
+  "constants":
+  [
+    { "name": "INIT_GRAY",
+      "kind": "unsigned(BITS-1 downto 0)",
+      "type": "",
+      "index": 546
+    },
+    { "name": "INIT_PAR",
+      "kind": "std_logic",
+      "type": "",
+      "index": 546
+    }
+  ],
+  "types":
+  [
+  ],
+  "process":
+  [
+  ]
+}

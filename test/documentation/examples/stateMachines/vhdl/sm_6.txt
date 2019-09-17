@@ -1,0 +1,8 @@
+zero => one:  (updown = '0') ;
+zero => three: ;
+one => two:  (updown = '0') ;
+one => zero: ;
+two => three:  (updown = '0') ;
+two => one: ;
+three => zero:  (updown = '0') ;
+three => two: ;

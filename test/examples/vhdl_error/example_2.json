@@ -1,0 +1,43 @@
+{
+  "GHDL":
+  [
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [67,62]
+      },
+      "description": "port \"burst_length\" cannot be read"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [76,30]
+      },
+      "description": "port \"burst_length\" cannot be read"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [87,26]
+      },
+      "description": "port \"burst_length\" cannot be read"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [88,48]
+      },
+      "description": "port \"burst_length\" cannot be read"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [89,14]
+      },
+      "description": "port \"burst_last\" cannot be read"
+    }
+  ],
+  "MODELSIM":
+  [
+  ]
+}

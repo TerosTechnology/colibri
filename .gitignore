@@ -1,0 +1,13 @@
+transcript
+node_modules
+work
+.eslintrc.json
+.tern-project
+*.sqlite-journal
+src/db/resources/configuration.json
+*.svg
+*.html
+*.project
+*.pdf
+*.cf
+*.o

@@ -1,0 +1,70 @@
+{
+  "libraries":
+    [
+      { "name": "ieee.std_logic_1164.all", "index": 291 },
+      { "name": "ieee.std_logic_arith.all", "index": 291 },
+      { "name": "work.all", "index": 291 }
+    ],
+
+  "entity": { "name": "gcd", "index": 348 },
+  "architecture": { "name": "FSMD", "index": 348 },
+
+  "generics":
+  [
+  ],
+  "ports":
+  [
+    { "name": "clk",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "rst",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "go_i",
+      "kind": "in",
+      "type": "axil_m2s_t",
+      "index": 546
+    },
+    { "name": "x_i",
+      "kind": "in",
+      "type": "unsigned(3 downto 0)",
+      "index": 546
+    },
+    { "name": "y_i",
+      "kind": "in",
+      "type": "unsigned(3 downto 0)",
+      "index": 546
+    },
+    { "name": "d_o",
+      "kind": "out",
+      "type": "unsigned(3 downto 0)",
+      "index": 546
+    }
+  ],
+  "signals":
+  [
+  ],
+  "constants":
+  [
+  ],
+  "types":
+  [
+    { "name": "S_Type",
+      "kind": "(ST0, ST1, ST2)",
+      "type": "",
+      "index": 546
+    }
+  ],
+  "process":
+  [
+    { "name": "fsdmp",
+      "kind": "",
+      "type": "",
+      "index": 546
+    }
+  ]
+}

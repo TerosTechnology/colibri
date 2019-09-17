@@ -1,0 +1,57 @@
+{
+  "GHDL":
+  [
+    { "severity": "error",
+      "location": {
+        "file": "example_4.vhd",
+        "position": [12,10]
+      },
+      "description": "unit \"std_logic_arith\" not found in library \"ieee\""
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_4.vhd",
+        "position": [12,10]
+      },
+      "description": "(use --ieee=synopsys for non-standard synopsys packages)"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_4.vhd",
+        "position": [28,14]
+      },
+      "description": "entity 'fir_filter' was not analysed"
+    }
+  ],
+  "MODELSIM":
+  [
+    { "severity": "warning",
+      "location": {
+        "file": "example_4.vhd",
+        "position": [58,0]
+      },
+      "description": "(vcom-1272) Length of expected is 4; length of actual is 16."
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_4.vhd",
+        "position": [62,0]
+      },
+      "description": "(vcom-1272) Length of expected is 4; length of actual is 16."
+    },
+    { "severity": "warning",
+      "location": {
+        "file": "example_4.vhd",
+        "position": [100,0]
+      },
+      "description": "(vcom-1272) Length of expected is 4; length of actual is 16."
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_4.vhd",
+        "position": [113,0]
+      },
+      "description": "VHDL Compiler exiting"
+    }
+  ]
+}

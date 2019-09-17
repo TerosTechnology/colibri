@@ -1,0 +1,8 @@
+s0 => s1:  data_in = '1' ;
+s0 => s0: ;
+s1 => s2:  data_in = '1' ;
+s1 => s1: ;
+s2 => s3:  data_in = '1' ;
+s2 => s2: ;
+s3 => s3:  data_in = '1' ;
+s3 => s1: ;

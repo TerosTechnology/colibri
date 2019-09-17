@@ -1,0 +1,93 @@
+{
+  "libraries":
+    [
+      { "name": "ieee.std_logic_1164.all", "index": 291 },
+      { "name": "ieee.numeric_std.all", "index": 291 },
+      { "name": "work.axil_pkg.all", "index": 291 },
+      { "name": "work.axi_pkg.axi_response_ok", "index": 291 },
+      { "name": "work.axi_pkg.axi_response_decerr", "index": 291 },
+      { "name": "work.axi_dma_regs_pkg.all", "index": 291 }
+    ],
+
+  "entity": { "name": "axi_dma_regs", "index": 348 },
+  "architecture": { "name": "a", "index": 348 },
+
+  "generics":
+  [
+  ],
+  "ports":
+  [
+    { "name": "clk",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "axils_m2s",
+      "kind": "in",
+      "type": "axil_m2s_t",
+      "index": 546
+    },
+    { "name": "axils_s2m",
+      "kind": "out",
+      "type": "axil_s2m_t",
+      "index": 546
+    },
+    { "name": "start_transfer",
+      "kind": "out",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "transfer_done",
+      "kind": "in",
+      "type": "std_logic",
+      "index": 546
+    },
+    { "name": "src_address",
+      "kind": "out",
+      "type": "std_logic_vector(31 downto 0)",
+      "index": 546
+    },
+    { "name": "dst_address",
+      "kind": "out",
+      "type": "std_logic_vector(31 downto 0)",
+      "index": 546
+    },
+    { "name": "num_bytes",
+      "kind": "out",
+      "type": "std_logic_vector(31 downto 0)",
+      "index": 546
+    }
+  ],
+  "signals":
+  [
+    { "name": "state",
+      "kind": "state_t",
+      "type": "",
+      "index": 546
+    },
+    { "name": "addr",
+      "kind": "std_logic_vector(axils_m2s.ar.addr'range)",
+      "type": "",
+      "index": 546
+    }
+  ],
+  "constants":
+  [
+  ],
+  "types":
+  [
+    { "name": "state_t",
+      "kind": "(idle,writing,write_response,reading)",
+      "type": "",
+      "index": 546
+    }
+  ],
+  "process":
+  [
+    { "name": "main",
+      "kind": "",
+      "type": "",
+      "index": 546
+    }
+  ]
+}
