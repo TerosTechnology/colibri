@@ -6,3 +6,4 @@ exports.VerilogParser     = require('./parser/verilogparser');
 exports.Linter    = require('./linter/ghdl');
 exports.StateMachineVhdl = require('./documenter/vhdldocumenter');
 exports.StateMachineVerilog = require('./documenter/verilogdocumenter');
+exports.Simulators = require('./simulators/simulators');

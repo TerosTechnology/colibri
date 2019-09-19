@@ -18,6 +18,7 @@
     "shelljs": ">=0.8.3",
     "state-machine-cat": ">=4.1.0",
     "sqlite3": "x",
-    "sequelize": "x"
+    "sequelize": "x",
+    "axios" : "x"
   }
 }
