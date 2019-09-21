@@ -6,7 +6,7 @@ class Manager {
     this.url = 'http://'+ip+":"+port;
   }
 
-  async getSuites(ip,port){
+  async getSuites(){
     const url = this.url+'/suites/';
     const getData = async url => {
       try {

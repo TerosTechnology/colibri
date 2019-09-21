@@ -14,5 +14,8 @@ var example = {
     ]
 }
 
+// var manager = new colibri.Simulators.Manager("localhost","8000");
+// manager.runCocotb(example).then( respuesta => console.log(respuesta))
+
 var manager = new colibri.Simulators.Manager("localhost","8000");
-manager.runCocotb(example).then( respuesta => console.log(respuesta))
+manager.getSuites().then( respuesta => console.log(respuesta[1]['simulators'][0]))
