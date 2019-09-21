@@ -21,44 +21,49 @@ class cocotb {
   clockGen(){
     this.str_out += '\n@cocotb.coroutine\n'
     this.str_out += 'def gen_clk(clk, period):\n'
-    this.str_out += '  while True:\n'
-    this.str_out += '    clk.value = 0\n'
-    this.str_out += '    yield Timer(period/2)\n'
-    this.str_out += '    clk.value = 1\n'
-    this.str_out += '    yield Timer(period/2)\n'
+    this.str_out += '    while True:\n'
+    this.str_out += '        clk.value = 0\n'
+    this.str_out += '        yield Timer(period/2)\n'
+    this.str_out += '        clk.value = 1\n'
+    this.str_out += '        yield Timer(period/2)\n'
   }
   cocoTest(){
     this.str_out += '\n@cocotb.test()\n'
     this.str_out += 'def ' + this.str.entity["name"] + '_testAlive(dut):\n'
-    this.str_out += '  Period = 10\n'
+    this.str_out += '    Period = 10\n'
     let x=0
-    while (this.str.ports[x]["kind"] != "in" || this.str.ports[x]["type"] != "std_logic"){
+    while (((this.str.ports[x]["direction"] != "in" && this.str.ports[x]["direction"] != "input") && (this.str.ports[x]["type"] != "std_logic" && this.str.ports[x]["type"] != "")) && x<this.str.ports.length  ) {
       x++;
+      if (x==this.str.ports.length) {
+        break
+      }
     }
-    this.str_out += '  clk=dut.' + this.str.ports[x]["name"] + '\n'
-    this.str_out += '  cocotb.fork(gen_clk(clk, Period))\n'
-    this.str_out += '  yield Timer(20*Period)\n'
+    if (x<this.str.ports.length) { // There is a valid input for clok
+      this.str_out += '    clk=dut.' + this.str.ports[x]["name"] + '\n'
+      this.str_out += '    cocotb.fork(gen_clk(clk, Period))\n'
+    }
+    this.str_out += '    yield Timer(20*Period)\n'
     for (var i = 0; i < this.str.ports.length-1; i++) {
-      if (this.str.ports[i]["kind"] == "in" && i !=x) {
-        this.str_out += '  '+ this.str.ports[i]["name"]+' = random.randint(0, 1)\n'
+      if ((this.str.ports[i]["direction"] == "in" || this.str.ports[i]["direction"] == "input") && i !=x) {
+        this.str_out += '    '+ this.str.ports[i]["name"]+' = random.randint(0, 1)\n'
       }
     }
     for (var i = 0; i < this.str.ports.length-1; i++) {
-      if (this.str.ports[i]["kind"] == "in" && i !=x) {
-        this.str_out += '  dut.'+ this.str.ports[i]["name"] + ' = ' + this.str.ports[i]["name"] + '\n'
+      if ((this.str.ports[i]["direction"] == "in" || this.str.ports[i]["direction"] == "input") && i !=x) {
+        this.str_out += '    dut.'+ this.str.ports[i]["name"] + ' = ' + this.str.ports[i]["name"] + '\n'
       }
     }
-    this.str_out += '  yield Timer(20*Period)\n'
-    this.str_out += '  print(dut.test)\n'
+    this.str_out += '    yield Timer(20*Period)\n'
+    this.str_out += '    print(dut.test)\n'
     x = 0
-    while (this.str.ports[x]["kind"] != "out"){
+    while ((this.str.ports[x]["direction"] != "out" && this.str.ports[x]["direction"] != "output") && x<this.str.ports.length-1) {
       x++;
     }
-    this.str_out += '  if int(dut.' + this.str.ports[x]["name"] + ') == int(dut.' + this.str.ports[x]["name"] + '):\n'
-    this.str_out += '    raise TestFailure(\n'
-    this.str_out += '    "result is incorrect: %s != %s" % str(dut.'+this.str.ports[x]["name"]+'))\n'
-    this.str_out += '  else:\n'
-    this.str_out += '    dut._log.info("Ok!")\n'
+    this.str_out += '    if int(dut.' + this.str.ports[x]["name"] + ') == int(dut.' + this.str.ports[x]["name"] + '):\n'
+    this.str_out += '        raise TestFailure(\n'
+    this.str_out += '        "result is incorrect: %s != %s" % str(dut.'+this.str.ports[x]["name"]+'))\n'
+    this.str_out += '    else:\n'
+    this.str_out += '        dut._log.info("Ok!")\n'
   }
 }
 

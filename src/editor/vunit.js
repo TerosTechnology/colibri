@@ -71,39 +71,39 @@ class runpy {
   run(){
     this.str_out += '\n#Run tests.\n'
     this.str_out += 'try:\n'
-    this.str_out += '  ui.main()\n'
+    this.str_out += '    ui.main()\n'
     this.str_out += 'except SystemExit as exc:\n'
-    this.str_out += '  all_ok = exc.code == 0\n'
+    this.str_out += '    all_ok = exc.code == 0\n'
   }
   flags(){
     let synopsys_var = ' '
     let psl_var      = ' '
     this.str_out += '\n#Simulators flags.\n'
     this.str_out += 'if(code_coverage==True):\n'
-    this.str_out += '  ' + this.str.config["name"] + '_src_lib.add_compile_option   ("ghdl.flags"     , [ '+synopsys_var+'"-fprofile-arcs","-ftest-coverage"'+ psl_var+'])\n'
-    this.str_out += '  ' + this.str.config["name"] + '_tb_lib.add_compile_option    ("ghdl.flags"     , [ '+synopsys_var+'"-fprofile-arcs","-ftest-coverage"'+ psl_var+'])\n'
-    this.str_out += '  ui.set_sim_option("ghdl.elab_flags"      , ['+synopsys_var+'"-Wl,-lgcov"'+psl_var+'])\n'
+    this.str_out += '    ' + this.str.config["name"] + '_src_lib.add_compile_option   ("ghdl.flags"     , [ '+synopsys_var+'"-fprofile-arcs","-ftest-coverage"'+ psl_var+'])\n'
+    this.str_out += '    ' + this.str.config["name"] + '_tb_lib.add_compile_option    ("ghdl.flags"     , [ '+synopsys_var+'"-fprofile-arcs","-ftest-coverage"'+ psl_var+'])\n'
+    this.str_out += '    ui.set_sim_option("ghdl.elab_flags"      , ['+synopsys_var+'"-Wl,-lgcov"'+psl_var+'])\n'
   }
   checkCov(){
     this.str_out += '\n#Check GHDL backend.\n'
-    this.str_out += 'code_coverage=False\ntry:\n  if( GHDLInterface.determine_backend("")=="gcc" or  GHDLInterface.determine_backend("")=="GCC"):\n    code_coverage=True\n  else:\n    code_coverage=False\nexcept:\n  print("")\n'
+    this.str_out += 'code_coverage=False\ntry:\n    if( GHDLInterface.determine_backend("")=="gcc" or  GHDLInterface.determine_backend("")=="GCC"):\n      code_coverage=True\n    else:\n      code_coverage=False\nexcept:\n    print("")\n'
   }
   coverageOut(){
     this.str_out += '\n#Code coverage.\n'
     this.str_out += 'if all_ok:\n'
-    this.str_out += '  if(code_coverage==True):\n'
+    this.str_out += '    if(code_coverage==True):\n'
     for(var x=0;x<this.str.src.length;x++){
-      this.str_out +=  '    subprocess.call(["lcov", "--capture", "--directory", "' + this.path.basename(this.str.src[x]).split(".")[0] + '.gcda", "--output-file",  "code_' + x.toString()+ '.info" ])\n'
+      this.str_out +=  '        subprocess.call(["lcov", "--capture", "--directory", "' + this.path.basename(this.str.src[x]).split(".")[0] + '.gcda", "--output-file",  "code_' + x.toString()+ '.info" ])\n'
     }
-    this.str_out += '    subprocess.call(["genhtml"'
+    this.str_out += '        subprocess.call(["genhtml"'
     for(var x=0;x<this.str.src.length;x++){
       this.str_out +=  ',"code_' + x.toString()+ '.info"'
     }
     this.str_out +=  ',"--output-directory", "'+this.str.config["codeCovPath"]+'"])\n'
-    this.str_out +=  '  else:\n'
-    this.str_out +=  '    exit(0)\n'
+    this.str_out +=  '    else:\n'
+    this.str_out +=  '        exit(0)\n'
     this.str_out +=  'else:\n'
-    this.str_out +=  '  exit(1)\n'
+    this.str_out +=  '    exit(1)\n'
   }
 }
 
