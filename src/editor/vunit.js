@@ -43,8 +43,7 @@ class runpy {
   checkSimulator(){
     this.str_out += "\n#Check simulator.\n"
     this.str_out += 'print ("=============================================")\n'
-    this.str_out += 'simulator_class = SIMULATOR_FACTORY.select_simulator()\nsimname = simulator_class.name\nprint simname\n'
-    this.str_out += 'if (simname == "modelsim"):\n  f= open("modelsim.do","w+")\n  f.write("add wave * \\nlog -r /*\\nvcd file\\nvcd add -r /*\\n")\n  f.close()\n'
+    this.str_out += 'simulator_class = SIMULATOR_FACTORY.select_simulator()\nsimname = simulator_class.name\nprint (simname)\n'
     this.str_out += 'print ("=============================================")\n'
   }
   vunitInstance(){
@@ -84,7 +83,6 @@ class runpy {
     this.str_out += '  ' + this.str.config["name"] + '_src_lib.add_compile_option   ("ghdl.flags"     , [ '+synopsys_var+'"-fprofile-arcs","-ftest-coverage"'+ psl_var+'])\n'
     this.str_out += '  ' + this.str.config["name"] + '_tb_lib.add_compile_option    ("ghdl.flags"     , [ '+synopsys_var+'"-fprofile-arcs","-ftest-coverage"'+ psl_var+'])\n'
     this.str_out += '  ui.set_sim_option("ghdl.elab_flags"      , ['+synopsys_var+'"-Wl,-lgcov"'+psl_var+'])\n'
-    this.str_out += 'ui.set_sim_option("modelsim.init_files.after_load" ,["modelsim.do"])\n'
   }
   checkCov(){
     this.str_out += '\n#Check GHDL backend.\n'
