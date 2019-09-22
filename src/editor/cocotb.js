@@ -56,6 +56,16 @@ class cocotb {
     this.str_out += '    yield Timer(20*Period)\n'
     this.str_out += '    print(dut.test)\n'
     x = 0
+    while (x<this.str.ports.length) {
+      if ((this.str.ports[x]["direction"] == "out" || this.str.ports[x]["direction"] == "output")) {
+        this.str_out += '    print(dut.'+this.str.ports[x]["name"]+')\n'
+      }
+      x++;
+      if (x==this.str.ports.length) {
+        break
+      }
+    }
+    x = 0
     while ((this.str.ports[x]["direction"] != "out" && this.str.ports[x]["direction"] != "output") && x<this.str.ports.length-1) {
       x++;
     }
