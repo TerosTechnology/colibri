@@ -36,7 +36,7 @@
       "index": 546
     },
     { "name": "tx_out",
-      "kind": "output",
+      "direction": "output",
       "type": "",
       "index": 546
     },
@@ -46,7 +46,7 @@
       "index": 546
     },
     { "name": "rxclk",
-      "kind": "input",
+      "direction": "input",
       "type": "",
       "index": 546
     },
@@ -61,7 +61,7 @@
       "index": 546
     },
     { "name": "rx_enable",
-      "kind": "input",
+      "direction": "input",
       "type": "",
       "index": 546
     },
