@@ -1,7 +1,14 @@
 //TODO: regular la tabulación.
 //TODO: estandarizar ports y genrics.
+const cocotb = require('./cocotb')
 
 function createTestbench(structure, options) {
+
+  if (options['type']=="cocotb"){
+    testCoco = new cocotb.cocotb(structure);
+    return testCoco.generate();
+  }
+
   var vunit = options['type'] == "vunit"
   var space = '  ';
   var str = '';

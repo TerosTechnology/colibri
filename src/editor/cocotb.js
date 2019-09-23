@@ -54,7 +54,6 @@ class cocotb {
       }
     }
     this.str_out += '    yield Timer(20*Period)\n'
-    this.str_out += '    print(dut.test)\n'
     x = 0
     while (x<this.str.ports.length) {
       if ((this.str.ports[x]["direction"] == "out" || this.str.ports[x]["direction"] == "output")) {
