@@ -19,6 +19,19 @@ class Manager {
     return await getData(url);
   }
 
+  async runTool(project){
+    const url = this.url+'/tests/';
+    const getData = async url => {
+      try {
+        const response = await axios.post(url,project);
+        return response.data;
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    return await getData(url);
+  }
+
   async runCocotb(project){
     const url = this.url+'/tests/';
     const getData = async url => {
