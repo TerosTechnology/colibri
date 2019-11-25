@@ -45,6 +45,7 @@ class VhdlParser extends BaseParser {
     return item;
   }
   getPorts(str) {
+    str = this.deleteComments(str);
     var items = this.REGEX['PORTS0'].exec(str);
     if (items == null) {
       return []
@@ -52,6 +53,7 @@ class VhdlParser extends BaseParser {
     return this.getItem(items[1].replace(/--/gi, ";")+";", items['index'], this.REGEX['PORT']);
   }
   getGenerics(str) {
+    str = this.deleteComments(str);
     var items = this.REGEX['GENERICS0'].exec(str);
     if (items == null) {
       return []
@@ -114,7 +116,12 @@ class VhdlParser extends BaseParser {
     }
     return items;
   }
+  deleteComments(str) {
+    str = str.replace(/--(.+)/gi, '');
+    return str;
+  }
 }
+
 
 module.exports = {
   VhdlParser: VhdlParser

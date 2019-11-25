@@ -41,19 +41,19 @@ class BaseStructure {
   getHtmlDoc(md) {
     var html = `
     <style>
-    h1,h2,h3,svg,table {margin-left:5%;}
-    div.template { background-color: white;position:absolute; }
-    td,th,h1,h2,h3 {color: black;}
-    h1,h2 {font-weight:bold;}
-    svg {width: 100%;}
-    tr:hover {background-color: #ddd;}
-    td, th {
+    #teroshdl h1,#teroshdl h2,#teroshdl h3,#teroshdl svg,#teroshdl table {margin-left:5%;}
+    div.templateTerosHDL { background-color: white;position:absolute; }
+    #teroshdl td,#teroshdl th,#teroshdl h1,#teroshdl h2,#teroshdl h3 {color: black;}
+    #teroshdl h1,#teroshdl h2 {font-weight:bold;}
+    #teroshdl svg {width: 100%;}
+    #teroshdl tr:hover {background-color: #ddd;}
+    #teroshdl td, #teroshdl th {
         border: 1px solid grey
     }
-    th { background-color: #ffd78c;}
-    tr:nth-child(even){background-color: #f2f2f2;}
+    #teroshdl th { background-color: #ffd78c;}
+    #teroshdl tr:nth-child(even){background-color: #f2f2f2;}
     </style>
-    <div class='template' style="overflow-y:auto;height:100%;width:100%" >
+    <div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%" >
     `
     var mdDoc = md;
     var showdown = require('showdown');
