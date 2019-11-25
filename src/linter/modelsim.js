@@ -15,4 +15,6 @@ class Modelsim extends BaseLinter {
   }
 }
 
-module.exports = Modelsim
+module.exports = {
+  Modelsim: Modelsim
+}

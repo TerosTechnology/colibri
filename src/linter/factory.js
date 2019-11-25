@@ -1,44 +1,49 @@
-const codes = require('../db/codes')
-const db_manager = require('../db/db_manager')
-
 const Ghdl = require('./ghdl')
 const Icarus = require('./icarus')
 const Modelsim = require('./modelsim')
 const Verilator = require('./verilator')
 
+const SIMULATORS = {
+  GHDL : 'ghdl',
+  ICARUS : 'icarus',
+  MODELSIM : 'modelsim',
+  VERILATOR : 'verilator'
+};
+
 class LinterFactory {
-  getConfiguredLinter() {
-    let linter = db_manager.getActiveLinterCode();
-    if (typeof linter !== 'undefined' && linter !== null) {
-      if (linter == codes.Linters.GHDL) {
-        return this.getGhdl();
-      } else if (linter == codes.Linters.ICARUS) {
-        return this.getIcarus();
-      } else if (linter == codes.Linters.MODELSIM) {
-        return this.getModelsim();
-      } else if (linter == codes.Linters.VERILATOR) {
-        return this.getVerilator();
-      }
+  constructor(sim){
+    if (sim == SIMULATORS.GHDL) {
+      return this.getGhdl();
+    }
+    else if (sim == SIMULATORS.ICARUS){
+      return this.getIcarus();
+    }
+    else if (sim == SIMULATORS.MODELSIM){
+      return this.getModelsim();
+    }
+    else if (sim == SIMULATORS.VERILATOR){
+      return this.getVerilator();
     }
   }
 
   getGhdl() {
-    return new Ghdl();
+    return new Ghdl.Ghdl();
   }
 
   getIcarus() {
-    return new Icarus();
+    return new Icarus.Icarus();
   }
 
   getModelsim() {
-    return new Modelsim();
+    return new Modelsim.Modelsim();
   }
 
   getVerilator() {
-    return new Verilator();
+    return new Verilator.Verilator();
   }
-
 }
 
-var instance = new LinterFactory();
-module.exports = instance
+module.exports = {
+  LinterFactory : LinterFactory,
+  SIMULATORS : SIMULATORS
+}

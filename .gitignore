@@ -11,3 +11,4 @@ src/db/resources/configuration.json
 *.pdf
 *.cf
 *.o
+*.out

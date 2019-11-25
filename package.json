@@ -4,8 +4,6 @@
   "description": "Backend for terosHDL IDE",
   "main": "src/main.js",
   "scripts": {
-    "testEditor": "cd test;cd editor; node tbVerilog; node tbVhdl; node component",
-    "testDocumentation": "cd test;cd documentation; node documentation; node stateMachine",
     "testLinter": "cd test; node linter"
   },
   "author": "",
