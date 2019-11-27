@@ -2,6 +2,8 @@ const fs = require('fs');
 const Colibri = require('../src/main');
 const Linter = Colibri.Linter;
 
+let finalResult = true;
+
 var vhdl_simulators = [Linter.SIMULATORS.GHDL];
 for (let i = 0; i < vhdl_simulators.length; ++i) {
   let linter = new Linter.LinterFactory(vhdl_simulators[i]);
@@ -14,6 +16,8 @@ for (let i = 0; i < vhdl_simulators.length; ++i) {
 
     console.log("Testing... Simulator: [" + vhdl_simulators[i] + "] || File: " +
       "example_" + x + ".vhdl || Result: " + result);
+    if (result == false)
+      finalResult = false;
   }
 }
 
@@ -29,8 +33,15 @@ for (let i = 0; i < verilog_simulators.length; ++i) {
 
     console.log("Testing... Simulator: [" + verilog_simulators[i] + "] || File: " +
       "example_" + x + ".v || Result: " + result);
+    if (result == false)
+      finalResult = false;
   }
 }
+
+if (finalResult == false)
+  return -1;
+
+
 
 function compare(m, n) {
   if (m.length != n.length) {

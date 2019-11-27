@@ -6,7 +6,7 @@
         "file": "example_0.vhd",
         "position": [47,9]
       },
-      "description": "cannot find resource library \"poc\""
+      "description": "canot find resource library \"poc\""
     },
     { "severity": "error",
       "location": {
