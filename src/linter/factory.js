@@ -2,26 +2,20 @@ const Ghdl = require('./ghdl')
 const Icarus = require('./icarus')
 const Modelsim = require('./modelsim')
 const Verilator = require('./verilator')
-
-const SIMULATORS = {
-  GHDL : 'ghdl',
-  ICARUS : 'icarus',
-  MODELSIM : 'modelsim',
-  VERILATOR : 'verilator'
-};
+const General = require('../general/general')
 
 class LinterFactory {
   constructor(sim){
-    if (sim == SIMULATORS.GHDL) {
+    if (sim == General.SIMULATORS.GHDL) {
       return this.getGhdl();
     }
-    else if (sim == SIMULATORS.ICARUS){
+    else if (sim == General.SIMULATORS.ICARUS){
       return this.getIcarus();
     }
-    else if (sim == SIMULATORS.MODELSIM){
+    else if (sim == General.SIMULATORS.MODELSIM){
       return this.getModelsim();
     }
-    else if (sim == SIMULATORS.VERILATOR){
+    else if (sim == General.SIMULATORS.VERILATOR){
       return this.getVerilator();
     }
   }
@@ -44,6 +38,5 @@ class LinterFactory {
 }
 
 module.exports = {
-  LinterFactory : LinterFactory,
-  SIMULATORS : SIMULATORS
+  LinterFactory : LinterFactory
 }

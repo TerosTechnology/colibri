@@ -8,6 +8,10 @@ exports.StateMachineVerilog = require('./documenter/verilogdocumenter');
 exports.Simulators = require('./simulators/simulators');
 
 //******************************************************************************
+//General
+//******************************************************************************
+exports.General = require('./general/general')
+//******************************************************************************
 //Linter
 //******************************************************************************
 exports.Linter    = require('./linter/factory');

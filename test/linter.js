@@ -1,10 +1,11 @@
 const fs = require('fs');
 const Colibri = require('../src/main');
 const Linter = Colibri.Linter;
+const General = Colibri.General;
 
 let finalResult = true;
 
-var vhdl_simulators = [Linter.SIMULATORS.GHDL];
+var vhdl_simulators = [General.SIMULATORS.GHDL];
 for (let i = 0; i < vhdl_simulators.length; ++i) {
   let linter = new Linter.LinterFactory(vhdl_simulators[i]);
   for (let x = 0; x < 5; ++x) {
@@ -21,7 +22,7 @@ for (let i = 0; i < vhdl_simulators.length; ++i) {
   }
 }
 
-var verilog_simulators = [Linter.SIMULATORS.ICARUS,Linter.SIMULATORS.VERILATOR];
+var verilog_simulators = [General.SIMULATORS.ICARUS,General.SIMULATORS.VERILATOR];
 for (let i = 0; i < verilog_simulators.length; ++i) {
   let linter = new Linter.LinterFactory(verilog_simulators[i]);
   for (let x = 0; x < 5; ++x) {
