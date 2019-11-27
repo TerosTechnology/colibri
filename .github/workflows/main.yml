@@ -10,22 +10,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
-      - name: Check ghdl
+      - name: Test
         run: |
-          ghdl --version
-
-    # steps:
-    # - uses: actions/checkout@v1
-    # - uses: docker://terostech/multi-simulator:1.0.0
-    # - name: Run a one-line script
-    #   run: docker images
-    # - name: Run a multi-line script
-    #   run: |
-    #     ghdl --version
-    #     npm install .
-    #     cd test
-    #     cd examples
-    #     cd vhdl_error
-    #     ghdl -s example_0.vhd
-    #     ghdl -s example_1.vhd
-    #     ghdl -s example_2.vhd
+          npm run-script testLinter
