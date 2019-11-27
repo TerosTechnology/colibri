@@ -4,14 +4,21 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-18.04
-
+    container:
+      image: docker://terostech/multi-simulator:1.0.0
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v1
+      - name: Check ghdl
+        run: |
+          ghdl --version
+
+    # steps:
     # - uses: actions/checkout@v1
-    - uses: docker://terostech/multi-simulator:1.0.0
-    - name: Run a one-line script
-      run: docker images
+    # - uses: docker://terostech/multi-simulator:1.0.0
+    # - name: Run a one-line script
+    #   run: docker images
     # - name: Run a multi-line script
     #   run: |
     #     ghdl --version
