@@ -16,5 +16,8 @@ jobs:
       run: |
         npm install .
         cd test
-        ls
-        node linter
+        cd examples
+        cd vhdl_error
+        ghdl -s example_0.vhd
+        ghdl -s example_1.vhd
+        ghdl -s example_2.vhd
