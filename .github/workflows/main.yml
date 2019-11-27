@@ -9,17 +9,16 @@ jobs:
 
     steps:
     # - uses: actions/checkout@v1
-    # - uses: docker://terostech/multi-simulator:1.0.0
+    - uses: docker://terostech/multi-simulator:1.0.0
     - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
-      uses: docker://terostech/multi-simulator:1.0.0
-      run: |
-        ghdl --version
-        npm install .
-        cd test
-        cd examples
-        cd vhdl_error
-        ghdl -s example_0.vhd
-        ghdl -s example_1.vhd
-        ghdl -s example_2.vhd
+      run: ghdl --version
+    # - name: Run a multi-line script
+    #   run: |
+    #     ghdl --version
+    #     npm install .
+    #     cd test
+    #     cd examples
+    #     cd vhdl_error
+    #     ghdl -s example_0.vhd
+    #     ghdl -s example_1.vhd
+    #     ghdl -s example_2.vhd
