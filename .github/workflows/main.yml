@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
-    - uses: terostech/multi-simulator:1.0.0.0
+    - uses: docker://terostech/multi-simulator:1.0.0.0
     - name: Run a one-line script
       run: echo Hello, world!
     - name: Run a multi-line script
