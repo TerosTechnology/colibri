@@ -39,7 +39,7 @@ for (let i = 0; i < verilog_simulators.length; ++i) {
 }
 
 if (finalResult == false)
-  return -1;
+  throw new Error('Test error.');
 
 
 
