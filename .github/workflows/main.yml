@@ -17,4 +17,4 @@ jobs:
         npm install .
         cd test
         ls
-        nodejs linter
+        node linter
