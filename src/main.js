@@ -1,4 +1,4 @@
-exports.VhdlEditor    = require('./editor/vhdleditor')
+// exports.VhdlEditor    = require('./editor/vhdleditor')
 // exports.VerilogEditor = require('./editor/verilogeditor')
 exports.Documenter = require('./documenter/documenter');
 exports.VhdlParser     = require('./parser/vhdlparser');
@@ -15,3 +15,7 @@ exports.General = require('./general/general')
 //Linter
 //******************************************************************************
 exports.Linter    = require('./linter/factory');
+//******************************************************************************
+//Templates
+//******************************************************************************
+exports.Templates    = require('./templates/templates');

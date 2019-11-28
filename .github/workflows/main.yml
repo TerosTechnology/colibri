@@ -3,7 +3,7 @@ name: Tests
 on: [push]
 
 jobs:
-  build:
+  test-linter:
     runs-on: ubuntu-18.04
     container:
       image: docker://terostech/multi-simulator:1.0.0
@@ -14,3 +14,14 @@ jobs:
         run: |
           npm install .
           npm run-script testLinter
+  test-templates:
+    runs-on: ubuntu-18.04
+    container:
+      image: docker://terostech/multi-simulator:1.0.0
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v1
+      - name: Test
+        run: |
+          npm install .
+          npm run-script testTemplates

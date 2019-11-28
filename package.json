@@ -4,7 +4,8 @@
   "description": "Backend for terosHDL IDE",
   "main": "src/main.js",
   "scripts": {
-    "testLinter": "cd test; node linter"
+    "testLinter": "cd test; node linter",
+    "testTemplates": "cd test/templates; node cocoTest; node verilatorTest; node vunitRunpy"
   },
   "author": "",
   "license": "GPL-3.0",

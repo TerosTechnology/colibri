@@ -2,8 +2,6 @@
 //TODO: estandarizar ports y genrics.
 //TODO: versión
 //TODO: vunit
-const codes = require('../db/codes')
-const db_manager = require('../db/db_manager')
 
 function createTestbench(structure, options) {
   var vunit = options['type'] == "vunit"
