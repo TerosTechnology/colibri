@@ -2,9 +2,11 @@
 //TODO: estandarizar ports y genrics.
 //TODO: versión
 //TODO: vunit
+const General = require('../general/general')
 
 function createTestbench(structure, options) {
   var vunit = options['type'] == "vunit"
+  var version = options['version'];
   var space = '  ';
   var str = '';
   // str += setLibraries(structure['libraries']);
@@ -21,8 +23,7 @@ function createTestbench(structure, options) {
   str += setSignals(space, structure['ports']);
   str += '\n'
 
-  var version = db_manager.getActiveStandardCode()
-  if (version == codes.Standards.VERILOG2001) {
+  if (version == General.VERILOGSTANDARS.VERILOG2001) {
     str += setInstance2001(space, structure['entity']['name'], structure['generics'], structure['ports']);
   } else {
     str += setInstance(space, structure['entity']['name'], structure['generics'], structure['ports']);

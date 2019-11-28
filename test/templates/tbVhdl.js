@@ -1,10 +1,5 @@
 const fs = require('fs');
-const codes = require('../../src/db/codes')
-const db_manager = require('../../src/db/db_manager')
-const EditorFactory = require('../../src/editor/factory')
-
-db_manager.setActiveStandardCode(codes.Standards.VHDL2008);
-db_manager.setActiveEditorCode(codes.Editors.VHDL);
+const Colibri = require('../../src/main');
 
 let options = {
   'type' : "normal",
@@ -17,7 +12,8 @@ let options = {
 var structure = fs.readFileSync('./examples/vhdl/structure.json','utf8');
 structure     = JSON.parse(structure);
 var testExpected = fs.readFileSync('./examples/vhdl/tbVhdl.vhd','utf8');
-var test = EditorFactory.getConfiguredEditor().createTestbench(structure, options);
+templates = new Colibri.Templates.Templates();
+var test = templates.getVHDLTestbench(structure, options);
 
 console.log('****************************************************************');
 if(testExpected.replace(/\n/g,'').replace(/ /g,'') === test.replace(/\n/g,'').replace(/ /g,'')){
@@ -25,14 +21,19 @@ if(testExpected.replace(/\n/g,'').replace(/ /g,'') === test.replace(/\n/g,'').re
 }
 else{
   console.log("Testing... tbVhdl: Fail!");
+  throw new Error('Test error.');
 }
 ////////////////////////////////////////////////////////////////////////////////
 options['type'] = "vunit";
 testExpected = fs.readFileSync('./examples/vhdl/tbVhdlVunit.vhd','utf8');
-test = EditorFactory.getConfiguredEditor().createTestbench(structure, options);if(testExpected.replace(/\n/g,'').replace(/ /g,'') === test.replace(/\n/g,'').replace(/ /g,'')){
+templates = new Colibri.Templates.Templates();
+var test = templates.getVHDLTestbench(structure, options)
+
+if(testExpected.replace(/\n/g,'').replace(/ /g,'') === test.replace(/\n/g,'').replace(/ /g,'')){
   console.log("Testing... tbVhdlVunit: Ok!");
 }
 else{
   console.log("Testing... tbVhdlVunit: Fail!");
+  throw new Error('Test error.');
 }
 console.log('****************************************************************');
