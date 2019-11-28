@@ -1,8 +1,4 @@
-const documenter = require('./documenter')
-
-class VerilogStructure extends documenter.BaseStructure {}
-
-class VerilogStateMachine extends documenter.BaseStateMachine {
+class StateMachineVerilog {
   getStateMachine(str) {
     var strDel = this.deleteComments(str);
     var body = this.getBody(strDel);
@@ -132,6 +128,5 @@ class VerilogStateMachine extends documenter.BaseStateMachine {
 }
 
 module.exports = {
-  VerilogStructure: VerilogStructure,
-  VerilogStateMachine: VerilogStateMachine,
+  StateMachineVerilog: StateMachineVerilog
 }
