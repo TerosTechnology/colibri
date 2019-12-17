@@ -7,7 +7,7 @@ const General = require('../general/general')
 function createTestbench(structure, options) {
   var vunit = false;
   var version = General.VERILOGSTANDARS.VERILOG2001;
-  if{
+  if(options != null){
     vunit = options['type'] == "vunit"
     version = options['version'];
   }
