@@ -5,35 +5,37 @@ const Verilator = require('./verilator')
 const General = require('../general/general')
 
 class LinterFactory {
-  constructor(sim){
+  constructor(sim,path){
     if (sim == General.SIMULATORS.GHDL) {
-      return this.getGhdl();
+      return this.getGhdl(path);
     }
     else if (sim == General.SIMULATORS.ICARUS){
-      return this.getIcarus();
+      return this.getIcarus(path);
     }
     else if (sim == General.SIMULATORS.MODELSIM){
-      return this.getModelsim();
+      return this.getModelsim(path);
     }
     else if (sim == General.SIMULATORS.VERILATOR){
-      return this.getVerilator();
+      return this.getVerilator(path);
     }
+    else
+      return null;
   }
 
-  getGhdl() {
-    return new Ghdl.Ghdl();
+  getGhdl(path) {
+    return new Ghdl.Ghdl(path);
   }
 
-  getIcarus() {
-    return new Icarus.Icarus();
+  getIcarus(path) {
+    return new Icarus.Icarus(path);
   }
 
-  getModelsim() {
-    return new Modelsim.Modelsim();
+  getModelsim(path) {
+    return new Modelsim.Modelsim(path);
   }
 
-  getVerilator() {
-    return new Verilator.Verilator();
+  getVerilator(path) {
+    return new Verilator.Verilator(path);
   }
 }
 
