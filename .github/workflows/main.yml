@@ -16,8 +16,6 @@ jobs:
           npm run-script testLinter
   test-templates:
     runs-on: ubuntu-18.04
-    # container:
-    #   image: docker://terostech/multi-simulator:1.0.0
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
@@ -27,8 +25,6 @@ jobs:
           npm run-script testTemplates
   test-documenter:
     runs-on: ubuntu-18.04
-    # container:
-    #   image: docker://terostech/multi-simulator:1.0.0
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1

@@ -5,8 +5,12 @@
 const General = require('../general/general')
 
 function createTestbench(structure, options) {
-  var vunit = options['type'] == "vunit"
-  var version = options['version'];
+  var vunit = false;
+  var version = General.VERILOGSTANDARS.VERILOG2001;
+  if{
+    vunit = options['type'] == "vunit"
+    version = options['version'];
+  }
   var space = '  ';
   var str = '';
   // str += setLibraries(structure['libraries']);
@@ -164,15 +168,8 @@ function setClkProcess(space) {
 }
 
 function createComponent(structure, options) {
-  // let option = {
-  //   'language' : "vhdl",
-  //   'version'  : "2008",
-  //   'type' : "normal",
-  //   'parameters' : [
-  //     {'parameter' : "X"},
-  //     {'parameter' : "Y"},
-  //   ]
-  // }
+  if (options == null)
+    return "";
   var component = "";
   if (options['type'] == "component") {
     component = "";
