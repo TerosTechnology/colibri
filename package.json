@@ -6,7 +6,7 @@
   "scripts": {
     "testLinter": "cd test; node linter",
     "testTemplates": "cd test/templates; ./runAllTests.sh",
-    "testDocumenter": "cd test/documenter; node stateMachine; node documenter"
+    "testDocumenter": "cd test/documenter; node stateMachine; node baseStructure"
   },
   "author": "",
   "license": "GPL-3.0",
