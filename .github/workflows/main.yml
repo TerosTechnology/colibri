@@ -25,7 +25,7 @@ jobs:
           npm run-script testTemplates
   # ****************************************************************************
   # ****************************************************************************
-  test-documenter-linux:
+  test-documenter:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
