@@ -20,15 +20,12 @@ for (let i=0;i<language.length;++i){
     else
       var stmGenerator = new Colibri.Documenter.StateMachineVerilog();
     var out      = stmGenerator.getStateMachine(code,options);
-
-    if(expected.localeCompare(out) == 0){
+    if(expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') == expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
       console.log("Testing... state machine: " + x +" "+language[i]+": Ok!");
     }
     else{
       console.log("Expected: " + expected);
-      console.log('****************************************************************');
       console.log("Real: " + out);
-      console.log('****************************************************************');
       console.log("Testing... state machine: " + x +" "+language[i]+": Fail!");
       throw new Error('Test error.');
     }
