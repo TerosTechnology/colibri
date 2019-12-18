@@ -28,7 +28,6 @@ class BaseLinter {
       async: false,
       silent: true
     });
-
     if (this.PARAMETERS['OUTPUT'] == this.OUTPUT.OUT) {
       str = stdout
     } else if (this.PARAMETERS['OUTPUT'] == this.OUTPUT.ERR) {
