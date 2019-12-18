@@ -32,6 +32,15 @@ jobs:
         run: |
           npm install .
           npm run-script testDocumenter
+  test-documenter-mac:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v1
+      - name: Test
+        run: |
+          npm install .
+          npm run-script testDocumenter
   test-documenter-windows:
     runs-on: windows-latest
     steps:
@@ -39,4 +48,5 @@ jobs:
         uses: actions/checkout@v1
       - name: Test
         run: |
+          cd test
           dir
