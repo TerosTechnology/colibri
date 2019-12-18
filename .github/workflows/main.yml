@@ -48,5 +48,5 @@ jobs:
         uses: actions/checkout@v1
       - name: Test
         run: |
-          cd test
-          dir
+          npm install .
+          npm run-script testDocumenter
