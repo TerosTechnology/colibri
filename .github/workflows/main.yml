@@ -29,7 +29,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-18.04]
+        os: [windows-latest, macos-latest, ubuntu-18.04]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
@@ -37,12 +37,12 @@ jobs:
         run: |
           npm install .
           npm run-script testDocumenter
-  test-documenter-windows:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v1
-      - name: Test
-        run: |
-          npm install .
-          npm run-script testDocumenterWindows
+  # test-documenter-windows:
+  #   runs-on: windows-latest
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v1
+  #     - name: Test
+  #       run: |
+  #         npm install .
+  #         npm run-script testDocumenterWindows
