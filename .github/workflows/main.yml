@@ -24,7 +24,7 @@ jobs:
           npm install .
           npm run-script testTemplates
   # ****************************************************************************
-  # ****************************************************************************              
+  # ****************************************************************************
   test-documenter-linux:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -45,4 +45,4 @@ jobs:
       - name: Test
         run: |
           npm install .
-          npm run-script testDocumenter
+          npm run-script testDocumenterWindows
