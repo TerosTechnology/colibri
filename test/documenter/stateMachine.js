@@ -20,7 +20,7 @@ for (let i=0;i<language.length;++i){
     else
       var stmGenerator = new Colibri.Documenter.StateMachineVerilog();
     var out      = stmGenerator.getStateMachine(code,options);
-    if(expected.localeCompare(out)){
+    if(expected.localeCompare(out) == 0){
       console.log("Testing... state machine: " + x +" "+language[i]+": Ok!");
     }
     else{
