@@ -5,8 +5,8 @@
   "main": "src/main.js",
   "scripts": {
     "testLinter": "cd test; node linter",
-    "testTemplates": "cd test/templates; ./runAllTests.sh",
-    "testDocumenter": "cd test/documenter; node stateMachine; node baseStructure"
+    "testTemplates": "cd test; cd templates; ./runAllTests.sh",
+    "testDocumenter": "cd test; cd documenter; node stateMachine"
   },
   "author": "",
   "license": "GPL-3.0",

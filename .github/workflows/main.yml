@@ -23,8 +23,17 @@ jobs:
         run: |
           npm install .
           npm run-script testTemplates
-  test-documenter:
+  test-documenter-linux:
     runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v1
+      - name: Test
+        run: |
+          npm install .
+          npm run-script testDocumenter
+  test-documenter-windows:
+    runs-on: windows-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1

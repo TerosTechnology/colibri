@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const Colibri = require('../../src/main');
 
 let options = {
@@ -12,8 +13,8 @@ var language = ["vhdl"];
 for (let i=0;i<language.length;++i){
   console.log('****************************************************************');
   for (let x=0;x<7;++x){
-    var code     = fs.readFileSync('./examples/stateMachines/'+language[i]+'/sm_'+x+'.vhd','utf8');
-    var expected = fs.readFileSync('./examples/stateMachines/'+language[i]+'/sm_'+x+'.txt','utf8');
+    var code     = fs.readFileSync('examples'+path.sep+'stateMachines'+path.sep+language[i]+path.sep+'sm_'+x+'.vhd','utf8');
+    var expected = fs.readFileSync('examples'+path.sep+'stateMachines'+path.sep+language[i]+path.sep+'sm_'+x+'.txt','utf8');
     if (language[i] == "vhdl")
       var stmGenerator = new Colibri.Documenter.StateMachineVHDL();
     else

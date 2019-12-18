@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const Colibri = require('../src/main');
 const Linter = Colibri.Linter;
 const General = Colibri.General;
@@ -9,9 +10,9 @@ var vhdl_simulators = [General.SIMULATORS.GHDL];
 for (let i = 0; i < vhdl_simulators.length; ++i) {
   let linter = new Linter.LinterFactory(vhdl_simulators[i]);
   for (let x = 0; x < 5; ++x) {
-    let file = "./examples/vhdl_error/example_" + x + ".vhd"
+    let file = "examples"+path.sep+"vhdl_error"+path.sep+"example_" + x + ".vhd"
     let errors_result = linter.lint(file);
-    let errors_exp = fs.readFileSync('./examples/vhdl_error/example_' + x + '.json', 'utf8');
+    let errors_exp = fs.readFileSync("examples"+path.sep+"vhdl_error"+path.sep+"example_" + x + ".json", 'utf8');
     errors_exp = JSON.parse(errors_exp);
     let result = compare(errors_result, errors_exp[vhdl_simulators[i].toUpperCase()]);
 
@@ -26,9 +27,9 @@ var verilog_simulators = [General.SIMULATORS.ICARUS,General.SIMULATORS.VERILATOR
 for (let i = 0; i < verilog_simulators.length; ++i) {
   let linter = new Linter.LinterFactory(verilog_simulators[i]);
   for (let x = 0; x < 5; ++x) {
-    let file = "./examples/verilog_error/example_" + x + ".v"
+    let file = "examples"+path.sep+"verilog_error"+path.sep+"example_" + x + ".v"
     let errors_result = linter.lint(file);
-    let errors_exp = fs.readFileSync('./examples/verilog_error/example_' + x + '.json', 'utf8');
+    let errors_exp = fs.readFileSync("examples"+path.sep+"verilog_error"+path.sep+"example_" + x + '.json', 'utf8');
     errors_exp = JSON.parse(errors_exp);
     let result = compare(errors_result, errors_exp[verilog_simulators[i].toUpperCase()]);
 
