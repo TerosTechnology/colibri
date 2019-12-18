@@ -24,7 +24,7 @@ for (let i=0;i<language.length;++i){
       console.log("Testing... state machine: " + x +" "+language[i]+": Ok!");
     }
     else{
-      console.log("Expected: " + xpected.replace(/\n/g,'').replace(/ /g,''));
+      console.log("Expected: " + expected.replace(/\n/g,'').replace(/ /g,''));
       console.log("Real: " + out.replace(/\n/g,'').replace(/ /g,'')));
       console.log("Testing... state machine: " + x +" "+language[i]+": Fail!");
       throw new Error('Test error.');
