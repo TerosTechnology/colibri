@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const Colibri = require('../../src/main');
 
 let options = {
@@ -9,14 +10,14 @@ let options = {
   ]
 }
 ////////////////////////////////////////////////////////////////////////////////
-var structure = fs.readFileSync('./examples/vhdl/structure.json','utf8');
+var structure = fs.readFileSync('examples'+path.sep+'vhdl'+path.sep+'structure.json','utf8');
 structure     = JSON.parse(structure);
-var testExpected = fs.readFileSync('./examples/vhdl/tbVhdl.vhd','utf8');
+var testExpected = fs.readFileSync('examples'+path.sep+'vhdl'+path.sep+'tbVhdl.vhd','utf8');
 templates = new Colibri.Templates.Templates();
 var test = templates.getVHDLTestbench(structure, options);
 
 console.log('****************************************************************');
-if(testExpected.replace(/\n/g,'').replace(/ /g,'') === test.replace(/\n/g,'').replace(/ /g,'')){
+if(testExpected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === test.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
   console.log("Testing... tbVhdl: Ok!");
 }
 else{
@@ -25,11 +26,11 @@ else{
 }
 ////////////////////////////////////////////////////////////////////////////////
 options['type'] = "vunit";
-testExpected = fs.readFileSync('./examples/vhdl/tbVhdlVunit.vhd','utf8');
+testExpected = fs.readFileSync('examples'+path.sep+'vhdl'+path.sep+'tbVhdlVunit.vhd','utf8');
 templates = new Colibri.Templates.Templates();
 var test = templates.getVHDLTestbench(structure, options)
 
-if(testExpected.replace(/\n/g,'').replace(/ /g,'') === test.replace(/\n/g,'').replace(/ /g,'')){
+if(testExpected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '') === test.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '')){
   console.log("Testing... tbVhdlVunit: Ok!");
 }
 else{
