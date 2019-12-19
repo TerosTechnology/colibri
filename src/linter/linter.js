@@ -1,7 +1,12 @@
 const shell = require('shelljs');
 
 class BaseLinter {
-  constructor() {
+  constructor(path) {
+    const pathOS = require('path');
+    if (path != null)
+      this.path = path + pathOS.sep;
+    else
+      this.path = "";
     this.OUTPUT = {
       OUT: 0,
       ERR: 1
@@ -13,8 +18,8 @@ class BaseLinter {
   }
 
   execute(file) {
+    var cmd = this.path + this.PARAMETERS['SYNT'] + file;
     var str;
-    var cmd = this.PARAMETERS['SYNT'] + file;
     var {
       stdout,
       stderr,
@@ -23,7 +28,6 @@ class BaseLinter {
       async: false,
       silent: true
     });
-
     if (this.PARAMETERS['OUTPUT'] == this.OUTPUT.OUT) {
       str = stdout
     } else if (this.PARAMETERS['OUTPUT'] == this.OUTPUT.ERR) {

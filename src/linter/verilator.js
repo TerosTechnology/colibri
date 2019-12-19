@@ -15,4 +15,6 @@ class Verilator extends BaseLinter {
   }
 }
 
-module.exports = Verilator
+module.exports = {
+  Verilator: Verilator
+}

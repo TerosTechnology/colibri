@@ -3,13 +3,10 @@
 const cocotb = require('./cocotb')
 
 function createTestbench(structure, options) {
-
-  if (options['type']=="cocotb"){
-    testCoco = new cocotb.cocotb(structure);
-    return testCoco.generate();
+  var vunit = false;
+  if (options != null){
+    vunit = options['type'] == "vunit"
   }
-
-  var vunit = options['type'] == "vunit"
   var space = '  ';
   var str = '';
   str += setLibraries(structure['libraries']);
@@ -220,13 +217,8 @@ function setClkProcess(space) {
 }
 
 function createComponent(structure, options) {
-  // let option = {
-  //   'type' : "normal",
-  //   'parameters' : [
-  //     {'parameter' : "X"},
-  //     {'parameter' : "Y"},
-  //   ]
-  // }
+  if (options == null)
+    return "";
   var component = "";
   if (options['type'] == "component") {
     component = setComponent('  ', structure['entity']['name'],

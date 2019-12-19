@@ -15,4 +15,6 @@ class Icarus extends BaseLinter {
   }
 }
 
-module.exports = Icarus
+module.exports = {
+  Icarus: Icarus
+}

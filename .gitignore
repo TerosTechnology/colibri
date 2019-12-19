@@ -1,3 +1,4 @@
+npm-debug.log
 transcript
 node_modules
 work
@@ -11,3 +12,4 @@ src/db/resources/configuration.json
 *.pdf
 *.cf
 *.o
+*.out

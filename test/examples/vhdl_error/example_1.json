@@ -11,20 +11,6 @@
     { "severity": "warning",
       "location": {
         "file": "example_1.vhd",
-        "position": [57,30]
-      },
-      "description": "declaration of \"val\" hides port \"val\" [-Whide]"
-    },
-    { "severity": "warning",
-      "location": {
-        "file": "example_1.vhd",
-        "position": [67,25]
-      },
-      "description": "declaration of \"val\" hides port \"val\" [-Whide]"
-    },
-    { "severity": "warning",
-      "location": {
-        "file": "example_1.vhd",
         "position": [67,25]
       },
       "description": "declaration of \"val\" hides port \"val\" [-Whide]"

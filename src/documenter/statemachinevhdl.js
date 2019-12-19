@@ -1,8 +1,4 @@
-const documenter = require('./documenter')
-
-class VhdlStructure extends documenter.BaseStructure {}
-
-class VhdlStateMachine extends documenter.BaseStateMachine {
+class StateMachineVHDL {
   getStateMachine(str) {
     var strDel = this.deleteComments(str);
     var body = this.getBody(strDel);
@@ -141,6 +137,5 @@ class VhdlStateMachine extends documenter.BaseStateMachine {
 }
 
 module.exports = {
-  VhdlStructure: VhdlStructure,
-  VhdlStateMachine: VhdlStateMachine,
+  StateMachineVHDL: StateMachineVHDL
 }

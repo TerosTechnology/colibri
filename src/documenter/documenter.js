@@ -1,5 +1,6 @@
-const codes = require('../db/codes')
-const diagram = require('./diagram')
+const Diagram = require('./diagram')
+const StmVHDL = require('./statemachinevhdl')
+const StmVerilog = require('./statemachineverilog')
 
 class BaseStructure {
   constructor(structure) {
@@ -21,7 +22,7 @@ class BaseStructure {
   }
 
   getDiagram(){
-    var strDiagram = diagram.diagramGenerator(this.structure,0);
+    var strDiagram = Diagram.diagramGenerator(this.structure,0);
     return strDiagram;
   }
 
@@ -134,8 +135,8 @@ class BaseStructure {
   }
 }
 
-class BaseStateMachine {
-  getSvgStateMachine(str) {
+class StateMachineVHDL extends StmVHDL.StateMachineVHDL{
+  getSVG(str) {
     const smcat = require("state-machine-cat")
     var go = this.getStateMachine(str);
     try {
@@ -152,7 +153,14 @@ class BaseStateMachine {
   }
 }
 
+class StateMachineVerilog extends StmVerilog.StateMachineVerilog{
+  getSVG(str) {
+  }
+}
+
+
 module.exports = {
   BaseStructure: BaseStructure,
-  BaseStateMachine: BaseStateMachine
+  StateMachineVHDL: StateMachineVHDL,
+  StateMachineVerilog : StateMachineVerilog
 }

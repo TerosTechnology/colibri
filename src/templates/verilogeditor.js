@@ -2,11 +2,15 @@
 //TODO: estandarizar ports y genrics.
 //TODO: versión
 //TODO: vunit
-const codes = require('../db/codes')
-const db_manager = require('../db/db_manager')
+const General = require('../general/general')
 
 function createTestbench(structure, options) {
-  var vunit = options['type'] == "vunit"
+  var vunit = false;
+  var version = General.VERILOGSTANDARS.VERILOG2001;
+  if(options != null){
+    vunit = options['type'] == "vunit"
+    version = options['version'];
+  }
   var space = '  ';
   var str = '';
   // str += setLibraries(structure['libraries']);
@@ -23,8 +27,7 @@ function createTestbench(structure, options) {
   str += setSignals(space, structure['ports']);
   str += '\n'
 
-  var version = db_manager.getActiveStandardCode()
-  if (version == codes.Standards.VERILOG2001) {
+  if (version == General.VERILOGSTANDARS.VERILOG2001) {
     str += setInstance2001(space, structure['entity']['name'], structure['generics'], structure['ports']);
   } else {
     str += setInstance(space, structure['entity']['name'], structure['generics'], structure['ports']);
@@ -165,15 +168,8 @@ function setClkProcess(space) {
 }
 
 function createComponent(structure, options) {
-  // let option = {
-  //   'language' : "vhdl",
-  //   'version'  : "2008",
-  //   'type' : "normal",
-  //   'parameters' : [
-  //     {'parameter' : "X"},
-  //     {'parameter' : "Y"},
-  //   ]
-  // }
+  if (options == null)
+    return "";
   var component = "";
   if (options['type'] == "component") {
     component = "";
