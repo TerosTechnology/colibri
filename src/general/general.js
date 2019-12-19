@@ -13,7 +13,13 @@ const VERILOGSTANDARS = {
   VERILOG2001 : '2001',
 };
 
+const LANGUAGES = {
+  VHDL : 'vhdl',
+  VERILOG : 'verilog'
+};
+
 module.exports = {
+  LANGUAGES : LANGUAGES,
   SIMULATORS : SIMULATORS,
   VERILOGSTANDARS : VERILOGSTANDARS
 }

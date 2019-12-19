@@ -1,11 +1,11 @@
 //TODO: regular la tabulación.
 //TODO: estandarizar ports y genrics.
-const cocotb = require('./cocotb')
+const Codes = require('./codes')
 
 function createTestbench(structure, options) {
   var vunit = false;
   if (options != null){
-    vunit = options['type'] == "vunit"
+    vunit = options['type'] == Codes.TYPESTESTBENCH.VUNIT
   }
   var space = '  ';
   var str = '';
@@ -220,14 +220,17 @@ function createComponent(structure, options) {
   if (options == null)
     return "";
   var component = "";
-  if (options['type'] == "component") {
+  if (options['type'] == Codes.TYPESCOMPONENTS.COMPONENT) {
     component = setComponent('  ', structure['entity']['name'],
       structure['generics'], structure['ports'], false);
-  } else if (options['type'] == "instance") {
+  } else if (options['type'] == Codes.TYPESCOMPONENTS.INSTANCE) {
     component = setInstance('  ', structure['entity']['name'],
       structure['generics'], structure['ports'], false);
-  } else if (options['type'] == "signals") {
+  } else if (options['type'] == Codes.TYPESCOMPONENTS.SIGNALS) {
     component = setSignals('  ', structure['ports']);
+  }
+  else{
+    console.log("error")
   }
   return component;
 }

@@ -3,8 +3,34 @@ const Verilator = require('./verilator')
 const VUnit = require('./vunit')
 const VHDLTestbench = require('./vhdleditor')
 const VerilogTestbench = require('./verilogeditor')
+const General = require('../general/general')
+const Codes = require('./codes')
 
 class Templates {
+  getTemplate(type,structure,options){
+    var language = options["language"];
+    var template;
+    if (type == Codes.TYPES.COCOTB)
+      template = this.getCocotbTemplate(structure);
+    else if(type == Codes.TYPES.VERILATOR)
+      template = this.getVerilatorTemplate(structure);
+    else if(type == Codes.TYPES.VUNIT)
+      template = this.getVUnitTemplate(structure);
+    else if(type == Codes.TYPES.TESTBENCH){
+      if (language == General.LANGUAGES.VHDL)
+        template = this.getVHDLTestbench(structure,options);
+      else if(language == General.LANGUAGES.VERILOG)
+        template = this.getVerilogTestbench(structure,options);
+    }
+    else if(type == Codes.TYPES.COMPONENT){
+      if (language == General.LANGUAGES.VHDL)
+        template = this.getVHDLComponent(structure,options);
+      else if(language == General.LANGUAGES.VERILOG)
+        template = this.getVerilogComponent(structure,options);
+    }
+    return template;
+  }
+
   getCocotbTemplate(structure) {
     var template = new Cocotb.cocotb(structure);
     return template.generate();
@@ -39,5 +65,6 @@ class Templates {
 }
 
 module.exports = {
+  Codes : Codes,
   Templates: Templates
 }

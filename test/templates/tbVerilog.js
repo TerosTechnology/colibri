@@ -5,6 +5,7 @@ const Colibri = require('../../src/main');
 let options = {
   'type': "normal",
   'version' : Colibri.General.VERILOGSTANDARS.VERILOG2001,
+  'language' : Colibri.General.LANGUAGES.VERILOG,
   'parameters': [{
       'parameter': "X"
     },
@@ -18,7 +19,7 @@ var structure = fs.readFileSync('examples'+path.sep+'verilog'+path.sep+'structur
 structure = JSON.parse(structure);
 var testExpected = fs.readFileSync('examples'+path.sep+'verilog'+path.sep+'tbVerilog2001.v', 'utf8');
 templates = new Colibri.Templates.Templates();
-var test = templates.getVerilogTestbench(structure, options);
+var test = templates.getTemplate(Colibri.Templates.Codes.TYPES.TESTBENCH,structure, options);
 
 console.log('****************************************************************');
 if (testExpected.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '') === test.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '')) {
@@ -31,7 +32,7 @@ if (testExpected.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '') === tes
 options['type'] = "vunit"
 testExpected = fs.readFileSync('examples'+path.sep+'verilog'+path.sep+'tbVerilogVunit2001.v', 'utf8');
 templates = new Colibri.Templates.Templates();
-var test = templates.getVerilogTestbench(structure, options);
+var test = templates.getTemplate(Colibri.Templates.Codes.TYPES.TESTBENCH,structure, options);
 
 if (testExpected.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '') === test.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '')) {
   console.log("Testing... tbVerilogVunit 2001: Ok!");
