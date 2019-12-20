@@ -21,7 +21,7 @@ class BaseStructure {
     fs.writeFileSync(path,this.getMdDoc(file));
   }
   savePdf(path){
-
+    this.getPdfDoc(path);
   }
   saveHtml(path){
     fs.writeFileSync(path,this.html);
@@ -38,15 +38,22 @@ class BaseStructure {
   }
 
   getPdfDoc(path) {
-    var pdfPath = path + path.sep + "terosDoc.pdf"
-    var mdDoc = this.getMdDoc(path);
-
+    var fileSVG = pathLib.basename(path,pathLib.extname(path)) + ".svg";
+    var pathSVG = pathLib.dirname(path) + pathLib.sep + fileSVG;
+    this.saveSVG(pathSVG);
+    var mdDoc = this.getMdDoc(pathSVG);
     var markdownpdf = require("markdown-pdf")
     var options = {
       cssPath: __dirname + '/custom.css'
     }
-    markdownpdf(options).from.string(mdDoc).to(pdfPath, function() {
-      console.log("Created", pdfPath)
+    markdownpdf(options).from.string(mdDoc).to(path, function() {
+      console.log("Created", path)
+      try {
+        fs.unlinkSync(pathSVG)
+        //file removed
+      } catch(err) {
+        console.error(err)
+      }
     })
   }
 
