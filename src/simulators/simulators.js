@@ -1,5 +1,5 @@
 const axios = require("axios");
-
+const Codes = require('./codes')
 
 class Manager {
   constructor(ip,port){
@@ -7,13 +7,18 @@ class Manager {
   }
 
   async getSuites(){
+    var rsp = {result:null,data:null};
     const url = this.url+'/suites/';
     const getData = async url => {
       try {
         const response = await axios.get(url);
-        return response.data;
+        rsp['result'] = Codes.CODE_RESPONSE['SUCCESSFUL'];
+        rsp['data']   = response.data;
+        return rsp;
       } catch (error) {
         console.log(error);
+        rsp['result'] = Codes.CODE_RESPONSE['UNREACHABLE_SERVER'];
+        return rsp;
       }
     };
     return await getData(url);
@@ -60,5 +65,6 @@ class Manager {
 }
 
 module.exports = {
+  Codes : Codes,
   Manager : Manager
 }
