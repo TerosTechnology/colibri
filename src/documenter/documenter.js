@@ -1,3 +1,4 @@
+const pathLib = require('path');
 const Diagram = require('./diagram')
 const StmVHDL = require('./statemachinevhdl')
 const StmVerilog = require('./statemachineverilog')
@@ -11,14 +12,24 @@ class BaseStructure {
 
     this.md   = this.getMdDoc(null);
     this.html = this.getHtmlDoc(this.md);
+  }
 
-    var os = require('os');
-    if (os.platform == "win32"){
-      this.separator = "\\"
-    }
-    else{
-      this.separator = "/"
-    }
+  saveMarkdown(path){
+    var file = pathLib.basename(path,pathLib.extname(path)) + ".svg";
+    var pathSVG = pathLib.dirname(path) + pathLib.sep + file;
+    this.saveSVG(pathSVG);
+    fs.writeFileSync(path,this.getMdDoc(file));
+  }
+  savePdf(path){
+
+  }
+  saveHtml(path){
+    fs.writeFileSync(path,this.html);
+  }
+  saveImage(){
+  }
+  saveSVG(path){
+    fs.writeFileSync(path,this.getDiagram());
   }
 
   getDiagram(){
@@ -27,7 +38,7 @@ class BaseStructure {
   }
 
   getPdfDoc(path) {
-    var pdfPath = path + this.separator + "terosDoc.pdf"
+    var pdfPath = path + path.sep + "terosDoc.pdf"
     var mdDoc = this.getMdDoc(path);
 
     var markdownpdf = require("markdown-pdf")
@@ -77,11 +88,7 @@ class BaseStructure {
       mdDoc += this.getDiagram();
     }
     else{
-      var svgPath = path + this.separator + "terosOutDocModule.svg"
-      var svg = this.getDiagram();
-      const fs = require('fs');
-      fs.writeFileSync(svgPath,svg);
-      mdDoc += '![Diagram](' + svgPath + ' "Diagram")';
+      mdDoc += '![Diagram](' + path + ' "Diagram")';
     }
     mdDoc += "\n"
     //Description
