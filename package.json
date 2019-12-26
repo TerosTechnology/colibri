@@ -6,7 +6,7 @@
   "scripts": {
     "testLinter": "cd test; node linter",
     "testTemplates": "cd test && cd templates && node cocoTest && node verilatorTest && node vunitRunpy && node tbVhdl && node tbVerilog && node component",
-    "testDocumenter": "cd test && cd documenter && node stateMachine"
+    "testDocumenter": "cd test && cd documenter && node stateMachine",
     "testProjectManager": "cd test && cd projectManager && node projectManager"
   },
   "author": "",
