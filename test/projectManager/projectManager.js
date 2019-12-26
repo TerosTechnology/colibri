@@ -81,4 +81,4 @@ else {
   throw new Error('Test error testbench names.');
 }
 //Save trs
-projectManager.saveTrs("prj_created.trs");
+projectManager.saveProject("prj_created.trs");

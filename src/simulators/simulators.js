@@ -6,7 +6,7 @@ class Simulators {
     this.url = 'http://'+ip+":"+port;
   }
 
-  async getSuites(){
+  async getSuites(ip,port){
     var rsp = {result:null,data:null};
     const url = this.url+'/suites/';
     const getData = async url => {

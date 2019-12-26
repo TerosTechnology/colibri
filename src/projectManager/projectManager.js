@@ -16,7 +16,7 @@ class ProjectManager extends Simulators.Simulators{
     this.source = JSON.parse(jsonF)['src'];
     this.testbench = JSON.parse(jsonF)['tb'];
   }
-  saveTrs(file){
+  saveProject(file){
     var prj = {
       src : this.source,
       tb : this.testbench
@@ -109,6 +109,9 @@ class ProjectManager extends Simulators.Simulators{
       'files'  : this.source.concat(this.testbench)
     }
     return edam;
+  }
+  getSuites(server,port){
+    return super.getSuites(server,port);
   }
 }
 
