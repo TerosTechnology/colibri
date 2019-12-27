@@ -15,6 +15,8 @@ class ProjectManager extends Simulators.Simulators{
     var jsonF = fs.readFileSync(file,'utf8');
     this.source = JSON.parse(jsonF)['src'];
     this.testbench = JSON.parse(jsonF)['tb'];
+    console.log(this.source)
+    console.log(this.testbench)
   }
   saveProject(file){
     var prj = {
@@ -66,19 +68,19 @@ class ProjectManager extends Simulators.Simulators{
   }
   getSourceName(){
     var names = [];
-    for (const x in this.source) {
-      names = names.concat(this.source[x]['name']);
-    }
+    for(var i=0; i<this.source.length;++i)
+      names = names.concat(this.source[i]['name']);
     return names;
   }
   getTestbenchName(){
     var names = [];
-    for (const x in this.testbench) {
-      names = names.concat(this.testbench[x]['name']);
-    }
+    for(var i=0; i<this.testbench.length;++i)
+      names = names.concat(this.testbench[i]['name']);
     return names;
   }
   getFileType(f){
+    if (typeof f != "string")
+      return "none";
     var ext = f.split('.').pop();
     var file_type = "";
     if (ext == "py")

@@ -27,4 +27,4 @@ exports.ProjectManager = require('./projectManager/projectManager');
 //******************************************************************************
 //Beautifuler
 //******************************************************************************
-exports.Beautifuler = require('./beautifuler/export');
+exports.Beautifuler = require('./beautifuler/beautifuler');
