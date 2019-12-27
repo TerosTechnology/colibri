@@ -33,10 +33,10 @@ class ProjectManager extends Simulators.Simulators{
   }
   addSource(newSource){
     console.log("Added source...");
-    for (const x in newSource) {
+    for (var i=0;i<newSource.length;++i) {
       var f = {
-        name: newSource[x],
-        type: this.getFileType(newSource[x])
+        name: newSource[i],
+        type: this.getFileType(newSource[i])
       }
       this.source = this.source.concat(f);
     }
@@ -49,10 +49,10 @@ class ProjectManager extends Simulators.Simulators{
   }
   addTestbench(newTestbench){
     console.log("Added testbench...");
-    for (const x in newTestbench) {
+    for (var i=0;i<newTestbench.length;++i) {
       var f = {
-        name: newTestbench[x],
-        type: this.getFileType(newTestbench[x])
+        name: newTestbench[i],
+        type: this.getFileType(newTestbench[i])
       }
       this.testbench = this.testbench.concat(f);
     }
@@ -70,12 +70,14 @@ class ProjectManager extends Simulators.Simulators{
     var names = [];
     for(var i=0; i<this.source.length;++i)
       names = names.concat(this.source[i]['name']);
+    console.log(names)
     return names;
   }
   getTestbenchName(){
     var names = [];
     for(var i=0; i<this.testbench.length;++i)
       names = names.concat(this.testbench[i]['name']);
+    console.log(names)
     return names;
   }
   getFileType(f){
