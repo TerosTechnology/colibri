@@ -27,7 +27,7 @@ class runpy {
     this.str_out = "# -*- coding: utf-8 -*-\n"
   }
   pythonLibraries(){
-    this.str_out += "from os.path import join , dirname, abspath\nimport subprocess\nfrom vunit.ghdl_interface import GHDLInterface\nfrom vunit.simulator_factory import SIMULATOR_FACTORY\n"
+    this.str_out += "from os.path import join , dirname, abspath\nimport subprocess\nfrom vunit.sim_if.ghdl import GHDLInterface\nfrom vunit.sim_if.factory import SIMULATOR_FACTORY\n"
   }
   setLang(){
     if (this.str.lang=="vhdl") {

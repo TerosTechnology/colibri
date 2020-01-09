@@ -7,7 +7,7 @@ structure     = JSON.parse(structure);
 
 var runpy = new Colibri.Templates.Templates();
 
-fs.writeFile("run.py", runpy.getVUnitTemplate(structure), function(err) {
+fs.writeFile("runGen.py", runpy.getVUnitTemplate(structure), function(err) {
     if(err) {
       throw new Error('Test error.');
     }
