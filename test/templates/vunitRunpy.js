@@ -16,7 +16,7 @@ fs.writeFile("runGen.py", runpy.getVUnitTemplate(structure), function(err) {
 
 var file = fs.readFileSync('run.py','utf8');
 var fileGen = fs.readFileSync('runGen.py','utf8');
-if(file!=fileGen){
+if(file.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '') != fileGen.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '')) {
     throw new Error('Template error.');
 }
 else
