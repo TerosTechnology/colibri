@@ -5,14 +5,13 @@
   "main": "src/main.js",
   "scripts": {
     "testLinter": "cd test; node linter",
-    "testTemplates": "cd test && cd templates && node cocoTest && node verilatorTest && node vunitRunpy && filecompare runGen.py run.py && node tbVhdl && node tbVerilog && node component",
+    "testTemplates": "cd test && cd templates && node cocoTest && node verilatorTest && node vunitRunpy && node tbVhdl && node tbVerilog && node component",
     "testDocumenter": "cd test && cd documenter && node stateMachine"
   },
   "author": "",
   "license": "GPL-3.0",
   "dependencies": {
     "axios": "x",
-    "filecompare": "^1.0.4",
     "markdown-pdf": ">=10.0.0",
     "sequelize": "x",
     "shelljs": ">=0.8.3",
