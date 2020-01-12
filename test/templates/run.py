@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from os.path import join , dirname, abspath
 import subprocess
-from vunit.ghdl_interface import GHDLInterface
-from vunit.simulator_factory import SIMULATOR_FACTORY
+from vunit.sim_if.ghdl import GHDLInterface
+from vunit.sim_if.factory import SIMULATOR_FACTORY
 from vunit   import VUnit, VUnitCLI
 
 ##############################################################################
