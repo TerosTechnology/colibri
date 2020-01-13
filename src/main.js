@@ -20,3 +20,11 @@ exports.Templates    = require('./templates/templates');
 //Templates
 //******************************************************************************
 exports.Documenter = require('./documenter/documenter');
+//******************************************************************************
+//ProjectManager
+//******************************************************************************
+exports.ProjectManager = require('./projectManager/projectManager');
+//******************************************************************************
+//Beautifuler
+//******************************************************************************
+exports.Beautifuler = require('./beautifuler/beautifuler');

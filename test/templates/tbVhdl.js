@@ -4,6 +4,7 @@ const Colibri = require('../../src/main');
 
 let options = {
   'type' : "normal",
+  'language' : Colibri.General.LANGUAGES.VHDL,
   'parameters' : [
     {'parameter' : "X"},
     {'parameter' : "Y"}
@@ -14,7 +15,7 @@ var structure = fs.readFileSync('examples'+path.sep+'vhdl'+path.sep+'structure.j
 structure     = JSON.parse(structure);
 var testExpected = fs.readFileSync('examples'+path.sep+'vhdl'+path.sep+'tbVhdl.vhd','utf8');
 templates = new Colibri.Templates.Templates();
-var test = templates.getVHDLTestbench(structure, options);
+var test = templates.getTemplate(Colibri.Templates.Codes.TYPES.TESTBENCH,structure, options);
 
 console.log('****************************************************************');
 if(testExpected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === test.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
@@ -28,7 +29,7 @@ else{
 options['type'] = "vunit";
 testExpected = fs.readFileSync('examples'+path.sep+'vhdl'+path.sep+'tbVhdlVunit.vhd','utf8');
 templates = new Colibri.Templates.Templates();
-var test = templates.getVHDLTestbench(structure, options)
+var test = templates.getTemplate(Colibri.Templates.Codes.TYPES.TESTBENCH,structure, options)
 
 if(testExpected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '') === test.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '')){
   console.log("Testing... tbVhdlVunit: Ok!");

@@ -1,0 +1,1 @@
+{"src":[{"name":"source_0.v","type":"verilogSource-2005"},{"name":"source_1.v","type":"verilogSource-2005"},{"name":"source_3.v","type":"verilogSource-2005"},{"name":"source_4.v","type":"verilogSource-2005"},{"name":"source_5.v","type":"verilogSource-2005"}],"tb":[{"name":"testbench_0.v","type":"verilogSource-2005"},{"name":"testbench_3.v","type":"verilogSource-2005"}]}

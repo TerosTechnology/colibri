@@ -6,18 +6,19 @@
   "scripts": {
     "testLinter": "cd test; node linter",
     "testTemplates": "cd test && cd templates && node cocoTest && node verilatorTest && node vunitRunpy && node tbVhdl && node tbVerilog && node component",
-    "testDocumenter": "cd test && cd documenter && node stateMachine"
+    "testDocumenter": "cd test && cd documenter && node stateMachine",
+    "testProjectManager": "cd test && cd projectManager && node projectManager"
   },
   "author": "",
   "license": "GPL-3.0",
   "dependencies": {
-    "axios": "x",
-    "markdown-pdf": ">=10.0.0",
+    "markdown-pdf" : "10.0.0",
+    "svg.js" : "2.5",
+    "svgdom" : "x",
+    "showdown": "1.9.0",
+    "shelljs": "0.8.3",
+    "state-machine-cat": "4.1.0",
     "sequelize": "x",
-    "shelljs": ">=0.8.3",
-    "showdown": ">=1.9.0",
-    "state-machine-cat": ">=4.1.0",
-    "svg.js": "2.5",
-    "svgdom": "x"
+    "axios" : "x"
   }
 }
