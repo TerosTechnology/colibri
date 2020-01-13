@@ -76,7 +76,7 @@ function setVunitLibraries() {
 
 function setLibraries(m) {
   var str = '';
-  for (const x in m) {
+  for (let x = 0; x < m.length; ++x) {
     str += 'use ' + m[x]['name'] + ';\n';
   }
   return str;
@@ -108,7 +108,7 @@ function setConstants(space, m) {
   str += space + '-- Clock period\n';
   str += space + 'constant clk_period : time := 5 ns;\n';
   str += space + '-- Generics\n';
-  for (const x in m) {
+  for (let x = 0; x < m.length; ++x) {
     str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ';\n';
   }
   return str;
@@ -116,7 +116,7 @@ function setConstants(space, m) {
 
 function setSignals(space, m) {
   var str = '';
-  for (const x in m) {
+  for (let x = 0; x < m.length; ++x) {
     str += space + 'signal ' + m[x]['name'] + ' : ' + m[x]['type'] + ';\n';
   }
   return str;

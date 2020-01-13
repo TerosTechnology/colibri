@@ -56,7 +56,7 @@ function setVunitLibraries() {
 
 function setLibraries(m) {
   var str = '';
-  for (const x in m) {
+  for (let x = 0; x < m.length; ++x) {
     str += 'use ' + m[x]['name'] + ';\n';
   }
   return str;
@@ -79,7 +79,7 @@ function setVunitEntity(m) {
 function setConstants(space, m) {
   var str = '';
   str += space + '// Parameters\n';
-  for (const x in m) {
+  for (let x = 0; x < m.length; ++x) {
     str += space + 'localparam ' + m[x]['type'] + ' ' + m[x]['name'] + ';\n';
   }
   return str;
@@ -87,7 +87,7 @@ function setConstants(space, m) {
 
 function setSignals(space, m) {
   var str = '';
-  for (const x in m) {
+  for (let x = 0; x < m.length; ++x) {
     str += space + 'reg ' + m[x]['type'] + ' ' + m[x]['name'] + ';\n';
   }
   return str;
