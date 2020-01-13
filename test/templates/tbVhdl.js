@@ -23,8 +23,6 @@ if(testExpected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === test.re
 }
 else{
   console.log("Testing... tbVhdl: Fail!");
-  console.log(testExpected);
-  console.log(test);
   throw new Error('Test error.');
 }
 ////////////////////////////////////////////////////////////////////////////////
