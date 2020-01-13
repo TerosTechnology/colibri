@@ -14,11 +14,11 @@ class Simulators {
         const response = await axios.get(url);
         rsp['result'] = Codes.CODE_RESPONSE['SUCCESSFUL'];
         rsp['data']   = response.data;
-        return rsp;
+        return await rsp;
       } catch (error) {
         console.log(error);
         rsp['result'] = Codes.CODE_RESPONSE['UNREACHABLE_SERVER'];
-        return rsp;
+        return await rsp;
       }
     };
     return await getData(url);
