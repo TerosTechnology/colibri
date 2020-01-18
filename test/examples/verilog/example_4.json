@@ -1,0 +1,7 @@
+{ entity: { name: 'clk_div' },
+  generics: [],
+  ports:
+   [ { name: 'clk_in', kind: 'input', type: '' },
+     { name: 'reset', kind: 'input', type: '' },
+     { name: 'enable', kind: 'input', type: '' },
+     { name: 'clk_out', kind: 'output', type: '' } ] }

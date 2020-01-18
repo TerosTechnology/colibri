@@ -1,0 +1,5 @@
+{ entity: { name: 'gray_counter' },
+  generics: [],
+  ports:
+   [ { name: 'clk, rst, enable', kind: 'input', type: '' },
+     { name: 'out', kind: 'output', type: '[ 7:0]' } ] }

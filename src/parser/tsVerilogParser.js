@@ -5,19 +5,15 @@ const path = require('path');
 const Parser = require('tree-sitter');
 const VerilogParser = require('tree-sitter-verilog');
 
-const parser = new Parser();
-parser.setLanguage(VerilogParser);
+// const parser = new Parser();
+// parser.setLanguage(VerilogParser);
 
-const source = '..'+path.sep+'..'+path.sep+'test'+path.sep+'examples'+path.sep+'verilog'+path.sep+'example_1.v'
-const sourceCode = fs.readFileSync(source,'utf8');
-const tree = parser.parse(sourceCode);
+// const source = '..'+path.sep+'..'+path.sep+'test'+path.sep+'examples'+path.sep+'verilog'+path.sep+'example_7.v'
+// const sourceCode = fs.readFileSync(source,'utf8');
 
+var lines
 
-lines = fileLines(source)
-
-console.log(getAll(tree.rootNode));
-
-
+// console.log(getAll(sourceCode));
 
 arr = []
 function searchTree(element,matchingTitle){
@@ -81,7 +77,7 @@ function getPortType(port,split_code){
   searchTree(port,'net_port_type1');
   if (arr[0] == null){
     console.log("- Port type: ");
-    return;
+    return "";
   }
   var line = split_code[arr[0].startPosition.row]
   var port_type = line.substring(arr[0].startPosition.column,arr[0].endPosition.column)
@@ -128,9 +124,9 @@ function getPorts(tree){
   inputs = arr;
   for(var x = 0; x < inputs.length;++x){
     item = {
-      'name':  getPortName(inputs[x],lines),
-      'kind':  'output',
-      'type':  getPortType(inputs[x],lines)
+      "name":  getPortName(inputs[x],lines),
+      "kind":  "output",
+      "type":  getPortType(inputs[x],lines)
     }
     console.log("--");
     items.push(item);
@@ -142,9 +138,23 @@ function getPorts(tree){
   inputs = arr;
   for(var x = 0; x < inputs.length;++x){
     item = {
-      'name':  getPortNameAnsi(inputs[x],lines),
-      'kind':  getPortKind(inputs[x],lines),
-      'type':  getPortType(inputs[x],lines)
+      "name":  getPortNameAnsi(inputs[x],lines),
+      "kind":  getPortKind(inputs[x],lines),
+      "type":  getPortType(inputs[x],lines)
+    }
+    console.log("--");
+    items.push(item);
+  }
+  //inouts
+  console.log("----------- inouts -----------");
+  arr = []
+  searchTree(element,'inout_declaration');
+  inputs = arr;
+  for(var x = 0; x < inputs.length;++x){
+    item = {
+      "name":  getPortName(inputs[x],lines),
+      "kind":  "inout",
+      "type":  getPortType(inputs[x],lines)
     }
     console.log("--");
     items.push(item);
@@ -154,22 +164,18 @@ function getPorts(tree){
 
 
 
-
-
-
-
-
-
-
-
-
-
-function getAll(tree) {
+function getAll(sourceCode) {
+  const parser = new Parser();
+  parser.setLanguage(VerilogParser);
+  lines = fileLines(sourceCode)
+  const tree = parser.parse(sourceCode);
+  // console.log(tree.rootNode);
+  fs.writeFile("tree.json", tree.rootNode, function(err) {  });
   var structure = {
         // 'libraries': this.getLibraries(str),
-    'entity': getEntityName(tree), // module
-    'generics': getGenerics(tree), // parameters
-    'ports': getPorts(tree),
+    "entity": getEntityName(tree.rootNode), // module
+    "generics": getGenerics(tree.rootNode), // parameters
+    "ports": getPorts(tree.rootNode),
         // 'architecture': this.getArchitectureName(str),
         // 'signals': this.getSignals(str),  // regs
         // 'constants': this.getConstants(str),
@@ -189,21 +195,16 @@ function getGenerics(tree) {
   var element = tree;
   //Inputs
   arr = []
-  // searchTree(element,'parameter_port_declaration');
   searchTree(element,'parameter_declaration');
   if (arr== null) {
     searchTree(element,'parameter_port_declaration');
   }
-  // console.log(element);
-  // element = arr
-  // arr = []
-  // searchTree(element[0],'simple_identifier');
   inputs = arr;
   console.log(inputs);
   for(var x = 0; x < inputs.length;++x){
     item = {
-      'name':  getGenericName(inputs[x],lines),
-      'kind':  getGenericKind(inputs[x],lines)
+      "name":  getGenericName(inputs[x],lines),
+      "kind":  getGenericKind(inputs[x],lines)
     }
     console.log("--");
     items.push(item);
@@ -253,31 +254,7 @@ function getGenericKind(port,split_code){
   }
 }
 
-// function getGenericType(port,split_code){
-//   arr = [];
-//   searchTree(port,'list_of_variable_identifiers');
-//   if(arr.length == 0){
-//     arr = []
-//     searchTree(port,'simple_identifier');
-//     var line = split_code[arr[0].startPosition.row]
-//     var port_name = line.substring(arr[0].startPosition.column,arr[0].endPosition.column)
-//     console.log("- Port name: " + port_name);
-//     return port_name;
-//   }
-//   else{
-//     var line = split_code[arr[0].startPosition.row]
-//     var port_name = line.substring(arr[0].startPosition.column,arr[0].endPosition.column)
-//     var split_port_name = port_name.split(',')
-//     for(var x = 0;x < split_port_name.length; ++x)
-//       console.log("- Port name: " + split_port_name[x].replace(/ /g,''));
-//       return port_name;
-//   }
-//
-// }
-
 function getEntityName(tree) {
-  // const key = ['module_header', 'simple_identifier'];
-  // let key = 'module_header';
   arr = [];
   var element = tree;
   //Inputs
@@ -287,26 +264,18 @@ function getEntityName(tree) {
   arr = []
   searchTree(element[0],'simple_identifier');
   let item = {
-    'name':  extractData(arr[0])
+    "name":  extractData(arr[0])
   };
   return item
 }
 
 function extractData (node){
-  // console.log(lines[node.startPosition.row].substr(node.startPosition.column, node.endPosition.column-node.startPosition.column));
   return lines[node.startPosition.row].substr(node.startPosition.column, node.endPosition.column-node.startPosition.column)
 }
 
 function fileLines(source) {
-  // var array = fs.readFileSync(source).toString().replace(/\r\n/g,'\n').split('\n');
-  var array = fs.readFileSync(source).toString().split(os.EOL);
+  var array = source.toString().split(os.EOL);
   return array
 }
 
-fs.writeFile("tree-sitter-verilog.json", tree.rootNode, function(err) {
-    if(err) {
-      throw new Error('tree-sitter error.');
-    }
-    else
-      console.log("---> Tested: tree-sitter generator");
-});
+module.exports = getAll

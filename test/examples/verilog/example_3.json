@@ -1,0 +1,40 @@
+{
+  "entity": {
+    "name": "uart_rx"
+  },
+  "generics": [{
+    "name": "cycles_per_bit",
+    "kind": "integer"
+  }],
+  "ports": [{
+      "name": "clk",
+      "kind": "input",
+      "type": ""
+    },
+    {
+      "name": "rx",
+      "kind": "input",
+      "type": ""
+    },
+    {
+      "name": "tready",
+      "kind": "input",
+      "type": ""
+    },
+    {
+      "name": "overflow",
+      "kind": "output",
+      "type": ""
+    },
+    {
+      "name": "tvalid",
+      "kind": "output",
+      "type": ""
+    },
+    {
+      "name": "tdata",
+      "kind": "output",
+      "type": ""
+    }
+  ]
+}

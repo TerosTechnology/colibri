@@ -1,5 +1,6 @@
 const fs = require('fs');
 const VerilogParser = require('../src/parser/verilogparser')
+const tsVerilogParser = require('../src/parser/tsVerilogParser')
 const VhdlParser = require('../src/parser/vhdlparser')
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -14,16 +15,27 @@ for (let x=0;x<1;++x){
   console.log("Test " + rs + " ["+"example_"+x+".v"+"]");
 }
 ////////////////////////////////////////////////////////////////////////////////
-for (let x=0;x<6;++x){
-  let parser = new VhdlParser();
-  let example_vhd = fs.readFileSync('./examples/vhdl/example_'+x+'.vhd' ,'utf8');
-  let example_result  = parser.getAll(example_vhd);
-  let example_exp_result = fs.readFileSync('./examples/vhdl/example_'+x+'.json','utf8');
+for (let x=1;x<4;++x){
+  // let parser = new tsVerilogParser();
+  let example_verilog = fs.readFileSync('./examples/verilog/example_'+x+'.v' ,'utf8');
+  let example_result  = tsVerilogParser(example_verilog);
+  let example_exp_result = fs.readFileSync('./examples/verilog/example_'+x+'.json','utf8');
   example_exp_result     = JSON.parse(example_exp_result);
 
-  let rs = compareVhdl(example_result,example_exp_result,"example_"+x+".vhd");
-  console.log("Test " + rs + " ["+"example_"+x+".vhd"+"]")
+  let rs = compareVerilogTs(example_result,example_exp_result,"example_"+x+".v");
+  console.log("Test " + rs + " ["+"example_"+x+".v"+"]");
 }
+////////////////////////////////////////////////////////////////////////////////
+// for (let x=0;x<6;++x){
+//   let parser = new VhdlParser.VhdlParser();
+//   let example_vhd = fs.readFileSync('./examples/vhdl/example_'+x+'.vhd' ,'utf8');
+//   let example_result  = parser.getAll(example_vhd);
+//   let example_exp_result = fs.readFileSync('./examples/vhdl/example_'+x+'.json','utf8');
+//   example_exp_result     = JSON.parse(example_exp_result);
+//
+//   let rs = compareVhdl(example_result,example_exp_result,"example_"+x+".vhd");
+//   console.log("Test " + rs + " ["+"example_"+x+".vhd"+"]")
+// }
 ////////////////////////////////////////////////////////////////////////////////
 function compareVhdl(m,n,file){
   var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
@@ -48,6 +60,17 @@ function compareVerilog(m,n,file){
   var ch5 = check(m['constants'],n['constants'],['name','kind'],"constants",file);
 
   return ch0 && ch1 && ch2 && ch3 && ch4 && ch5;
+}
+function compareVerilogTs(m,n,file){
+  // var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
+  if(m['entity']['name'] != n['entity']['name']) { return false; }
+  var ch1 = check(m['generics'],n['generics'],['name','kind'],"generics",file);
+  var ch2 = check(m['ports'],n['ports'],['name','kind','type'],"ports",file);
+  // var ch3 = check(m['regs'],n['regs'],['name','kind','type'],"regs",file);
+  // var ch4 = check(m['nets'],n['nets'],['name','kind','type'],"nets",file);
+  // var ch5 = check(m['constants'],n['constants'],['name','kind'],"constants",file);
+
+  return ch1 && ch2;
 }
 
 function check(m,n,cmp,type,file){

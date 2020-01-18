@@ -1,0 +1,45 @@
+{
+  "entity": {
+    "name": "add2_and_clip_reg"
+  },
+  "generics": [{
+    "name": "WIDTH",
+    "kind": "WIDTH"
+  }],
+  "ports": [{
+      "name": "clk",
+      "kind": "input",
+      "type": ""
+    },
+    {
+      "name": "rst",
+      "kind": "input",
+      "type": ""
+    },
+    {
+      "name": "in1",
+      "kind": "input",
+      "type": "[WIDTH-1:0]"
+    },
+    {
+      "name": "in2",
+      "kind": "input",
+      "type": "[WIDTH-1:0]"
+    },
+    {
+      "name": "strobe_in",
+      "kind": "input",
+      "type": ""
+    },
+    {
+      "name": "sum",
+      "kind": "output",
+      "type": ""
+    },
+    {
+      "name": "strobe_out",
+      "kind": "output",
+      "type": ""
+    }
+  ]
+}
