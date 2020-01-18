@@ -104,59 +104,35 @@ function getPortKind(port,split_code){
   return port_type;
 }
 
+function addPort(element,key,name,direction,type,ansi,items){
+  var item={};
+  arr = []
+  searchTree(element,key);
+  inputs = arr;
+  for(var x = 0; x < inputs.length;++x){
+    item = {
+      'name':  name(inputs[x],lines),
+      'direction':  ((ansi == true)? direction(inputs[x],lines):direction),
+      'type':  type(inputs[x],lines)
+    }
+    items.push(item);
+  }
+  return items
+}
+
 function getPorts(tree){
   arr = [];
   var items=[];
   var item={};
   var element = tree;
   //Inputs
-  arr = []
-  searchTree(element,'input_declaration');
-  inputs = arr;
-  for(var x = 0; x < inputs.length;++x){
-    item = {
-      'name':  getPortName(inputs[x],lines),
-      'direction':  'input',
-      'type':  getPortType(inputs[x],lines)
-    }
-    items.push(item);
-  }
+  items = addPort(element,'input_declaration',getPortName,'input',getPortType,false,items)
   //Outputs
-  arr = []
-  searchTree(element,'output_declaration');
-  inputs = arr;
-  for(var x = 0; x < inputs.length;++x){
-    item = {
-      "name":  getPortName(inputs[x],lines),
-      "direction":  "output",
-      "type":  getPortType(inputs[x],lines)
-    }
-    items.push(item);
-  }
+  items = addPort(element,'output_declaration',getPortName,'output',getPortType,false,items)
   //ansi_port_declaration
-  arr = []
-  searchTree(element,'ansi_port_declaration');
-  inputs = arr;
-  for(var x = 0; x < inputs.length;++x){
-    item = {
-      "name":  getPortNameAnsi(inputs[x],lines),
-      "direction":  getPortKind(inputs[x],lines),
-      "type":  getPortType(inputs[x],lines)
-    }
-    items.push(item);
-  }
+  items = addPort(element,'ansi_port_declaration',getPortNameAnsi,getPortKind,getPortType,true,items)
   //inouts
-  arr = []
-  searchTree(element,'inout_declaration');
-  inputs = arr;
-  for(var x = 0; x < inputs.length;++x){
-    item = {
-      "name":  getPortName(inputs[x],lines),
-      "direction":  "inout",
-      "type":  getPortType(inputs[x],lines)
-    }
-    items.push(item);
-  }
+  items = addPort(element,'inout_declaration',getPortName,"inout",getPortType,false,items)
   return items
 }
 
