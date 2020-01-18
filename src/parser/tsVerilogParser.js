@@ -170,7 +170,7 @@ function getAll(sourceCode) {
   lines = fileLines(sourceCode)
   const tree = parser.parse(sourceCode);
   // console.log(tree.rootNode);
-  fs.writeFile("tree.json", tree.rootNode, function(err) {  });
+  // fs.writeFile("tree.json", tree.rootNode, function(err) {  });
   var structure = {
         // 'libraries': this.getLibraries(str),
     "entity": getEntityName(tree.rootNode), // module

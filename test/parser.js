@@ -15,7 +15,7 @@ for (let x=0;x<1;++x){
   console.log("Test " + rs + " ["+"example_"+x+".v"+"]");
 }
 ////////////////////////////////////////////////////////////////////////////////
-for (let x=1;x<4;++x){
+for (let x=1;x<5;++x){
   // let parser = new tsVerilogParser();
   let example_verilog = fs.readFileSync('./examples/verilog/example_'+x+'.v' ,'utf8');
   let example_result  = tsVerilogParser(example_verilog);
