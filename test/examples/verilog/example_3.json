@@ -8,32 +8,32 @@
   }],
   "ports": [{
       "name": "clk",
-      "kind": "input",
+      "direction": "input",
       "type": ""
     },
     {
       "name": "rx",
-      "kind": "input",
+      "direction": "input",
       "type": ""
     },
     {
       "name": "tready",
-      "kind": "input",
+      "direction": "input",
       "type": ""
     },
     {
       "name": "overflow",
-      "kind": "output",
+      "direction": "output",
       "type": ""
     },
     {
       "name": "tvalid",
-      "kind": "output",
+      "direction": "output",
       "type": ""
     },
     {
       "name": "tdata",
-      "kind": "output",
+      "direction": "output",
       "type": ""
     }
   ]

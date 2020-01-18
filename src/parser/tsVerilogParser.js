@@ -116,7 +116,7 @@ function getPorts(tree){
   for(var x = 0; x < inputs.length;++x){
     item = {
       'name':  getPortName(inputs[x],lines),
-      'kind':  'input',
+      'direction':  'input',
       'type':  getPortType(inputs[x],lines)
     }
     items.push(item);
@@ -128,7 +128,7 @@ function getPorts(tree){
   for(var x = 0; x < inputs.length;++x){
     item = {
       "name":  getPortName(inputs[x],lines),
-      "kind":  "output",
+      "direction":  "output",
       "type":  getPortType(inputs[x],lines)
     }
     items.push(item);
@@ -140,7 +140,7 @@ function getPorts(tree){
   for(var x = 0; x < inputs.length;++x){
     item = {
       "name":  getPortNameAnsi(inputs[x],lines),
-      "kind":  getPortKind(inputs[x],lines),
+      "direction":  getPortKind(inputs[x],lines),
       "type":  getPortType(inputs[x],lines)
     }
     items.push(item);
@@ -152,7 +152,7 @@ function getPorts(tree){
   for(var x = 0; x < inputs.length;++x){
     item = {
       "name":  getPortName(inputs[x],lines),
-      "kind":  "inout",
+      "direction":  "inout",
       "type":  getPortType(inputs[x],lines)
     }
     items.push(item);

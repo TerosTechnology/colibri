@@ -11,67 +11,67 @@
   "ports":
   [
     { "name": "reset",
-      "kind": "input",
+      "direction": "input",
       "type": "",
       "index": 546
     },
     { "name": "txclk",
-      "kind": "input",
+      "direction": "input",
       "type": "",
       "index": 546
     },
     { "name": "ld_tx_data",
-      "kind": "input",
+      "direction": "input",
       "type": "",
       "index": 546
     },
     { "name": "tx_data",
-      "kind": "input",
+      "direction": "input",
       "type": "[7:0]",
       "index": 546
     },
     { "name": "tx_enable",
-      "kind": "input",
+      "direction": "input",
       "type": "",
       "index": 546
     },
     { "name": "tx_out",
-      "kind": "output",
+      "direction": "output",
       "type": "",
       "index": 546
     },
     { "name": "tx_empty",
-      "kind": "output",
+      "direction": "output",
       "type": "",
       "index": 546
     },
     { "name": "rxclk",
-      "kind": "input",
+      "direction": "input",
       "type": "",
       "index": 546
     },
     { "name": "uld_rx_data",
-      "kind": "input",
+      "direction": "input",
       "type": "",
       "index": 546
     },
     { "name": "rx_data",
-      "kind": "output",
+      "direction": "output",
       "type": "[7:0]",
       "index": 546
     },
     { "name": "rx_enable",
-      "kind": "input",
+      "direction": "input",
       "type": "",
       "index": 546
     },
     { "name": "rx_in",
-      "kind": "input",
+      "direction": "input",
       "type": "",
       "index": 546
     },
     { "name": "rx_empty",
-      "kind": "output",
+      "direction": "output",
       "type": "",
       "index": 546
     }

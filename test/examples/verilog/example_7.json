@@ -1,9 +1,37 @@
-{ entity: { name: 'behav_counter' },
-  generics: [],
-  ports:
-   [ { name: 'd', kind: 'input', type: '[7:0]' },
-     { name: 'clk', kind: 'input', type: '' },
-     { name: 'clear', kind: 'input', type: '' },
-     { name: 'load', kind: 'input', type: '' },
-     { name: 'up_down', kind: 'input', type: '' },
-     { name: 'qd', kind: 'output', type: '[7:0]' } ] }
+{
+  "entity": {
+    "name": "behav_counter"
+  },
+  "generics": [],
+  "ports": [{
+      "name": "d",
+      "direction": "input",
+      "type": "[7:0]"
+    },
+    {
+      "name": "clk",
+      "direction": "input",
+      "type": ""
+    },
+    {
+      "name": "clear",
+      "direction": "input",
+      "type": ""
+    },
+    {
+      "name": "load",
+      "direction": "input",
+      "type": ""
+    },
+    {
+      "name": "up_down",
+      "direction": "input",
+      "type": ""
+    },
+    {
+      "name": "qd",
+      "direction": "output",
+      "type": "[7:0]"
+    }
+  ]
+}

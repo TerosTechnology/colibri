@@ -5,22 +5,22 @@
   "generics": [],
   "ports": [{
       "name": "nC",
-      "kind": "input",
+      "direction": "input",
       "type": ""
     },
     {
       "name": "C",
-      "kind": "input",
+      "direction": "input",
       "type": ""
     },
     {
       "name": "L",
-      "kind": "inout",
+      "direction": "inout",
       "type": ""
     },
     {
       "name": "R",
-      "kind": "inout",
+      "direction": "inout",
       "type": ""
     }
   ]

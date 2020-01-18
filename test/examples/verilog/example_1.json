@@ -8,37 +8,37 @@
   }],
   "ports": [{
       "name": "clk",
-      "kind": "input",
+      "direction": "input",
       "type": ""
     },
     {
       "name": "rst",
-      "kind": "input",
+      "direction": "input",
       "type": ""
     },
     {
       "name": "in1",
-      "kind": "input",
+      "direction": "input",
       "type": "[WIDTH-1:0]"
     },
     {
       "name": "in2",
-      "kind": "input",
+      "direction": "input",
       "type": "[WIDTH-1:0]"
     },
     {
       "name": "strobe_in",
-      "kind": "input",
+      "direction": "input",
       "type": ""
     },
     {
       "name": "sum",
-      "kind": "output",
+      "direction": "output",
       "type": ""
     },
     {
       "name": "strobe_out",
-      "kind": "output",
+      "direction": "output",
       "type": ""
     }
   ]
