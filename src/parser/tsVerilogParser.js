@@ -13,7 +13,6 @@ const sourceCode = fs.readFileSync(source,'utf8');
 const tree = parser.parse(sourceCode);
 
 
-var nodes = [];
 lines = fileLines(source)
 
 console.log(getAll(tree.rootNode));
@@ -54,12 +53,44 @@ function getPortName(port,split_code){
       console.log("- Port name: " + split_port_name[x].replace(/ /g,''));
       return port_name;
   }
+}
 
+function getPortNameAnsi(port,split_code){
+  arr = [];
+  searchTree(port,'port_identifier');
+  if(arr.length == 0){
+    arr = []
+    searchTree(port,'simple_identifier');
+    var line = split_code[arr[0].startPosition.row]
+    var port_name = line.substring(arr[0].startPosition.column,arr[0].endPosition.column)
+    console.log("- Port name: " + port_name);
+    return port_name;
+  }
+  else{
+    var line = split_code[arr[0].startPosition.row]
+    var port_name = line.substring(arr[0].startPosition.column,arr[0].endPosition.column)
+    var split_port_name = port_name.split(',')
+    for(var x = 0;x < split_port_name.length; ++x)
+      console.log("- Port name: " + split_port_name[x].replace(/ /g,''));
+      return port_name;
+  }
 }
 
 function getPortType(port,split_code){
   arr = [];
   searchTree(port,'net_port_type1');
+  if (arr[0] == null){
+    console.log("- Port type: ");
+    return;
+  }
+  var line = split_code[arr[0].startPosition.row]
+  var port_type = line.substring(arr[0].startPosition.column,arr[0].endPosition.column)
+  console.log("- Port type: " + port_type);
+  return port_type;
+}
+function getPortKind(port,split_code){
+  arr = [];
+  searchTree(port,'port_direction');
   if (arr[0] == null){
     console.log("- Port type: ");
     return;
@@ -93,11 +124,26 @@ function getPorts(tree){
   console.log("----------- Outputs -----------");
   arr = []
   searchTree(element,'output_declaration');
+  // searchTree(element,'ansi_port_declaration');
   inputs = arr;
   for(var x = 0; x < inputs.length;++x){
     item = {
       'name':  getPortName(inputs[x],lines),
       'kind':  'output',
+      'type':  getPortType(inputs[x],lines)
+    }
+    console.log("--");
+    items.push(item);
+  }
+  //ansi_port_declaration
+  console.log("----------- ansi_port_declaration -----------");
+  arr = []
+  searchTree(element,'ansi_port_declaration');
+  inputs = arr;
+  for(var x = 0; x < inputs.length;++x){
+    item = {
+      'name':  getPortNameAnsi(inputs[x],lines),
+      'kind':  getPortKind(inputs[x],lines),
       'type':  getPortType(inputs[x],lines)
     }
     console.log("--");
