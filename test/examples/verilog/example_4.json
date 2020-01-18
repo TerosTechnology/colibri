@@ -1,0 +1,31 @@
+{
+  "entity": {
+    "name": "clk_div"
+  },
+  "generics": [],
+  "ports": [{
+      "name": "clk_in",
+      "direction": "input",
+      "type": "",
+      "comment": ""
+    },
+    {
+      "name": "reset",
+      "direction": "input",
+      "type": "",
+      "comment": ""
+    },
+    {
+      "name": "enable",
+      "direction": "input",
+      "type": "",
+      "comment": ""
+    },
+    {
+      "name": "clk_out",
+      "direction": "output",
+      "type": "",
+      "comment": ""
+    }
+  ]
+}

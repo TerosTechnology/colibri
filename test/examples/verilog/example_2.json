@@ -1,0 +1,31 @@
+{
+  "entity": {
+    "name": "t_gate_switch"
+  },
+  "generics": [],
+  "ports": [{
+      "name": "nC",
+      "direction": "input",
+      "type": "",
+      "comment": ""
+    },
+    {
+      "name": "C",
+      "direction": "input",
+      "type": "",
+      "comment": ""
+    },
+    {
+      "name": "L",
+      "direction": "inout",
+      "type": "",
+      "comment": ""
+    },
+    {
+      "name": "R",
+      "direction": "inout",
+      "type": "",
+      "comment": ""
+    }
+  ]
+}

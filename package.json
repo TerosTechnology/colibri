@@ -7,7 +7,8 @@
     "testLinter": "cd test; node linter",
     "testTemplates": "cd test && cd templates && node cocoTest && node verilatorTest && node vunitRunpy && node tbVhdl && node tbVerilog && node component",
     "testDocumenter": "cd test && cd documenter && node stateMachine",
-    "testProjectManager": "cd test && cd projectManager && node projectManager"
+    "testProjectManager": "cd test && cd projectManager && node projectManager",
+    "testParser": "cd test && node parser"
   },
   "author": "",
   "license": "GPL-3.0",
@@ -19,6 +20,8 @@
     "shelljs": "0.8.3",
     "state-machine-cat": "4.1.0",
     "sequelize": "x",
-    "axios" : "x"
+    "axios" : "x",
+    "tree-sitter": "^0.15.15",
+    "tree-sitter-verilog": "^0.18.8"
   }
 }

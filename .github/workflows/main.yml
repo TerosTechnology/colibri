@@ -56,3 +56,17 @@ jobs:
         run: |
           npm install .
           npm run-script testProjectManager
+  # ****************************************************************************
+  # ****************************************************************************
+  test-Parser:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-18.04]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v1
+      - name: Test
+        run: |
+          npm install .
+          npm run-script testParser

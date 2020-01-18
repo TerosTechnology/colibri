@@ -1,0 +1,27 @@
+{
+  "entity": {
+    "name": "gray_counter"
+  },
+  "generics": [],
+  "ports": [{
+    "name": "clk",
+    "direction": "input",
+    "type": "",
+    "comment": ""
+  }, {
+    "name": "rst",
+    "direction": "input",
+    "type": "",
+    "comment": ""
+  }, {
+    "name": "enable",
+    "direction": "input",
+    "type": "",
+    "comment": ""
+  }, {
+    "name": "out",
+    "direction": "output",
+    "type": "[ 7:0]",
+    "comment": ""
+  }]
+}
