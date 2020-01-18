@@ -8,7 +8,7 @@ const VerilogParser = require('tree-sitter-verilog');
 const parser = new Parser();
 parser.setLanguage(VerilogParser);
 
-const source = '..'+path.sep+'..'+path.sep+'test'+path.sep+'examples'+path.sep+'verilog'+path.sep+'example_0.v'
+const source = '..'+path.sep+'..'+path.sep+'test'+path.sep+'examples'+path.sep+'verilog'+path.sep+'example_1.v'
 const sourceCode = fs.readFileSync(source,'utf8');
 const tree = parser.parse(sourceCode);
 
@@ -72,7 +72,7 @@ function getPortType(port,split_code){
 
 function getPorts(tree){
   arr = [];
-  var items={};
+  var items=[];
   var item={};
   var element = tree;
   //Inputs
@@ -95,9 +95,13 @@ function getPorts(tree){
   searchTree(element,'output_declaration');
   inputs = arr;
   for(var x = 0; x < inputs.length;++x){
-    getPortName(inputs[x],lines);
-    getPortType(inputs[x],lines);
+    item = {
+      'name':  getPortName(inputs[x],lines),
+      'kind':  'output',
+      'type':  getPortType(inputs[x],lines)
+    }
     console.log("--");
+    items.push(item);
   }
   return items
 }
@@ -118,7 +122,7 @@ function getAll(tree) {
   var structure = {
         // 'libraries': this.getLibraries(str),
     'entity': getEntityName(tree), // module
-    // 'generics': getGenerics(str), // parameters
+    'generics': getGenerics(tree), // parameters
     'ports': getPorts(tree),
         // 'architecture': this.getArchitectureName(str),
         // 'signals': this.getSignals(str),  // regs
@@ -130,9 +134,104 @@ function getAll(tree) {
 }
 
 
+function getGenerics(tree) {
+  // const key = ['module_header', 'simple_identifier'];
+  // let key = 'parameter_port_list';
+  arr = [];
+  var items=[];
+  var item={};
+  var element = tree;
+  //Inputs
+  arr = []
+  // searchTree(element,'parameter_port_declaration');
+  searchTree(element,'parameter_declaration');
+  if (arr== null) {
+    searchTree(element,'parameter_port_declaration');
+  }
+  // console.log(element);
+  // element = arr
+  // arr = []
+  // searchTree(element[0],'simple_identifier');
+  inputs = arr;
+  console.log(inputs);
+  for(var x = 0; x < inputs.length;++x){
+    item = {
+      'name':  getGenericName(inputs[x],lines),
+      'kind':  getGenericKind(inputs[x],lines)
+    }
+    console.log("--");
+    items.push(item);
+  }
+  return items
+}
+
+function getGenericName(port,split_code){
+  arr = [];
+  searchTree(port,'list_of_variable_identifiers');
+  if(arr.length == 0){
+    arr = []
+    searchTree(port,'simple_identifier');
+    var line = split_code[arr[0].startPosition.row]
+    var port_name = line.substring(arr[0].startPosition.column,arr[0].endPosition.column)
+    console.log("- Port name: " + port_name);
+    return port_name;
+  }
+  else{
+    var line = split_code[arr[0].startPosition.row]
+    var port_name = line.substring(arr[0].startPosition.column,arr[0].endPosition.column)
+    var split_port_name = port_name.split(',')
+    for(var x = 0;x < split_port_name.length; ++x)
+      console.log("- Port name: " + split_port_name[x].replace(/ /g,''));
+      return port_name;
+  }
+}
+
+function getGenericKind(port,split_code){
+  arr = [];
+  searchTree(port,'data_type_or_implicit1'); // parameter_identifier
+  if(arr.length == 0){
+    arr = []
+    searchTree(port,'simple_identifier');
+    var line = split_code[arr[0].startPosition.row]
+    var port_name = line.substring(arr[0].startPosition.column,arr[0].endPosition.column)
+    console.log("- Port name: " + port_name);
+    return port_name;
+  }
+  else{
+    var line = split_code[arr[0].startPosition.row]
+    var port_name = line.substring(arr[0].startPosition.column,arr[0].endPosition.column)
+    var split_port_name = port_name.split(',')
+    for(var x = 0;x < split_port_name.length; ++x)
+      console.log("- Port name: " + split_port_name[x].replace(/ /g,''));
+      return port_name;
+  }
+}
+
+// function getGenericType(port,split_code){
+//   arr = [];
+//   searchTree(port,'list_of_variable_identifiers');
+//   if(arr.length == 0){
+//     arr = []
+//     searchTree(port,'simple_identifier');
+//     var line = split_code[arr[0].startPosition.row]
+//     var port_name = line.substring(arr[0].startPosition.column,arr[0].endPosition.column)
+//     console.log("- Port name: " + port_name);
+//     return port_name;
+//   }
+//   else{
+//     var line = split_code[arr[0].startPosition.row]
+//     var port_name = line.substring(arr[0].startPosition.column,arr[0].endPosition.column)
+//     var split_port_name = port_name.split(',')
+//     for(var x = 0;x < split_port_name.length; ++x)
+//       console.log("- Port name: " + split_port_name[x].replace(/ /g,''));
+//       return port_name;
+//   }
+//
+// }
+
 function getEntityName(tree) {
   // const key = ['module_header', 'simple_identifier'];
-  let key = 'module_header';
+  // let key = 'module_header';
   arr = [];
   var element = tree;
   //Inputs
@@ -146,7 +245,6 @@ function getEntityName(tree) {
   };
   return item
 }
-
 
 function extractData (node){
   // console.log(lines[node.startPosition.row].substr(node.startPosition.column, node.endPosition.column-node.startPosition.column));
