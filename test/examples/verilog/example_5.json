@@ -4,99 +4,113 @@
   },
   "generics": [{
       "name": "DATA_WIDTH",
-      "kind": "DATA_WIDTH"
+      "kind": ""
     },
 
     {
       "name": "KEEP_WIDTH",
-      "kind": "KEEP_WIDTH"
+      "kind": ""
     },
     {
       "name": "HDR_WIDTH",
-      "kind": "HDR_WIDTH"
+      "kind": ""
     },
     {
       "name": "ENABLE_PADDING",
-      "kind": "ENABLE_PADDING"
+      "kind": ""
     },
     {
       "name": "ENABLE_DIC",
-      "kind": "ENABLE_DIC"
+      "kind": ""
     },
     {
       "name": "MIN_FRAME_LENGTH",
-      "kind": "MIN_FRAME_LENGTH"
+      "kind": ""
     }
   ],
   "ports": [{
       "name": "clk",
       "direction": "input",
-      "type": "wire"
+      "type": "wire",
+      "comment": ""
     },
     {
       "name": "rst",
       "direction": "input",
-      "type": "wire"
+      "type": "wire",
+      "comment": ""
     },
     {
       "name": "s_axis_tdata",
       "direction": "input",
-      "type": "wire [DATA_WIDTH-1:0]"
+      "type": "wire [DATA_WIDTH-1:0]",
+      "comment": ""
     },
     {
       "name": "s_axis_tkeep",
       "direction": "input",
-      "type": "wire [KEEP_WIDTH-1:0]"
+      "type": "wire [KEEP_WIDTH-1:0]",
+      "comment": ""
     },
     {
       "name": "s_axis_tvalid",
       "direction": "input",
-      "type": "wire"
+      "type": "wire",
+      "comment": ""
     },
     {
       "name": "s_axis_tready",
       "direction": "output",
-      "type": "wire"
+      "type": "wire",
+      "comment": ""
     },
     {
       "name": "s_axis_tlast",
       "direction": "input",
-      "type": "wire"
+      "type": "wire",
+      "comment": ""
     },
     {
       "name": "s_axis_tuser",
       "direction": "input",
-      "type": "wire"
+      "type": "wire",
+      "comment": ""
     },
     {
       "name": "encoded_tx_data",
       "direction": "output",
-      "type": "wire [DATA_WIDTH-1:0]"
+      "type": "wire [DATA_WIDTH-1:0]",
+      "comment": ""
     },
     {
       "name": "encoded_tx_hdr",
       "direction": "output",
-      "type": "wire [HDR_WIDTH-1:0]"
+      "type": "wire [HDR_WIDTH-1:0]",
+      "comment": ""
     },
     {
       "name": "ifg_delay",
       "direction": "input",
-      "type": "wire [7:0]"
+      "type": "wire [7:0]",
+      "comment": ""
     },
     {
       "name": "start_packet_0",
       "direction": "output",
-      "type": "wire"
+      "type": "wire",
+      "comment": ""
     },
     {
       "name": "start_packet_4",
       "direction": "output",
-      "type": "wire"
+      "type": "wire",
+      "comment": ""
     },
     {
       "name": "error_underflow",
       "direction": "output",
-      "type": "wire"
+      "type": "wire",
+      "comment": ""
     }
   ]
 }

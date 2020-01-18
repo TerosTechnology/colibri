@@ -6,22 +6,26 @@
   "ports": [{
       "name": "clk_in",
       "direction": "input",
-      "type": ""
+      "type": "",
+      "comment": ""
     },
     {
       "name": "reset",
       "direction": "input",
-      "type": ""
+      "type": "",
+      "comment": ""
     },
     {
       "name": "enable",
       "direction": "input",
-      "type": ""
+      "type": "",
+      "comment": ""
     },
     {
       "name": "clk_out",
       "direction": "output",
-      "type": ""
+      "type": "",
+      "comment": ""
     }
   ]
 }

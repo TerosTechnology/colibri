@@ -4,42 +4,49 @@
   },
   "generics": [{
     "name": "WIDTH",
-    "kind": "WIDTH"
+    "kind": ""
   }],
   "ports": [{
       "name": "clk",
       "direction": "input",
-      "type": ""
+      "type": "",
+      "comment": ""
     },
     {
       "name": "rst",
       "direction": "input",
-      "type": ""
+      "type": "",
+      "comment": ""
     },
     {
       "name": "in1",
       "direction": "input",
-      "type": "[WIDTH-1:0]"
+      "type": "[WIDTH-1:0]",
+      "comment": ""
     },
     {
       "name": "in2",
       "direction": "input",
-      "type": "[WIDTH-1:0]"
+      "type": "[WIDTH-1:0]",
+      "comment": ""
     },
     {
       "name": "strobe_in",
       "direction": "input",
-      "type": ""
+      "type": "",
+      "comment": ""
     },
     {
       "name": "sum",
       "direction": "output",
-      "type": ""
+      "type": "",
+      "comment": ""
     },
     {
       "name": "strobe_out",
       "direction": "output",
-      "type": ""
+      "type": "",
+      "comment": ""
     }
   ]
 }

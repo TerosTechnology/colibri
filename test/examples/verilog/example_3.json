@@ -9,32 +9,38 @@
   "ports": [{
       "name": "clk",
       "direction": "input",
-      "type": ""
+      "type": "",
+      "comment": ""
     },
     {
       "name": "rx",
       "direction": "input",
-      "type": ""
+      "type": "",
+      "comment": ""
     },
     {
       "name": "tready",
       "direction": "input",
-      "type": ""
+      "type": "",
+      "comment": ""
     },
     {
       "name": "overflow",
       "direction": "output",
-      "type": ""
+      "type": "",
+      "comment": ""
     },
     {
       "name": "tvalid",
       "direction": "output",
-      "type": ""
+      "type": "",
+      "comment": ""
     },
     {
       "name": "tdata",
       "direction": "output",
-      "type": ""
+      "type": "",
+      "comment": ""
     }
   ]
 }

@@ -6,32 +6,38 @@
   "ports": [{
       "name": "d",
       "direction": "input",
-      "type": "[7:0]"
+      "type": "[7:0]",
+      "comment": " input 1 comment"
     },
     {
       "name": "clk",
       "direction": "input",
-      "type": ""
+      "type": "",
+      "comment": " input 2 comment"
     },
     {
       "name": "clear",
       "direction": "input",
-      "type": ""
+      "type": "",
+      "comment": " input 3 comment"
     },
     {
       "name": "load",
       "direction": "input",
-      "type": ""
+      "type": "",
+      "comment": ""
     },
     {
       "name": "up_down",
       "direction": "input",
-      "type": ""
+      "type": "",
+      "comment": ""
     },
     {
       "name": "qd",
       "direction": "output",
-      "type": "[7:0]"
+      "type": "[7:0]",
+      "comment": ""
     }
   ]
 }

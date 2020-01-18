@@ -6,18 +6,22 @@
   "ports": [{
     "name": "clk",
     "direction": "input",
-    "type": ""
+    "type": "",
+    "comment": ""
   }, {
     "name": "rst",
     "direction": "input",
-    "type": ""
+    "type": "",
+    "comment": ""
   }, {
     "name": "enable",
     "direction": "input",
-    "type": ""
+    "type": "",
+    "comment": ""
   }, {
     "name": "out",
     "direction": "output",
-    "type": "[ 7:0]"
+    "type": "[ 7:0]",
+    "comment": ""
   }]
 }

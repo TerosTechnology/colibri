@@ -6,22 +6,26 @@
   "ports": [{
       "name": "nC",
       "direction": "input",
-      "type": ""
+      "type": "",
+      "comment": ""
     },
     {
       "name": "C",
       "direction": "input",
-      "type": ""
+      "type": "",
+      "comment": ""
     },
     {
       "name": "L",
       "direction": "inout",
-      "type": ""
+      "type": "",
+      "comment": ""
     },
     {
       "name": "R",
       "direction": "inout",
-      "type": ""
+      "type": "",
+      "comment": ""
     }
   ]
 }

@@ -22,7 +22,7 @@ function getAll(sourceCode) {
   lines = fileLines(sourceCode)
   const tree = parser.parse(sourceCode);
   // console.log(tree.rootNode);
-  // fs.writeFile("tree.json", tree.rootNode, function(err) {  });
+  fs.writeFile("tree.json", tree.rootNode, function(err) {  });
   var structure = {
         // 'libraries': this.getLibraries(str),
     "entity": getEntityName(tree.rootNode), // module
@@ -104,7 +104,7 @@ function getPortKind(port,split_code){
   return port_type;
 }
 
-function addPort(element,key,name,direction,type,ansi,items){
+function addPort(element,key,name,direction,type,ansi,items,comments){
   var item={};
   arr = []
   searchTree(element,key);
@@ -117,7 +117,8 @@ function addPort(element,key,name,direction,type,ansi,items){
         'name':  port_name[i],
         'direction':  ((ansi == true)? direction(inputs[x],lines):direction),
         'type':  type(inputs[x],lines),
-        "index": index(inputs[x])
+        "index": index(inputs[x]),
+        "comment": comments[inputs[x].startPosition.row]
       }
       items.push(item);
     }
@@ -130,20 +131,31 @@ function getPorts(tree){
   var items=[];
   var item={};
   var element = tree;
+  //Comments
+  comments = getComments(element)
   //Inputs
-  items = addPort(element,'input_declaration',getPortName,'input',getPortType,false,items)
+  items = addPort(element,'input_declaration',getPortName,'input',getPortType,false,items,comments)
   //Outputs
-  items = addPort(element,'output_declaration',getPortName,'output',getPortType,false,items)
+  items = addPort(element,'output_declaration',getPortName,'output',getPortType,false,items,comments)
   //ansi_port_declaration
-  items = addPort(element,'ansi_port_declaration',getPortNameAnsi,getPortKind,getPortType,true,items)
+  items = addPort(element,'ansi_port_declaration',getPortNameAnsi,getPortKind,getPortType,true,items,comments)
   //inouts
-  items = addPort(element,'inout_declaration',getPortName,"inout",getPortType,false,items)
+  items = addPort(element,'inout_declaration',getPortName,"inout",getPortType,false,items,comments)
   return items
 }
 
+function getComments (tree){
+  var item={};
+  arr = []
+  searchTree(tree,'comment');
+  inputs = arr;
+  for(var x = 0; x < inputs.length;++x){
+    item[inputs[x].startPosition.row] = extractData(inputs[x]).substr(2)
+  }
+  return item
+}
+
 function getGenerics(tree) {
-  // const key = ['module_header', 'simple_identifier'];
-  // let key = 'parameter_port_list';
   arr = [];
   var items=[];
   var item={};
@@ -185,12 +197,10 @@ function getGenericName(port,split_code){
 
 function getGenericKind(port,split_code){
   arr = [];
-  searchTree(port,'data_type_or_implicit1'); // parameter_identifier
+  searchTree(port,'data_type_or_implicit1'); // parameter_identifier, data_type_or_implicit1
   if(arr.length == 0){
     arr = []
-    searchTree(port,'simple_identifier');
-    var port_name = extractData(arr[0])
-    return port_name;
+    return "";
   }
   else{
     var port_name = extractData(arr[0])
@@ -203,8 +213,6 @@ function getGenericKind(port,split_code){
 function getEntityName(tree) {
   arr = [];
   var element = tree;
-  //Inputs
-  arr = []
   searchTree(element,'module_header');
   element = arr
   arr = []
