@@ -21,6 +21,7 @@ for (let x=1;x<8;++x){
   let example_result  = tsVerilogParser(example_verilog);
   let example_exp_result = fs.readFileSync('./examples/verilog/example_'+x+'.json','utf8');
   example_exp_result     = JSON.parse(example_exp_result);
+  // console.log(example_result);
 
   let rs = compareVerilogTs(example_result,example_exp_result,"example_"+x+".v");
   console.log("Test " + rs + " ["+"example_"+x+".v"+"]");

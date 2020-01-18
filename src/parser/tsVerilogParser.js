@@ -110,12 +110,17 @@ function addPort(element,key,name,direction,type,ansi,items){
   searchTree(element,key);
   inputs = arr;
   for(var x = 0; x < inputs.length;++x){
-    item = {
-      'name':  name(inputs[x],lines),
-      'direction':  ((ansi == true)? direction(inputs[x],lines):direction),
-      'type':  type(inputs[x],lines)
+    var port_name = name(inputs[x],lines)
+    port_name = port_name.split(',')
+    for (var i = 0; i < port_name.length; i++) {
+      item = {
+        'name':  port_name[i],
+        'direction':  ((ansi == true)? direction(inputs[x],lines):direction),
+        'type':  type(inputs[x],lines),
+        "index": index(inputs[x])
+      }
+      items.push(item);
     }
-    items.push(item);
   }
   return items
 }
@@ -153,7 +158,8 @@ function getGenerics(tree) {
   for(var x = 0; x < inputs.length;++x){
     item = {
       "name":  getGenericName(inputs[x],lines),
-      "kind":  getGenericKind(inputs[x],lines)
+      "kind":  getGenericKind(inputs[x],lines),
+      "index": index(inputs[x])
     }
     items.push(item);
   }
@@ -204,13 +210,18 @@ function getEntityName(tree) {
   arr = []
   searchTree(element[0],'simple_identifier');
   let item = {
-    "name":  extractData(arr[0])
+    "name":  extractData(arr[0]),
+    "index": index(arr[0])
   };
   return item
 }
 
 function extractData (node){
   return lines[node.startPosition.row].substr(node.startPosition.column, node.endPosition.column-node.startPosition.column)
+}
+
+function index (node){
+  return [node.startPosition.row, node.startPosition.column]
 }
 
 function fileLines(source) {

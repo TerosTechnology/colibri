@@ -4,7 +4,15 @@
   },
   "generics": [],
   "ports": [{
-    "name": "clk,rst,enable",
+    "name": "clk",
+    "direction": "input",
+    "type": ""
+  }, {
+    "name": "rst",
+    "direction": "input",
+    "type": ""
+  }, {
+    "name": "enable",
     "direction": "input",
     "type": ""
   }, {
