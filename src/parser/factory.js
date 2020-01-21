@@ -8,11 +8,11 @@ const tsVerilogParser = require('./tsVerilogParser')
 class ParserFactory {
   constructor(lang) {
     if (lang == 'vhdl') {
-        return this.getVhdlParser();
-      } else if (lang == 'verilog') {
-        return this.getVerilogParser();
-      }
+      return this.getVhdlParser();
+    } else if (lang == 'verilog') {
+      return this.getVerilogParser();
     }
+  }
 
   getVhdlParser() {
     return new VhdlParser();
@@ -23,7 +23,6 @@ class ParserFactory {
   }
 }
 
-// var instance = new ParserFactory();
 module.exports = {
-  ParserFactory : ParserFactory
+  ParserFactory: ParserFactory
 }

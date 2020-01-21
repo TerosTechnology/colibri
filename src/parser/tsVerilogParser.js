@@ -1,4 +1,3 @@
-const BaseParser = require('./parser')
 const fs = require('fs');
 const os = require("os");
 const path = require('path');
