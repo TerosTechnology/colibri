@@ -16,9 +16,9 @@ const VhdlParser = require('../src/parser/vhdlparser')
 // }
 ////////////////////////////////////////////////////////////////////////////////
 for (let x=1;x<8;++x){
-  // let parser = new tsVerilogParser();
+  let parser = new tsVerilogParser();
   let example_verilog = fs.readFileSync('./examples/verilog/example_'+x+'.v' ,'utf8');
-  let example_result  = tsVerilogParser(example_verilog);
+  let example_result  = parser.getAll(example_verilog);
   let example_exp_result = fs.readFileSync('./examples/verilog/example_'+x+'.json','utf8');
   example_exp_result     = JSON.parse(example_exp_result);
   // console.log(example_result);
