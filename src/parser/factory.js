@@ -22,7 +22,7 @@ class ParserFactory {
   }
 
   getVerilogParser() {
-    return new VerilogParser();
+    return new tsVerilogParser();
   }
 }
 

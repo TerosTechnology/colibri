@@ -9,13 +9,13 @@ class tsVerilogParser extends BaseParser {
   constructor() {
     super();
     this.arr = []
+    this.parser = new Parser();
+    this.parser.setLanguage(VerilogParser);
   }
 
   getAll(sourceCode) {
-    const parser = new Parser();
-    parser.setLanguage(VerilogParser);
     var lines = this.fileLines(sourceCode)
-    const tree = parser.parse(sourceCode);
+    const tree = this.parser.parse(sourceCode);
     // console.log(tree.rootNode);
     // fs.writeFile("tree.json", tree.rootNode, function(err) {  });
     var structure = {
