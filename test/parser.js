@@ -8,7 +8,8 @@ const Parser = Colibri.Parser;
 
 for (let x=1;x<8;++x){
   var ParserLang = [General.LANGUAGES.VERILOG];
-  let parser = new Parser.ParserFactory(ParserLang);
+  let parser = new Parser.ParserFactory;
+  parser = parser.getParser(ParserLang);
   let example_verilog = fs.readFileSync('./examples/verilog/example_'+x+'.v' ,'utf8');
   let example_result  = parser.getAll(example_verilog);
   let example_exp_result = fs.readFileSync('./examples/verilog/example_'+x+'.json','utf8');

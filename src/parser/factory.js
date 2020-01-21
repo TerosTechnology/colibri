@@ -1,11 +1,12 @@
-const codes = require('../db/codes')
 const general = require('../general/general')
 const VhdlParser = require('./vhdlparser')
 const tsVerilogParser = require('./tsVerilogParser')
 
 
 class ParserFactory {
-  constructor(lang) {
+  constructor() {}
+
+  getParser(lang) {
     if (lang == 'vhdl') {
       return this.getVhdlParser();
     } else if (lang == 'verilog') {
