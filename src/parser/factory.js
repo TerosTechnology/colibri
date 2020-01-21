@@ -1,7 +1,6 @@
 const codes = require('../db/codes')
 const general = require('../general/general')
 const VhdlParser = require('./vhdlparser')
-const VerilogParser = require('./verilogparser')
 const tsVerilogParser = require('./tsVerilogParser')
 
 

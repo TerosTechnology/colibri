@@ -3,23 +3,9 @@ const Colibri = require('../src/main');
 const general = require('../src/general/general')
 const General = Colibri.General;
 const Parser = Colibri.Parser;
-// const tsVerilogParser = require('../src/parser/tsVerilogParser')
-// const VerilogParser = require('../src/parser/verilogparser')
 // const VhdlParser = require('../src/parser/vhdlparser')
-// const ParserFactory = require('../src/parser/factory')
 
-////////////////////////////////////////////////////////////////////////////////
-// for (let x=0;x<1;++x){
-//   let parser = new VerilogParser();
-//   let example_verilog = fs.readFileSync('./examples/verilog/example_'+x+'.v' ,'utf8');
-//   let example_result  = parser.getAll(example_verilog);
-//   let example_exp_result = fs.readFileSync('./examples/verilog/example_'+x+'.json','utf8');
-//   example_exp_result     = JSON.parse(example_exp_result);
-//
-//   let rs = compareVerilog(example_result,example_exp_result,"example_"+x+".v");
-//   console.log("Test " + rs + " ["+"example_"+x+".v"+"]");
-// }
-////////////////////////////////////////////////////////////////////////////////
+
 for (let x=1;x<8;++x){
   var ParserLang = [General.LANGUAGES.VERILOG];
   let parser = new Parser.ParserFactory(ParserLang);
