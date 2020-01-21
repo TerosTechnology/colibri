@@ -105,13 +105,32 @@ class tsVerilogParser extends BaseParser {
     this.searchTree(element, key);
     inputs = this.arr;
     for (var x = 0; x < inputs.length; ++x) {
-      var port_name = name(inputs[x], lines)
+      var port_name
+      switch (name) {
+        case 'getPortName':
+          port_name = this.getPortName(inputs[x], lines)
+          break;
+        case 'getPortNameAnsi':
+          port_name = this.getPortNameAnsi(inputs[x], lines)
+          break;
+        default:
+          name = this.getPortName
+      }
       port_name = port_name.split(',')
+      var directionVar = this.getPortKind(inputs[x], lines)
+      var typeVar
+      switch (type) {
+        case 'getPortType':
+          typeVar = this.getPortType(inputs[x], lines)
+          break;
+        default:
+          typeVar = this.getPortType(inputs[x], lines)
+      }
       for (var i = 0; i < port_name.length; i++) {
         item = {
           'name': port_name[i],
-          'direction': ((ansi == true) ? direction(inputs[x], lines) : direction),
-          'type': type(inputs[x], lines),
+          'direction': ((ansi == true) ? directionVar : direction),
+          'type': typeVar,
           "index": this.index(inputs[x]),
           "comment": comments[inputs[x].startPosition.row]
         }
@@ -130,13 +149,13 @@ class tsVerilogParser extends BaseParser {
     //Comments
     comments = this.getComments(element, lines)
     //Inputs
-    items = this.addPort(element, 'input_declaration', this.getPortName, 'input', this.getPortType, false, items, comments, lines)
+    items = this.addPort(element, 'input_declaration', 'getPortName', 'input', 'getPortType', false, items, comments, lines)
     //Outputs
-    items = this.addPort(element, 'output_declaration', this.getPortName, 'output', this.getPortType, false, items, comments, lines)
+    items = this.addPort(element, 'output_declaration', 'getPortName', 'output', 'getPortType', false, items, comments, lines)
     //ansi_port_declaration
-    items = this.addPort(element, 'ansi_port_declaration', this.getPortNameAnsi, this.getPortKind, this.getPortType, true, items, comments, lines)
+    items = this.addPort(element, 'ansi_port_declaration', 'getPortNameAnsi', 'getPortKind', 'getPortType', true, items, comments, lines)
     //inouts
-    items = this.addPort(element, 'inout_declaration', this.getPortName, "inout", this.getPortType, false, items, comments, lines)
+    items = this.addPort(element, 'inout_declaration', 'getPortName', "inout", 'getPortType', false, items, comments, lines)
     return items
   }
 
@@ -147,7 +166,7 @@ class tsVerilogParser extends BaseParser {
     this.searchTree(tree, 'comment');
     inputs = this.arr;
     for (var x = 0; x < inputs.length; ++x) {
-      item[inputs[x].startPosition.row] =this. extractData(inputs[x], lines).substr(2)
+      item[inputs[x].startPosition.row] = this.extractData(inputs[x], lines).substr(2)
     }
     return item
   }
