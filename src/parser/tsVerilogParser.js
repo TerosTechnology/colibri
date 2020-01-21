@@ -5,9 +5,8 @@ const path = require('path');
 const Parser = require('tree-sitter');
 const VerilogParser = require('tree-sitter-verilog');
 
-class tsVerilogParser extends BaseParser {
+class tsVerilogParser  {
   constructor() {
-    super();
     this.arr = []
     this.parser = new Parser();
     this.parser.setLanguage(VerilogParser);

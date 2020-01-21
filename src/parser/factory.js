@@ -1,21 +1,18 @@
 const codes = require('../db/codes')
-const db_manager = require('../db/db_manager')
-
+const general = require('../general/general')
 const VhdlParser = require('./vhdlparser')
 const VerilogParser = require('./verilogparser')
+const tsVerilogParser = require('./tsVerilogParser')
 
 
 class ParserFactory {
-  getConfiguredParser() {
-    let parser = db_manager.getActiveParserCode();
-    if (typeof parser !== 'undefined' && parser !== null) {
-      if (parser == codes.Parsers.VHDL) {
+  constructor(lang) {
+    if (lang == 'vhdl') {
         return this.getVhdlParser();
-      } else if (parser == codes.Parsers.VERILOG) {
+      } else if (lang == 'verilog') {
         return this.getVerilogParser();
       }
     }
-  }
 
   getVhdlParser() {
     return new VhdlParser();
@@ -26,5 +23,7 @@ class ParserFactory {
   }
 }
 
-var instance = new ParserFactory();
-module.exports = instance
+// var instance = new ParserFactory();
+module.exports = {
+  ParserFactory : ParserFactory
+}

@@ -1,7 +1,7 @@
 // exports.VhdlEditor    = require('./editor/vhdleditor')
 // exports.VerilogEditor = require('./editor/verilogeditor')
-exports.VhdlParser     = require('./parser/vhdlparser');
-exports.VerilogParser     = require('./parser/verilogparser');
+// exports.VhdlParser     = require('./parser/vhdlparser');
+// exports.VerilogParser     = require('./parser/verilogparser');
 exports.Simulators = require('./simulators/simulators');
 
 //******************************************************************************
@@ -12,6 +12,10 @@ exports.General = require('./general/general')
 //Linter
 //******************************************************************************
 exports.Linter    = require('./linter/factory');
+//******************************************************************************
+//Parser
+//******************************************************************************
+exports.Parser    = require('./parser/factory');
 //******************************************************************************
 //Templates
 //******************************************************************************
