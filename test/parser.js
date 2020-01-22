@@ -6,7 +6,7 @@ const Parser = Colibri.Parser;
 // const VhdlParser = require('../src/parser/vhdlparser')
 
 
-for (let x=1;x<8;++x){
+for (let x=0;x<8;++x){
   var ParserLang = [General.LANGUAGES.VERILOG];
   let parser = new Parser.ParserFactory;
   parser = parser.getParser(ParserLang);
@@ -21,7 +21,9 @@ for (let x=1;x<8;++x){
 }
 ////////////////////////////////////////////////////////////////////////////////
 // for (let x=0;x<6;++x){
-//   let parser = new VhdlParser.VhdlParser();
+//   var ParserLang = [General.LANGUAGES.VHDL];
+//   let parser = new Parser.ParserFactory;
+//   parser = parser.getParser(ParserLang);
 //   let example_vhd = fs.readFileSync('./examples/vhdl/example_'+x+'.vhd' ,'utf8');
 //   let example_result  = parser.getAll(example_vhd);
 //   let example_exp_result = fs.readFileSync('./examples/vhdl/example_'+x+'.json','utf8');
