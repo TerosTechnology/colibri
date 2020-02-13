@@ -6,7 +6,6 @@ const VerilogParser = require('tree-sitter-verilog');
 
 class tsVerilogParser  {
   constructor() {
-    this.arr = []
     this.parser = new Parser();
     this.parser.setLanguage(VerilogParser);
   }
@@ -31,29 +30,32 @@ class tsVerilogParser  {
   }
 
   searchTree(element, matchingTitle) {
-    if (element.type == matchingTitle) {
-      this.arr.push(element);
-    } else if (element != null) {
-      var i;
-      var result = null;
-      for (i = 0; result == null && i < element.childCount; i++) {
-        result = this.searchTree(element.child(i), matchingTitle);
+    var arr_match = [];
+    function recursive_searchTree(element, matchingTitle) {
+      if (element.type == matchingTitle) {
+        arr_match.push(element);
+      } else if (element != null) {
+        var i;
+        var result = null;
+        for (i = 0; result == null && i < element.childCount; i++) {
+          result = recursive_searchTree(element.child(i), matchingTitle);
+        }
+        return result;
       }
-      return result;
+      return null;
     }
-    return null;
+    recursive_searchTree(element, matchingTitle);
+    return arr_match;
   }
 
   getPortName(port, lines) {
-    this.arr = [];
-    this.searchTree(port, 'list_of_variable_identifiers');
-    if (this.arr.length == 0) {
-      this.arr = []
-      this.searchTree(port, 'simple_identifier');
-      var port_name = this.extractData(this.arr[0], lines)
+    var arr = this.searchTree(port, 'list_of_variable_identifiers');
+    if (arr.length == 0) {
+      arr = this.searchTree(port, 'simple_identifier');
+      var port_name = this.extractData(arr[0], lines)
       return port_name;
     } else {
-      var port_name = this.extractData(this.arr[0], lines)
+      var port_name = this.extractData(arr[0], lines)
       var split_port_name = port_name.split(',')
       for (var x = 0; x < split_port_name.length; ++x)
         return port_name;
@@ -61,15 +63,13 @@ class tsVerilogParser  {
   }
 
   getPortNameAnsi(port, lines) {
-    this.arr = [];
-    this.searchTree(port, 'port_identifier');
-    if (this.arr.length == 0) {
-      this.arr = []
-      this.searchTree(port, 'simple_identifier');
-      var port_name = this.extractData(this.arr[0], lines)
+    var arr = this.searchTree(port, 'port_identifier');
+    if (arr.length == 0) {
+      arr = this.searchTree(port, 'simple_identifier');
+      var port_name = this.extractData(arr[0], lines)
       return port_name;
     } else {
-      var port_name = this.extractData(this.arr[0], lines)
+      var port_name = this.extractData(arr[0], lines)
       var split_port_name = port_name.split(',')
       for (var x = 0; x < split_port_name.length; ++x)
         return port_name;
@@ -77,31 +77,28 @@ class tsVerilogParser  {
   }
 
   getPortType(port, lines) {
-    this.arr = [];
-    this.searchTree(port, 'net_port_type1');
-    if (this.arr[0] == null) {
+    var arr = this.searchTree(port, 'net_port_type1');
+    if (arr[0] == null) {
       return "";
     }
-    var port_type = this.extractData(this.arr[0], lines)
+    var port_type = this.extractData(arr[0], lines)
     return port_type;
   }
 
   getPortKind(port, lines) {
-    this.arr = [];
-    this.searchTree(port, 'port_direction');
-    if (this.arr[0] == null) {
+    var arr = this.searchTree(port, 'port_direction');
+    if (arr[0] == null) {
       return;
     }
-    var port_type = this.extractData(this.arr[0], lines)
+    var port_type = this.extractData(arr[0], lines)
     return port_type;
   }
 
   addPort(element, key, name, direction, type, ansi, items, comments, lines) {
     var item = {};
     var inputs = [];
-    this.arr = []
-    this.searchTree(element, key);
-    inputs = this.arr;
+    var arr = this.searchTree(element, key);
+    inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       var port_name
       switch (name) {
@@ -139,7 +136,6 @@ class tsVerilogParser  {
   }
 
   getPorts(tree, lines) {
-    this.arr = [];
     var items = [];
     var comments = [];
     var item = {};
@@ -160,9 +156,8 @@ class tsVerilogParser  {
   getComments(tree, lines) {
     var item = {};
     var inputs = [];
-    this.arr = []
-    this.searchTree(tree, 'comment');
-    inputs = this.arr;
+    var arr = this.searchTree(tree, 'comment');
+    inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       item[inputs[x].startPosition.row] = this.extractData(inputs[x], lines).substr(2)
     }
@@ -170,18 +165,16 @@ class tsVerilogParser  {
   }
 
   getGenerics(tree, lines) {
-    this.arr = [];
     var items = [];
     var inputs = [];
     var item = {};
     var element = tree;
     //Inputs
-    this.arr = []
-    this.searchTree(element, 'parameter_declaration');
-    if (this.arr == null) {
-      this.searchTree(element, 'parameter_port_declaration');
+    var arr = this.searchTree(element, 'parameter_declaration');
+    if (arr == null) {
+      arr = this.searchTree(element, 'parameter_port_declaration');
     }
-    inputs = this.arr;
+    inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       item = {
         "name": this.getGenericName(inputs[x], lines),
@@ -194,15 +187,13 @@ class tsVerilogParser  {
   }
 
   getGenericName(port, lines) {
-    this.arr = [];
-    this.searchTree(port, 'list_of_variable_identifiers');
-    if (this.arr.length == 0) {
-      this.arr = []
-      this.searchTree(port, 'simple_identifier');
-      var port_name = this.extractData(this.arr[0], lines)
+    var arr = this.searchTree(port, 'list_of_variable_identifiers');
+    if (arr.length == 0) {
+      arr = this.searchTree(port, 'simple_identifier');
+      var port_name = this.extractData(arr[0], lines)
       return port_name;
     } else {
-      var port_name = this.extractData(this.arr[0], lines)
+      var port_name = this.extractData(arr[0], lines)
       var split_port_name = port_name.split(',')
       for (var x = 0; x < split_port_name.length; ++x)
         return port_name;
@@ -210,13 +201,11 @@ class tsVerilogParser  {
   }
 
   getGenericKind(port, lines) {
-    this.arr = [];
-    this.searchTree(port, 'data_type_or_implicit1'); // parameter_identifier, data_type_or_implicit1
-    if (this.arr.length == 0) {
-      this.arr = []
+    var arr = this.searchTree(port, 'data_type_or_implicit1'); // parameter_identifier, data_type_or_implicit1
+    if (arr.length == 0) {
       return "";
     } else {
-      var port_name = this.extractData(this.arr[0], lines)
+      var port_name = this.extractData(arr[0], lines)
       var split_port_name = port_name.split(',')
       for (var x = 0; x < split_port_name.length; ++x)
         return port_name;
@@ -224,15 +213,13 @@ class tsVerilogParser  {
   }
 
   getEntityName(tree, lines) {
-    this.arr = [];
     var element = tree;
-    this.searchTree(element, 'module_header');
-    element = this.arr
-    this.arr = []
-    this.searchTree(element[0], 'simple_identifier');
+    var arr = this.searchTree(element, 'module_header');
+    element = arr
+    var arr = this.searchTree(element[0], 'simple_identifier');
     let item = {
-      "name": this.extractData(this.arr[0], lines),
-      "index": this.index(this.arr[0])
+      "name": this.extractData(arr[0], lines),
+      "index": this.index(arr[0])
     };
     return item
   }
