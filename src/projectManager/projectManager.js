@@ -15,16 +15,19 @@ class Manager extends Simulators.Simulators{
     var jsonF = fs.readFileSync(file,'utf8');
     this.source = JSON.parse(jsonF)['src'];
     this.testbench = JSON.parse(jsonF)['tb'];
-    console.log(this.source)
-    console.log(this.testbench)
+    this.configurator.setAll(JSON.parse(jsonF)['config']);
   }
   saveProject(file){
     var prj = {
       src : this.source,
-      tb : this.testbench
+      tb : this.testbench,
+      config : this.configurator.getAll()
     };
     var data = JSON.stringify(prj);
     fs.writeFileSync(file,data);
+  }
+  getConfig(){
+    return this.configurator.getAll();
   }
   clear(){
     this.source = [];
@@ -100,7 +103,8 @@ class Manager extends Simulators.Simulators{
       'tool' : this.configurator.getTool(),
       'working_dir' : this.configurator.getWorkingDir(),
       'top_level' : this.configurator.getTopLevel(),
-      'files'  : this.source.concat(this.testbench)
+      'files'  : this.source.concat(this.testbench),
+      'gtkwave' : ''
     }
     return edam;
   }
@@ -124,7 +128,8 @@ class Configurator{
       'language':'',
       'name':'',
       'top_level':'',
-      'working_dir':''
+      'working_dir':'',
+      'gtkwave':''
     }
     return configuration;
   }
@@ -156,7 +161,7 @@ class Configurator{
     if (typeof topLevel != 'string') {
         throw new Error('You must pass requiredParam to function setTopLevel!');
     }
-    this.configuration["topLevel"] = topLevel;
+    this.configuration["top_level"] = topLevel;
   }
   setWorkingDir(workingDir){
     if (typeof workingDir != 'string') {
@@ -181,6 +186,20 @@ class Configurator{
   }
   getWorkingDir(){
     return this.configuration['working_dir'];
+  }
+  getAll(){
+    return this.configuration;
+  }
+  setAll(config){
+    this.configuration = {
+      'suite':config['suite'],
+      'tool':config['tool'],
+      'language':config['language'],
+      'name':config['name'],
+      'top_level':config['top_level'],
+      'working_dir':config['working_dir'],
+      'gtkwave':config['gtkwave']
+    }
   }
 }
 
