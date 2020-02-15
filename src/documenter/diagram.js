@@ -33,8 +33,8 @@ function diagramGenerator(structure,bn){
   }
 
   generics=getGenerics(structure,name, kind);
-  inPorts=getPorts(structure,name,kind,'in');
-  outPorts=getPorts(structure,name,kind,'out');
+  inPorts=getPortsIn(structure,name,kind);
+  outPorts=getPortsOut(structure,name,kind);
   locx=(size/2)*maxString(generics,inPorts,[0,0],kind)
   width=(size)*maxString(generics,inPorts,outPorts,name)
 
@@ -82,17 +82,29 @@ function getGenerics(structure,name,kind){
   return str
 }
 
-function getPorts(structure,name,kind,inout){
+function getPortsIn(structure,name,kind){
   var str_in= [[],[]]
   var cont_in = 0
   for (let x = 0; x <= structure.ports.length-1; ++x){
-    if (structure.ports[x]['direction']== inout) {
+    if (structure.ports[x]['direction']== "in" || structure.ports[x]['direction']== "input") {
       str_in[name][cont_in] = '   ' + structure.ports[x]['name'] + ' ';
       str_in[kind][cont_in] = '   ' + structure.ports[x]['type'] + ' ';
       cont_in++;
     }
   }
+  return str_in
+}
 
+function getPortsOut(structure,name,kind){
+  var str_in= [[],[]]
+  var cont_in = 0
+  for (let x = 0; x <= structure.ports.length-1; ++x){
+    if (structure.ports[x]['direction']== "out" || structure.ports[x]['direction']== "output") {
+      str_in[name][cont_in] = '   ' + structure.ports[x]['name'] + ' ';
+      str_in[kind][cont_in] = '   ' + structure.ports[x]['type'] + ' ';
+      cont_in++;
+    }
+  }
   return str_in
 }
 

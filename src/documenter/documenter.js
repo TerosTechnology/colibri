@@ -2,13 +2,16 @@ const pathLib = require('path');
 const Diagram = require('./diagram')
 const StmVHDL = require('./statemachinevhdl')
 const StmVerilog = require('./statemachineverilog')
+const ParserLib = require('../parser/factory')
 
 class BaseStructure {
-  constructor(structure) {
-    this.structure = structure;
-    this.entity = structure['entity']['name'];
-    this.ports = structure['ports'];
-    this.generics = structure['generics'];
+  constructor(str,lang) {
+    var parser = new ParserLib.ParserFactory;
+    parser = parser.getParser(lang);
+    this.structure = parser.getAll(str);
+    this.entity = this.structure['entity']['name'];
+    this.ports = this.structure['ports'];
+    this.generics = this.structure['generics'];
 
     this.md   = this.getMdDoc(null);
     this.html = this.getHtmlDoc(this.md);
@@ -131,7 +134,7 @@ class BaseStructure {
     var table = []
     table.push(["Port name", "Direction", "Type", "Description"])
     for (let i = 0; i < this.ports.length; ++i) {
-      table.push([this.ports[i]['name'], this.ports[i]['direction'], this.ports[i]['type'], ""]);
+      table.push([this.ports[i]['name'], this.ports[i]['direction'], this.ports[i]['type'], this.ports[i]['comment']]);
     }
     var text = md(table) + '\n';
     return text;
