@@ -1,7 +1,7 @@
 const fs = require('fs');
 const Simulators = require('../simulators/simulators')
 
-class ProjectManager extends Simulators.Simulators{
+class Manager extends Simulators.Simulators{
   constructor(configurator){
     super();
     this.source = [];
@@ -36,7 +36,7 @@ class ProjectManager extends Simulators.Simulators{
     for (var i=0;i<newSource.length;++i) {
       var f = {
         name: newSource[i],
-        type: this.getFileType(newSource[i])
+        file_type: this.getFileType(newSource[i])
       }
       this.source = this.source.concat(f);
     }
@@ -52,7 +52,7 @@ class ProjectManager extends Simulators.Simulators{
     for (var i=0;i<newTestbench.length;++i) {
       var f = {
         name: newTestbench[i],
-        type: this.getFileType(newTestbench[i])
+        file_type: this.getFileType(newTestbench[i])
       }
       this.testbench = this.testbench.concat(f);
     }
@@ -93,16 +93,6 @@ class ProjectManager extends Simulators.Simulators{
       file_type = "vhdlSource-2008"
     return file_type;
   }
-  simulate(serverIP,serverPort){
-    var edam = this.getEdamFormat();
-    var sim = new jsTeros.Simulators.Manager(serverIP,serverPort);
-    sim.runTool(edam).then(function(response) {
-      console.log(response)
-      return response;
-    }, function() {
-      // failed
-    });
-  }
   getEdamFormat(){
     var edam = {
       'name': this.configurator.getName(),
@@ -116,6 +106,10 @@ class ProjectManager extends Simulators.Simulators{
   }
   getSuites(server,port){
     return super.getSuites(server,port);
+  }
+  simulate(ip,port){
+    var edam = this.getEdamFormat();
+    return super.simulate(ip,port,edam);
   }
 }
 
@@ -191,5 +185,6 @@ class Configurator{
 }
 
 module.exports = {
-  ProjectManager : ProjectManager
+  Configurator   : Configurator,
+  Manager : Manager
 }
