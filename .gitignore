@@ -13,3 +13,5 @@ src/db/resources/configuration.json
 *.cf
 *.o
 *.out
+*.vcd
+Makefile

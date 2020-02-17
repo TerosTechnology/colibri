@@ -38,7 +38,9 @@ begin
     a <= "00010";
     b <= "00001";
 
-    assert x /= "00011" report "Error in sum" severity FAILURE;
+    wait for 100*clk_period;
+
+    assert x /= "00010" report "Error in sum" severity FAILURE;
     std.env.finish;
   end process;
 

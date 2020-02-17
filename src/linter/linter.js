@@ -1,4 +1,5 @@
 const shell = require('shelljs');
+const { dirname } = require('path');
 
 class BaseLinter {
   constructor(path) {
@@ -13,30 +14,23 @@ class BaseLinter {
     };
   }
 
-  lint(file) {
-    return this.execute(file);
-  }
-
-  execute(file) {
-    var cmd = this.path + this.PARAMETERS['SYNT'] + file;
+  async lint(file) {
     var str;
-    var {
-      stdout,
-      stderr,
-      code
-    } = shell.exec(cmd, {
-      async: false,
-      silent: true
-    });
-    if (this.PARAMETERS['OUTPUT'] == this.OUTPUT.OUT) {
-      str = stdout
-    } else if (this.PARAMETERS['OUTPUT'] == this.OUTPUT.ERR) {
-      str = stderr
-    }
+    var cmd = this.path + this.PARAMETERS['SYNT'] + file;
+    var element = this;
 
-    return this.parseErrors(str, file);
+    const exec = require('child_process').exec;
+     return new Promise((resolve, reject) => {
+      exec(cmd, (error, stdout, stderr) => {
+        if (element.PARAMETERS['OUTPUT'] == element.OUTPUT.OUT) {
+          str = stdout
+        } else if (element.PARAMETERS['OUTPUT'] == element.OUTPUT.ERR) {
+          str = stderr
+        }
+       resolve(element.parseErrors(str, file));
+      });
+     });
   }
-
 
   parseErrors(str, file) {
     let errorRegex = this.PARAMETERS['ERROR']
