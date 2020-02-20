@@ -217,10 +217,23 @@ class tsVerilogParser  {
     var arr = this.searchTree(element, 'module_header');
     element = arr
     var arr = this.searchTree(element[0], 'simple_identifier');
+    var module_index = this.index(arr[0]);
     let item = {
       "name": this.extractData(arr[0], lines),
-      "index": this.index(arr[0])
+      "description": "",
+      "index": module_index
     };
+
+    var description = "";
+    var comments = this.searchTree(tree, 'comment');
+    for (var x=0; x< comments.length; ++x){
+      if (comments[x].startPosition.row >= module_index[0])
+        break;
+      description += this.extractData(comments[x], lines).substr(2) + ' ';
+    }
+    description += '\n';
+    item["description"] = description;
+
     return item
   }
 

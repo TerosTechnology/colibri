@@ -10,6 +10,7 @@ class BaseStructure {
     parser = parser.getParser(lang);
     this.structure = parser.getAll(str);
     this.entity = this.structure['entity']['name'];
+    this.entity_description = this.structure['entity']['description'];
     this.ports = this.structure['ports'];
     this.generics = this.structure['generics'];
 
@@ -72,6 +73,8 @@ class BaseStructure {
     #teroshdl td, #teroshdl th {
         border: 1px solid grey
     }
+    #teroshdl p {color:black;}
+    #teroshdl p {margin:5%;}
     #teroshdl th { background-color: #ffd78c;}
     #teroshdl tr:nth-child(even){background-color: #f2f2f2;}
     </style>
@@ -103,6 +106,7 @@ class BaseStructure {
     mdDoc += "\n"
     //Description
     mdDoc += "## Description\n";
+    mdDoc  += this.entity_description;
     //Architecture
     mdDoc += "## Architectures\n";
     //Generics and ports
