@@ -386,8 +386,8 @@ class VHDLEntity(object):
         for matchNum,match in enumerate(comments, start=1):
             comment_index = coords_of_str_index(code_with_comments,match.start())
             if(comment_index[0] < index[0]):
-                description += match.group().replace("--","")
-        description += "\n"
+                description += match.group().replace("--","") + "\n"
+        # description += "\n"
         # description  = description.replace('"','www')
 
         # Find generics and ports

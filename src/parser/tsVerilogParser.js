@@ -229,7 +229,7 @@ class tsVerilogParser  {
     for (var x=0; x< comments.length; ++x){
       if (comments[x].startPosition.row >= module_index[0])
         break;
-      description += this.extractData(comments[x], lines).substr(2) + ' ';
+      description += this.extractData(comments[x], lines).substr(2) + '\n ';
     }
     description += '\n';
     item["comment"] = description;
