@@ -8,9 +8,9 @@ class BaseStructure {
   constructor(str,lang) {
     var parser = new ParserLib.ParserFactory;
     parser = parser.getParser(lang);
-    this.structure = parser.getAll(str);
+    this.structure =  parser.getAll(str);
     this.entity = this.structure['entity']['name'];
-    this.entity_description = this.structure['entity']['description'];
+    this.entity_description = this.structure['entity']['comment'];
     this.ports = this.structure['ports'];
     this.generics = this.structure['generics'];
 
@@ -149,7 +149,7 @@ class BaseStructure {
     var table = []
     table.push(["Generic name", "Type", "Description"])
     for (let i = 0; i < this.generics.length; ++i) {
-      table.push([this.generics[i]['name'], this.generics[i]['type'], ""]);
+      table.push([this.generics[i]['name'], this.generics[i]['type'], this.generics[i]['comment']]);
     }
     var text = md(table) + '\n';
     return text;

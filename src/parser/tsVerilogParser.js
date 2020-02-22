@@ -220,7 +220,7 @@ class tsVerilogParser  {
     var module_index = this.index(arr[0]);
     let item = {
       "name": this.extractData(arr[0], lines),
-      "description": "",
+      "comment": "",
       "index": module_index
     };
 
@@ -232,7 +232,7 @@ class tsVerilogParser  {
       description += this.extractData(comments[x], lines).substr(2) + ' ';
     }
     description += '\n';
-    item["description"] = description;
+    item["comment"] = description;
 
     return item
   }

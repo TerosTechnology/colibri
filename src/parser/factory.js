@@ -1,6 +1,7 @@
 const general = require('../general/general')
 const VhdlParser = require('./vhdlparser')
 const tsVerilogParser = require('./tsVerilogParser')
+const vunitVhdlParser = require('./vunitVhdlParser')
 
 
 class ParserFactory {
@@ -15,7 +16,8 @@ class ParserFactory {
   }
 
   getVhdlParser() {
-    return new VhdlParser();
+    // return new VhdlParser();
+    return new vunitVhdlParser();
   }
 
   getVerilogParser() {
