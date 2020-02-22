@@ -14,6 +14,7 @@ import re
 from os.path import abspath
 import logging
 import sys
+import json
 
 HDL_FILE_ENCODING = "latin-1"
 
@@ -387,6 +388,7 @@ class VHDLEntity(object):
             if(comment_index[0] < index[0]):
                 description += match.group().replace("--","")
         description += "\n"
+        # description  = description.replace('"','www')
 
         # Find generics and ports
         generics = cls._find_generic_clause(code,code_with_comments)
@@ -682,7 +684,8 @@ class VHDLInterfaceElement(object):
         for matchNum,match in enumerate(comments, start=1):
             comment_index = coords_of_str_index(code_with_comments,match.start())
             if(comment_index[0] == index[0]):
-                description = match.group().replace("--","")
+                description += match.group().replace("--","")
+        # description = description.replace('"','wwww')
 
         # Extract the identifier
         identifier = interface_element_string.split(":")[0].strip()
@@ -1214,5 +1217,4 @@ vhdl_parsed = {
     'generics': generics,
     'ports': ports
 }
-
-print(vhdl_parsed)
+print(json.dumps(vhdl_parsed))
