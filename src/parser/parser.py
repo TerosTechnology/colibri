@@ -63,13 +63,13 @@ class VHDLDesignFile(object):  # pylint: disable=too-many-instance-attributes
         code = remove_comments(code).lower()
         return cls(
             entities=list(VHDLEntity.find(code,code_with_comments)),
-            architectures=list(VHDLArchitecture.find(code)),
-            packages=list(VHDLPackage.find(code)),
-            package_bodies=list(VHDLPackageBody.find(code)),
-            contexts=list(VHDLContext.find(code)),
-            component_instantiations=list(cls._component_re.findall(code)),
-            configurations=list(VHDLConfiguration.find(code)),
-            references=list(VHDLReference.find(code)),
+            # architectures=list(VHDLArchitecture.find(code)),
+            # packages=list(VHDLPackage.find(code)),
+            # package_bodies=list(VHDLPackageBody.find(code)),
+            # contexts=list(VHDLContext.find(code)),
+            # component_instantiations=list(cls._component_re.findall(code)),
+            # configurations=list(VHDLConfiguration.find(code)),
+            # references=list(VHDLReference.find(code)),
         )
 
     _component_re = re.compile(
@@ -382,9 +382,10 @@ class VHDLEntity(object):
 
         comments = get_comments(code_with_comments)
         description = ""
-        description = ""
         for matchNum,match in enumerate(comments, start=1):
             comment_index = coords_of_str_index(code_with_comments,match.start())
+            if(comment_index[0] > index[0]):
+                break
             if(comment_index[0] < index[0]):
                 description += match.group().replace("--","") + "\n"
         # description += "\n"
@@ -683,6 +684,8 @@ class VHDLInterfaceElement(object):
         description = ""
         for matchNum,match in enumerate(comments, start=1):
             comment_index = coords_of_str_index(code_with_comments,match.start())
+            if(comment_index[0] > index[0]):
+                break
             if(comment_index[0] == index[0]):
                 description += match.group().replace("--","")
         # description = description.replace('"','wwww')
