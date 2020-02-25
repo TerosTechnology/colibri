@@ -688,7 +688,7 @@ class VHDLInterfaceElement(object):
             if(comment_index[0] > index[0]):
                 break
 
-            if(comment_index[0] < index[0]):
+            if(comment_index[0] == index[0]):
                 str_description = match.group().replace("--","") + "\n"
                 if (comment_symbol == "" or str_description[0] == comment_symbol):
                     description += str_description[1:]
