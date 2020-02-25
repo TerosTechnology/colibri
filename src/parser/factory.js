@@ -7,21 +7,20 @@ const vunitVhdlParser = require('./vunitVhdlParser')
 class ParserFactory {
   constructor() {}
 
-  getParser(lang) {
+  getParser(lang,comment_symbol) {
     if (lang == 'vhdl') {
-      return this.getVhdlParser();
+      return this.getVhdlParser(comment_symbol);
     } else if (lang == 'verilog') {
-      return this.getVerilogParser();
+      return this.getVerilogParser(comment_symbol);
     }
   }
 
-  getVhdlParser() {
-    // return new VhdlParser();
-    return new vunitVhdlParser();
+  getVhdlParser(comment_symbol) {
+    return new vunitVhdlParser(comment_symbol);
   }
 
-  getVerilogParser() {
-    return new tsVerilogParser();
+  getVerilogParser(comment_symbol) {
+    return new tsVerilogParser(comment_symbol);
   }
 }
 

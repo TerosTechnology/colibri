@@ -5,9 +5,10 @@ const Parser = require('tree-sitter');
 const VerilogParser = require('tree-sitter-verilog');
 
 class tsVerilogParser  {
-  constructor() {
+  constructor(comment_symbol) {
     this.parser = new Parser();
     this.parser.setLanguage(VerilogParser);
+    this.comment_symbol = comment_symbol
   }
 
   getAll(sourceCode) {
@@ -122,12 +123,19 @@ class tsVerilogParser  {
           typeVar = this.getPortType(inputs[x], lines)
       }
       for (var i = 0; i < port_name.length; i++) {
+        var comment = "";
+        var comment_str = comments[inputs[x].startPosition.row];
+        if (comment_str == undefined)
+          comment = "";
+        else if (this.comment_symbol == "" ||  comment_str[0] == this.comment_symbol)
+          comment = comment_str.substring(1);
+
         item = {
           'name': port_name[i],
           'direction': ((ansi == true) ? directionVar : direction),
           'type': typeVar,
           "index": this.index(inputs[x]),
-          "comment": comments[inputs[x].startPosition.row]
+          "comment": comment
         }
         items.push(item);
       }
@@ -229,7 +237,9 @@ class tsVerilogParser  {
     for (var x=0; x< comments.length; ++x){
       if (comments[x].startPosition.row >= module_index[0])
         break;
-      description += this.extractData(comments[x], lines).substr(2) + '\n ';
+      var comment_str = this.extractData(comments[x], lines).substr(2) + '\n ';
+      if (this.comment_symbol == "" ||  comment_str[0] == this.comment_symbol)
+        description += comment_str.substring(1);
     }
     description += '\n';
     item["comment"] = description;

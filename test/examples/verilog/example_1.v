@@ -9,11 +9,11 @@ module add2_and_clip_reg
   #(parameter WIDTH=16) //pepe
     (input clk,
      input rst,
-     input [WIDTH-1:0] in1, //descrition
-     input [WIDTH-1:0] in2,
+     input [WIDTH-1:0] in1, //**descrition**
+     input [WIDTH-1:0] in2,s
      input strobe_in,
      output reg [WIDTH-1:0] sum,
-     output reg strobe_out);
+     output reg strobe_out);s
 
    wire [WIDTH-1:0] sum_int;
 

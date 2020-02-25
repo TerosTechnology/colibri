@@ -5,9 +5,9 @@ const StmVerilog = require('./statemachineverilog')
 const ParserLib = require('../parser/factory')
 
 class BaseStructure {
-  constructor(str,lang) {
+  constructor(str,lang,comment_symbol) {
     var parser = new ParserLib.ParserFactory;
-    parser = parser.getParser(lang);
+    parser = parser.getParser(lang,comment_symbol);
     this.structure =  parser.getAll(str);
     this.entity = this.structure['entity']['name'];
     this.entity_description = this.structure['entity']['comment'];

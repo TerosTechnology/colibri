@@ -17,6 +17,7 @@ import sys
 import json
 
 HDL_FILE_ENCODING = "latin-1"
+comment_symbol = ""
 
 def coords_of_str_index(s, index):
     """Get (line_number, col) of `index` in `s`."""
@@ -387,9 +388,9 @@ class VHDLEntity(object):
             if(comment_index[0] > index[0]):
                 break
             if(comment_index[0] < index[0]):
-                description += match.group().replace("--","") + "\n"
-        # description += "\n"
-        # description  = description.replace('"','www')
+                str_description = match.group().replace("--","") + "\n"
+                if (comment_symbol == "" or str_description[0] == comment_symbol):
+                    description += str_description[1:]
 
         # Find generics and ports
         generics = cls._find_generic_clause(code,code_with_comments)
@@ -686,9 +687,11 @@ class VHDLInterfaceElement(object):
             comment_index = coords_of_str_index(code_with_comments,match.start())
             if(comment_index[0] > index[0]):
                 break
-            if(comment_index[0] == index[0]):
-                description += match.group().replace("--","")
-        # description = description.replace('"','wwww')
+
+            if(comment_index[0] < index[0]):
+                str_description = match.group().replace("--","") + "\n"
+                if (comment_symbol == "" or str_description[0] == comment_symbol):
+                    description += str_description[1:]
 
         # Extract the identifier
         identifier = interface_element_string.split(":")[0].strip()
@@ -1185,7 +1188,8 @@ def get_comments(code):
     return comments
 
 
-code = sys.argv[1]
+comment_symbol = sys.argv[1]
+code = sys.argv[2]
 
 try:
     design_file = VHDLDesignFile.parse(code)
