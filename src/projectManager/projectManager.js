@@ -73,14 +73,12 @@ class Manager extends Simulators.Simulators{
     var names = [];
     for(var i=0; i<this.source.length;++i)
       names = names.concat(this.source[i]['name']);
-    console.log(names)
     return names;
   }
   getTestbenchName(){
     var names = [];
     for(var i=0; i<this.testbench.length;++i)
       names = names.concat(this.testbench[i]['name']);
-    console.log(names)
     return names;
   }
   getFileType(f){
