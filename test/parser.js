@@ -1,24 +1,17 @@
 const fs = require('fs');
-const VerilogParser = require('../src/parser/verilogparser')
-const tsVerilogParser = require('../src/parser/tsVerilogParser')
-const VhdlParser = require('../src/parser/vhdlparser')
+const Colibri = require('../src/main');
+const general = require('../src/general/general')
+const General = Colibri.General;
+const Parser = Colibri.Parser;
+// const VhdlParser = require('../src/parser/vhdlparser')
 
-////////////////////////////////////////////////////////////////////////////////
-// for (let x=0;x<1;++x){
-//   let parser = new VerilogParser();
-//   let example_verilog = fs.readFileSync('./examples/verilog/example_'+x+'.v' ,'utf8');
-//   let example_result  = parser.getAll(example_verilog);
-//   let example_exp_result = fs.readFileSync('./examples/verilog/example_'+x+'.json','utf8');
-//   example_exp_result     = JSON.parse(example_exp_result);
-//
-//   let rs = compareVerilog(example_result,example_exp_result,"example_"+x+".v");
-//   console.log("Test " + rs + " ["+"example_"+x+".v"+"]");
-// }
-////////////////////////////////////////////////////////////////////////////////
-for (let x=1;x<8;++x){
-  // let parser = new tsVerilogParser();
+
+for (let x=0;x<8;++x){
+  var ParserLang = [General.LANGUAGES.VERILOG];
+  let parser = new Parser.ParserFactory;
+  parser = parser.getParser(ParserLang);
   let example_verilog = fs.readFileSync('./examples/verilog/example_'+x+'.v' ,'utf8');
-  let example_result  = tsVerilogParser(example_verilog);
+  let example_result  = parser.getAll(example_verilog);
   let example_exp_result = fs.readFileSync('./examples/verilog/example_'+x+'.json','utf8');
   example_exp_result     = JSON.parse(example_exp_result);
   // console.log(example_result);
@@ -28,7 +21,9 @@ for (let x=1;x<8;++x){
 }
 ////////////////////////////////////////////////////////////////////////////////
 // for (let x=0;x<6;++x){
-//   let parser = new VhdlParser.VhdlParser();
+//   var ParserLang = [General.LANGUAGES.VHDL];
+//   let parser = new Parser.ParserFactory;
+//   parser = parser.getParser(ParserLang);
 //   let example_vhd = fs.readFileSync('./examples/vhdl/example_'+x+'.vhd' ,'utf8');
 //   let example_result  = parser.getAll(example_vhd);
 //   let example_exp_result = fs.readFileSync('./examples/vhdl/example_'+x+'.json','utf8');

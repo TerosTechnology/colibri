@@ -28,6 +28,7 @@ class BaseParser {
     }
     let item = {
       'name': result[1],
+      'description': "",
       'index': result['index']
     };
     return item;

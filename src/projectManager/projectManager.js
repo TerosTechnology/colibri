@@ -1,7 +1,7 @@
 const fs = require('fs');
 const Simulators = require('../simulators/simulators')
 
-class ProjectManager extends Simulators.Simulators{
+class Manager extends Simulators.Simulators{
   constructor(configurator){
     super();
     this.source = [];
@@ -15,16 +15,19 @@ class ProjectManager extends Simulators.Simulators{
     var jsonF = fs.readFileSync(file,'utf8');
     this.source = JSON.parse(jsonF)['src'];
     this.testbench = JSON.parse(jsonF)['tb'];
-    console.log(this.source)
-    console.log(this.testbench)
+    this.configurator.setAll(JSON.parse(jsonF)['config']);
   }
   saveProject(file){
     var prj = {
       src : this.source,
-      tb : this.testbench
+      tb : this.testbench,
+      config : this.configurator.getAll()
     };
     var data = JSON.stringify(prj);
     fs.writeFileSync(file,data);
+  }
+  getConfig(){
+    return this.configurator.getAll();
   }
   clear(){
     this.source = [];
@@ -36,7 +39,7 @@ class ProjectManager extends Simulators.Simulators{
     for (var i=0;i<newSource.length;++i) {
       var f = {
         name: newSource[i],
-        type: this.getFileType(newSource[i])
+        file_type: this.getFileType(newSource[i])
       }
       this.source = this.source.concat(f);
     }
@@ -52,7 +55,7 @@ class ProjectManager extends Simulators.Simulators{
     for (var i=0;i<newTestbench.length;++i) {
       var f = {
         name: newTestbench[i],
-        type: this.getFileType(newTestbench[i])
+        file_type: this.getFileType(newTestbench[i])
       }
       this.testbench = this.testbench.concat(f);
     }
@@ -70,14 +73,12 @@ class ProjectManager extends Simulators.Simulators{
     var names = [];
     for(var i=0; i<this.source.length;++i)
       names = names.concat(this.source[i]['name']);
-    console.log(names)
     return names;
   }
   getTestbenchName(){
     var names = [];
     for(var i=0; i<this.testbench.length;++i)
       names = names.concat(this.testbench[i]['name']);
-    console.log(names)
     return names;
   }
   getFileType(f){
@@ -93,16 +94,6 @@ class ProjectManager extends Simulators.Simulators{
       file_type = "vhdlSource-2008"
     return file_type;
   }
-  simulate(serverIP,serverPort){
-    var edam = this.getEdamFormat();
-    var sim = new jsTeros.Simulators.Manager(serverIP,serverPort);
-    sim.runTool(edam).then(function(response) {
-      console.log(response)
-      return response;
-    }, function() {
-      // failed
-    });
-  }
   getEdamFormat(){
     var edam = {
       'name': this.configurator.getName(),
@@ -110,12 +101,17 @@ class ProjectManager extends Simulators.Simulators{
       'tool' : this.configurator.getTool(),
       'working_dir' : this.configurator.getWorkingDir(),
       'top_level' : this.configurator.getTopLevel(),
-      'files'  : this.source.concat(this.testbench)
+      'files'  : this.source.concat(this.testbench),
+      'gtkwave' : ''
     }
     return edam;
   }
   getSuites(server,port){
     return super.getSuites(server,port);
+  }
+  simulate(ip,port){
+    var edam = this.getEdamFormat();
+    return super.simulate(ip,port,edam);
   }
 }
 
@@ -130,7 +126,8 @@ class Configurator{
       'language':'',
       'name':'',
       'top_level':'',
-      'working_dir':''
+      'working_dir':'',
+      'gtkwave':''
     }
     return configuration;
   }
@@ -162,7 +159,7 @@ class Configurator{
     if (typeof topLevel != 'string') {
         throw new Error('You must pass requiredParam to function setTopLevel!');
     }
-    this.configuration["topLevel"] = topLevel;
+    this.configuration["top_level"] = topLevel;
   }
   setWorkingDir(workingDir){
     if (typeof workingDir != 'string') {
@@ -188,8 +185,23 @@ class Configurator{
   getWorkingDir(){
     return this.configuration['working_dir'];
   }
+  getAll(){
+    return this.configuration;
+  }
+  setAll(config){
+    this.configuration = {
+      'suite':config['suite'],
+      'tool':config['tool'],
+      'language':config['language'],
+      'name':config['name'],
+      'top_level':config['top_level'],
+      'working_dir':config['working_dir'],
+      'gtkwave':config['gtkwave']
+    }
+  }
 }
 
 module.exports = {
-  ProjectManager : ProjectManager
+  Configurator   : Configurator,
+  Manager : Manager
 }

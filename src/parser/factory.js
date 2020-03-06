@@ -1,30 +1,29 @@
-const codes = require('../db/codes')
-const db_manager = require('../db/db_manager')
-
+const general = require('../general/general')
 const VhdlParser = require('./vhdlparser')
-const VerilogParser = require('./verilogparser')
+const tsVerilogParser = require('./tsVerilogParser')
+const vunitVhdlParser = require('./vunitVhdlParser')
 
 
 class ParserFactory {
-  getConfiguredParser() {
-    let parser = db_manager.getActiveParserCode();
-    if (typeof parser !== 'undefined' && parser !== null) {
-      if (parser == codes.Parsers.VHDL) {
-        return this.getVhdlParser();
-      } else if (parser == codes.Parsers.VERILOG) {
-        return this.getVerilogParser();
-      }
+  constructor() {}
+
+  getParser(lang,comment_symbol) {
+    if (lang == 'vhdl') {
+      return this.getVhdlParser(comment_symbol);
+    } else if (lang == 'verilog') {
+      return this.getVerilogParser(comment_symbol);
     }
   }
 
-  getVhdlParser() {
-    return new VhdlParser();
+  getVhdlParser(comment_symbol) {
+    return new vunitVhdlParser(comment_symbol);
   }
 
-  getVerilogParser() {
-    return new VerilogParser();
+  getVerilogParser(comment_symbol) {
+    return new tsVerilogParser(comment_symbol);
   }
 }
 
-var instance = new ParserFactory();
-module.exports = instance
+module.exports = {
+  ParserFactory: ParserFactory
+}

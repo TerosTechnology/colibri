@@ -90,7 +90,8 @@ class VhdlParser extends BaseParser {
             'name': line,
             'direction': resultItems[2],
             'type': resultItems[3],
-            'index': resultItems['index'] + offset
+            'index': resultItems['index'] + offset,
+            'comment' : ""
           };
           items.push(item);
         }
@@ -123,6 +124,4 @@ class VhdlParser extends BaseParser {
 }
 
 
-module.exports = {
-  VhdlParser: VhdlParser
-}
+module.exports =  VhdlParser
