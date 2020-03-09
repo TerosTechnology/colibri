@@ -65,7 +65,7 @@ var data = JSON.stringify(project);
 fs.writeFileSync("prj.trs",data);
 //*****************************************************************************
 //*****************************************************************************
-var projectManager = new Colibri.ProjectManager.ProjectManager();
+var projectManager = new Colibri.ProjectManager.Manager();
 //Load trs project
 projectManager.loadProject("prj.trs");
 //Add source
