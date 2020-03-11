@@ -27,39 +27,52 @@ var sources = ["source_0.v","source_1.v","source_2.v","source_3.v"];
 var sources_p = [
   {
     name : "source_0.v",
-    type: "verilogSource-2005"
+    file_type: "verilogSource-2005"
   },
   {
     name : "source_1.v",
-    type: "verilogSource-2005"
+    file_type: "verilogSource-2005"
   },
   {
     name : "source_2.v",
-    type: "verilogSource-2005"
+    file_type: "verilogSource-2005"
   },
   {
     name : "source_3.v",
-    type: "verilogSource-2005"
+    file_type: "verilogSource-2005"
   }
 ]
 var testbenches = ["testbench_0.v","testbench_1.v","testbench_2.v"];
 var testbenches_p = [
   {
     name : "testbench_0.v",
-    type: "verilogSource-2005"
+    file_type: "verilogSource-2005"
   },
   {
     name : "testbench_1.v",
-    type: "verilogSource-2005"
+    file_type: "verilogSource-2005"
   },
   {
     name : "testbench_2.v",
-    type: "verilogSource-2005"
+    file_type: "verilogSource-2005"
   }
 ]
+var configs = ["testbench_0.v","testbench_1.v","testbench_2.v"];
+var configs_p =
+  {
+    suite : "",
+    tool : "",
+    languaje : "",
+    name : "",
+    top_level : "",
+    top_level_file : "",
+    working_dir : "",
+    gtkwave : ""
+  };
 var project = {
   src : sources_p,
-  tb : testbenches_p
+  tb : testbenches_p,
+  config: configs_p
 };
 var data = JSON.stringify(project);
 fs.writeFileSync("prj.trs",data);
