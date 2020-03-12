@@ -1,7 +1,8 @@
-// Copyright 2020
+// Copyright 2020 Teros Tech
 //
-// Ismael Perez Rojo (ismaelprojo@gmail.com)
-// Carlos Alberto Ruiz Naranjo (carlosruiznaranjo@gmail.com)
+// Ismael Perez Rojo
+// Carlos Alberto Ruiz Naranjo
+// Alfredo Enrique Sáezs
 //
 // This file is part of Colibri.
 //
