@@ -1,8 +1,14 @@
 const fs = require('fs');
 const Simulators = require('../simulators/simulators')
+const ParserLib = require('../parser/factory')
+const nopy = require('nopy');
+const path = require('path');
 
 class Manager extends Simulators.Simulators{
   constructor(configurator){
+    var server_path = __dirname + path.sep + "test.py"
+    nopy.spawnPython([server_path], { interop: "buffer" }).then(({ code, stdout, stderr }) => {
+    });
     super();
     this.source = [];
     this.testbench = [];
@@ -100,6 +106,7 @@ class Manager extends Simulators.Simulators{
       'suite': this.configurator.getSuite(),
       'tool' : this.configurator.getTool(),
       'working_dir' : this.configurator.getWorkingDir(),
+      'top_level_file' : this.configurator.getTopLevelFile(),
       'top_level' : this.configurator.getTopLevel(),
       'files'  : this.source.concat(this.testbench),
       'gtkwave' : ''
@@ -112,6 +119,12 @@ class Manager extends Simulators.Simulators{
   simulate(ip,port){
     var edam = this.getEdamFormat();
     return super.simulate(ip,port,edam);
+  }
+  get_entity(str,lang){
+    var parser = new ParserLib.ParserFactory;
+    parser = parser.getParser(lang,'');
+    var structure =  parser.getAll(str);
+    return structure['entity']['name'];
   }
 }
 
@@ -126,6 +139,7 @@ class Configurator{
       'language':'',
       'name':'',
       'top_level':'',
+      'top_level_file':'',
       'working_dir':'',
       'gtkwave':''
     }
@@ -161,6 +175,12 @@ class Configurator{
     }
     this.configuration["top_level"] = topLevel;
   }
+  setTopLevelFile(topLevelFile){
+    if (typeof topLevelFile != 'string') {
+        throw new Error('You must pass requiredParam to function setTopLevelFile!');
+    }
+    this.configuration["top_level_file"] = topLevelFile;
+  }
   setWorkingDir(workingDir){
     if (typeof workingDir != 'string') {
         throw new Error('You must pass requiredParam to function setWorkingDir!');
@@ -182,6 +202,9 @@ class Configurator{
   getTopLevel(){
     return this.configuration['top_level'];
   }
+  getTopLevelFile(){
+    return this.configuration['top_level_file'];
+  }
   getWorkingDir(){
     return this.configuration['working_dir'];
   }
@@ -195,6 +218,7 @@ class Configurator{
       'language':config['language'],
       'name':config['name'],
       'top_level':config['top_level'],
+      'top_level_file':config['top_level_file'],
       'working_dir':config['working_dir'],
       'gtkwave':config['gtkwave']
     }

@@ -15,3 +15,5 @@ src/db/resources/configuration.json
 *.out
 *.vcd
 Makefile
+python_modules
+package-lock.json
