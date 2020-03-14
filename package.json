@@ -21,7 +21,6 @@
     "state-machine-cat": "4.1.0",
     "sequelize": "x",
     "axios" : "x",
-    "tree-sitter": "^0.15.15",
     "tree-sitter-verilog": "^0.18.8"
   }
 }
