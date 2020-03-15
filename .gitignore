@@ -17,3 +17,4 @@ src/db/resources/configuration.json
 Makefile
 python_modules
 package-lock.json
+*.pyc

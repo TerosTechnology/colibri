@@ -3,9 +3,10 @@ const Simulators = require('../simulators/simulators')
 const ParserLib = require('../parser/factory')
 const nopy = require('nopy');
 const path = require('path');
+const dependency = require('./dependency_graph');
 
 class Manager extends Simulators.Simulators{
-  constructor(configurator){
+  constructor(graph,configurator){
     var server_path = __dirname + path.sep + "test.py"
     nopy.spawnPython([server_path], { interop: "buffer" }).then(({ code, stdout, stderr }) => {
     });
@@ -16,6 +17,8 @@ class Manager extends Simulators.Simulators{
       this.configurator = new Configurator();
     else
       this.configurator = configurator;
+    //if (graph != undefined)
+    this.dependency_graph = new dependency.Dependency_graph(graph);
   }
   loadProject(file){
     var jsonF = fs.readFileSync(file,'utf8');
@@ -125,6 +128,12 @@ class Manager extends Simulators.Simulators{
     parser = parser.getParser(lang,'');
     var structure =  parser.getAll(str);
     return structure['entity']['name'];
+  }
+  generate_svg(sources,function_open,top_level){
+    this.dependency_graph.generate_svg(sources,function_open,top_level);
+  }
+  set_top_dependency_graph(file){
+    this.dependency_graph.set_top_dependency_graph(file);
   }
 }
 
