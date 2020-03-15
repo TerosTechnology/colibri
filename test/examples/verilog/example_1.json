@@ -22,7 +22,7 @@
       "name": "in1",
       "direction": "input",
       "type": "[WIDTH-1:0]",
-      "comment": ""
+      "comment": "**descrition**"
     },
     {
       "name": "in2",
