@@ -13,7 +13,7 @@
       "name": "clk",
       "direction": "input",
       "type": "",
-      "comment": " input 2 comment"
+      "comment": "input 2 comment"
     },
     {
       "name": "clear",
