@@ -1,8 +1,8 @@
-// Copyright 2020 Teros Tech
+// Copyright 2020 Teros Technology
 //
 // Ismael Perez Rojo
 // Carlos Alberto Ruiz Naranjo
-// Alfredo Enrique Sáez
+// Alfredo Saez
 //
 // This file is part of Colibri.
 //
@@ -38,7 +38,7 @@ class tsVerilogParser  {
     // console.log(tree.rootNode);
     // fs.writeFile("tree.json", tree.rootNode, function(err) {  });
     var structure = {
-      // 'libraries': this.getLibraries(str),
+      'libraries': this.get_libraries(tree.rootNode, lines),  // includes
       "entity": this.getEntityName(tree.rootNode, lines), // module
       "generics": this.getGenerics(tree.rootNode, lines), // parameters
       "ports": this.getPorts(tree.rootNode, lines),
@@ -193,6 +193,23 @@ class tsVerilogParser  {
     return item
   }
 
+  get_libraries(tree, lines) {
+    var items = [];
+    var inputs = [];
+    var item = {};
+    var element = tree;
+    //Inputs
+    var arr = this.searchTree(element, 'include_compiler_directive');
+    inputs = arr;
+    for (var x = 0; x < inputs.length; ++x) {
+      item = {
+        "name": this.get_library_name(inputs[x], lines),
+      }
+      items.push(item);
+    }
+    return items
+  }
+
   getGenerics(tree, lines) {
     var items = [];
     var inputs = [];
@@ -213,6 +230,19 @@ class tsVerilogParser  {
       items.push(item);
     }
     return items
+  }
+
+  get_library_name(port, lines) {
+    var arr = this.searchTree(port, 'double_quoted_string');
+    if (arr.length == 0) {
+      var lib = this.extractData(arr[0], lines)
+      return lib;
+    } else {
+      var lib = this.extractData(arr[0], lines).substr(1,this.extractData(arr[0], lines).length - 2);
+      var split_lib = lib.split(',')
+      for (var x = 0; x < split_lib.length; ++x)
+        return lib;
+    }
   }
 
   getGenericName(port, lines) {

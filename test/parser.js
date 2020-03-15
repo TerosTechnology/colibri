@@ -1,8 +1,8 @@
-// Copyright 2020 Teros Tech
+// Copyright 2020 Teros Technology
 //
 // Ismael Perez Rojo
 // Carlos Alberto Ruiz Naranjo
-// Alfredo Enrique Sáez
+// Alfredo Saez
 //
 // This file is part of Colibri.
 //
@@ -37,7 +37,6 @@ for (let x=0;x<8;++x){
   let example_exp_result = fs.readFileSync('./examples/verilog/example_'+x+'.json','utf8');
   example_exp_result     = JSON.parse(example_exp_result);
   // console.log(example_result);
-
   let rs = compareVerilogTs(example_result,example_exp_result,"example_"+x+".v");
   console.log("Test " + rs + " ["+"example_"+x+".v"+"]");
   if (rs!= true) {
@@ -63,7 +62,9 @@ for (let x=0;x<8;++x){
 // }
 //////////////////////////////////////////////////////////////////////////////
 function compareVhdl(m,n,file){
-  var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
+  if (m['libraries']['name']!=undefined) {
+    var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
+  }
   if(m['entity']['name'] != n['entity']['name']) { return false; }
   if(m['architecture']['name'] != n['architecture']['name']) { return false; }
   var ch1 = check(m['generics'],n['generics'],['name','kind'],"generics",file);
@@ -87,7 +88,7 @@ function compareVerilog(m,n,file){
   return ch0 && ch1 && ch2 && ch3 && ch4 && ch5;
 }
 function compareVerilogTs(m,n,file){
-  // var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
+  var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
   if(m['entity']['name'] != n['entity']['name']) { return false; }
   var ch1 = check(m['generics'],n['generics'],['name','kind'],"generics",file);
   var ch2 = check(m['ports'],n['ports'],['name','direction','type','comment'],"ports",file);

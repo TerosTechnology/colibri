@@ -1,4 +1,8 @@
 {
+  "libraries": [
+    {"name": "my_incl.vh"},
+    {"name": "my_inclsv.svh"}
+  ],
   "entity": {
     "name": "behav_counter"
   },
