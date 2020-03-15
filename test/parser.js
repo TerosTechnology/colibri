@@ -26,6 +26,7 @@ const General = Colibri.General;
 const Parser = Colibri.Parser;
 // const VhdlParser = require('../src/parser/vhdlparser')
 
+var test_result = true;
 
 for (let x=0;x<8;++x){
   var ParserLang = [General.LANGUAGES.VERILOG];
@@ -39,8 +40,11 @@ for (let x=0;x<8;++x){
 
   let rs = compareVerilogTs(example_result,example_exp_result,"example_"+x+".v");
   console.log("Test " + rs + " ["+"example_"+x+".v"+"]");
+  if (rs!= true) {
+    test_result= false;
+  }
 }
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 // for (let x=0;x<6;++x){
 //   var ParserLang = [General.LANGUAGES.VHDL];
 //   let parser = new Parser.ParserFactory;
@@ -49,11 +53,15 @@ for (let x=0;x<8;++x){
 //   let example_result  = parser.getAll(example_vhd);
 //   let example_exp_result = fs.readFileSync('./examples/vhdl/example_'+x+'.json','utf8');
 //   example_exp_result     = JSON.parse(example_exp_result);
+//   console.log(example_result);
 //
 //   let rs = compareVhdl(example_result,example_exp_result,"example_"+x+".vhd");
-//   console.log("Test " + rs + " ["+"example_"+x+".vhd"+"]")
+//   console.log("Test " + rs + " ["+"example_"+x+".vhd"+"]");
+//   if (rs!= true) {
+//     test_result= false;
+//   }
 // }
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 function compareVhdl(m,n,file){
   var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
   if(m['entity']['name'] != n['entity']['name']) { return false; }
@@ -133,4 +141,10 @@ function check(m,n,cmp,type,file){
     }
   }
   return true;
+}
+
+if (test_result == true)
+  console.log("All test...  OK!")
+else{
+  throw new Error('Test errors');
 }
