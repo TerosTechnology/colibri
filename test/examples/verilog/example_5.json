@@ -5,28 +5,34 @@
   },
   "generics": [{
       "name": "DATA_WIDTH",
-      "kind": ""
+      "kind": "",
+      "comment": ""
     },
 
     {
       "name": "KEEP_WIDTH",
-      "kind": ""
+      "kind": "",
+      "comment": "**Data width parameter**"
     },
     {
       "name": "HDR_WIDTH",
-      "kind": ""
+      "kind": "",
+      "comment": ""
     },
     {
       "name": "ENABLE_PADDING",
-      "kind": ""
+      "kind": "",
+      "comment": ""
     },
     {
       "name": "ENABLE_DIC",
-      "kind": ""
+      "kind": "",
+      "comment": "enable"
     },
     {
       "name": "MIN_FRAME_LENGTH",
-      "kind": ""
+      "kind": "",
+      "comment": ""
     }
   ],
   "ports": [{

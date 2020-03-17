@@ -5,7 +5,8 @@
   },
   "generics": [{
     "name": "WIDTH",
-    "kind": ""
+    "kind": "",
+    "comment": " pepe"
   }],
   "ports": [{
       "name": "clk",

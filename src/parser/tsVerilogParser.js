@@ -35,8 +35,7 @@ class tsVerilogParser  {
   getAll(sourceCode) {
     var lines = this.fileLines(sourceCode)
     const tree = this.parser.parse(sourceCode);
-    // console.log(tree.rootNode);
-    fs.writeFile("tree.json", tree.rootNode, function(err) {  });
+    // fs.writeFile("tree.json", tree.rootNode, function(err) {  });
     var structure = {
       'libraries': this.get_libraries(tree.rootNode, lines),  // includes
       "entity": this.getEntityName(tree.rootNode, lines), // module
@@ -229,6 +228,8 @@ class tsVerilogParser  {
     var inputs = [];
     var item = {};
     var element = tree;
+    //comments
+    let comments = this.getComments(element, lines);
     //Inputs
     var arr = this.searchTree(element, 'parameter_declaration');
     if (arr == null) {
@@ -236,10 +237,20 @@ class tsVerilogParser  {
     }
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
+      let comment = ""
+      let pre_comment = comments[inputs[x].startPosition.row];
+      if (pre_comment != undefined) {
+        if (this.comment_symbol == "" ||  pre_comment[0] == this.comment_symbol){
+          comment = pre_comment.substring(1);
+        }else {
+          comment = "";
+        }
+      }
       item = {
         "name": this.getGenericName(inputs[x], lines),
         "kind": this.getGenericKind(inputs[x], lines),
-        "index": this.index(inputs[x])
+        "index": this.index(inputs[x]),
+        "comment": comment
       }
       items.push(item);
     }

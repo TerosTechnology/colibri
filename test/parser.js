@@ -88,7 +88,7 @@ function compareVerilog(m,n,file){
 function compareVerilogTs(m,n,file){
   var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
   if(m['entity']['name'] != n['entity']['name']) { return false; }
-  var ch1 = check(m['generics'],n['generics'],['name','kind'],"generics",file);
+  var ch1 = check(m['generics'],n['generics'],['name','kind','comment'],"generics",file);
   var ch2 = check(m['ports'],n['ports'],['name','direction','type','comment'],"ports",file);
   // var ch3 = check(m['regs'],n['regs'],['name','kind','type'],"regs",file);
   // var ch4 = check(m['nets'],n['nets'],['name','kind','type'],"nets",file);

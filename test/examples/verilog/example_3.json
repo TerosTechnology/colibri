@@ -5,7 +5,8 @@
   },
   "generics": [{
     "name": "cycles_per_bit",
-    "kind": "integer"
+    "kind": "integer",
+    "comment": "  #one parameter"
   }],
   "ports": [{
       "name": "clk",

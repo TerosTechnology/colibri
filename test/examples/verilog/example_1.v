@@ -6,7 +6,7 @@
 //
 
 module add2_and_clip_reg
-  #(parameter WIDTH=16) //pepe
+  #(parameter WIDTH=16) //! pepe
     (input clk,
      input rst,
      input [WIDTH-1:0] in1, //!**descrition**
