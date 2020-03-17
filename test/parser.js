@@ -142,8 +142,8 @@ function check(m,n,cmp,type,file){
   return true;
 }
 
-// if (test_result == true)
-//   console.log("All test...  OK!")
-// else{
-//   throw new Error('Test errors');
-// }
+if (test_result == true)
+  console.log("All test...  OK!")
+else{
+  throw new Error('Test errors');
+}
