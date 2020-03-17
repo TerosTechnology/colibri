@@ -62,9 +62,7 @@ for (let x=0;x<8;++x){
 // }
 //////////////////////////////////////////////////////////////////////////////
 function compareVhdl(m,n,file){
-  if (m['libraries']['name']!=undefined) {
-    var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
-  }
+  var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
   if(m['entity']['name'] != n['entity']['name']) { return false; }
   if(m['architecture']['name'] != n['architecture']['name']) { return false; }
   var ch1 = check(m['generics'],n['generics'],['name','kind'],"generics",file);
@@ -144,8 +142,8 @@ function check(m,n,cmp,type,file){
   return true;
 }
 
-if (test_result == true)
-  console.log("All test...  OK!")
-else{
-  throw new Error('Test errors');
-}
+// if (test_result == true)
+//   console.log("All test...  OK!")
+// else{
+//   throw new Error('Test errors');
+// }

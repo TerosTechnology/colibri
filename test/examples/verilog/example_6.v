@@ -7,10 +7,10 @@
 module
 
 gray_counter (
-  out    , // counter out
-  enable , // enable for counter
-  clk    , // clock
-  rst      // active hight reset
+  out    , //! counter out
+  enable , //! enable for counter
+  clk    , //! clock
+  rst      //! active hight reset
   );
 
   //------------Input Ports--------------
