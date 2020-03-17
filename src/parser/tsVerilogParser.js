@@ -144,13 +144,13 @@ class tsVerilogParser  {
           typeVar = this.getPortType(inputs[x], lines)
       }
       var port_ref = this.searchTree(element, 'port_reference');
+      var comment = "";
+      var comment_str = comments[inputs[x].startPosition.row];
       for (var i = 0; i < port_name.length; i++) {
-        var comment = "";
-        var comment_str = comments[inputs[x].startPosition.row];
-        if (comment_str == undefined & port_ref !=null){
+        if (comment_str == undefined ){
           for (var z = 0; z < port_ref.length; z++) {
             var port_ref_name = this.extractData(port_ref[z],lines);
-            if(port_ref_name == port_name[i]){
+            if(port_ref_name == port_name[i].trim()){
               var pre_comment =  comments[port_ref[z].startPosition.row];
               if (pre_comment != undefined) {
                 if (this.comment_symbol == "" ||  pre_comment[0] == this.comment_symbol){
