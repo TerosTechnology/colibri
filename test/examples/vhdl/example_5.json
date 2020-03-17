@@ -14,54 +14,54 @@
   "ports":
   [
     { "name": "rst",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": ""
     },
     { "name": "clk",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": ""
     },
     { "name": "coef_ld",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": ""
     },
     { "name": "start",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": ""
     },
     { "name": "o_enable",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": ""
     },
     { "name": "bypass",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": ""
     },
     { "name": "Yn_in",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic_vector(15 downto 0)",
-      "index": 546
+      "comment": ""
     },
     { "name": "Xn_in",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic_vector(15 downto 0)",
-      "index": 546
+      "comment": ""
     },
     { "name": "Xn_out",
-      "kind": "out",
+      "direction": "out",
       "type": "std_logic_vector(3 downto 0)",
-      "index": 546
+      "comment": ""
     },
     { "name": "Yn_out",
-      "kind": "out",
+      "direction": "out",
       "type": "std_logic_vector(15 downto 0)",
-      "index": 546
+      "comment": ""
     }
   ],
   "signals":

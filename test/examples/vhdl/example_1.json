@@ -11,47 +11,45 @@
   "generics":
   [
     { "name": "BITS",
-      "kind": "positive",
-      "type": "",
-      "index": 546
+      "type": "positive",
+      "comment": " Bit width of the counter"
     },
     { "name": "INIT",
-      "kind": "natural",
-      "type": "",
-      "index": 546
+      "type": "natural",
+      "comment": " Initial/reset counter value"
     }
   ],
   "ports":
   [
     { "name": "clk",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": ""
     },
     { "name": "rst",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": " Reset to INIT value"
     },
     { "name": "inc",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": " Increment"
     },
     { "name": "dec",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": " Decrement"
     },
     { "name": "val",
-      "kind": "out",
+      "direction": "out",
       "type": "std_logic_vector(BITS-1 downto 0)",
-      "index": 546
+      "comment": " Value output"
     },
     { "name": "cry",
-      "kind": "out",
+      "direction": "out",
       "type": "std_logic",
-      "index": 546
+      "comment": " Carry output"
     }
   ],
   "signals":

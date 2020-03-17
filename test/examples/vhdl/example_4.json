@@ -15,34 +15,34 @@
   "ports":
   [
     { "name": "clk",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": ""
     },
     { "name": "rst",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": ""
     },
     { "name": "go_i",
-      "kind": "in",
-      "type": "axil_m2s_t",
-      "index": 546
+      "direction": "in",
+      "type": "std_logic",
+      "comment": ""
     },
     { "name": "x_i",
-      "kind": "in",
+      "direction": "in",
       "type": "unsigned(3 downto 0)",
-      "index": 546
+      "comment": ""
     },
     { "name": "y_i",
-      "kind": "in",
+      "direction": "in",
       "type": "unsigned(3 downto 0)",
-      "index": 546
+      "comment": ""
     },
     { "name": "d_o",
-      "kind": "out",
+      "direction": "out",
       "type": "unsigned(3 downto 0)",
-      "index": 546
+      "comment": ""
     }
   ],
   "signals":

@@ -248,7 +248,7 @@ class tsVerilogParser  {
       }
       item = {
         "name": this.getGenericName(inputs[x], lines),
-        "kind": this.getGenericKind(inputs[x], lines),
+        "type": this.getGenericKind(inputs[x], lines),
         "index": this.index(inputs[x]),
         "comment": comment
       }
