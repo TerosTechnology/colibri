@@ -36,7 +36,7 @@ class tsVerilogParser  {
     var lines = this.fileLines(sourceCode)
     const tree = this.parser.parse(sourceCode);
     // console.log(tree.rootNode);
-    // fs.writeFile("tree.json", tree.rootNode, function(err) {  });
+    fs.writeFile("tree.json", tree.rootNode, function(err) {  });
     var structure = {
       'libraries': this.get_libraries(tree.rootNode, lines),  // includes
       "entity": this.getEntityName(tree.rootNode, lines), // module
@@ -143,11 +143,25 @@ class tsVerilogParser  {
         default:
           typeVar = this.getPortType(inputs[x], lines)
       }
+      var port_ref = this.searchTree(element, 'port_reference');
       for (var i = 0; i < port_name.length; i++) {
         var comment = "";
         var comment_str = comments[inputs[x].startPosition.row];
-        if (comment_str == undefined)
-          comment = "";
+        if (comment_str == undefined & port_ref !=null){
+          for (var z = 0; z < port_ref.length; z++) {
+            var port_ref_name = this.extractData(port_ref[z],lines);
+            if(port_ref_name == port_name[i]){
+              var pre_comment =  comments[port_ref[z].startPosition.row];
+              if (pre_comment != undefined) {
+                if (this.comment_symbol == "" ||  pre_comment[0] == this.comment_symbol){
+                  comment = pre_comment.substring(1);
+                }else {
+                  comment = "";
+                }
+            }
+          }
+        }
+      }
         else if (this.comment_symbol == "" ||  comment_str[0] == this.comment_symbol)
           comment = comment_str.substring(1);
 
