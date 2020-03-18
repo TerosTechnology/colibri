@@ -70,3 +70,30 @@ jobs:
         run: |
           npm install .
           npm run-script testParser
+
+  test-Parser-windows:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v1
+      - name: Test
+        run: |
+          apm install
+          apm run-script testParser
+
+  test-Parser-windows2:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v1
+      - name: Test
+        run: |
+          npm install --global --production windows-build-tools
+          npm install
+          npm run-script testParser
