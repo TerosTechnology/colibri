@@ -24,7 +24,8 @@
     "sequelize": "x",
     "axios" : "x",
     "tree-sitter": "^0.15.15",
-    "tree-sitter-verilog": "^0.18.8"
+    "tree-sitter-verilog": "^0.18.8",
+    "nopy": "^0.2.3"
   },
   "python": {
     "execPath": "python3",
