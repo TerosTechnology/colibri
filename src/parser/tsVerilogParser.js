@@ -1,3 +1,24 @@
+// Copyright 2020 Teros Technology
+//
+// Ismael Perez Rojo
+// Carlos Alberto Ruiz Naranjo
+// Alfredo Saez
+//
+// This file is part of Colibri.
+//
+// Colibri is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Colibri is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
+
 const fs = require('fs');
 const os = require("os");
 const path = require('path');
@@ -14,10 +35,9 @@ class tsVerilogParser  {
   getAll(sourceCode) {
     var lines = this.fileLines(sourceCode)
     const tree = this.parser.parse(sourceCode);
-    // console.log(tree.rootNode);
     // fs.writeFile("tree.json", tree.rootNode, function(err) {  });
     var structure = {
-      // 'libraries': this.getLibraries(str),
+      'libraries': this.get_libraries(tree.rootNode, lines),  // includes
       "entity": this.getEntityName(tree.rootNode, lines), // module
       "generics": this.getGenerics(tree.rootNode, lines), // parameters
       "ports": this.getPorts(tree.rootNode, lines),
@@ -122,11 +142,25 @@ class tsVerilogParser  {
         default:
           typeVar = this.getPortType(inputs[x], lines)
       }
+      var port_ref = this.searchTree(element, 'port_reference');
+      var comment = "";
+      var comment_str = comments[inputs[x].startPosition.row];
       for (var i = 0; i < port_name.length; i++) {
-        var comment = "";
-        var comment_str = comments[inputs[x].startPosition.row];
-        if (comment_str == undefined)
-          comment = "";
+        if (comment_str == undefined ){
+          for (var z = 0; z < port_ref.length; z++) {
+            var port_ref_name = this.extractData(port_ref[z],lines);
+            if(port_ref_name == port_name[i].trim()){
+              var pre_comment =  comments[port_ref[z].startPosition.row];
+              if (pre_comment != undefined) {
+                if (this.comment_symbol == "" ||  pre_comment[0] == this.comment_symbol){
+                  comment = pre_comment.substring(1);
+                }else {
+                  comment = "";
+                }
+            }
+          }
+        }
+      }
         else if (this.comment_symbol == "" ||  comment_str[0] == this.comment_symbol)
           comment = comment_str.substring(1);
 
@@ -172,11 +206,30 @@ class tsVerilogParser  {
     return item
   }
 
+  get_libraries(tree, lines) {
+    var items = [];
+    var inputs = [];
+    var item = {};
+    var element = tree;
+    //Inputs
+    var arr = this.searchTree(element, 'include_compiler_directive');
+    inputs = arr;
+    for (var x = 0; x < inputs.length; ++x) {
+      item = {
+        "name": this.get_library_name(inputs[x], lines),
+      }
+      items.push(item);
+    }
+    return items
+  }
+
   getGenerics(tree, lines) {
     var items = [];
     var inputs = [];
     var item = {};
     var element = tree;
+    //comments
+    let comments = this.getComments(element, lines);
     //Inputs
     var arr = this.searchTree(element, 'parameter_declaration');
     if (arr == null) {
@@ -184,14 +237,37 @@ class tsVerilogParser  {
     }
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
+      let comment = ""
+      let pre_comment = comments[inputs[x].startPosition.row];
+      if (pre_comment != undefined) {
+        if (this.comment_symbol == "" ||  pre_comment[0] == this.comment_symbol){
+          comment = pre_comment.substring(1);
+        }else {
+          comment = "";
+        }
+      }
       item = {
         "name": this.getGenericName(inputs[x], lines),
-        "kind": this.getGenericKind(inputs[x], lines),
-        "index": this.index(inputs[x])
+        "type": this.getGenericKind(inputs[x], lines),
+        "index": this.index(inputs[x]),
+        "comment": comment
       }
       items.push(item);
     }
     return items
+  }
+
+  get_library_name(port, lines) {
+    var arr = this.searchTree(port, 'double_quoted_string');
+    if (arr.length == 0) {
+      var lib = this.extractData(arr[0], lines)
+      return lib;
+    } else {
+      var lib = this.extractData(arr[0], lines).substr(1,this.extractData(arr[0], lines).length - 2);
+      var split_lib = lib.split(',')
+      for (var x = 0; x < split_lib.length; ++x)
+        return lib;
+    }
   }
 
   getGenericName(port, lines) {

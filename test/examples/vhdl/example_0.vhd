@@ -50,21 +50,21 @@ use			PoC.utils.all;
 
 entity arith_counter_bcd is
 	generic (
-		DIGITS : positive														-- Number of BCD digits
+		DIGITS : positive														--! Number of BCD digits
 	);
 	port (
 		clk : in	std_logic;
-		rst : in	std_logic;												-- Reset to 0
-		inc : in	std_logic;												-- Increment
-		val : out T_BCD_VECTOR(DIGITS-1 downto 0) 	-- Value output
+		rst : in	std_logic;												--! Reset to 0
+		inc : in	std_logic;												--! Increment
+		val : out T_BCD_VECTOR(DIGITS-1 downto 0) 	--! Value output
 	);
 end entity;
 
 
 architecture rtl of arith_counter_bcd is
   -- c(i) = carry-in of stage 'i'
-  signal p : unsigned(DIGITS-1 downto 0);  -- Stage Overflows=Propagates
-  signal c : unsigned(DIGITS   downto 0);  -- Inter-Stage Carries
+  signal p : unsigned(DIGITS-1 downto 0);  --! Stage Overflows=Propagates
+  signal c : unsigned(DIGITS   downto 0);  --! Inter-Stage Carries
 begin
 	-- Compute Carries using standard addition
   c <= ('0'&p) xor (('0'&p) + 1);

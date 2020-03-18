@@ -5,7 +5,7 @@
 // Copyright (c) 2014-2019, Lars Asplund lars.anders.asplund@gmail.com
 
 module uart_rx(clk, rx, overflow, tready, tvalid, tdata);
-   parameter integer cycles_per_bit = 434;
+   parameter integer cycles_per_bit = 434; //!  #one parameter
 
    input logic       clk;
 

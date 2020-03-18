@@ -1,10 +1,12 @@
 {
+  "libraries":[],
   "entity": {
     "name": "uart_rx"
   },
   "generics": [{
     "name": "cycles_per_bit",
-    "kind": "integer"
+    "type": "integer",
+    "comment": "  #one parameter"
   }],
   "ports": [{
       "name": "clk",

@@ -1,10 +1,13 @@
+`include "my_incl.vh"
+`include "my_inclsv.svh"
+
 module behav_counter( d, clk, clear, load, up_down, qd);
 
 // Port Declaration
 
-input   [7:0] d; // input 1 comment
-input   clk; // input 2 comment
-input   clear; // input 3 comment
+input   [7:0] d; //! input 1 comment
+input   clk; //!input 2 comment
+input   clear; //! input 3 comment
 input   load;
 input   up_down;
 output  [7:0] qd;

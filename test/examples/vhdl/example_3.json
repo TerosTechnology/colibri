@@ -18,44 +18,44 @@
   "ports":
   [
     { "name": "clk",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": ""
     },
     { "name": "axils_m2s",
-      "kind": "in",
+      "direction": "in",
       "type": "axil_m2s_t",
-      "index": 546
+      "comment": ""
     },
     { "name": "axils_s2m",
-      "kind": "out",
+      "direction": "out",
       "type": "axil_s2m_t",
-      "index": 546
+      "comment": ""
     },
     { "name": "start_transfer",
-      "kind": "out",
+      "direction": "out",
       "type": "std_logic",
-      "index": 546
+      "comment": ""
     },
     { "name": "transfer_done",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": ""
     },
     { "name": "src_address",
-      "kind": "out",
+      "direction": "out",
       "type": "std_logic_vector(31 downto 0)",
-      "index": 546
+      "comment": ""
     },
     { "name": "dst_address",
-      "kind": "out",
+      "direction": "out",
       "type": "std_logic_vector(31 downto 0)",
-      "index": 546
+      "comment": ""
     },
     { "name": "num_bytes",
-      "kind": "out",
+      "direction": "out",
       "type": "std_logic_vector(31 downto 0)",
-      "index": 546
+      "comment": ""
     }
   ],
   "signals":

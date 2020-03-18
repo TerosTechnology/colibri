@@ -1,4 +1,9 @@
 {
+  "libraries": [
+    {"name": "includes.v"},
+    {"name": "includes1.v"},
+    {"name": "includes2.v"}
+  ],
   "entity": {
     "name": "t_gate_switch"
   },

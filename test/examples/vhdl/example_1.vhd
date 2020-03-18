@@ -37,16 +37,16 @@ use			ieee.numeric_std.all;
 
 entity arith_counter_gray is
 	generic (
-		BITS : positive;															-- Bit width of the counter
-		INIT : natural 				:= 0										-- Initial/reset counter value
+		BITS : positive;															--! Bit width of the counter
+		INIT : natural 				:= 0										--! Initial/reset counter value
 	);
 	port (
 		clk : in	std_logic;
-		rst : in	std_logic;													-- Reset to INIT value
-		inc : in	std_logic;													-- Increment
-		dec : in	std_logic		:= '0';									-- Decrement
-		val : out std_logic_vector(BITS-1 downto 0);	-- Value output
-		cry : out std_logic														-- Carry output
+		rst : in	std_logic;													--! Reset to INIT value
+		inc : in	std_logic;													--! Increment
+		dec : in	std_logic		:= '0';									--! Decrement
+		val : out std_logic_vector(BITS-1 downto 0);	--! Value output
+		cry : out std_logic														--! Carry output
 	);
 end entity arith_counter_gray;
 
