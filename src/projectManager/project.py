@@ -30,7 +30,6 @@ from library import Library
 
 LOGGER = logging.getLogger(__name__)
 
-
 class Project(object):  # pylint: disable=too-many-instance-attributes
     """
     The representation of a HDL code project.

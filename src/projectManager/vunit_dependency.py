@@ -78,7 +78,6 @@ def get_file_dependencies(source_file):
             continue
         results.append(SourceFile(source_file, project, "src_lib"))
 
-    ###
     ui_src_file = results
     dependencies = get_implementation_subset(ui_src_file)
     dependency_list = []

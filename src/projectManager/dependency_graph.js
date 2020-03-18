@@ -37,27 +37,26 @@ class Dependency_graph {
       this.graph = document.createElement("div");
     this.graph.setAttribute("id", "#graph");
     this.graph.setAttribute("style", "background-color:white;width=900px;height=900px");
-    var element = this;
+    let element = this;
     this.create_dependency_graph(files).then( async function (dependency_graph) {
-      console.log(dependency_graph)
       d3_selection.select(this.graph).on("click", function() {
         if(event['path'][1]['id'] == "graph0")
         return;
-        var children = event['path'][2]['children']
-        for (var i=0;i<children.length;++i){
+        let children = event['path'][2]['children']
+        for (let i=0;i<children.length;++i){
           if(children[i]['childNodes'][3] != null && children[i]['classList'][0]!=='edge'
           && children[i]['classList']['value']!==""){
             children[i]['childNodes'][3]['attributes'][0]['value'] = 'lightgray'
           }
         }
-        var g = event['path'][1];
-        var node_path = g.getElementsByTagName("title")[0]['innerHTML'];
-        var node_name = g.getElementsByTagName("text")[0]['innerHTML'];
-        var rectangle = g.getElementsByTagName("polygon");
+        let g = event['path'][1];
+        let node_path = g.getElementsByTagName("title")[0]['innerHTML'];
+        let node_name = g.getElementsByTagName("text")[0]['innerHTML'];
+        let rectangle = g.getElementsByTagName("polygon");
         rectangle[0]['attributes'][0]['value'] = "red"
         open_function(node_path);
       });
-      var t = d3_transition.transition().duration(700).ease(d3_ease.easeLinear);
+      let t = d3_transition.transition().duration(700).ease(d3_ease.easeLinear);
       if (dependency_graph == "")
         return;
       d3.graphviz(element.graph).transition(t).height(window.innerHeight).width(window.innerWidth)
@@ -69,12 +68,12 @@ class Dependency_graph {
   }
 
   create_dependency_graph(sources) {
-    var str = "";
-    for (var i=0;i<sources.length-1;++i)
+    let str = "";
+    for (let i=0;i<sources.length-1;++i)
     str += sources[i] + ","
     str += sources[sources.length-1];
 
-    var py_path = __dirname + path.sep + "vunit_dependency.py"
+    let py_path = __dirname + path.sep + "vunit_dependency.py"
     return new Promise(function(resolve, reject) {
       nopy.spawnPython([py_path, str], { interop: "buffer" }).then(({ code, stdout, stderr }) => {
         resolve(stdout);
@@ -84,9 +83,9 @@ class Dependency_graph {
 
   set_top_dependency_graph(file) {
     try{
-      var selection = d3_selection.select(this.graph);
-      var childs = selection['_groups'][0][0]['childNodes'][0]['childNodes'][1]['childNodes'];
-      for (var i=0;i<childs.length;++i){
+      let selection = d3_selection.select(this.graph);
+      let childs = selection['_groups'][0][0]['childNodes'][0]['childNodes'][1]['childNodes'];
+      for (let i=0;i<childs.length;++i){
         if(childs[i]['childNodes'][3] != null && childs[i]['classList'][0]!=='edge'
         && childs[i]['classList']['value']!==""){
           if (childs[i]['childNodes'].length>2){

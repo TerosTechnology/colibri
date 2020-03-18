@@ -23,7 +23,6 @@ def simplify_path(path):
 
     return path
 
-
 class SourceFileList(list):
     """
     A list of :class:`.SourceFile`

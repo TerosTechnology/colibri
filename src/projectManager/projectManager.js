@@ -7,7 +7,7 @@ const dependency = require('./dependency_graph');
 
 class Manager extends Simulators.Simulators{
   constructor(graph,configurator){
-    var server_path = __dirname + path.sep + "test.py"
+    let server_path = __dirname + path.sep + "server_triel.py"
     nopy.spawnPython([server_path], { interop: "buffer" }).then(({ code, stdout, stderr }) => {
     });
     super();
@@ -17,22 +17,21 @@ class Manager extends Simulators.Simulators{
       this.configurator = new Configurator();
     else
       this.configurator = configurator;
-    //if (graph != undefined)
     this.dependency_graph = new dependency.Dependency_graph(graph);
   }
   loadProject(file){
-    var jsonF = fs.readFileSync(file,'utf8');
+    let jsonF = fs.readFileSync(file,'utf8');
     this.source = JSON.parse(jsonF)['src'];
     this.testbench = JSON.parse(jsonF)['tb'];
     this.configurator.setAll(JSON.parse(jsonF)['config']);
   }
   saveProject(file){
-    var prj = {
+    let prj = {
       src : this.source,
       tb : this.testbench,
       config : this.configurator.getAll()
     };
-    var data = JSON.stringify(prj);
+    let data = JSON.stringify(prj);
     fs.writeFileSync(file,data);
   }
   getConfig(){
@@ -41,12 +40,10 @@ class Manager extends Simulators.Simulators{
   clear(){
     this.source = [];
     this.testbench = [];
-    // this.configurator = new Configurator();
   }
   addSource(newSource){
-    console.log("Added source...");
-    for (var i=0;i<newSource.length;++i) {
-      var f = {
+    for (let i=0;i<newSource.length;++i) {
+      let f = {
         name: newSource[i],
         file_type: this.getFileType(newSource[i])
       }
@@ -54,15 +51,14 @@ class Manager extends Simulators.Simulators{
     }
   }
   deleteSource(source){
-    for(var i=0;i<source.length;++i)
+    for(let i=0;i<source.length;++i)
       this.source = this.source.filter(function( obj ) {
           return obj.name !== source[i];
       });
   }
   addTestbench(newTestbench){
-    console.log("Added testbench...");
-    for (var i=0;i<newTestbench.length;++i) {
-      var f = {
+    for (let i=0;i<newTestbench.length;++i) {
+      let f = {
         name: newTestbench[i],
         file_type: this.getFileType(newTestbench[i])
       }
@@ -70,7 +66,7 @@ class Manager extends Simulators.Simulators{
     }
   }
   deleteTestbench(testbench){
-    for(var i=0;i<testbench.length;++i)
+    for(let i=0;i<testbench.length;++i)
       this.testbench = this.testbench.filter(function( obj ) {
           return obj.name !== testbench[i];
       });
@@ -79,22 +75,22 @@ class Manager extends Simulators.Simulators{
     this.configurator = configurator;
   }
   getSourceName(){
-    var names = [];
-    for(var i=0; i<this.source.length;++i)
+    let names = [];
+    for(let i=0; i<this.source.length;++i)
       names = names.concat(this.source[i]['name']);
     return names;
   }
   getTestbenchName(){
-    var names = [];
-    for(var i=0; i<this.testbench.length;++i)
+    let names = [];
+    for(let i=0; i<this.testbench.length;++i)
       names = names.concat(this.testbench[i]['name']);
     return names;
   }
   getFileType(f){
     if (typeof f != "string")
       return "none";
-    var ext = f.split('.').pop();
-    var file_type = "";
+    let ext = f.split('.').pop();
+    let file_type = "";
     if (ext == "py")
       file_type = "py"
     else if(ext == "v")
@@ -104,7 +100,7 @@ class Manager extends Simulators.Simulators{
     return file_type;
   }
   getEdamFormat(){
-    var edam = {
+    let edam = {
       'name': this.configurator.getName(),
       'suite': this.configurator.getSuite(),
       'tool' : this.configurator.getTool(),
@@ -120,13 +116,13 @@ class Manager extends Simulators.Simulators{
     return super.getSuites(server,port);
   }
   simulate(ip,port){
-    var edam = this.getEdamFormat();
+    let edam = this.getEdamFormat();
     return super.simulate(ip,port,edam);
   }
   get_entity(str,lang){
-    var parser = new ParserLib.ParserFactory;
+    let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(lang,'');
-    var structure =  parser.getAll(str);
+    let structure =  parser.getAll(str);
     return structure['entity']['name'];
   }
   generate_svg(sources,function_open,top_level){
@@ -142,7 +138,7 @@ class Configurator{
     this.configuration = this.setDefaults();
   }
   setDefaults(){
-    var configuration = {
+    let configuration = {
       'suite':'',
       'tool':'',
       'language':'',

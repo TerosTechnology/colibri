@@ -15,7 +15,6 @@ from vunit.vhdl_standard import VHDLStandard
 
 LOGGER = logging.getLogger(__name__)
 
-
 class Library(object):  # pylint: disable=too-many-instance-attributes
     """
     Represents a VHDL library
