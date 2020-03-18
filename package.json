@@ -8,7 +8,9 @@
     "testTemplates": "cd test && cd templates && node cocoTest && node verilatorTest && node vunitRunpy && node tbVhdl && node tbVerilog && node component",
     "testDocumenter": "cd test && cd documenter && node stateMachine",
     "testProjectManager": "cd test && cd projectManager && node projectManager",
-    "testParser": "cd test && node parser"
+    "testParser": "cd test && node parser",
+    "nopy": "nopy",
+    "install": "npip install"
   },
   "author": "",
   "license": "GPL-3.0",
@@ -23,5 +25,12 @@
     "axios" : "x",
     "tree-sitter": "^0.15.15",
     "tree-sitter-verilog": "^0.18.8"
+  },
+  "python": {
+    "execPath": "python3",
+    "dependencies": {
+      "vunit_hdl": "==4.2.0",
+      "git+https://github.com/TerosTechnology/triel.git@master": ""
+    }
   }
 }
