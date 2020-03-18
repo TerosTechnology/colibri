@@ -25,7 +25,9 @@
     "axios" : "x",
     "tree-sitter": "^0.15.15",
     "tree-sitter-verilog": "^0.18.8",
-    "nopy": "^0.2.3"
+    "nopy": "^0.2.3",
+    "d3": "5.12.0",
+    "d3-graphviz": "2.6.1"
   },
   "python": {
     "execPath": "python3",
