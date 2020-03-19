@@ -78,10 +78,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
-      - uses: UziTech/action-setup-atom@v1
-        with:
-          channel: stable
       - name: Test
         run: |
-          apm install
-          apm run-script testParser
+          npm install
+          npm run-script testParser
