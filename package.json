@@ -27,9 +27,7 @@
     "tree-sitter-verilog": "^0.18.8",
     "nopy": "^0.2.3",
     "d3": "5.12.0",
-    "d3-graphviz": "2.6.1",
-    "windows-build-tools" : "5.2.2",
-    "node-gyp" : "6.1.0"
+    "d3-graphviz": "2.6.1"
   },
   "python": {
     "execPath": "python3",
