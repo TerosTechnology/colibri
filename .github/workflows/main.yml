@@ -80,5 +80,6 @@ jobs:
         uses: actions/checkout@v1
       - name: Test
         run: |
+          npm -g install node-pre-gyp
           npm install
           npm run-script testParser
