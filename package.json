@@ -8,20 +8,33 @@
     "testTemplates": "cd test && cd templates && node cocoTest && node verilatorTest && node vunitRunpy && node tbVhdl && node tbVerilog && node component",
     "testDocumenter": "cd test && cd documenter && node stateMachine",
     "testProjectManager": "cd test && cd projectManager && node projectManager",
-    "testParser": "cd test && node parser"
+    "testParser": "cd test && node parser",
+    "nopy": "nopy",
+    "install": "npip install"
   },
   "author": "",
   "license": "GPL-3.0",
   "dependencies": {
-    "markdown-pdf" : "10.0.0",
-    "svg.js" : "2.5",
-    "svgdom" : "x",
+    "markdown-pdf": "10.0.0",
+    "svg.js": "2.5",
+    "svgdom": "x",
     "showdown": "1.9.0",
     "shelljs": "0.8.3",
     "state-machine-cat": "4.1.0",
     "sequelize": "x",
-    "axios" : "x",
+    "axios": "x",
     "tree-sitter": "^0.15.15",
-    "tree-sitter-verilog": "^0.18.8"
+    "tree-sitter-verilog": "^0.18.8",
+    "nopy": "^0.2.3",
+    "d3": "5.12.0",
+    "d3-graphviz": "2.6.1"
+  },
+  "python": {
+    "execPath": "python3",
+    "dependencies": {
+      "wheel": ">=0.34.2",
+      "vunit_hdl": "==4.2.0",
+      "git+https://github.com/TerosTechnology/triel.git@master": ""
+    }
   }
 }

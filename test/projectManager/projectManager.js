@@ -116,3 +116,4 @@ else {
 }
 //Save trs
 projectManager.saveProject("prj_created.trs");
+process.exit(0);

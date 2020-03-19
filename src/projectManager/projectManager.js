@@ -1,29 +1,15 @@
-// Copyright 2020 Teros Technology
-//
-// Ismael Perez Rojo
-// Carlos Alberto Ruiz Naranjo
-// Alfredo Saez
-//
-// This file is part of Colibri.
-//
-// Colibri is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Colibri is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
-
 const fs = require('fs');
 const Simulators = require('../simulators/simulators')
+const ParserLib = require('../parser/factory')
+const nopy = require('nopy');
+const path = require('path');
+const dependency = require('./dependency_graph');
 
 class Manager extends Simulators.Simulators{
-  constructor(configurator){
+  constructor(graph,configurator){
+    let server_path = __dirname + path.sep + "server_triel.py"
+    nopy.spawnPython([server_path], { interop: "buffer" }).then(({ code, stdout, stderr }) => {
+    });
     super();
     this.source = [];
     this.testbench = [];
@@ -31,20 +17,21 @@ class Manager extends Simulators.Simulators{
       this.configurator = new Configurator();
     else
       this.configurator = configurator;
+    this.dependency_graph = new dependency.Dependency_graph(graph);
   }
   loadProject(file){
-    var jsonF = fs.readFileSync(file,'utf8');
+    let jsonF = fs.readFileSync(file,'utf8');
     this.source = JSON.parse(jsonF)['src'];
     this.testbench = JSON.parse(jsonF)['tb'];
     this.configurator.setAll(JSON.parse(jsonF)['config']);
   }
   saveProject(file){
-    var prj = {
+    let prj = {
       src : this.source,
       tb : this.testbench,
       config : this.configurator.getAll()
     };
-    var data = JSON.stringify(prj);
+    let data = JSON.stringify(prj);
     fs.writeFileSync(file,data);
   }
   getConfig(){
@@ -53,12 +40,10 @@ class Manager extends Simulators.Simulators{
   clear(){
     this.source = [];
     this.testbench = [];
-    // this.configurator = new Configurator();
   }
   addSource(newSource){
-    console.log("Added source...");
-    for (var i=0;i<newSource.length;++i) {
-      var f = {
+    for (let i=0;i<newSource.length;++i) {
+      let f = {
         name: newSource[i],
         file_type: this.getFileType(newSource[i])
       }
@@ -66,15 +51,14 @@ class Manager extends Simulators.Simulators{
     }
   }
   deleteSource(source){
-    for(var i=0;i<source.length;++i)
+    for(let i=0;i<source.length;++i)
       this.source = this.source.filter(function( obj ) {
           return obj.name !== source[i];
       });
   }
   addTestbench(newTestbench){
-    console.log("Added testbench...");
-    for (var i=0;i<newTestbench.length;++i) {
-      var f = {
+    for (let i=0;i<newTestbench.length;++i) {
+      let f = {
         name: newTestbench[i],
         file_type: this.getFileType(newTestbench[i])
       }
@@ -82,7 +66,7 @@ class Manager extends Simulators.Simulators{
     }
   }
   deleteTestbench(testbench){
-    for(var i=0;i<testbench.length;++i)
+    for(let i=0;i<testbench.length;++i)
       this.testbench = this.testbench.filter(function( obj ) {
           return obj.name !== testbench[i];
       });
@@ -91,22 +75,22 @@ class Manager extends Simulators.Simulators{
     this.configurator = configurator;
   }
   getSourceName(){
-    var names = [];
-    for(var i=0; i<this.source.length;++i)
+    let names = [];
+    for(let i=0; i<this.source.length;++i)
       names = names.concat(this.source[i]['name']);
     return names;
   }
   getTestbenchName(){
-    var names = [];
-    for(var i=0; i<this.testbench.length;++i)
+    let names = [];
+    for(let i=0; i<this.testbench.length;++i)
       names = names.concat(this.testbench[i]['name']);
     return names;
   }
   getFileType(f){
     if (typeof f != "string")
       return "none";
-    var ext = f.split('.').pop();
-    var file_type = "";
+    let ext = f.split('.').pop();
+    let file_type = "";
     if (ext == "py")
       file_type = "py"
     else if(ext == "v")
@@ -116,11 +100,12 @@ class Manager extends Simulators.Simulators{
     return file_type;
   }
   getEdamFormat(){
-    var edam = {
+    let edam = {
       'name': this.configurator.getName(),
       'suite': this.configurator.getSuite(),
       'tool' : this.configurator.getTool(),
       'working_dir' : this.configurator.getWorkingDir(),
+      'top_level_file' : this.configurator.getTopLevelFile(),
       'top_level' : this.configurator.getTopLevel(),
       'files'  : this.source.concat(this.testbench),
       'gtkwave' : ''
@@ -131,8 +116,20 @@ class Manager extends Simulators.Simulators{
     return super.getSuites(server,port);
   }
   simulate(ip,port){
-    var edam = this.getEdamFormat();
+    let edam = this.getEdamFormat();
     return super.simulate(ip,port,edam);
+  }
+  get_entity(str,lang){
+    let parser = new ParserLib.ParserFactory;
+    parser = parser.getParser(lang,'');
+    let structure =  parser.getAll(str);
+    return structure['entity']['name'];
+  }
+  generate_svg(sources,function_open,top_level){
+    this.dependency_graph.generate_svg(sources,function_open,top_level);
+  }
+  set_top_dependency_graph(file){
+    this.dependency_graph.set_top_dependency_graph(file);
   }
 }
 
@@ -141,12 +138,13 @@ class Configurator{
     this.configuration = this.setDefaults();
   }
   setDefaults(){
-    var configuration = {
+    let configuration = {
       'suite':'',
       'tool':'',
       'language':'',
       'name':'',
       'top_level':'',
+      'top_level_file':'',
       'working_dir':'',
       'gtkwave':''
     }
@@ -182,6 +180,12 @@ class Configurator{
     }
     this.configuration["top_level"] = topLevel;
   }
+  setTopLevelFile(topLevelFile){
+    if (typeof topLevelFile != 'string') {
+        throw new Error('You must pass requiredParam to function setTopLevelFile!');
+    }
+    this.configuration["top_level_file"] = topLevelFile;
+  }
   setWorkingDir(workingDir){
     if (typeof workingDir != 'string') {
         throw new Error('You must pass requiredParam to function setWorkingDir!');
@@ -203,6 +207,9 @@ class Configurator{
   getTopLevel(){
     return this.configuration['top_level'];
   }
+  getTopLevelFile(){
+    return this.configuration['top_level_file'];
+  }
   getWorkingDir(){
     return this.configuration['working_dir'];
   }
@@ -216,6 +223,7 @@ class Configurator{
       'language':config['language'],
       'name':config['name'],
       'top_level':config['top_level'],
+      'top_level_file':config['top_level_file'],
       'working_dir':config['working_dir'],
       'gtkwave':config['gtkwave']
     }
