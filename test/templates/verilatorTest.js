@@ -19,19 +19,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
+const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 const Colibri = require('../../src/main');
 
-var structure = fs.readFileSync('examples'+path.sep+'verilog'+path.sep+'structure.json','utf8');
+let path_example = 'examples'+path.sep+'verilog'+path.sep
+var structure = fs.readFileSync(path_example+'structure.json','utf8');
 structure_v     = JSON.parse(structure);
 
 var veritest = new Colibri.Templates.Templates();
 
-fs.writeFile("veritest.cpp", veritest.getVerilatorTemplate(structure_v), function(err) {
-    if(err) {
-      throw new Error('Test error.');
-    }
-    else
-      console.log("---> Tested: verilator");
-});
+let verilator_expected = fs.readFileSync(path_example+'veritest.cpp','utf8');
+let verilator_template = veritest.getVerilatorTemplate(structure_v)
+
+console.log('****************************************************************');
+if(verilator_expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === verilator_template.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
+  console.log("---> Tested: verilator --> ok!".green);
+}
+else{
+  console.log("---> Tested: verilator --> fail!".red);
+  throw new Error('Test error.');
+}

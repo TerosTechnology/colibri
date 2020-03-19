@@ -29,6 +29,9 @@
     "d3": "5.12.0",
     "d3-graphviz": "2.6.1"
   },
+  "devDependencies":{
+    "colors": "x"
+  },
   "python": {
     "execPath": "python3",
     "dependencies": {
