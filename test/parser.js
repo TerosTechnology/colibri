@@ -19,6 +19,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
+const colors = require('colors');
 const fs = require('fs');
 const Colibri = require('../src/main');
 const general = require('../src/general/general')
@@ -61,7 +62,7 @@ for (let x=0;x<6;++x){
 }
 //////////////////////////////////////////////////////////////////////////////
 function compareVhdl(m,n,file){
-  // var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
+  var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
   if(m['entity']['name'] != n['entity']['name']) { return false; }
   // if(m['architecture']['name'] != n['architecture']['name']) { return false; }
   var ch1 = check(m['generics'],n['generics'],['name','type','comment'],"generics",file);
@@ -71,7 +72,7 @@ function compareVhdl(m,n,file){
   // var ch5 = check(m['types'],n['types'],['name','type'],"types",file);
   // var ch6 = check(m['process'],n['process'],['name'],"process",file);
 
-  return ch1 && ch2;
+  return ch0 && ch1 && ch2;
 }
 function compareVerilog(m,n,file){
   var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
@@ -99,10 +100,10 @@ function compareVerilogTs(m,n,file){
 function check(m,n,cmp,type,file){
   if(m.length != n.length) {
     console.log("*************************************************************")
-    console.log("Fail: " + type + " in file: " + file);
-    console.log("Real ----->");
+    console.log("Fail: " + type.yellow + " in file: " + file.red);
+    console.log("Real ----->".yellow);
     console.log(m);
-    console.log("Expected ----->");
+    console.log("Expected ----->".yellow);
     console.log(n);
     console.log("*************************************************************")
     return false;
@@ -128,10 +129,10 @@ function check(m,n,cmp,type,file){
         console.log("*********************************************************")
         console.log(JSON.stringify(name_m));
         console.log(JSON.stringify(name_n));
-        console.log("Fail: " + type + " in file: " + file);
-        console.log("Real ----->");
+        console.log("Fail: " + type.yellow + " in file: " + file.red);
+        console.log("Real ----->".yellow);
         console.log(m);
-        console.log("Expected ----->");
+        console.log("Expected ----->".yellow);
         console.log(n);
         console.log("*********************************************************")
         return false;
@@ -142,7 +143,7 @@ function check(m,n,cmp,type,file){
 }
 
 if (test_result == true)
-  console.log("All test...  OK!")
+  console.log("All test...  OK!".green)
 else{
-  throw new Error('Test errors');
+  throw new Error('Test errors'.red);
 }

@@ -13,7 +13,7 @@ module add2_and_clip_reg
      input [WIDTH-1:0] in2,
      input strobe_in,
      output reg [WIDTH-1:0] sum,
-     output reg strobe_out);s
+     output reg strobe_out);
 
    wire [WIDTH-1:0] sum_int;
 
