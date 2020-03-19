@@ -31,7 +31,7 @@ structure_v     = JSON.parse(structure);
 var veritest = new Colibri.Templates.Templates();
 
 let verilator_expected = fs.readFileSync(path_example+'veritest.cpp','utf8');
-let verilator_template = veritest.getVerilatorTemplate(structure_v)
+let verilator_template = veritest.getVerilatorTemplate(structure_v);
 
 console.log('****************************************************************');
 if(verilator_expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === verilator_template.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
