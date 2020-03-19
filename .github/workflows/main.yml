@@ -80,7 +80,7 @@ jobs:
         uses: actions/checkout@v1
       - name: Test
         run: |
-          npm config set python C:/hostedtoolcache/windows/Python/2.7*/x64
+          npm config set python C:/hostedtoolcache/windows/Python/2.7*/x64/python.exe
           npm -g install node-pre-gyp
           npm -g install node-gyp
           npm install
