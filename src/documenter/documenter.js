@@ -18,7 +18,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
-
+const fs = require('fs');
 const pathLib = require('path');
 const Diagram = require('./diagram')
 const StmVHDL = require('./statemachinevhdl')
