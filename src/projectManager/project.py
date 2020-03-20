@@ -14,7 +14,7 @@ from pathlib import Path
 import logging
 from collections import OrderedDict
 from vunit.hashing import hash_string
-from vunit.dependency_graph import DependencyGraph, CircularDependencyException
+from dependency_graph import DependencyGraph, CircularDependencyException
 from vunit.vhdl_parser import VHDLParser
 from vunit.parsing.verilog.parser import VerilogParser
 from vunit.exceptions import CompileError
@@ -556,6 +556,21 @@ class Project(object):  # pylint: disable=too-many-instance-attributes
 
     def has_library(self, library_name):
         return library_name in self._libraries
+
+    def get_direct_dependencies(self):
+        dependency_graph = self.create_dependency_graph(True)
+
+        files = self.get_source_files_in_order()
+
+        dependencies = []
+        for i in range(0,len(files)):
+            dependency_local = []
+            dependency = dependency_graph.get_direct_dependencies(files[i])
+            for dep in dependency:
+                dependency_local.append(str(dep.name))
+            dependencies.append(dependency_local)
+
+        return files,dependencies
 
     def _needs_recompile(self, dependency_graph, source_file, timestamps):
         """
