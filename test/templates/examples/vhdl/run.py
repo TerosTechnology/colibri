@@ -33,11 +33,11 @@ ui = VUnit.from_argv()
 
 #Add module sources.
 test_1_src_lib = ui.add_library("src_lib")
-test_1_src_lib.add_source_files("examples/vhdl/exampleRunpy_1.vhd")
+test_1_src_lib.add_source_files("exampleRunpy_1.vhd")
 
 #Add tb sources.
 test_1_tb_lib = ui.add_library("tb_lib")
-test_1_tb_lib.add_source_files("examples/vhdl/tbVhdlVunitRunpy.vhd")
+test_1_tb_lib.add_source_files("tbVhdlVunitRunpy.vhd")
 
 ##############################################################################
 

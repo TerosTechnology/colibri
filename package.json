@@ -9,6 +9,7 @@
     "testDocumenter": "cd test && cd documenter && node stateMachine",
     "testProjectManager": "cd test && cd projectManager && node projectManager",
     "testParser": "cd test && node parser",
+    "testSuites": "cd test && cd templates && sh runAllSuites.sh",
     "nopy": "nopy",
     "install": "npip install"
   },
