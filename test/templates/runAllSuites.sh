@@ -1,5 +1,9 @@
 # Vunit
 export VUNIT_SIMULATOR=ghdl
-python examples/vhdl/run.py
+cd examples/vhdl
+python run.py
+cd ../..
 # Verilator
-sh examples/verilog/veriTest.sh
+cd examples/verilog
+sh veriTest.sh
+cd ../..
