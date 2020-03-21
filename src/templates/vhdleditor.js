@@ -44,7 +44,6 @@ function createTestbench(structure, options) {
     str += setEntity(structure['entity']);
     str += '\n'
   }
-  str += '\n'
   str += setArchitecture(structure['architecture'], structure['entity']);
   str += '\n'
   if (vunit === false) {

@@ -26,7 +26,6 @@ entity example_vhdl_tb is
   generic (runner_cfg : string);
 end;
 
-
 architecture bench of example_vhdl_tb is
 
   -- Clock period
