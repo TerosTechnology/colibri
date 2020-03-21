@@ -19,6 +19,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
+const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 const Colibri = require('../../src/main');
@@ -44,9 +45,9 @@ var test = templates.getTemplate(Colibri.Templates.Codes.TYPES.TESTBENCH,structu
 
 console.log('****************************************************************');
 if (testExpected.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '') === test.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '')) {
-  console.log("Testing... tbVerilog 2001: Ok!");
+  console.log("Testing... tbVerilog 2001: Ok!".green);
 } else {
-  console.log("Testing... tbVerilog 2001: Fail!");
+  console.log("Testing... tbVerilog 2001: Fail!".red);
   throw new Error('Test error.');
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -56,9 +57,9 @@ templates = new Colibri.Templates.Templates();
 var test = templates.getTemplate(Colibri.Templates.Codes.TYPES.TESTBENCH,structure, options);
 
 if (testExpected.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '') === test.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '')) {
-  console.log("Testing... tbVerilogVunit 2001: Ok!");
+  console.log("Testing... tbVerilogVunit 2001: Ok!".green);
 } else {
-  console.log("Testing... tbVerilogVunit 2001: Fail!");
+  console.log("Testing... tbVerilogVunit 2001: Fail!".red);
   throw new Error('Test error.');
 }
 console.log('****************************************************************');

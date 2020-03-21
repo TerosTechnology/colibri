@@ -30,7 +30,8 @@ function createTestbench(structure, options) {
   }
   var space = '  ';
   var str = '';
-  str += setLibraries(structure['libraries']);
+  // str += setLibraries(structure['libraries']);
+  str += "library	ieee;\nuse  ieee.std_logic_1164.all;\nuse  ieee.numeric_std.all;\n";
   str += '\n'
   if (vunit == true) {
     str += setVunitLibraries();
@@ -43,7 +44,6 @@ function createTestbench(structure, options) {
     str += setEntity(structure['entity']);
     str += '\n'
   }
-  str += '\n'
   str += setArchitecture(structure['architecture'], structure['entity']);
   str += '\n'
   if (vunit === false) {

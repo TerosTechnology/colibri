@@ -1,7 +1,7 @@
 {
   "src":
-    ["./examples/vhdl/exampleRunpy_1.vhd"],
-  "tb": ["./examples/vhdl/tbVhdlVunitRunpy.vhd"],
+    ["./exampleRunpy_1.vhd"],
+  "tb": ["./tbVhdlVunitRunpy.vhd"],
   "lang": ["vhdl"],
   "config": { "name": "test_1", "outputPath": "./", "codeCovPath": "covHtml", "complex": 1, "poscheck": 1, "precheck": 1 },
   "flags":  { "disableIeeeWarnings": 1, "synopsysLibraries": 1, "pslSupport": 1, "coverageReport": 1 },

@@ -19,20 +19,16 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
+const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 const Colibri = require('../src/main');
 const Linter = Colibri.Linter;
 const General = Colibri.General;
 
-let finalResult = true;
 
 testVHDL();
 testVerilog();
-
-if (finalResult == false)
-  throw new Error('Test error.');
-
 
 async function testVHDL(){
   var vhdl_simulators = [General.SIMULATORS.GHDL];
@@ -47,8 +43,11 @@ async function testVHDL(){
 
       console.log("Testing... Simulator: [" + vhdl_simulators[i] + "] || File: " +
         "example_" + x + ".vhdl || Result: " + result);
-      if (result == false)
-        finalResult = false;
+      if (result == false){
+        console.log("Simulator:  ".yellow + vhdl_simulators[i].red);
+        console.log("File:       ".yellow + file.red);
+        throw new Error('Test error.'.red );
+      }
     }
   }
 }
@@ -66,8 +65,11 @@ async function testVerilog(){
 
       console.log("Testing... Simulator: [" + verilog_simulators[i] + "] || File: " +
         "example_" + x + ".v || Result: " + result);
-      if (result == false)
-        finalResult = false;
+      if (result == false){
+        console.log("Simulator:  ".yellow + verilog_simulators[i].red);
+        console.log("File:       ".yellow + file.red);
+        throw new Error('Test error.'.red);
+      }
     }
   }
 }
@@ -76,9 +78,9 @@ function compare(m, n) {
   if (m.length != n.length) {
     console.log("*************************************************************")
     console.log("Fail: length");
-    console.log("Real ----->");
+    console.log("Real ----->".yellow);
     console.log(m);
-    console.log("Expected ----->");
+    console.log("Expected ----->".yellow);
     console.log(n);
     console.log("*************************************************************")
     return false;
@@ -88,10 +90,10 @@ function compare(m, n) {
     for (let x = 0; x < insp.length; ++x) {
       if (m[i][insp[x]] != n[i][insp[x]]) {
         console.log("*************************************************************")
-        console.log("Fail: " + insp[x]);
-        console.log("Real ----->");
+        console.log("Fail: " + insp[x].red);
+        console.log("Real ----->".yellow);
         console.log(m[i]);
-        console.log("Expected ----->");
+        console.log("Expected ----->".yellow);
         console.log(n[i]);
         console.log("*************************************************************")
         return false;
@@ -103,9 +105,9 @@ function compare(m, n) {
       m[i]['location']['position'][0] != n[i]['location']['position'][0]) {
       console.log("*************************************************************")
       console.log("Fail: location,position");
-      console.log("Real ----->");
+      console.log("Real ----->".yelow);
       console.log(m[i]);
-      console.log("Expected ----->");
+      console.log("Expected ----->".yellow);
       console.log(n[i]);
       console.log("*************************************************************")
       return false;

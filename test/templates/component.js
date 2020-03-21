@@ -19,6 +19,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
+const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 const Colibri = require('../../src/main');
@@ -47,10 +48,10 @@ for (let i=0;i<language.length;++i){
     var out = templates.getTemplate(Colibri.Templates.Codes.TYPES.COMPONENT,structure,options);
 
     if(expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '') === out.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '')){
-      console.log("Testing... " + tested[x] +" "+language[i]+": Ok!");
+      console.log("Testing... " + tested[x] +" "+language[i]+": Ok!".green);
     }
     else{
-      console.log("Testing... " + tested[x] +" "+language[i]+": Fail!");
+      console.log("Testing... " + tested[x] +" "+language[i]+": Fail!".red);
       throw new Error('Test error.');
     }
   }

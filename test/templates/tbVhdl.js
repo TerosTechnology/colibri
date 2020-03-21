@@ -19,6 +19,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
+const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 const Colibri = require('../../src/main');
@@ -40,10 +41,14 @@ var test = templates.getTemplate(Colibri.Templates.Codes.TYPES.TESTBENCH,structu
 
 console.log('****************************************************************');
 if(testExpected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === test.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
-  console.log("Testing... tbVhdl: Ok!");
+  console.log("Testing... tbVhdl: Ok!".green);
 }
 else{
-  console.log("Testing... tbVhdl: Fail!");
+  console.log("Expected -->".yellow);
+  console.log(testExpected);
+  console.log("Real     -->".yellow);
+  console.log(test);
+  console.log("Testing... tbVhdl: Fail!".red);
   throw new Error('Test error.');
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -53,10 +58,14 @@ templates = new Colibri.Templates.Templates();
 var test = templates.getTemplate(Colibri.Templates.Codes.TYPES.TESTBENCH,structure, options)
 
 if(testExpected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '') === test.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '')){
-  console.log("Testing... tbVhdlVunit: Ok!");
+  console.log("Testing... tbVhdlVunit: Ok!".green);
 }
 else{
-  console.log("Testing... tbVhdlVunit: Fail!");
+  console.log("Expected -->".yellow);
+  console.log(testExpected);
+  console.log("Real     -->".yellow);
+  console.log(test);
+  console.log("Testing... tbVhdlVunit: Fail!".red);
   throw new Error('Test error.');
 }
 console.log('****************************************************************');

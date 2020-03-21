@@ -1,5 +1,6 @@
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+library	ieee;
+use  ieee.std_logic_1164.all;
+use  ieee.numeric_std.all;
 
 library src_lib;
 --
@@ -24,7 +25,6 @@ context vunit_lib.vunit_context;
 entity example_vhdl_tb is
   generic (runner_cfg : string);
 end;
-
 
 architecture bench of example_vhdl_tb is
 
