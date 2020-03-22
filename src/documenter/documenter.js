@@ -101,7 +101,6 @@ class BaseStructure {
     <div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%" >
     `
 
-
     var mdDoc = md;
     var showdown = require('showdown');
     showdown.setFlavor('github');
