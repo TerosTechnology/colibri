@@ -26,11 +26,8 @@ function diagramGenerator(structure,bn){
   var ns = 'http://www.w3.org/2000/svg'
   var div = document.getElementById('drawing')
   var svg = document.createElementNS(ns, 'svg')
-  // svg.setAttribute("preserveAspectRatio", "xMidYMid");
-  // svg.setAttribute("style", "width:100%; height:100%;");
-
+  
   const canvas = SVG(svg)
-
   var border  = 'black'
   var genBox  = '#bdecb6'  //'blue'
   var portBox = '#fdfd96'  //'red'
