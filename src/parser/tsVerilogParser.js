@@ -22,8 +22,10 @@
 const fs = require('fs');
 const os = require("os");
 const path = require('path');
-const Parser = require('tree-sitter');
-const VerilogParser = require('tree-sitter-verilog');
+if (process.platform !== "win32";) {
+  const Parser = require('tree-sitter');
+  const VerilogParser = require('tree-sitter-verilog');
+}
 
 class tsVerilogParser  {
   constructor(comment_symbol) {
