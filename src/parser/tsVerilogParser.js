@@ -22,7 +22,7 @@
 const fs = require('fs');
 const os = require("os");
 const path = require('path');
-if (process.platform !== "win32";) {
+if (process.platform !== "win32") {
   const Parser = require('tree-sitter');
   const VerilogParser = require('tree-sitter-verilog');
 }
