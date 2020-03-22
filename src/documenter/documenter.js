@@ -85,11 +85,10 @@ class BaseStructure {
   getHtmlDoc(md) {
     var html = `
     <style>
-    #teroshdl h1,#teroshdl h2,#teroshdl h3,#teroshdl svg,#teroshdl table {margin-left:5%;}
+    #teroshdl h1,#teroshdl h2,#teroshdl h3,#teroshdl table {margin-left:5%;}
     div.templateTerosHDL { background-color: white;position:absolute; }
     #teroshdl td,#teroshdl th,#teroshdl h1,#teroshdl h2,#teroshdl h3 {color: black;}
     #teroshdl h1,#teroshdl h2 {font-weight:bold;}
-    #teroshdl svg {width: 100%;}
     #teroshdl tr:hover {background-color: #ddd;}
     #teroshdl td, #teroshdl th {
         border: 1px solid grey
@@ -101,6 +100,7 @@ class BaseStructure {
     </style>
     <div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%" >
     `
+
     var mdDoc = md;
     var showdown = require('showdown');
     showdown.setFlavor('github');
