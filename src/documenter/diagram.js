@@ -26,7 +26,7 @@ function diagramGenerator(structure,bn){
   var ns = 'http://www.w3.org/2000/svg'
   var div = document.getElementById('drawing')
   var svg = document.createElementNS(ns, 'svg')
-  svg.setAttribute("preserveAspectRatio", "xMidYMid");
+  // svg.setAttribute("preserveAspectRatio", "xMidYMid");
   // svg.setAttribute("style", "width:100%; height:100%;");
 
   const canvas = SVG(svg)
@@ -63,14 +63,13 @@ function diagramGenerator(structure,bn){
   locx=(size/2)*maxString(generics,inPorts,[0,0],kind)
   width=(size)*maxString(generics,inPorts,outPorts,name)
 
-
-  min_x = 0;
-  max_x = 0;
-  max_leght_text_x = 0;
+  let min_x = 0;
+  let max_x = 0;
+  let max_leght_text_x = 0;
 
   //generic square
   high = size*generics[0].length;
-  total_high = high;
+  total_high = high+offset/2;
   if (generics[0].length>0) {
     var recta = canvas.rect(width,high+offset).fill(border).move(locx,locy)
     canvas.rect(width-4,high+offset/2).fill(genBox).move(locx+2,locy+2)
@@ -86,7 +85,7 @@ function diagramGenerator(structure,bn){
   //ports square
   locy=high+offset/2+separator
   high = size*Math.max(inPorts[0].length,outPorts[0].length)
-  total_high = total_high + high;
+  total_high = total_high + high + + offset/2;
   var recta = canvas.rect(width,high+offset).fill(border).move(locx,locy)
   canvas.rect(width-4,high+offset/2).fill(portBox).move(locx+2,locy+2)
   //write ports
@@ -101,13 +100,13 @@ function diagramGenerator(structure,bn){
     locy=size*generics[0].length+offset+size*i+separator
     var textright= canvas.text(outPorts[kind][i]).move(locx+width+text_space+text_space_pin,locy).font({family:   font, size: size, anchor:   'start'})
     var textright= canvas.text(outPorts[name][i]).move(locx+width-text_space,locy).font({family:   font, size: size, anchor:   'end'})
-    max_leght_text_x = Math.max(max_leght_text_x,outPorts[name][i].length);
+    let max_local = outPorts[name][i].length + outPorts[kind][i].length
+    max_leght_text_x = Math.max(max_leght_text_x,max_local);
     max_x = Math.max(max_x,textright['node'].getAttribute('x'));
     var pins=canvas.line(locx-text_space,0, locx, 0 ).move(locx+width,locy+size*2/4).stroke({ color: 'black', width: size/4, linecap: 'rec' })
   }
 
-  let total_width = max_x - min_x + 1.4*size*max_leght_text_x;
-  console.log(min_x)
+  let total_width = max_x + 0.7*size*max_leght_text_x;
   svg.setAttribute("viewBox", "0 0 " + total_width + " " + 1.15*total_high);
 
   return canvas.svg();
