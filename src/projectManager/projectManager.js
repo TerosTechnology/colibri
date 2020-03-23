@@ -4,11 +4,12 @@ const ParserLib = require('../parser/factory')
 const nopy = require('nopy');
 const path = require('path');
 const dependency = require('./dependency_graph');
+const run_python = require('./run_python');
 
 class Manager extends Simulators.Simulators{
   constructor(graph,configurator){
     let server_path = __dirname + path.sep + "server_triel.py"
-    nopy.spawnPython([server_path], { interop: "buffer" }).then(({ code, stdout, stderr }) => {
+    run_python.spawnPython([server_path], { interop: "buffer" }).then(({ code, stdout, stderr }) => {
     });
     super();
     this.source = [];
