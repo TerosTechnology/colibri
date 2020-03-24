@@ -159,7 +159,10 @@ class BaseStructure {
     var table = []
     table.push(["Port name", "Direction", "Type", "Description"])
     for (let i = 0; i < this.ports.length; ++i) {
-      table.push([this.ports[i]['name'], this.ports[i]['direction'], this.ports[i]['type'], this.ports[i]['comment']]);
+      table.push([this.ports[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      this.ports[i]['direction'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      this.ports[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      this.ports[i]['comment'].replace(/ \r/g, ' ').replace(/\n/g, ' ')]);
     }
     var text = md(table) + '\n';
     return text;
@@ -170,7 +173,9 @@ class BaseStructure {
     var table = []
     table.push(["Generic name", "Type", "Description"])
     for (let i = 0; i < this.generics.length; ++i) {
-      table.push([this.generics[i]['name'], this.generics[i]['type'], this.generics[i]['comment']]);
+      table.push([this.generics[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      this.generics[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      this.generics[i]['comment'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
     var text = md(table) + '\n';
     return text;
@@ -199,7 +204,6 @@ class StateMachineVerilog extends StmVerilog.StateMachineVerilog{
   getSVG(str) {
   }
 }
-
 
 module.exports = {
   BaseStructure: BaseStructure,
