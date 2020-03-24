@@ -5,6 +5,7 @@ const nopy = require('nopy');
 const path = require('path');
 const dependency = require('./dependency_graph');
 const run_python = require('./run_python');
+const documenter = require('../documenter/documenter');
 
 class Manager extends Simulators.Simulators{
   constructor(graph,configurator){
@@ -87,6 +88,10 @@ class Manager extends Simulators.Simulators{
       names = names.concat(this.testbench[i]['name']);
     return names;
   }
+  save_md_doc(output_dir_doc,symbol_vhdl,symbol_verilog){
+    documenter.get_md_doc_from_array(this.getSourceName(),output_dir_doc,symbol_vhdl,symbol_verilog);
+  }
+
   getFileType(f){
     if (typeof f != "string")
       return "none";

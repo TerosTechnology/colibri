@@ -205,7 +205,36 @@ class StateMachineVerilog extends StmVerilog.StateMachineVerilog{
   }
 }
 
+function get_md_doc_from_array(files,output_dir_doc,symbol_vhdl,symbol_verilog){
+  //Main doc
+  let main_doc = "# Project documentation\n"
+  let lang = "vhdl";
+  let symbol = "!";
+  let doc  = [];
+  for (let i=0;i<files.length;++i){
+    let filename = pathLib.basename(files[i],pathLib.extname(files[i]));
+    if(pathLib.extname(files[i]) == '.vhd'){
+      lang = "vhdl";
+      symbol = symbol_vhdl;
+    }
+    else if(pathLib.extname(files[i]) == '.v'){
+      lang = "verilog";
+      symbol = symbol_verilog;
+    }
+    else
+      break;
+    main_doc += "- [" + filename + "](./" + filename + ".md)\n";
+
+    let contents = fs.readFileSync(files[i], 'utf8');
+
+    let doc_inst = new BaseStructure(contents,lang,symbol);
+    doc_inst.saveMarkdown(output_dir_doc + path.sep + filename + ".md");
+  }
+  fs.writeFileSync(output_dir_doc + pathLib.sep + "README.md",main_doc);
+}
+
 module.exports = {
+  get_md_doc_from_array : get_md_doc_from_array,
   BaseStructure: BaseStructure,
   StateMachineVHDL: StateMachineVHDL,
   StateMachineVerilog : StateMachineVerilog
