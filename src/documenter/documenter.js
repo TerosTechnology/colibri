@@ -159,7 +159,10 @@ class BaseStructure {
     var table = []
     table.push(["Port name", "Direction", "Type", "Description"])
     for (let i = 0; i < this.ports.length; ++i) {
-      table.push([this.ports[i]['name'], this.ports[i]['direction'], this.ports[i]['type'], this.ports[i]['comment']]);
+      table.push([this.ports[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      this.ports[i]['direction'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      this.ports[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      this.ports[i]['comment'].replace(/ \r/g, ' ').replace(/\n/g, ' ')]);
     }
     var text = md(table) + '\n';
     return text;
@@ -170,7 +173,9 @@ class BaseStructure {
     var table = []
     table.push(["Generic name", "Type", "Description"])
     for (let i = 0; i < this.generics.length; ++i) {
-      table.push([this.generics[i]['name'], this.generics[i]['type'], this.generics[i]['comment']]);
+      table.push([this.generics[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      this.generics[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      this.generics[i]['comment'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
     var text = md(table) + '\n';
     return text;
@@ -200,8 +205,36 @@ class StateMachineVerilog extends StmVerilog.StateMachineVerilog{
   }
 }
 
+function get_md_doc_from_array(files,output_dir_doc,symbol_vhdl,symbol_verilog){
+  //Main doc
+  let main_doc = "# Project documentation\n"
+  let lang = "vhdl";
+  let symbol = "!";
+  let doc  = [];
+  for (let i=0;i<files.length;++i){
+    let filename = pathLib.basename(files[i],pathLib.extname(files[i]));
+    if(pathLib.extname(files[i]) == '.vhd'){
+      lang = "vhdl";
+      symbol = symbol_vhdl;
+    }
+    else if(pathLib.extname(files[i]) == '.v'){
+      lang = "verilog";
+      symbol = symbol_verilog;
+    }
+    else
+      break;
+    main_doc += "- [" + filename + "](./" + filename + ".md)\n";
+
+    let contents = fs.readFileSync(files[i], 'utf8');
+
+    let doc_inst = new BaseStructure(contents,lang,symbol);
+    doc_inst.saveMarkdown(output_dir_doc + path.sep + filename + ".md");
+  }
+  fs.writeFileSync(output_dir_doc + pathLib.sep + "README.md",main_doc);
+}
 
 module.exports = {
+  get_md_doc_from_array : get_md_doc_from_array,
   BaseStructure: BaseStructure,
   StateMachineVHDL: StateMachineVHDL,
   StateMachineVerilog : StateMachineVerilog
