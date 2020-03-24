@@ -1,4 +1,4 @@
-name: Tests
+name: Linux
 
 on: [push]
 
@@ -20,7 +20,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-18.04, windows-latest]
+        os: [ubuntu-18.04]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
@@ -34,7 +34,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-18.04, windows-latest]
+        os: [ubuntu-18.04]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
@@ -48,7 +48,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-18.04, windows-latest]
+        os: [ubuntu-18.04]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
@@ -61,7 +61,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-18.04, windows-latest]
+        os: [ubuntu-18.04]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1

@@ -18,7 +18,7 @@ Makefile
 python_modules
 package-lock.json
 *.pyc
-/vunit_out
+vunit_out
 *.gdca
 *.gcno
 /obj_dir
