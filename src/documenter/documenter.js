@@ -205,9 +205,10 @@ class StateMachineVerilog extends StmVerilog.StateMachineVerilog{
   }
 }
 
-function get_md_doc_from_array(files,output_dir_doc,symbol_vhdl,symbol_verilog,graph,with_dependency_graph){
+function get_md_doc_from_array(files,output_dir_doc,symbol_vhdl,symbol_verilog,
+          graph,project_name,with_dependency_graph){
   //Main doc
-  let main_doc = "# Project documentation\n"
+  let main_doc = "# Project documentation: " + project_name + "\n"
   let lang = "vhdl";
   let symbol = "!";
   let doc  = [];
