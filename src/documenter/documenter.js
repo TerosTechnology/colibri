@@ -205,9 +205,10 @@ class StateMachineVerilog extends StmVerilog.StateMachineVerilog{
   }
 }
 
-function get_md_doc_from_array(files,output_dir_doc,symbol_vhdl,symbol_verilog){
+function get_md_doc_from_array(files,output_dir_doc,symbol_vhdl,symbol_verilog,
+          graph,project_name,with_dependency_graph){
   //Main doc
-  let main_doc = "# Project documentation\n"
+  let main_doc = "# Project documentation: " + project_name + "\n"
   let lang = "vhdl";
   let symbol = "!";
   let doc  = [];
@@ -229,6 +230,11 @@ function get_md_doc_from_array(files,output_dir_doc,symbol_vhdl,symbol_verilog){
 
     let doc_inst = new BaseStructure(contents,lang,symbol);
     doc_inst.saveMarkdown(output_dir_doc + path.sep + filename + ".md");
+  }
+  if (with_dependency_graph == true){
+    main_doc += "# Project dependency graph\n"
+    main_doc += '![system](./dependency_graph.svg "System")'
+    fs.writeFileSync(output_dir_doc + pathLib.sep + "dependency_graph.svg",graph);
   }
   fs.writeFileSync(output_dir_doc + pathLib.sep + "README.md",main_doc);
 }
