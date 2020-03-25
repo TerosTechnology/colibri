@@ -88,8 +88,9 @@ class Manager extends Simulators.Simulators{
       names = names.concat(this.testbench[i]['name']);
     return names;
   }
-  save_md_doc(output_dir_doc,symbol_vhdl,symbol_verilog){
-    documenter.get_md_doc_from_array(this.getSourceName(),output_dir_doc,symbol_vhdl,symbol_verilog);
+  save_md_doc(output_dir_doc,symbol_vhdl,symbol_verilog,with_dependency_graph=false){
+    let svg_dependency_graph = this.dependency_graph.get_dependency_graph_svg();
+    documenter.get_md_doc_from_array(this.getSourceName(),output_dir_doc,symbol_vhdl,symbol_verilog,svg_dependency_graph,with_dependency_graph);
   }
 
   getFileType(f){

@@ -30,6 +30,7 @@ const nopy = require('nopy');
 class Dependency_graph {
   constructor(graph){
     this.graph = graph;
+    this.dependency_graph_svg = "";
   }
 
   generate_svg(files,open_function,top){
@@ -59,12 +60,20 @@ class Dependency_graph {
       let t = d3_transition.transition().duration(700).ease(d3_ease.easeLinear);
       if (dependency_graph == "")
         return;
+      element.dependency_graph = dependency_graph;
       d3.graphviz(element.graph).transition(t).height(window.innerHeight).width(window.innerWidth)
       .renderDot(dependency_graph).on("end", function(event) {
         if (top != undefined)
           element.set_top_dependency_graph(top);
       });
     });
+  }
+
+  get_dependency_graph_svg(){
+    let svg = document.createElement("svg");
+    d3.graphviz(svg).renderDot(this.dependency_graph);
+    console.log(svg);
+    return svg.childNodes[0].outerHTML;
   }
 
   create_dependency_graph(sources) {
