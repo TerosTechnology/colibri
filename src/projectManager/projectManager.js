@@ -42,6 +42,7 @@ class Manager extends Simulators.Simulators{
   clear(){
     this.source = [];
     this.testbench = [];
+    this.configurator = new Configurator();
   }
   addSource(newSource){
     for (let i=0;i<newSource.length;++i) {
@@ -75,6 +76,9 @@ class Manager extends Simulators.Simulators{
   }
   setConfiguration(configurator){
     this.configurator = configurator;
+  }
+  getConfigurator(configurator){
+    return this.configurator;
   }
   getSourceName(){
     let names = [];

@@ -388,11 +388,17 @@ class VHDLEntity(object):
             if(comment_index[0] > index[0]):
                 break
             if(comment_index[0] < index[0]):
-                str_description = match.group().replace("--","") + "\n"
+                # str_description = match.group().replace("--","") + "\n"
+                str_description = match.group() + "\n"
+                index_of_symbol = str_description.find('--')
+                str_description = str_description[index_of_symbol+2:]
+
                 if (comment_symbol == ""):
                     description += str_description
+                    # description += "\n"
                 elif (str_description[0] == comment_symbol):
                     description += str_description[1:]
+                    # description += "\n"
 
         # Find generics and ports
         generics = cls._find_generic_clause(code,code_with_comments)
@@ -694,8 +700,10 @@ class VHDLInterfaceElement(object):
                 str_description = match.group().replace("--","") + "\n"
                 if (comment_symbol == ""):
                     description += str_description
+                    # description += "\n"
                 elif (str_description[0] == comment_symbol):
                     description += str_description[1:]
+                    # description += "\n"
 
         # Extract the identifier
         identifier = interface_element_string.split(":")[0].strip()

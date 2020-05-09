@@ -29,14 +29,29 @@ class BaseStructure {
   constructor(str,lang,comment_symbol) {
     var parser = new ParserLib.ParserFactory;
     parser = parser.getParser(lang,comment_symbol);
-    this.structure =  parser.getAll(str);
-    this.entity = this.structure['entity']['name'];
-    this.entity_description = this.structure['entity']['comment'];
-    this.ports = this.structure['ports'];
-    this.generics = this.structure['generics'];
+    let structure = parser.getAll(str);
+    if (structure == null){
+      console.log("Error parsing");
+      this.md = null;
+      this.html = null;
+    }
+    else{
+      this.structure =  structure;
+      this.entity = this.structure['entity']['name'];
+      this.entity_description = this.structure['entity']['comment'];
+      this.ports = this.structure['ports'];
+      this.generics = this.structure['generics'];
 
-    this.md   = this.getMdDoc(null);
-    this.html = this.getHtmlDoc(this.md);
+      this.md   = this.getMdDoc(null);
+      this.html = this.getHtmlDoc(this.md);
+    }
+  }
+
+  isAlive(){
+    if (this.md == null)
+      return false;
+    else
+      return true;
   }
 
   saveMarkdown(path){
