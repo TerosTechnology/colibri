@@ -24,7 +24,6 @@ const VhdlParser = require('./vhdlparser')
 const tsVerilogParser = require('./tsVerilogParser')
 const vunitVhdlParser = require('./vunitVhdlParser')
 
-
 class ParserFactory {
   constructor() {}
 

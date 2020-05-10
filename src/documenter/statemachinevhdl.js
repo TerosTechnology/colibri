@@ -19,7 +19,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-class StateMachineVHDL {
+class State_machine_vhdl {
   getStateMachine(str) {
     var strDel = this.deleteComments(str);
     var body = this.getBody(strDel);
@@ -158,5 +158,5 @@ class StateMachineVHDL {
 }
 
 module.exports = {
-  StateMachineVHDL: StateMachineVHDL
+  State_machine_vhdl: State_machine_vhdl
 }

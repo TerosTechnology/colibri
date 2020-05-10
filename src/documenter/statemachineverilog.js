@@ -19,7 +19,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-class StateMachineVerilog {
+class State_machine_verilog {
   getStateMachine(str) {
     var strDel = this.deleteComments(str);
     var body = this.getBody(strDel);
@@ -149,5 +149,5 @@ class StateMachineVerilog {
 }
 
 module.exports = {
-  StateMachineVerilog: StateMachineVerilog
+  State_machine_verilog: State_machine_verilog
 }

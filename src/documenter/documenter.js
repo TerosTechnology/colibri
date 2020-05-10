@@ -24,6 +24,7 @@ const Diagram = require('./diagram')
 const StmVHDL = require('./statemachinevhdl')
 const StmVerilog = require('./statemachineverilog')
 const ParserLib = require('../parser/factory')
+const General = require('../general/general')
 
 class BaseStructure {
   constructor(str,lang,comment_symbol) {
@@ -197,26 +198,40 @@ class BaseStructure {
   }
 }
 
-class StateMachineVHDL extends StmVHDL.StateMachineVHDL{
-  getSVG(str) {
+function get_state_machine_hdl_svg(str,lang){
+  let state_machine_cl;
+  if (lang == General.LANGUAGES.VHDL){
+    state_machine_cl = new State_machine_vhdl();
+  }
+  else if (lang == General.LANGUAGES.VERILOG){
+    state_machine_cl = new State_machine_verilog();
+  }
+  else
+    return null;
+  return state_machine_cl.get_svg(str);
+}
+
+class State_machine_vhdl extends StmVHDL.State_machine_vhdl{
+  get_svg(str) {
     const smcat = require("state-machine-cat")
     let go = this.getStateMachine(str);
     try {
-      const lSVGInAString = smcat.render(
+      const svg = smcat.render(
         go, {
           outputType: "svg"
         }
       );
-      console.log(lSVGInAString);
+      return svg;
     } catch (pError) {
       console.error(pError);
+      return null;
     }
-    return go;
   }
 }
 
-class StateMachineVerilog extends StmVerilog.StateMachineVerilog{
-  getSVG(str) {
+class State_machine_verilog extends StmVerilog.State_machine_verilog{
+  get_svg(str) {
+    return null;
   }
 }
 
@@ -257,6 +272,5 @@ function get_md_doc_from_array(files,output_dir_doc,symbol_vhdl,symbol_verilog,
 module.exports = {
   get_md_doc_from_array : get_md_doc_from_array,
   BaseStructure: BaseStructure,
-  StateMachineVHDL: StateMachineVHDL,
-  StateMachineVerilog : StateMachineVerilog
+  get_state_machine_hdl_svg: get_state_machine_hdl_svg
 }
