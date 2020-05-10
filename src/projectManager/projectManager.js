@@ -1,3 +1,23 @@
+
+// Copyright 2019
+// Carlos Alberto Ruiz Naranjo, Ismael Pérez Rojo,
+// Alfredo Enrique Sáez Pérez de la Lastra
+//
+// This file is part of TerosHDL.
+//
+// TerosHDL is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// TerosHDL is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with TerosHDL.  If not, see <https://www.gnu.org/licenses/>.
+
 const fs = require('fs');
 const Simulators = require('../simulators/simulators')
 const ParserLib = require('../parser/factory')
@@ -84,7 +104,7 @@ class Manager extends Simulators.Simulators{
           return obj.name !== testbench[i];
     });
     this.autosave();
-  }  
+  }
   setConfiguration(configurator){
     this.configurator = configurator;
     this.autosave();
@@ -156,6 +176,66 @@ class Manager extends Simulators.Simulators{
   set_top_dependency_graph(file){
     this.dependency_graph.set_top_dependency_graph(file);
     this.autosave();
+  }
+  check_project(){
+    let errors = this.check_vunit();
+    return errors;
+    // if(){
+    //
+    // }
+    // else if(){
+    //
+    // }
+    // else if(){
+    //
+    // }
+    // else{
+    //
+    // }
+  }
+
+  check_vunit(){
+    let errors = {
+      'is_good' : true,
+      'error_messages' : []
+    };
+
+    let error_sources_msg = [];
+    //Check number of sources
+    if (this.source.length != 0){
+      let msg = "Your current suite is VUnit. " +
+      "Your project has " + this.source.length + " source files. " +
+      "You don't need to add source files. Please, remove the source files.";
+      error_sources_msg.push(msg);
+    }
+    //Check number of testbenches
+    if (this.testbench.length > 1){
+      let msg = "Your current suite is VUnit. Your project has " +
+                this.testbench.length + " testbench files. You only need " +
+                "to add your VUnit script (run.py).";
+      error_sources_msg.push(msg);
+    }
+    //Check .py extension
+    else if (this.testbench.length = 1){
+      let file_extension = path.extname(this.testbench[0]['name']);
+      if (file_extension != ".py"){
+        let msg = "Your current suite is VUnit. Your testbench " +
+                  "file extension isn't .py. You only need " +
+                  "to add your VUnit script (run.py).";
+        error_sources_msg.push(msg);
+      }
+    }
+    errors['error_messages'] = error_sources_msg;
+    if (error_sources_msg.length > 0){
+      errors['is_good'] = false;
+    }
+    return errors;
+  }
+  check_standalone(){
+
+  }
+  check_cocotb(){
+
   }
 }
 
