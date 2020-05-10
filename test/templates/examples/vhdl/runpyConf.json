@@ -1,12 +1,30 @@
 {
-  "src":
-    ["./exampleRunpy_1.vhd"],
-  "tb": ["./tbVhdlVunitRunpy.vhd"],
-  "lang": ["vhdl"],
-  "config": { "name": "test_1", "outputPath": "./", "codeCovPath": "covHtml", "complex": 1, "poscheck": 1, "precheck": 1 },
-  "flags":  { "disableIeeeWarnings": 1, "synopsysLibraries": 1, "pslSupport": 1, "coverageReport": 1 },
-  "libraries": { "xilibIseGhdlPath": "xilibIseGhdlPath",
-                 "xilibVivadoGhdlPath": "xilibVivadoGhdlPath",
-                 "xilibVivadoModelsimPath": "xilibVivadoModelsimPath",
-                 "xilibVivadoModelsimPath": "xilibVivadoModelsimPath"}
+  "src": [
+    "./exampleRunpy_1.vhd"
+  ],
+  "tb": [
+    "./tbVhdlVunitRunpy.vhd"
+  ],
+  "lang": "vhdl",
+  "config": {
+    "name": "test_1",
+    "output_path": "./",
+    "checks": true,
+    "simulator_suport": {
+      "ghdl" : {
+        "enable" : true,
+        "config" : {
+          "synopsys_libraries" : true,
+          "disable_ieee_warnings" : true,
+          "code_coverage" : {
+            "enable" : true,
+            "output_path": "./coverage
+          }
+        }
+      },
+      "modelsim" : {
+        "enable" : true
+      }
+    }
+  }
 }
