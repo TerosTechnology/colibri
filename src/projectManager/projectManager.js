@@ -8,14 +8,15 @@ const run_python = require('./run_python');
 const documenter = require('../documenter/documenter');
 
 class Manager extends Simulators.Simulators{
-  constructor(graph,configurator){
+  constructor(graph,configurator,autosave_file){
     let server_path = __dirname + path.sep + "server_triel.py"
     run_python.spawnPython([server_path], { interop: "buffer" }).then(({ code, stdout, stderr }) => {
     });
     super();
     this.source = [];
     this.testbench = [];
-    if (typeof configurator === 'undefined')
+    this.autosave_file = autosave_file;
+    if (configurator == null)
       this.configurator = new Configurator();
     else
       this.configurator = configurator;
@@ -26,6 +27,11 @@ class Manager extends Simulators.Simulators{
     this.source = JSON.parse(jsonF)['src'];
     this.testbench = JSON.parse(jsonF)['tb'];
     this.configurator.setAll(JSON.parse(jsonF)['config']);
+    this.autosave();
+  }
+  autosave(){
+    if (this.autosave_file != null)
+      this.saveProject(this.autosave_file);
   }
   saveProject(file){
     let prj = {
@@ -43,6 +49,7 @@ class Manager extends Simulators.Simulators{
     this.source = [];
     this.testbench = [];
     this.configurator = new Configurator();
+    this.autosave();
   }
   addSource(newSource){
     for (let i=0;i<newSource.length;++i) {
@@ -52,12 +59,14 @@ class Manager extends Simulators.Simulators{
       }
       this.source = this.source.concat(f);
     }
+    this.autosave();
   }
   deleteSource(source){
     for(let i=0;i<source.length;++i)
       this.source = this.source.filter(function( obj ) {
           return obj.name !== source[i];
-      });
+    });
+    this.autosave();
   }
   addTestbench(newTestbench){
     for (let i=0;i<newTestbench.length;++i) {
@@ -67,15 +76,18 @@ class Manager extends Simulators.Simulators{
       }
       this.testbench = this.testbench.concat(f);
     }
+    this.autosave();
   }
   deleteTestbench(testbench){
     for(let i=0;i<testbench.length;++i)
       this.testbench = this.testbench.filter(function( obj ) {
           return obj.name !== testbench[i];
-      });
-  }
+    });
+    this.autosave();
+  }  
   setConfiguration(configurator){
     this.configurator = configurator;
+    this.autosave();
   }
   getConfigurator(configurator){
     return this.configurator;
@@ -143,6 +155,7 @@ class Manager extends Simulators.Simulators{
   }
   set_top_dependency_graph(file){
     this.dependency_graph.set_top_dependency_graph(file);
+    this.autosave();
   }
 }
 
