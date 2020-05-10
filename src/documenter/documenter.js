@@ -27,7 +27,7 @@ const ParserLib = require('../parser/factory')
 
 class BaseStructure {
   constructor(str,lang,comment_symbol) {
-    var parser = new ParserLib.ParserFactory;
+    let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(lang,comment_symbol);
     let structure = parser.getAll(str);
     if (structure == null){
@@ -55,8 +55,8 @@ class BaseStructure {
   }
 
   saveMarkdown(path){
-    var file = pathLib.basename(path,pathLib.extname(path)) + ".svg";
-    var pathSVG = pathLib.dirname(path) + pathLib.sep + file;
+    let file = pathLib.basename(path,pathLib.extname(path)) + ".svg";
+    let pathSVG = pathLib.dirname(path) + pathLib.sep + file;
     this.saveSVG(pathSVG);
     fs.writeFileSync(path,this.getMdDoc(file));
   }
@@ -73,17 +73,17 @@ class BaseStructure {
   }
 
   getDiagram(){
-    var strDiagram = Diagram.diagramGenerator(this.structure,0);
+    let strDiagram = Diagram.diagramGenerator(this.structure,0);
     return strDiagram;
   }
 
   getPdfDoc(path) {
-    var fileSVG = pathLib.basename(path,pathLib.extname(path)) + ".svg";
-    var pathSVG = pathLib.dirname(path) + pathLib.sep + fileSVG;
+    let fileSVG = pathLib.basename(path,pathLib.extname(path)) + ".svg";
+    let pathSVG = pathLib.dirname(path) + pathLib.sep + fileSVG;
     this.saveSVG(pathSVG);
-    var mdDoc = this.getMdDoc(pathSVG);
-    var markdownpdf = require("markdown-pdf")
-    var options = {
+    let mdDoc = this.getMdDoc(pathSVG);
+    let markdownpdf = require("markdown-pdf")
+    let options = {
       cssPath: __dirname + '/custom.css'
     }
     markdownpdf(options).from.string(mdDoc).to(path, function() {
@@ -98,7 +98,7 @@ class BaseStructure {
   }
 
   getHtmlDoc(md) {
-    var html = `
+    let html = `
     <style>
     #teroshdl h1,#teroshdl h2,#teroshdl h3,#teroshdl table {margin-left:5%;}
     div.templateTerosHDL { background-color: white;position:absolute; }
@@ -116,10 +116,10 @@ class BaseStructure {
     <div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%" >
     `
 
-    var mdDoc = md;
-    var showdown = require('showdown');
+    let mdDoc = md;
+    let showdown = require('showdown');
     showdown.setFlavor('github');
-    var converter = new showdown.Converter({
+    let converter = new showdown.Converter({
       tables: true
     });
     html += converter.makeHtml(mdDoc);
@@ -128,7 +128,7 @@ class BaseStructure {
   }
 
   getMdDoc(path) {
-    var mdDoc = "";
+    let mdDoc = "";
     //Title
     mdDoc += "# Entity: " + this.entity + "\n";
     //Description
@@ -158,7 +158,7 @@ class BaseStructure {
   }
 
   getInOutSection() {
-    var md = "";
+    let md = "";
     //Title
     md += "## Generics and ports\n";
     //Tables
@@ -171,7 +171,7 @@ class BaseStructure {
 
   getDocPorts() {
     const md = require('./markdownTable');
-    var table = []
+    let table = []
     table.push(["Port name", "Direction", "Type", "Description"])
     for (let i = 0; i < this.ports.length; ++i) {
       table.push([this.ports[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
@@ -179,20 +179,20 @@ class BaseStructure {
       this.ports[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       this.ports[i]['comment'].replace(/ \r/g, ' ').replace(/\n/g, ' ')]);
     }
-    var text = md(table) + '\n';
+    let text = md(table) + '\n';
     return text;
   }
 
   getDocGenerics() {
     const md = require('./markdownTable');
-    var table = []
+    let table = []
     table.push(["Generic name", "Type", "Description"])
     for (let i = 0; i < this.generics.length; ++i) {
       table.push([this.generics[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       this.generics[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       this.generics[i]['comment'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
-    var text = md(table) + '\n';
+    let text = md(table) + '\n';
     return text;
   }
 }
@@ -200,7 +200,7 @@ class BaseStructure {
 class StateMachineVHDL extends StmVHDL.StateMachineVHDL{
   getSVG(str) {
     const smcat = require("state-machine-cat")
-    var go = this.getStateMachine(str);
+    let go = this.getStateMachine(str);
     try {
       const lSVGInAString = smcat.render(
         go, {
