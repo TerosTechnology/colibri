@@ -37,8 +37,12 @@ class runpy {
     // this.separator()
     this.add_src()
     this.addTb()
+    if (str.config.checks) {
+      this.check_calls()
+    }
     this.separator()
-    this.flags()
+    this.simulator_suport()
+    // this.flags()
     this.run()
     this.coverageOut()
     return this.str_out;
@@ -125,7 +129,18 @@ class runpy {
     }
   }
   check_calls(){
+    this.str_out += '\n#func checks\n'
+    this.str_out += 'tb_generated = '+this.str.config["name"] +'_tb_lib.entity("adder_tb")\n'
+    this.str_out += 'for test in tb_generated.get_tests():\n'
+    this.str_out += '    test.add_config(name="'+this.str.config["name"]+'", pre_config=pre_config_func(),post_check=post_check_func())\n'
+  }
+  simulator_suport(){
+    if (this.str.config.simulator_suport.ghdl.enable) {
+      this.str_out += '\n#Simulators flags.\n'
+      this.str_out += 'if(code_coverage == True):\n'
+      this.str_out += 'if(code_coverage == True):\n'
 
+    }
   }
   run(){
     this.str_out += '\n#Run tests.\n'
@@ -134,14 +149,27 @@ class runpy {
     this.str_out += 'except SystemExit as exc:\n'
     this.str_out += '    all_ok = exc.code == 0\n'
   }
-  flags(){
-    let synopsys_var = ' '
+  ghdl_config(){
+    if (this.str.config.simulator_suport.ghdl.config.synopsys_libraries) {
+      let synopsys_var = ' '
+    }else {
+      let synopsys_var = ' '
+    }
+    if (this.str.config.simulator_suport.ghdl.config.disable_ieee_warnings) {
+      let disable_ieee_warnings_var = ' '
+      let synopsys_var = ' '
+    }else {
+      let disable_ieee_warnings_var = ' '
+    }
+    if (this.str.config.simulator_suport.ghdl.config.code_coverage.enable) {
+      let code_coverage_var = ' '
+    }else {
+      let code_coverage_var = ' '
+    }
     let psl_var      = ' '
-    this.str_out += '\n#Simulators flags.\n'
-    this.str_out += 'if(code_coverage==True):\n'
-    this.str_out += '    ' + this.str.config["name"] + '_src_lib.add_compile_option   ("ghdl.flags"     , [ '+synopsys_var+'"-fprofile-arcs","-ftest-coverage"'+ psl_var+'])\n'
-    this.str_out += '    ' + this.str.config["name"] + '_tb_lib.add_compile_option    ("ghdl.flags"     , [ '+synopsys_var+'"-fprofile-arcs","-ftest-coverage"'+ psl_var+'])\n'
-    this.str_out += '    ui.set_sim_option("ghdl.elab_flags"      , ['+synopsys_var+'"-Wl,-lgcov"'+psl_var+'])\n'
+    this.str_out += '    ' + this.str.config["name"] + '_src_lib.add_compile_option   ("ghdl.flags"     , [ '+synopsys_var+'"-fprofile-arcs","-ftest-coverage"])\n'
+    this.str_out += '    ' + this.str.config["name"] + '_tb_lib.add_compile_option    ("ghdl.flags"     , [ '+synopsys_var+'"-fprofile-arcs","-ftest-coverage"])\n'
+    this.str_out += '    ui.set_sim_option("ghdl.elab_flags"      , ['+synopsys_var+'"-Wl,-lgcov"])\n'
   }
   coverageOut(){
     this.str_out += '\n#Code coverage.\n'
