@@ -18,7 +18,7 @@
           "disable_ieee_warnings" : true,
           "code_coverage" : {
             "enable" : true,
-            "output_path": "./coverage
+            "output_path": "./coverage"
           }
         }
       },
