@@ -31,20 +31,19 @@ class runpy {
     this.set_lang()
     this.separator()
     this.checks()
+    this.separator()
     this.check_simulator()
     this.separator()
     this.vunit_instance()
-    // this.separator()
     this.add_src()
     this.addTb()
-    if (str.config.checks) {
-      this.check_calls()
-    }
+    this.check_calls()
     this.separator()
     this.simulator_suport()
-    // this.flags()
+    this.separator()
+    this.post_run_fcn()
+    this.separator()
     this.run()
-    this.coverageOut()
     return this.str_out;
   }
 
@@ -63,7 +62,7 @@ class runpy {
     }
   }
   separator(){
-    this.str_out += "\n##############################################################################\n"
+    this.str_out += "\n################################################################################\n"
   }
   checks(){
     this.str_out += "#pre_config func\n"
@@ -76,19 +75,19 @@ class runpy {
     this.str_out += '    """\n'
     this.str_out += "    After test.\n"
     this.str_out += '    """\n'
-    this.str_out += "def post_check(output_path):\n"
-    this.str_out += "    check = True\n"
-    this.str_out += "    return check\n"
+    this.str_out += "    def post_check(output_path):\n"
+    this.str_out += "        check = True\n"
+    this.str_out += "        return check\n"
     this.str_out += "    return post_check\n"
   }
   check_simulator(){
-    this.str_out += "\n#Check simulator.\n"
+    this.str_out += "#Check simulator.\n"
     this.str_out += 'print ("=============================================")\n'
     this.str_out += 'simname = SIMULATOR_FACTORY.select_simulator().name\n'
-    if (this.str.simulator_suport.modelsim.enable) {
+    if (this.str.config.simulator_suport.modelsim.enable) {
       this.check_modelsim()
     }
-    if (this.str.simulator_suport.ghdl.enable) {
+    if (this.str.config.simulator_suport.ghdl.enable) {
       this.check_ghdl()
     }
     this.str_out += 'print ("Simulator = " + simname)\n'
@@ -98,7 +97,7 @@ class runpy {
     this.str_out += 'code_coverage = False\n'
     this.str_out += 'if (simname == "modelsim"):\n'
     this.str_out += '    f= open("modelsim.do","w+")\n'
-    this.str_out += '    f.write("add wave * \nlog -r /*\nvcd file\nvcd add -r /*\n")\n'
+    this.str_out += '    f.write("add wave * \\nlog -r /*\\nvcd file\\nvcd add -r /*\\n")\n'
     this.str_out += '    f.close()\n'
   }
   check_ghdl(){
@@ -107,7 +106,7 @@ class runpy {
     this.str_out += '                GHDLInterface.determine_backend("")=="GCC"))\n'
   }
   vunit_instance(){
-    this.str_out += '\n#VUnit instance.\n'
+    this.str_out += '#VUnit instance.\n'
     this.str_out += 'ui = VUnit.from_argv()\n'
   }
   add_src(){
@@ -129,25 +128,28 @@ class runpy {
     }
   }
   check_calls(){
-    this.str_out += '\n#func checks\n'
-    this.str_out += 'tb_generated = '+this.str.config["name"] +'_tb_lib.entity("adder_tb")\n'
-    this.str_out += 'for test in tb_generated.get_tests():\n'
-    this.str_out += '    test.add_config(name="'+this.str.config["name"]+'", pre_config=pre_config_func(),post_check=post_check_func())\n'
-  }
+    if (this.str.config.checks) {
+      this.str_out += '\n#func checks\n'
+      this.str_out += 'tb_generated = '+this.str.config["name"] +'_tb_lib.entity("adder_tb")\n'
+      this.str_out += 'for test in tb_generated.get_tests():\n'
+      this.str_out += '    test.add_config(name="'+this.str.config["name"]+'", pre_config=pre_config_func(),post_check=post_check_func())\n'
+      }
+    }
   simulator_suport(){
     if (this.str.config.simulator_suport.ghdl.enable) {
-      this.str_out += '\n#Simulators flags.\n'
+      this.str_out += '#Simulators flags.\n'
       this.str_out += 'if(code_coverage == True):\n'
-      this.str_out += 'if(code_coverage == True):\n'
-
+      this.ghdl_config(true)
+      this.str_out += 'else:\n'
+      this.ghdl_config(false)
     }
-  }
-  run(){
-    this.str_out += '\n#Run tests.\n'
-    this.str_out += 'try:\n'
-    this.str_out += '    ui.main()\n'
-    this.str_out += 'except SystemExit as exc:\n'
-    this.str_out += '    all_ok = exc.code == 0\n'
+    if (this.str.config.simulator_suport.modelsim.enable) {
+      this.str_out += '\n'
+      this.modelsim_config()
+    }
+    if (this.str.config.simulator_suport.ghdl.config.disable_ieee_warnings) {
+      this.disable_ieee_warnings()
+    }
   }
   ghdl_config(coverage){
     let flags_vars = ' '
@@ -160,48 +162,38 @@ class runpy {
     if (coverage) {
       if (this.str.config.simulator_suport.ghdl.config.code_coverage.enable) {
         let code_coverage_var = '"-fprofile-arcs","-ftest-coverage"'
-        let code_coverage_sim = "-Wl,-lgcov"
+        let code_coverage_sim = '"-Wl,-lgcov"'
         flags_vars += ',' + code_coverage_var
-        sim_vars   += ',' + synopsys_var
+        sim_vars   += ',' + code_coverage_sim
       }
     }
     this.str_out += '    ' + this.str.config["name"] + '_src_lib.add_compile_option   ("ghdl.flags"     , [ '+flags_vars+'])\n'
     this.str_out += '    ' + this.str.config["name"] + '_tb_lib.add_compile_option    ("ghdl.flags"     , [ '+flags_vars+'])\n'
-    this.str_out += '    ui.set_sim_option("ghdl.elab_flags"      , ['+sim_vars+'])\n'
+    this.str_out += '    ui.set_sim_option("ghdl.elab_flags", ['+sim_vars+'])\n'
   }
   modelsim_config(){
-    this.str_out += '    ui.set_sim_option("modelsim.init_files.after_load" ,["modelsim.do"])\n'
+    this.str_out += 'ui.set_sim_option("modelsim.init_files.after_load" ,["modelsim.do"])\n'
     }
   disable_ieee_warnings(){
-    if (this.str.config.simulator_suport.ghdl.config.disable_ieee_warnings) {
-      this.str_out += 'ui.set_sim_option("disable_ieee_warnings", True)\n'
-    }
+    this.str_out += 'ui.set_sim_option("disable_ieee_warnings", True)\n'
   }
   post_run_fcn(){
-    if (this.str.config.simulator_suport.ghdl.config.code_coverage.enable) {
-      this.str_out += 'def post_run_fcn(results):\n'
-      this.str_out += '    if(code_coverage == True ):\n'
-      this.str_out += '        subprocess.call(["lcov", "--capture", "--directory", "' + this.str.config["name"] + '.gcda", "--output-file",  "code_0.info" ])\n'
-      this.str_out += '        subprocess.call(["genhtml","code_0.info","--output-directory", "'+this.str.config.simulator_suport.ghdl.config.code_coverage["output_path"]+'"])\n'
-    }
-  }
-  coverageOut(){
-    this.str_out += '\n#Code coverage.\n'
-    this.str_out += 'if all_ok:\n'
-    this.str_out += '    if(code_coverage==True):\n'
+    this.str_out += 'def post_run_fcn(results):\n'
+    this.str_out += '    if(code_coverage == True ):\n'
     for(var x=0;x<this.str.src.length;x++){
-      this.str_out +=  '        subprocess.call(["lcov", "--capture", "--directory", "' + this.path.basename(this.str.src[x]).split(".")[0] + '.gcda", "--output-file",  "code_' + x.toString()+ '.info" ])\n'
+      this.str_out += '        subprocess.call(["lcov", "--capture", "--directory", "' + this.path.basename(this.str.src[x]).split(".")[0] + '.gcda", "--output-file",  "code_'+x.toString()+'.info" ])\n'
     }
     this.str_out += '        subprocess.call(["genhtml"'
     for(var x=0;x<this.str.src.length;x++){
-      this.str_out +=  ',"code_' + x.toString()+ '.info"'
+      this.str_out +=  ',"code_' + x.toString()+ '.info"' ,+this.str.config.simulator_suport.ghdl.config.code_coverage["output_path"]+'"])\n'
     }
-    this.str_out +=  ',"--output-directory", "'+this.str.config["codeCovPath"]+'"])\n'
-    this.str_out +=  '    else:\n'
-    this.str_out +=  '        exit(0)\n'
-    this.str_out +=  'else:\n'
-    this.str_out +=  '    exit(1)\n'
+    this.str_out +=  ',"--output-directory", "'+this.str.config.simulator_suport.ghdl.config.code_coverage["output_path"]+'"])\n'
   }
+  run(){
+    this.str_out += '#Run tests.\n'
+    this.str_out += 'ui.main(post_run=post_run_fcn)\n'
+  }
+
 }
 
 
