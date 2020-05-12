@@ -149,28 +149,34 @@ class runpy {
     this.str_out += 'except SystemExit as exc:\n'
     this.str_out += '    all_ok = exc.code == 0\n'
   }
-  ghdl_config(){
+  ghdl_config(coverage){
+    // if (this.str.config.simulator_suport.ghdl.config.disable_ieee_warnings) {
+    //   let disable_ieee_warnings_var = '"-fexplicit","--no-vital-checks","-frelaxed-rules"'
+    // }else {
+    //   let disable_ieee_warnings_var = ' '
+    // }
+    let flags_vars = ' '
     if (this.str.config.simulator_suport.ghdl.config.synopsys_libraries) {
-      let synopsys_var = ' '
+      let synopsys_var = '"-fexplicit","--ieee=synopsys","--no-vital-checks","-frelaxed-rules"'
+      flags_vars += synopsys_var
     }else {
       let synopsys_var = ' '
     }
-    if (this.str.config.simulator_suport.ghdl.config.disable_ieee_warnings) {
-      let disable_ieee_warnings_var = ' '
-      let synopsys_var = ' '
-    }else {
-      let disable_ieee_warnings_var = ' '
+    if (coverage) {
+      if (this.str.config.simulator_suport.ghdl.config.code_coverage.enable) {
+        let code_coverage_var = '"-fprofile-arcs","-ftest-coverage"'
+        flags_vars += ',' + code_coverage_var
+      }else {
+        let code_coverage_var = ' '
+      }
     }
-    if (this.str.config.simulator_suport.ghdl.config.code_coverage.enable) {
-      let code_coverage_var = ' '
-    }else {
-      let code_coverage_var = ' '
-    }
-    let psl_var      = ' '
-    this.str_out += '    ' + this.str.config["name"] + '_src_lib.add_compile_option   ("ghdl.flags"     , [ '+synopsys_var+'"-fprofile-arcs","-ftest-coverage"])\n'
-    this.str_out += '    ' + this.str.config["name"] + '_tb_lib.add_compile_option    ("ghdl.flags"     , [ '+synopsys_var+'"-fprofile-arcs","-ftest-coverage"])\n'
-    this.str_out += '    ui.set_sim_option("ghdl.elab_flags"      , ['+synopsys_var+'"-Wl,-lgcov"])\n'
+    this.str_out += '    ' + this.str.config["name"] + '_src_lib.add_compile_option   ("ghdl.flags"     , [ '+flags_vars+'])\n'
+    this.str_out += '    ' + this.str.config["name"] + '_tb_lib.add_compile_option    ("ghdl.flags"     , [ '+flags_vars+'])\n'
+    this.str_out += '    ui.set_sim_option("ghdl.elab_flags"      , ['+flags_vars+'"-Wl,-lgcov"])\n'
   }
+  modelsim_config(){
+    this.str_out += '    ui.set_sim_option("modelsim.init_files.after_load" ,["modelsim.do"])\n'
+    }
   coverageOut(){
     this.str_out += '\n#Code coverage.\n'
     this.str_out += 'if all_ok:\n'
