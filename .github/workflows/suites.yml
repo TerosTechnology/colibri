@@ -12,5 +12,4 @@ jobs:
         uses: actions/checkout@v1
       - name: Test_suites
         run: |
-          npm install .
           npm run-script testSuites
