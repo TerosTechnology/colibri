@@ -65,20 +65,22 @@ class runpy {
     this.str_out += "\n################################################################################\n"
   }
   checks(){
-    this.str_out += "#pre_config func\n"
-    this.str_out += "def pre_config_func():\n"
-    this.str_out += '    """\n'
-    this.str_out += "    Before test.\n"
-    this.str_out += '    """\n'
-    this.str_out += "#post_check func\n"
-    this.str_out += "def post_check_func():\n"
-    this.str_out += '    """\n'
-    this.str_out += "    After test.\n"
-    this.str_out += '    """\n'
-    this.str_out += "    def post_check(output_path):\n"
-    this.str_out += "        check = True\n"
-    this.str_out += "        return check\n"
-    this.str_out += "    return post_check\n"
+    if (this.str.config.checks) {
+      this.str_out += "#pre_config func\n"
+      this.str_out += "def pre_config_func():\n"
+      this.str_out += '    """\n'
+      this.str_out += "    Before test.\n"
+      this.str_out += '    """\n'
+      this.str_out += "#post_check func\n"
+      this.str_out += "def post_check_func():\n"
+      this.str_out += '    """\n'
+      this.str_out += "    After test.\n"
+      this.str_out += '    """\n'
+      this.str_out += "    def post_check(output_path):\n"
+      this.str_out += "        check = True\n"
+      this.str_out += "        return check\n"
+      this.str_out += "    return post_check\n"
+    }
   }
   check_simulator(){
     this.str_out += "#Check simulator.\n"
@@ -154,17 +156,19 @@ class runpy {
   ghdl_config(coverage){
     let flags_vars = ' '
     let sim_vars   = ' '
+    let sep = ' '
     if (this.str.config.simulator_suport.ghdl.config.synopsys_libraries) {
       let synopsys_var = '"-fexplicit","--ieee=synopsys","--no-vital-checks","-frelaxed-rules"'
       flags_vars += synopsys_var
       sim_vars   += synopsys_var
+      sep = ','
     }
     if (coverage) {
       if (this.str.config.simulator_suport.ghdl.config.code_coverage.enable) {
         let code_coverage_var = '"-fprofile-arcs","-ftest-coverage"'
         let code_coverage_sim = '"-Wl,-lgcov"'
-        flags_vars += ',' + code_coverage_var
-        sim_vars   += ',' + code_coverage_sim
+        flags_vars += sep + code_coverage_var
+        sim_vars   += sep + code_coverage_sim
       }
     }
     this.str_out += '    ' + this.str.config["name"] + '_src_lib.add_compile_option   ("ghdl.flags"     , [ '+flags_vars+'])\n'
