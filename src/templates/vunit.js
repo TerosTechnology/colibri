@@ -134,7 +134,7 @@ class runpy {
       let file = this.path.relative(this.str.config["output_path"],this.str.tb[0])
       file.replace("\\","\\\\")
       this.str_out += '\n#func checks\n'
-      this.str_out += 'tb_generated = '+this.str.config["name"] +'_tb_lib.test_bench("'+file.split(".")+'")\n'
+      this.str_out += 'tb_generated = '+this.str.config["name"] +'_tb_lib.test_bench("'+file.split(".")[0]+'")\n'
       this.str_out += 'for test in tb_generated.get_tests():\n'
       this.str_out += '    test.add_config(name="test_alive", pre_config=pre_config_func(),post_check=post_check_func())\n'
       }
