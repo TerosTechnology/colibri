@@ -25,7 +25,7 @@ const path = require('path');
 const Colibri = require('../../src/main');
 
 let path_example = 'examples'+path.sep+'vhdl'+path.sep+'runpy'+path.sep;
-for (let x=0;x<2;++x){
+for (let x=0;x<5;++x){
   let structure = fs.readFileSync(path_example+'runpyConf_'+x+'.json','utf8');
   structure     = JSON.parse(structure);
   let runpy = new Colibri.Templates.Templates();
