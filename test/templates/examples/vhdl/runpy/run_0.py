@@ -49,9 +49,9 @@ test_1_tb_lib = ui.add_library("tb_lib")
 test_1_tb_lib.add_source_files("tbVhdlVunitRunpy.vhd")
 
 #func checks
-tb_generated = test_1_tb_lib.entity("adder_tb")
+tb_generated = test_1_tb_lib.test_bench("tbVhdlVunitRunpy")
 for test in tb_generated.get_tests():
-    test.add_config(name="test_1", pre_config=pre_config_func(),post_check=post_check_func())
+    test.add_config(name="test_alive", pre_config=pre_config_func(),post_check=post_check_func())
 
 ################################################################################
 #Simulators flags.
