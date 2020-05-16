@@ -1,26 +1,26 @@
-name: Tests
+name: Macos
 
 on: [push]
 
 jobs:
-  test-linter:
-    runs-on: ubuntu-18.04
-    container:
-      image: docker://terostech/multi-simulator:1.0.0
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v1
-      - name: Test
-        run: |
-          npm install .
-          npm run-script testLinter
-  # ****************************************************************************
-  # ****************************************************************************
+  # test-linter:
+  #   runs-on: ubuntu-18.04
+  #   container:
+  #     image: docker://terostech/multi-simulator:1.0.0
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v1
+  #     - name: Test
+  #       run: |
+  #         npm install .
+  #         npm run-script testLinter
+  # # ****************************************************************************
+  # # ****************************************************************************
   test-templates:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-18.04]
+        os: [macos-latest]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
@@ -34,7 +34,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-18.04]
+        os: [macos-latest]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
@@ -48,7 +48,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-18.04]
+        os: [macos-latest]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
@@ -61,7 +61,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-18.04]
+        os: [macos-latest]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1

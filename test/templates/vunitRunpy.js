@@ -24,20 +24,24 @@ const fs = require('fs');
 const path = require('path');
 const Colibri = require('../../src/main');
 
-let path_example = 'examples'+path.sep+'vhdl'+path.sep
-let structure = fs.readFileSync(path_example+'runpyConf.json','utf8');
-structure     = JSON.parse(structure);
-
-let runpy = new Colibri.Templates.Templates();
-
-let runpy_expected = fs.readFileSync(path_example+'run.py','utf8');
-let runpy_template = runpy.getVUnitTemplate(structure);
-
-console.log('****************************************************************');
-if(runpy_expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === runpy_template.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
-  console.log("---> Tested: runpy --> ok!".green);
+let path_example = 'examples'+path.sep+'vhdl'+path.sep+'runpy'+path.sep;
+for (let x=0;x<5;++x){
+  let structure = fs.readFileSync(path_example+'runpyConf_'+x+'.json','utf8');
+  structure     = JSON.parse(structure);
+  let runpy = new Colibri.Templates.Templates();
+  let runpy_expected = fs.readFileSync(path_example+'run_'+x+'.py','utf8');
+  let runpy_template = runpy.getVUnitTemplate(structure);
+  check_runpy(runpy_expected,runpy_template,x);
 }
-else{
-  console.log("---> Tested: runpy --> fail!".red);
-  throw new Error('Test error.');
+
+function check_runpy(runpy_expected,runpy_template,x){
+  console.log('****************************************************************');
+  if(runpy_expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === runpy_template.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
+    console.log("---> Tested: runpy_"+x+"  ok!".green);
+  }
+  else{
+    console.log("---> Tested: runpy_"+x+"  fail!".red);
+    fs.writeFileSync("testdsfs.py",runpy_template)
+    throw new Error('Test error.');
+  }
 }

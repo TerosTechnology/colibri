@@ -45,7 +45,7 @@ for (let x=0;x<8;++x){
   }
 }
 //////////////////////////////////////////////////////////////////////////////
-for (let x=0;x<6;++x){
+for (let x=0;x<7;++x){
   var ParserLang = [General.LANGUAGES.VHDL];
   let parser = new Parser.ParserFactory;
   parser = parser.getParser(ParserLang,"!");

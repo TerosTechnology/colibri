@@ -1,4 +1,4 @@
-library	ieee;
+library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
@@ -22,11 +22,11 @@ context vunit_lib.vunit_context;
 -- use vunit_lib.run_base_pkg.all;
 -- use vunit_lib.run_pkg.all;
 
-entity example_vhdl_tb is
+entity tbVhdlVunitRunpy is
   generic (runner_cfg : string);
 end;
 
-architecture bench of example_vhdl_tb is
+architecture bench of tbVhdlVunitRunpy is
 
   -- Clock period
   constant clk_period : time := 5 ns;
