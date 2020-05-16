@@ -31,14 +31,17 @@ class VhdlParser {
     let path_python = __dirname + path.sep + "parser.py"
     str = str.replace(/"/g,'\\"');
     str = str.replace(/`/g,'\\`');
-    let cmd = "python3 " + path_python + ' "' + this.comment_symbol + '" ' + ' "' + str + ' "';
+    const MAX_ARG_LENGTH = 32767;
+    let reduce_str = str.slice(0,MAX_ARG_LENGTH);
 
+    let cmd = "python3 " + path_python + ' "' + this.comment_symbol + '" ' + ' "' + reduce_str + ' "';
     let structure = null;
     try {
       const execSync = require('child_process').execSync;
       let stdout = execSync(cmd).toString();
       structure = JSON.parse(stdout);
     } catch (error) {
+      console.log(error);
       console.error("Error parsing.");
     }
     return structure;

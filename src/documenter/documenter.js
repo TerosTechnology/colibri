@@ -207,8 +207,17 @@ function get_state_machine_hdl_svg(str,lang){
     state_machine_cl = new State_machine_verilog();
   }
   else
+    return null
+
+  let state_machine_svg;
+  try{
+    state_machine_svg = state_machine_cl.get_svg(str)
+  }
+  catch(error){
     return null;
-  return state_machine_cl.get_svg(str);
+  }
+
+  return state_machine_svg;
 }
 
 class State_machine_vhdl extends StmVHDL.State_machine_vhdl{

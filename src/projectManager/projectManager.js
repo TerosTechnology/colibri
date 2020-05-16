@@ -43,10 +43,11 @@ class Manager extends Simulators.Simulators{
     this.dependency_graph = new dependency.Dependency_graph(graph);
   }
   loadProject(file){
-    let jsonF = fs.readFileSync(file,'utf8');
-    this.source = JSON.parse(jsonF)['src'];
-    this.testbench = JSON.parse(jsonF)['tb'];
-    this.configurator.setAll(JSON.parse(jsonF)['config']);
+    let json_f = fs.readFileSync(file,'utf8');
+    this.source = JSON.parse(json_f)['src'];
+    this.testbench = JSON.parse(json_f)['tb'];
+    this.configurator.setAll(JSON.parse(json_f)['config']);
+    console.log(json_f)
     this.autosave();
   }
   autosave(){
@@ -121,7 +122,8 @@ class Manager extends Simulators.Simulators{
   getTestbenchName(){
     let names = [];
     for(let i=0; i<this.testbench.length;++i)
-      names = names.concat(this.testbench[i]['name']);
+      if (this.testbench[i] != null)
+        names = names.concat(this.testbench[i]['name']);
     return names;
   }
   save_md_doc(output_dir_doc,symbol_vhdl,symbol_verilog,with_dependency_graph=false){
@@ -194,13 +196,27 @@ class Manager extends Simulators.Simulators{
     // }
   }
 
+  check_project_name(){
+    let configurator = this.getConfigurator();
+    let error_sources_msg = [];
+    //Check project name
+    if (configurator.getName() == ""){
+      let msg = "Set your project name";
+      error_sources_msg.push(msg);
+    }
+    return error_sources_msg;
+  }
+
   check_vunit(){
     let errors = {
       'is_good' : true,
       'error_messages' : []
     };
-
     let error_sources_msg = [];
+
+    //Check project name
+    error_sources_msg = error_sources_msg.concat(this.check_project_name());
+
     //Check number of sources
     if (this.source.length != 0){
       let msg = "Your current suite is VUnit. " +
@@ -209,14 +225,14 @@ class Manager extends Simulators.Simulators{
       error_sources_msg.push(msg);
     }
     //Check number of testbenches
-    if (this.testbench.length > 1){
+    if (this.testbench.length != 1){
       let msg = "Your current suite is VUnit. Your project has " +
                 this.testbench.length + " testbench files. You only need " +
                 "to add your VUnit script (run.py).";
       error_sources_msg.push(msg);
     }
     //Check .py extension
-    else if (this.testbench.length = 1){
+    else if (this.testbench.length == 1){
       let file_extension = path.extname(this.testbench[0]['name']);
       if (file_extension != ".py"){
         let msg = "Your current suite is VUnit. Your testbench " +
@@ -232,10 +248,36 @@ class Manager extends Simulators.Simulators{
     return errors;
   }
   check_standalone(){
+    let errors = {
+      'is_good' : true,
+      'error_messages' : []
+    };
+    let error_sources_msg = [];
 
+    //Check project name
+    error_sources_msg.concat(this.check_project_name());
+
+    errors['error_messages'] = error_sources_msg;
+    if (error_sources_msg.length > 0){
+      errors['is_good'] = false;
+    }
+    return errors;
   }
   check_cocotb(){
+    let errors = {
+      'is_good' : true,
+      'error_messages' : []
+    };
+    let error_sources_msg = [];
 
+    //Check project name
+    error_sources_msg.concat(this.check_project_name());
+
+    errors['error_messages'] = error_sources_msg;
+    if (error_sources_msg.length > 0){
+      errors['is_good'] = false;
+    }
+    return errors;
   }
 }
 
