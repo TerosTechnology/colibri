@@ -101,8 +101,9 @@ function diagramGenerator(structure,bn){
     var pins=canvas.line(locx-text_space,0, locx, 0 ).move(locx+width,locy+size*2/4).stroke({ color: 'black', width: size/4, linecap: 'rec' })
   }
 
-  // let total_width = max_x + 0.7*size*max_leght_text_x;
-  // svg.setAttribute("viewBox", "0 0 " + total_width + " " + 1.15*total_high);
+  let total_width = max_x + 0.7*size*max_leght_text_x;
+  canvas.size(total_width, 1.15*total_high)
+  canvas.viewbox(0,0,total_width,1.15*total_high)
 
   return canvas.svg();
 }

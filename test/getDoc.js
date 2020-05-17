@@ -27,10 +27,11 @@ var structure = fs.readFileSync('./documenter/examples/vhdl/structure.vhd','utf8
 var D = new ln.BaseStructure(structure,"vhdl","!");
 var md = D.getMdDoc();
 // D.getPdfDoc('./');
-var html = D.getHtmlDoc();
+D.getHtmlDoc();
+var html = D.html;
 // console.log(md)
-console.log(html)
+// console.log(html)
 var svg = D.getDiagram();
 // fs.writeFileSync("svg.svg",svg)
-// fs.writeFileSync("html.html",html)
+fs.writeFileSync("html.html",html)
 fs.writeFileSync("md.md",md)
