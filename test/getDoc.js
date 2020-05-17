@@ -43,13 +43,16 @@ var ports = [
    'type'      : 'std_logic_vector(generic_0 downto 0)' }
 ];
 
-var structure = fs.readFileSync('./documentation/examples/vhdl/structure.json','utf8');
-structure     = JSON.parse(structure);
+var structure = fs.readFileSync('./documenter/examples/vhdl/structure.vhd','utf8');
+// structure     = JSON.parse(structure);
 
-var D = new ln.BaseStructure(structure);
-var md = D.getMdDoc('./');
-D.getPdfDoc('./');
+var D = new ln.BaseStructure(structure,"vhdl","!");
+var md = D.getMdDoc();
+// D.getPdfDoc('./');
 var html = D.getHtmlDoc();
 var svg = D.getDiagram();
+// fs.writeFileSync("svg.svg",svg)
+// fs.writeFileSync("html.html",html)
+// fs.writeFileSync("md.md",md)
 
-console.log(md);
+// console.log(md);

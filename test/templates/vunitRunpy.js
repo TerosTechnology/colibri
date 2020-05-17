@@ -41,7 +41,6 @@ function check_runpy(runpy_expected,runpy_template,x){
   }
   else{
     console.log("---> Tested: runpy_"+x+"  fail!".red);
-    fs.writeFileSync("testdsfs.py",runpy_template)
     throw new Error('Test error.');
   }
 }

@@ -21,13 +21,11 @@
 
 function diagramGenerator(structure,bn){
   const fs       = require('fs');
-  const SVG      = require('svg.js')
+  const window   = require('svgdom')
+  const SVG      = require('svg.js')(window)
+  const document = window.document
 
-  var ns = 'http://www.w3.org/2000/svg'
-  var div = document.getElementById('drawing')
-  var svg = document.createElementNS(ns, 'svg')
-  
-  const canvas = SVG(svg)
+  const canvas = SVG(document.documentElement)
   var border  = 'black'
   var genBox  = '#bdecb6'  //'blue'
   var portBox = '#fdfd96'  //'red'
@@ -102,9 +100,6 @@ function diagramGenerator(structure,bn){
     max_x = Math.max(max_x,textright['node'].getAttribute('x'));
     var pins=canvas.line(locx-text_space,0, locx, 0 ).move(locx+width,locy+size*2/4).stroke({ color: 'black', width: size/4, linecap: 'rec' })
   }
-
-  let total_width = max_x + 0.7*size*max_leght_text_x;
-  svg.setAttribute("viewBox", "0 0 " + total_width + " " + 1.15*total_high);
 
   return canvas.svg();
 }
