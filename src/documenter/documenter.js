@@ -24,10 +24,11 @@ const Diagram = require('./diagram')
 const StmVHDL = require('./statemachinevhdl')
 const StmVerilog = require('./statemachineverilog')
 const ParserLib = require('../parser/factory')
+const General = require('../general/general')
 
 class BaseStructure {
   constructor(str,lang,comment_symbol) {
-    var parser = new ParserLib.ParserFactory;
+    let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(lang,comment_symbol);
     let structure = parser.getAll(str);
     if (structure == null){
@@ -55,8 +56,8 @@ class BaseStructure {
   }
 
   saveMarkdown(path){
-    var file = pathLib.basename(path,pathLib.extname(path)) + ".svg";
-    var pathSVG = pathLib.dirname(path) + pathLib.sep + file;
+    let file = pathLib.basename(path,pathLib.extname(path)) + ".svg";
+    let pathSVG = pathLib.dirname(path) + pathLib.sep + file;
     this.saveSVG(pathSVG);
     fs.writeFileSync(path,this.getMdDoc(file));
   }
@@ -73,17 +74,17 @@ class BaseStructure {
   }
 
   getDiagram(){
-    var strDiagram = Diagram.diagramGenerator(this.structure,0);
+    let strDiagram = Diagram.diagramGenerator(this.structure,0);
     return strDiagram;
   }
 
   getPdfDoc(path) {
-    var fileSVG = pathLib.basename(path,pathLib.extname(path)) + ".svg";
-    var pathSVG = pathLib.dirname(path) + pathLib.sep + fileSVG;
+    let fileSVG = pathLib.basename(path,pathLib.extname(path)) + ".svg";
+    let pathSVG = pathLib.dirname(path) + pathLib.sep + fileSVG;
     this.saveSVG(pathSVG);
-    var mdDoc = this.getMdDoc(pathSVG);
-    var markdownpdf = require("markdown-pdf")
-    var options = {
+    let mdDoc = this.getMdDoc(pathSVG);
+    let markdownpdf = require("markdown-pdf")
+    let options = {
       cssPath: __dirname + '/custom.css'
     }
     markdownpdf(options).from.string(mdDoc).to(path, function() {
@@ -98,7 +99,7 @@ class BaseStructure {
   }
 
   getHtmlDoc(md) {
-    var html = `
+    let html = `
     <style>
     #teroshdl h1,#teroshdl h2,#teroshdl h3,#teroshdl table {margin-left:5%;}
     div.templateTerosHDL { background-color: white;position:absolute; }
@@ -116,10 +117,10 @@ class BaseStructure {
     <div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%" >
     `
 
-    var mdDoc = md;
-    var showdown = require('showdown');
+    let mdDoc = md;
+    let showdown = require('showdown');
     showdown.setFlavor('github');
-    var converter = new showdown.Converter({
+    let converter = new showdown.Converter({
       tables: true
     });
     html += converter.makeHtml(mdDoc);
@@ -128,7 +129,7 @@ class BaseStructure {
   }
 
   getMdDoc(path) {
-    var mdDoc = "";
+    let mdDoc = "";
     //Title
     mdDoc += "# Entity: " + this.entity + "\n";
     //Description
@@ -158,7 +159,7 @@ class BaseStructure {
   }
 
   getInOutSection() {
-    var md = "";
+    let md = "";
     //Title
     md += "## Generics and ports\n";
     //Tables
@@ -171,7 +172,7 @@ class BaseStructure {
 
   getDocPorts() {
     const md = require('./markdownTable');
-    var table = []
+    let table = []
     table.push(["Port name", "Direction", "Type", "Description"])
     for (let i = 0; i < this.ports.length; ++i) {
       table.push([this.ports[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
@@ -179,44 +180,67 @@ class BaseStructure {
       this.ports[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       this.ports[i]['comment'].replace(/ \r/g, ' ').replace(/\n/g, ' ')]);
     }
-    var text = md(table) + '\n';
+    let text = md(table) + '\n';
     return text;
   }
 
   getDocGenerics() {
     const md = require('./markdownTable');
-    var table = []
+    let table = []
     table.push(["Generic name", "Type", "Description"])
     for (let i = 0; i < this.generics.length; ++i) {
       table.push([this.generics[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       this.generics[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       this.generics[i]['comment'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
-    var text = md(table) + '\n';
+    let text = md(table) + '\n';
     return text;
   }
 }
 
-class StateMachineVHDL extends StmVHDL.StateMachineVHDL{
-  getSVG(str) {
+function get_state_machine_hdl_svg(str,lang){
+  let state_machine_cl;
+  if (lang == General.LANGUAGES.VHDL){
+    state_machine_cl = new State_machine_vhdl();
+  }
+  else if (lang == General.LANGUAGES.VERILOG){
+    state_machine_cl = new State_machine_verilog();
+  }
+  else
+    return null
+
+  let state_machine_svg;
+  try{
+    state_machine_svg = state_machine_cl.get_svg(str)
+  }
+  catch(error){
+    return null;
+  }
+
+  return state_machine_svg;
+}
+
+class State_machine_vhdl extends StmVHDL.State_machine_vhdl{
+  get_svg(str) {
     const smcat = require("state-machine-cat")
-    var go = this.getStateMachine(str);
+    let go = this.getStateMachine(str);
     try {
-      const lSVGInAString = smcat.render(
+      const svg = smcat.render(
         go, {
           outputType: "svg"
         }
       );
-      console.log(lSVGInAString);
+      return svg;
     } catch (pError) {
       console.error(pError);
+      return null;
     }
-    return go;
   }
 }
 
-class StateMachineVerilog extends StmVerilog.StateMachineVerilog{
-  getSVG(str) {
+class State_machine_verilog extends StmVerilog.State_machine_verilog{
+  get_svg(str) {
+    return null;
   }
 }
 
@@ -257,6 +281,5 @@ function get_md_doc_from_array(files,output_dir_doc,symbol_vhdl,symbol_verilog,
 module.exports = {
   get_md_doc_from_array : get_md_doc_from_array,
   BaseStructure: BaseStructure,
-  StateMachineVHDL: StateMachineVHDL,
-  StateMachineVerilog : StateMachineVerilog
+  get_state_machine_hdl_svg: get_state_machine_hdl_svg
 }

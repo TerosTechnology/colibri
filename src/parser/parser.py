@@ -686,6 +686,7 @@ class VHDLInterfaceElement(object):
         normalized = re.sub(r"^\s+", "", code)
         normalized = normalized.replace("(","\(")
         normalized = normalized.replace(")","\)")
+        normalized = normalized.replace("+","\+")
         substr = re.search(re.sub(r"^\s+", "", normalized),supercode_no_comments,re.IGNORECASE)
         index  = coords_of_str_index(supercode_no_comments, substr.start())
 
