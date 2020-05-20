@@ -29,11 +29,11 @@ const Codes = require('./codes')
 const ParserLib = require('../parser/factory')
 
 class Templates {
-  getTemplate(type,str,options){
+  async getTemplate(type,str,options){
     let language = options["language"];
     let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(language,'');
-    let structure =  parser.getAll(str);
+    let structure =  await parser.getAll(str);
     if (structure == null)
       return null;
     let template;
