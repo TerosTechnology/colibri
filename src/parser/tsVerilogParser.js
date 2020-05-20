@@ -24,22 +24,30 @@ const os = require("os");
 const path = require('path');
 // var Parser = []
 // var VerilogParser = []
-if (process.platform !== "win32") {
-  Parser = require('tree-sitter');
-  VerilogParser = require('tree-sitter-verilog');
-}
+// if (process.platform !== "win32") {
+//   Parser = require('web-tree-sitter');
+//   VerilogParser = Parser.Language.load('/home/carlos/repo/colibri/src/parser/parsers/tree-sitter-verilog.wasm');
+// }
+const Parser = require('web-tree-sitter');
+const initParser = Parser.init()
 
 class tsVerilogParser  {
   constructor(comment_symbol) {
-    this.parser = new Parser();
-    this.parser.setLanguage(VerilogParser);
     this.comment_symbol = comment_symbol
+    this.loaded_wasm = false;
   }
 
-  getAll(sourceCode) {
+  async getAll(sourceCode) {
+    await initParser;
+    this.parser = new Parser();
+    if (this.loaded_wasm === false){
+      let Lang = await Parser.Language.load(path.join(__dirname, path.sep + "parsers" + path.sep + "tree-sitter-verilog.wasm"));
+      this.parser.setLanguage(Lang);
+      this.loaded_wasm = true;
+    }
     var lines = this.fileLines(sourceCode)
     const tree = this.parser.parse(sourceCode);
-    // fs.writeFile("tree.json", tree.rootNode, function(err) {  });
+
     var structure = {
       'libraries': this.get_libraries(tree.rootNode, lines),  // includes
       "entity": this.getEntityName(tree.rootNode, lines), // module
@@ -215,8 +223,11 @@ class tsVerilogParser  {
     var inputs = [];
     var item = {};
     var element = tree;
+    //fix bug
+    return items;
     //Inputs
     var arr = this.searchTree(element, 'include_compiler_directive');
+
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       item = {
