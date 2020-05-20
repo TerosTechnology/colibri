@@ -687,6 +687,9 @@ class VHDLInterfaceElement(object):
         normalized = normalized.replace("(","\(")
         normalized = normalized.replace(")","\)")
         normalized = normalized.replace("+","\+")
+        normalized = normalized.replace("*","\*")
+        normalized = normalized.replace("/","\/+")
+        normalized = normalized.replace("^","\^")
         substr = re.search(re.sub(r"^\s+", "", normalized),supercode_no_comments,re.IGNORECASE)
         index  = coords_of_str_index(supercode_no_comments, substr.start())
 
@@ -1217,20 +1220,24 @@ entity_obj = {'name': entity.identifier,
 
 generics = []
 for i in range(0,len(entity.generics)):
-    generic = {'name': entity.generics[i].identifier,
-            'type': entity.generics[i].subtype_indication.code,
-            'comment': entity.generics[i].description
-            }
-    generics.append(generic)
+    generic_name_split = entity.generics[i].identifier.split(',')
+    for temp in generic_name_split:
+        generic = {'name': temp,
+                   'type': entity.generics[i].subtype_indication.code,
+                    'comment': entity.generics[i].description
+                }
+        generics.append(generic)
 
 ports = []
 for i in range(0,len(entity.ports)):
-    port = {'name': entity.ports[i].identifier,
-            'direction': entity.ports[i].mode,
-            'type': entity.ports[i].subtype_indication.code,
-            'comment': entity.ports[i].description
-            }
-    ports.append(port)
+    port_name_split = entity.ports[i].identifier.split(',')
+    for temp in port_name_split:
+        port = {'name': temp,
+                'direction': entity.ports[i].mode,
+                'type': entity.ports[i].subtype_indication.code,
+                'comment': entity.ports[i].description
+                }
+        ports.append(port)
 
 vhdl_parsed = {
     'entity': entity_obj,

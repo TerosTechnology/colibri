@@ -20,7 +20,6 @@
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
 const general = require('../general/general')
-const VhdlParser = require('./vhdlparser')
 const tsVerilogParser = require('./tsVerilogParser')
 const vunitVhdlParser = require('./vunitVhdlParser')
 

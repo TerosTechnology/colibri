@@ -60,7 +60,7 @@ class BaseStructure {
     fs.writeFileSync(path,html_doc);
   }
   async save_pdf(path){
-    this._get_pdf(path);
+    await this._get_pdf(path);
   }
   async save_svg(path){
     let svg_diagram_str = await this._get_diagram_svg();
@@ -69,7 +69,7 @@ class BaseStructure {
   async save_markdown(path){
     let file = pathLib.basename(path,pathLib.extname(path)) + ".svg";
     let path_svg = pathLib.dirname(path) + pathLib.sep + file;
-    fs.writeFileSync(path,this._get_markdown(file));
+    fs.writeFileSync(path,await this._get_markdown(file));
   }
   // ***************************************************************************
   async get_html(extra_top_space){
@@ -100,8 +100,8 @@ class BaseStructure {
     //Description
     markdown_doc += "## Description\n";
     markdown_doc  += code_tree['entity']['comment'];
-    //Architecture
-    markdown_doc += "## Architectures\n";
+    // //Architecture
+    // markdown_doc += "## Architectures\n";
     //Generics and ports
     markdown_doc += this._get_in_out_section(code_tree['ports'],code_tree['generics']);
     // //Signals
@@ -148,7 +148,7 @@ class BaseStructure {
     let file_svg = pathLib.basename(path,pathLib.extname(path)) + ".svg";
     let path_svg = pathLib.dirname(path) + pathLib.sep + file_svg;
     await this._save_svg_from_code_tree(path_svg, code_tree);
-    let markdown_doc = this._get_markdown(path_svg);
+    let markdown_doc = await this._get_markdown(path_svg);
     let markdownpdf = require("markdown-pdf")
     let options = {
       cssPath: __dirname + '/custom.css'
