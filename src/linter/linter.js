@@ -20,6 +20,7 @@
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
 const shell = require('shelljs');
+const os = require('os');
 const { dirname } = require('path');
 
 class BaseLinter {
@@ -37,9 +38,15 @@ class BaseLinter {
 
   async lint(file) {
     var str;
-    var cmd = this.path + this.PARAMETERS['SYNT'] + file;
+    let exe_str = "";
+    if (os.platform() == "win32"){
+      exe_str = ".exe";
+    }
+    var cmd = this.path + this.PARAMETERS['SYNT'] + exe_str + " " + file;
     var element = this;
 
+    console.log(cmd)
+    
     const exec = require('child_process').exec;
      return new Promise((resolve, reject) => {
       exec(cmd, (error, stdout, stderr) => {
