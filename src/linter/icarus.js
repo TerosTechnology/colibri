@@ -22,15 +22,15 @@
 const BaseLinter = require('./linter')
 
 class Icarus extends BaseLinter {
-  constructor() {
-    super();
+  constructor(path) {
+    super(path);
     this.PARAMETERS = {
-      'SYNT': "iverilog ",
-      'ERROR': /[\t\n ]*(.+){1}[\t]*.v:*([0-9]+):*[\t ]*(error):*[\t ]*([a-zA-Z \t0-9-:_.]+)/g,
-      'TYPEPOSITION': 3,
+      'SYNT': "iverilog",
+      'ERROR': /((?:[A-Z]:)?[^:]+):([^:]+):(.+)/g,
+      'TYPEPOSITION': 0,
       'ROWPOSITION': 2,
       'COLUMNPOSITION': 5,
-      'DESCRIPTIONPOSITION': 4,
+      'DESCRIPTIONPOSITION': 3,
       'OUTPUT': this.OUTPUT.ERR,
     }
   }

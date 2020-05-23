@@ -22,10 +22,10 @@
 const BaseLinter = require('./linter')
 
 class Modelsim extends BaseLinter {
-  constructor() {
-    super();
+  constructor(path) {
+    super(path);
     this.PARAMETERS = {
-      'SYNT': "vcom -2008 ",
+      'SYNT': "vcom -2008",
       'ERROR': /\** *(Error|Warning)*[ ()a-zA-Z]*: *([/\t:=$&%#@?¿'¡! A-Za-z._0-9]+)*[(]{1}[\t]*([0-9]+)*[)]{1}[\t]*:*[\t ]*(.+)/ig,
       'TYPEPOSITION': 1,
       'ROWPOSITION': 3,

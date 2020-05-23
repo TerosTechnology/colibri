@@ -25,7 +25,7 @@ class Ghdl extends BaseLinter {
   constructor(path) {
     super(path);
     this.PARAMETERS = {
-      'SYNT' : "ghdl -s -fno-color-diagnostics ",
+      'SYNT' : "ghdl -s -fno-color-diagnostics",
       'ERROR' : /[\t\n ]*(.+){1}[\t]*.vhd:*([0-9]+):([0-9]+):*[\t ]*(error|warning)*:*[\t ]*(.+)/g,
       'TYPEPOSITION': 4,
       'ROWPOSITION': 2,
