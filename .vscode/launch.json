@@ -13,6 +13,16 @@
         "<node_internals>/**"
       ],
       "program": "${file}"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "cwd": "${workspaceFolder}/test/templates",
+      "program": "${file}",
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
     }
   ]
 }

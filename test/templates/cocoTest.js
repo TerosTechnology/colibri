@@ -28,10 +28,7 @@ const Codes = require('../../src/templates/codes')
 let path_example_vhdl = 'examples'+path.sep+'vhdl'+path.sep
 let path_example_verilog = 'examples'+path.sep+'verilog'+path.sep
 var structure_vhdl = fs.readFileSync(path_example_vhdl+'example_1.vhd','utf8');
-// var structure_vhdl     = JSON.parse(structure);
-
 var structure_v = fs.readFileSync(path_example_verilog+'uart.v','utf8');
-// var structure_v     = JSON.parse(structure);
 
 var cocotbpyVhdl = new Colibri.Templates.Templates();
 var cocotbpyV = new Colibri.Templates.Templates();
