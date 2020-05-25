@@ -29,7 +29,8 @@ let path_example_vhdl = 'examples'+path.sep+'vhdl'+path.sep
 let path_example_verilog = 'examples'+path.sep+'verilog'+path.sep
 var structure_vhdl = fs.readFileSync(path_example_vhdl+'example_1.vhd','utf8');
 // var structure_vhdl     = JSON.parse(structure);
-var structure_v = fs.readFileSync(path_example_verilog+'structure.json','utf8');
+
+var structure_v = fs.readFileSync(path_example_verilog+'uart.v','utf8');
 // var structure_v     = JSON.parse(structure);
 
 var cocotbpyVhdl = new Colibri.Templates.Templates();
@@ -58,7 +59,7 @@ let options_verilog = {
   };
 let cocotb_verilog = ""
 let cocotb_verilog_expected = fs.readFileSync(path_example_verilog+'cocotbV.py', 'utf8');
-cocotbpyV.getTemplate(Codes.TYPES.COCOTB,structure_vhdl,options_verilog).then(cocotb_verilog => {
+cocotbpyV.getTemplate(Codes.TYPES.COCOTB,structure_v,options_verilog).then(cocotb_verilog => {
   console.log('****************************************************************');
   if(cocotb_verilog_expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === cocotb_verilog.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
     console.log("---> Tested: cocotb verilog --> ok!".green);
@@ -69,20 +70,3 @@ cocotbpyV.getTemplate(Codes.TYPES.COCOTB,structure_vhdl,options_verilog).then(co
   }
 });
 
-// console.log('****************************************************************');
-// if(cocotb_vhdl_expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === cocotb_vhdl.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
-//   console.log("---> Tested: cocotb vhdl --> ok!".green);
-// }
-// else{
-//   console.log("---> Tested: cocotb vhdl --> fail!".red);
-//   throw new Error('Test error.');
-// }
-//
-// console.log('****************************************************************');
-// if(cocotb_verilog_expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === cocotb_verilog.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
-//   console.log("---> Tested: cocotb verilog --> ok!".green);
-// }
-// else{
-//   console.log("---> Tested: cocotb verilog --> fail!".red);
-//   throw new Error('Test error.');
-// }
