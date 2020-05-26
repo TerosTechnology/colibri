@@ -23,6 +23,7 @@ const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 const Colibri = require('../../src/main');
+const Codes = require('../../src/templates/codes')
 
 let options = {
   'type' : "normal",
@@ -33,39 +34,41 @@ let options = {
   ]
 }
 ////////////////////////////////////////////////////////////////////////////////
-var structure = fs.readFileSync('examples'+path.sep+'vhdl'+path.sep+'structure.json','utf8');
-structure     = JSON.parse(structure);
+var structure = fs.readFileSync('examples'+path.sep+'vhdl'+path.sep+'example.vhd','utf8');
 var testExpected = fs.readFileSync('examples'+path.sep+'vhdl'+path.sep+'tbVhdl.vhd','utf8');
 templates = new Colibri.Templates.Templates();
-var test = templates.getTemplate(Colibri.Templates.Codes.TYPES.TESTBENCH,structure, options);
+templates.getTemplate(Colibri.Templates.Codes.TYPES.TESTBENCH,structure, options).then(test_vhd => {
+  console.log('****************************************************************');
+  if(testExpected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === test_vhd.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
+    console.log("Testing... tbVhdl: Ok!".green);
+  }
+  else{
+    console.log("Expected -->".yellow);
+    console.log(testExpected);
+    console.log("Real     -->".yellow);
+    console.log(test_vhd);
+    console.log("Testing... tbVhdl: Fail!".red);
+    throw new Error('Test error.');
+  }
+});
 
-console.log('****************************************************************');
-if(testExpected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === test.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
-  console.log("Testing... tbVhdl: Ok!".green);
-}
-else{
-  console.log("Expected -->".yellow);
-  console.log(testExpected);
-  console.log("Real     -->".yellow);
-  console.log(test);
-  console.log("Testing... tbVhdl: Fail!".red);
-  throw new Error('Test error.');
-}
 ////////////////////////////////////////////////////////////////////////////////
 options['type'] = "vunit";
 testExpected = fs.readFileSync('examples'+path.sep+'vhdl'+path.sep+'tbVhdlVunit.vhd','utf8');
 templates = new Colibri.Templates.Templates();
-var test = templates.getTemplate(Colibri.Templates.Codes.TYPES.TESTBENCH,structure, options)
+templates.getTemplate(Colibri.Templates.Codes.TYPES.TESTBENCH,structure, options).then(test_vhdl_vunit =>{
+  if(testExpected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '') === test_vhdl_vunit.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '')){
+    console.log("Testing... tbVhdlVunit: Ok!".green);
+  }
+  else{
+    console.log("Expected -->".yellow);
+    console.log(testExpected);
+    console.log("Real     -->".yellow);
+    console.log(test_vhdl_vunit);
+    console.log("Testing... tbVhdlVunit: Fail!".red);
+    throw new Error('Test error.');
+  }
+  console.log('****************************************************************');
+} )
 
-if(testExpected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '') === test.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '')){
-  console.log("Testing... tbVhdlVunit: Ok!".green);
-}
-else{
-  console.log("Expected -->".yellow);
-  console.log(testExpected);
-  console.log("Real     -->".yellow);
-  console.log(test);
-  console.log("Testing... tbVhdlVunit: Fail!".red);
-  throw new Error('Test error.');
-}
-console.log('****************************************************************');
+

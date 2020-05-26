@@ -2,10 +2,10 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity example_vhdl_tb is
+entity arith_counter_gray_tb is
 end;
 
-architecture bench of example_vhdl_tb is
+architecture bench of arith_counter_gray_tb is
 
   component example_vhdl
     generic (
@@ -38,7 +38,7 @@ architecture bench of example_vhdl_tb is
 
 begin
 
-  example_vhdl_inst : example_vhdl
+  arith_counter_gray_inst : arith_counter_gray
     generic map (
       g_GENERIC_0 => g_GENERIC_0,
       g_GENERIC_1 => g_GENERIC_1

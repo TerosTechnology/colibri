@@ -22,11 +22,11 @@ context vunit_lib.vunit_context;
 -- use vunit_lib.run_base_pkg.all;
 -- use vunit_lib.run_pkg.all;
 
-entity example_vhdl_tb is
+entity arith_counter_gray_tb is
   generic (runner_cfg : string);
 end;
 
-architecture bench of example_vhdl_tb is
+architecture bench of arith_counter_gray_tb is
 
   -- Clock period
   constant clk_period : time := 5 ns;
@@ -44,7 +44,7 @@ architecture bench of example_vhdl_tb is
 
 begin
 
-  example_vhdl_inst : entity src_lib.example_vhdl
+  arith_counter_gray_inst : entity src_lib.arith_counter_gray
     generic map (
       g_GENERIC_0 => g_GENERIC_0,
       g_GENERIC_1 => g_GENERIC_1
