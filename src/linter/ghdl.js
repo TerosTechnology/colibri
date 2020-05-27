@@ -18,10 +18,9 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
+const Base_linter = require('./base_linter')
 
-const BaseLinter = require('./linter')
-
-class Ghdl extends BaseLinter {
+class Ghdl extends Base_linter {
   constructor(path) {
     super(path);
     this.PARAMETERS = {

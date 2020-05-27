@@ -27,14 +27,16 @@
     "nopy": "^0.2.3",
     "d3": "5.12.0",
     "d3-graphviz": "2.6.1",
-    "web-tree-sitter": "^0.16.2"
+    "web-tree-sitter": "^0.16.2",
+    "temp": "^0.9.0"
   },
   "devDependencies": {
     "colors": "x",
     "eslint": "*",
     "prettier": "*",
     "babel-eslint": "*",
-    "eslint-config-prettier": "*"
+    "eslint-config-prettier": "*",
+    "eslint-plugin-prettier": "*"
   },
   "python": {
     "execPath": "python3",
