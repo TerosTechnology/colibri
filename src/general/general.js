@@ -30,7 +30,9 @@ const LINTERS = {
   GHDL : 'ghdl',
   ICARUS : 'icarus',
   MODELSIM : 'modelsim',
-  VERILATOR : 'verilator'
+  VERILATOR : 'verilator',
+  XVLOG : 'xvlog',
+  XVHDL : 'xvhdl'
 };
 
 const VHDLSTANDARS = {
@@ -51,4 +53,4 @@ module.exports = {
   SIMULATORS : SIMULATORS,
   VERILOGSTANDARS : VERILOGSTANDARS,
   LINTERS : LINTERS
-}
+};

@@ -22,25 +22,19 @@
 
 const Base_linter = require('./base_linter');
 
-class Modelsim extends Base_linter {
-  constructor(path) {
-    super(path);
+class Xvlog extends Base_linter {
+  constructor() {
+    super();
     this.PARAMETERS = {
-      'SYNT': "vcom -2008",
-      // From https://github.com/dave2pi/SublimeLinter-contrib-vlog/blob/master/linter.py
-      'ERROR': /"^\\*\\* (((Error)|(Warning))( \\(suppressible\\))?: )(\\([a-z]+-[0-9]+\\) )?([^\\(]*)\\(([0-9]+)\\): (\\([a-z]+-[0-9]+\\) )?((((near|Unknown identifier|Undefined variable):? )?[\"\']([\\w:;\\.]+)[\"\'][ :.]*)?.*)";/ig,
-      'TYPEPOSITION': 1,
-      'ROWPOSITION': 3,
-      'COLUMNPOSITION': 6,
-      'DESCRIPTIONPOSITION': 4,
-      'OUTPUT': this.OUTPUT.OUT,
+      'SYNT': "xvlog -nolog",
+      'SYNT_WINDOWS': "xvlog.exe -nolog"
     };
   }
 
-
   // options = {custom_bin:"", custom_arguments:""}
   async lint_from_file(file,options){
-    let errors = await this._lint(file, options);
+    let normalized_file = file.replace(' ','\\ ');
+    let errors = await this._lint(normalized_file, options);
     return errors;
   }
 
@@ -50,18 +44,46 @@ class Modelsim extends Base_linter {
     return errors;
   }
 
-  // async _lint(file,synt,synt_windows,options){
-  //   // let result = await this._exec_linter(file,this.PARAMETERS.SYNT,
-  //   //                       this.PARAMETERS.SYNT_WINDOWS,options);
-  //   // let errors_str = result.stderr;
-  //   // let errors_str_lines = errors_str.split(/\r?\n/g);
-  //   // let errors = [];
-  // }
+  async _lint(file,options){
+    let result = await this._exec_linter(file,this.PARAMETERS.SYNT,
+                          this.PARAMETERS.SYNT_WINDOWS,options);
+    file = file.replace('\\ ',' ');
+    let errors_str = result.stdout;
+    let errors_str_lines = errors_str.split(/\r?\n/g);
+    let errors = [];
+    errors_str_lines.forEach((line) => {
 
+      let tokens = line.split(/:?\s*(?:\[|\])\s*/).filter(Boolean);
+      if (tokens.length < 4
+          || tokens[0] != "ERROR"
+          || !tokens[1].startsWith("VRFC")) {
+          return;
+      }
 
+      // Get filename and line number
+      // eslint-disable-next-line no-unused-vars
+      let [filename, lineno_str] = tokens[3].split(/:(\d+)/);
+      let lineno = parseInt(lineno_str) - 1;
 
+      // if (filename != doc.fileName) // Check that filename matches
+      //     return;
+
+      let error = {
+        'severity' : "error",
+        'description' : "[" + tokens[1] + "] " + tokens[2],
+        'code' : tokens[1],
+        'location' : {
+          'file': file,
+          'position': [lineno, 0]
+        }
+      };
+      errors.push(error);
+    });
+
+    return errors;
+  }
 }
 
 module.exports = {
-  Modelsim: Modelsim
+  Xvlog: Xvlog
 };

@@ -4,7 +4,7 @@
   "description": "Backend for terosHDL IDE",
   "main": "src/main.js",
   "scripts": {
-    "testLinter": "cd test; node linter",
+    "testLinter": "cd test/linter; node linter",
     "testTemplates": "cd test && cd templates && node cocoTest && node verilatorTest && node vunitRunpy && node tbVhdl && node tbVerilog && node component",
     "testDocumenter": "cd test && cd documenter && node stateMachine",
     "testProjectManager": "cd test && cd projectManager && node projectManager",
@@ -19,7 +19,6 @@
     "markdown-pdf": "10.0.0",
     "svg.js": "2.7.1",
     "svgdom": "0.0.21",
-    "showdown": "1.9.0",
     "shelljs": "0.8.3",
     "state-machine-cat": "4.1.0",
     "sequelize": "x",

@@ -1,23 +1,25 @@
-// Copyright 2020 Teros Technology
-//
-// Ismael Perez Rojo
-// Carlos Alberto Ruiz Naranjo
-// Alfredo Saez
-//
-// This file is part of Colibri.
-//
-// Colibri is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Colibri is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
+// The MIT License (MIT)
+
+// Copyright (c) 2016 Masahiro H
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 const Base_linter = require('./base_linter')
 
 class Verilator extends Base_linter {
@@ -29,9 +31,10 @@ class Verilator extends Base_linter {
     };
   }
 
-  // options = {custom_bin:"", custom_arguments:""}
+  // options = {custom_bin:"", custom_arguments:"", custom_path:""}
   async lint_from_file(file,options){
-    let errors = await this._lint(file, options);
+    let normalized_file = file.replace(' ','\\ ');
+    let errors = await this._lint(normalized_file, options);
     return errors;
   }
 
@@ -41,9 +44,10 @@ class Verilator extends Base_linter {
     return errors;
   }
 
-  async _lint(file,synt,synt_windows,options){
+  async _lint(file,options){
     let result = await this._exec_linter(file,this.PARAMETERS.SYNT,
                           this.PARAMETERS.SYNT_WINDOWS,options);
+    let file_split_space = file.split('\\ ')[0];
     let errors_str = result.stderr;
     let errors_str_lines = errors_str.split(/\r?\n/g);
     let errors = [];
@@ -54,9 +58,9 @@ class Verilator extends Base_linter {
         line = line.substr(1);
                        
         // was it for a submodule
-        if (line.search(file) > 0) {
+        if (line.search(file_split_space) > 0) {
           // remove the filename
-          line = line.replace(file, '');
+          line = line.replace(file_split_space, '');
           line = line.replace(/\s+/g,' ').trim();
                        
           let terms = this.split_terms(line);
@@ -69,7 +73,7 @@ class Verilator extends Base_linter {
               'severity' : severity,
               'description' : message,
               'location' : {
-                'file': file,
+                'file': file.replace('\\ ',' '),
                 'position': [lineNum, 0]
               }
             };

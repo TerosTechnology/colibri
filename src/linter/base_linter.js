@@ -22,6 +22,7 @@
 const os = require('os');
 const temp = require('temp');
 const fs = require('fs');
+const path_lib = require('path');
 
 class Base_linter {
   _get_command(file, synt, synt_windows, options){
@@ -30,15 +31,26 @@ class Base_linter {
       command += options.custom_bin + " ";
     }
     else if(os.platform() == "win32"){
-      command += synt_windows + " ";
+      if (options !== undefined && options.custom_path !== undefined){
+        command += options.custom_path + path_lib.sep + synt_windows + " ";
+      }
+      else{
+        command += synt_windows + " ";
+      }
     }
     else{
-      command += synt + " ";
+      if (options !== undefined && options.custom_path !== undefined){
+        command += options.custom_path + path_lib.sep + synt + " ";
+      }
+      else{
+        command += synt + " ";
+      }
     }
 
     if (options !== undefined && options.custom_arguments !== undefined){
       command += options.custom_arguments + " ";
     }
+
     command += file;
     return command;
   }

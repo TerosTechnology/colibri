@@ -19,10 +19,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-// const Ghdl = require('./ghdl');
+const Ghdl = require('./ghdl');
 const Icarus = require('./icarus');
 // const Modelsim = require('./modelsim');
 const Verilator = require('./verilator');
+const Xvlog = require('./xvlog');
+const Xvhdl = require('./xvhdl');
 const General = require('../general/general');
 
 class Linter {
@@ -31,7 +33,7 @@ class Linter {
       throw new Error('Linter name is undefined.');
     }
     if (linter_name === General.LINTERS.GHDL) {
-      // return this.get_ghdl();
+      return this.get_ghdl();
     }
     else if (linter_name === General.LINTERS.ICARUS){
       return this.get_icarus();
@@ -42,14 +44,20 @@ class Linter {
     else if (linter_name === General.LINTERS.VERILATOR){
       return this.get_verilator();
     }
+    else if (linter_name === General.LINTERS.XVLOG){
+      return this.get_xvlog();
+    }
+    else if (linter_name === General.LINTERS.XVHDL){
+      return this.get_xvhdl();
+    }
     else{
       throw new Error('Linter name not supported.');
     }
   }
 
-  // get_ghdl() {
-  //   return new Ghdl.Ghdl();
-  // }
+  get_ghdl() {
+    return new Ghdl.Ghdl();
+  }
 
   get_icarus() {
     return new Icarus.Icarus();
@@ -61,6 +69,12 @@ class Linter {
 
   get_verilator() {
     return new Verilator.Verilator();
+  }
+  get_xvlog() {
+    return new Xvlog.Xvlog();
+  }
+  get_xvhdl() {
+    return new Xvhdl.Xvhdl();
   }
 }
 

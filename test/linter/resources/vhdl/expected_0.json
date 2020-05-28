@@ -1,0 +1,113 @@
+{
+  "xvhdl":
+  [
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [12,0]
+      },
+      "description": "[VRFC 10-1412] syntax error near -"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [19,0]
+      },
+      "description": "[VRFC 10-1412] syntax error near begin"
+    }
+  ],
+  "ghdl":
+  [
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [13,26]
+      },
+      "description": "resolution_indication not allowed before vhdl08"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [13,33]
+      },
+      "description": "')' is expected instead of '-'"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [13,33]
+      },
+      "description": "type mark expected in a subtype indication"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [13,33]
+      },
+      "description": "';' or ')' expected after interface"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [13,45]
+      },
+      "description": "missing \";\" at end of port clause"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [14,8]
+      },
+      "description": "'end' is expected instead of ')'"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [13,45]
+      },
+      "description": "missing \";\" at end of entity"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [15,1]
+      },
+      "description": "missing entity, architecture, package or configuration"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [15,11]
+      },
+      "description": "an identifier is expected instead of ';'"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [15,11]
+      },
+      "description": "'is' is expected instead of ';'"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [15,11]
+      },
+      "description": "';' (semi colon) not allowed alone"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [17,1]
+      },
+      "description": "'end' is expected instead of 'architecture'"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [15,12]
+      },
+      "description": "missing \";\" at end of entity"
+    }
+  ]
+}
