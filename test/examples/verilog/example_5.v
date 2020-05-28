@@ -27,10 +27,10 @@ THE SOFTWARE.
 module axis_baser_tx_64 #
 (
     parameter DATA_WIDTH = 64,
-    parameter KEEP_WIDTH = (DATA_WIDTH/8),
+    parameter KEEP_WIDTH = (DATA_WIDTH/8), //!**Data width parameter**
     parameter HDR_WIDTH = 2,
     parameter ENABLE_PADDING = 1,
-    parameter ENABLE_DIC = 1,
+    parameter ENABLE_DIC = 1,     //!enable
     parameter MIN_FRAME_LENGTH = 64
 )
 (

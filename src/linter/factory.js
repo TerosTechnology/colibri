@@ -1,44 +1,65 @@
-const codes = require('../db/codes')
-const db_manager = require('../db/db_manager')
+// Copyright 2020 Teros Technology
+//
+// Ismael Perez Rojo
+// Carlos Alberto Ruiz Naranjo
+// Alfredo Saez
+//
+// This file is part of Colibri.
+//
+// Colibri is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Colibri is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
 const Ghdl = require('./ghdl')
 const Icarus = require('./icarus')
 const Modelsim = require('./modelsim')
 const Verilator = require('./verilator')
+const General = require('../general/general')
 
 class LinterFactory {
-  getConfiguredLinter() {
-    let linter = db_manager.getActiveLinterCode();
-    if (typeof linter !== 'undefined' && linter !== null) {
-      if (linter == codes.Linters.GHDL) {
-        return this.getGhdl();
-      } else if (linter == codes.Linters.ICARUS) {
-        return this.getIcarus();
-      } else if (linter == codes.Linters.MODELSIM) {
-        return this.getModelsim();
-      } else if (linter == codes.Linters.VERILATOR) {
-        return this.getVerilator();
-      }
+  constructor(sim,path){
+    if (sim == General.SIMULATORS.GHDL) {
+      return this.getGhdl(path);
     }
+    else if (sim == General.SIMULATORS.ICARUS){
+      return this.getIcarus(path);
+    }
+    else if (sim == General.SIMULATORS.MODELSIM){
+      return this.getModelsim(path);
+    }
+    else if (sim == General.SIMULATORS.VERILATOR){
+      return this.getVerilator(path);
+    }
+    else
+      return null;
   }
 
-  getGhdl() {
-    return new Ghdl();
+  getGhdl(path) {
+    return new Ghdl.Ghdl(path);
   }
 
-  getIcarus() {
-    return new Icarus();
+  getIcarus(path) {
+    return new Icarus.Icarus(path);
   }
 
-  getModelsim() {
-    return new Modelsim();
+  getModelsim(path) {
+    return new Modelsim.Modelsim(path);
   }
 
-  getVerilator() {
-    return new Verilator();
+  getVerilator(path) {
+    return new Verilator.Verilator(path);
   }
-
 }
 
-var instance = new LinterFactory();
-module.exports = instance
+module.exports = {
+  LinterFactory : LinterFactory
+}

@@ -1,3 +1,4 @@
+npm-debug.log
 transcript
 node_modules
 work
@@ -11,3 +12,14 @@ src/db/resources/configuration.json
 *.pdf
 *.cf
 *.o
+*.out
+*.vcd
+Makefile
+python_modules
+package-lock.json
+*.pyc
+vunit_out
+*.gdca
+*.gcno
+/obj_dir
+*.info

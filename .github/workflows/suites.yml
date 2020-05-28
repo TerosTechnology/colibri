@@ -1,0 +1,15 @@
+name: Test_unit_suites
+
+on: [push]
+
+jobs:
+  test-suites:
+    runs-on: ubuntu-18.04
+    container:
+      image: docker://terostech/multi-simulator:1.0.2
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v1
+      - name: Test_suites
+        run: |
+          npm run-script testSuites

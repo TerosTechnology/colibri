@@ -12,32 +12,31 @@
   "generics":
   [
     { "name": "DIGITS",
-      "kind": "positive",
-      "type": "",
-      "index": 546
+      "type": "positive",
+      "comment": "Number of BCD digits"
     }
   ],
   "ports":
   [
     { "name": "clk",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": ""
     },
     { "name": "rst",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": " Reset to 0"
     },
     { "name": "inc",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": " Increment"
     },
     { "name": "val",
-      "kind": "out",
+      "direction": "out",
       "type": "T_BCD_VECTOR(DIGITS-1 downto 0)",
-      "index": 546
+      "comment": " Value output"
     }
   ],
   "signals":

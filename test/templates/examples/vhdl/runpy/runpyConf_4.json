@@ -1,0 +1,30 @@
+{
+  "src": [
+    "./exampleRunpy_1.vhd"
+  ],
+  "tb": [
+    "./tbVhdlVunitRunpy.vhd"
+  ],
+  "lang": "vhdl",
+  "config": {
+    "name": "test_1",
+    "output_path": "./",
+    "checks": false,
+    "simulator_suport": {
+      "ghdl" : {
+        "enable" : true,
+        "config" : {
+          "synopsys_libraries" : false,
+          "disable_ieee_warnings" : false,
+          "code_coverage" : {
+            "enable" : false,
+            "output_path": "./coverage"
+          }
+        }
+      },
+      "modelsim" : {
+        "enable" : false
+      }
+    }
+  }
+}

@@ -1,3 +1,7 @@
+`include "includes.v"
+`include "includes1.v"
+`include "includes2.v"
+
 module t_gate_switch (L,R,nC,C);
  inout L;
  inout R;

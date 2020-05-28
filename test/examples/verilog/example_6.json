@@ -1,0 +1,28 @@
+{
+  "libraries":[],
+  "entity": {
+    "name": "gray_counter"
+  },
+  "generics": [],
+  "ports": [{
+    "name": "clk",
+    "direction": "input",
+    "type": "",
+    "comment": " clock"
+  }, {
+    "name": "rst",
+    "direction": "input",
+    "type": "",
+    "comment": " active hight reset"
+  }, {
+    "name": "enable",
+    "direction": "input",
+    "type": "",
+    "comment": " enable for counter"
+  }, {
+    "name": "out",
+    "direction": "output",
+    "type": "[ 7:0]",
+    "comment": " counter out"
+  }]
+}

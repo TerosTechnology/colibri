@@ -11,67 +11,64 @@
   "generics":
   [
     { "name": "max_burst_length",
-      "kind": "natural range 1 to 256",
-      "type": "",
-      "index": 546
+      "type": "natural range 1 to 256",
+      "comment": ""
     },
     { "name": "z_5",
-      "kind": "natural range 1 to 256",
-      "type": "",
-      "index": 546
+      "type": "natural range 1 to 256",
+      "comment": ""
     },
     { "name": "bytes_per_beat",
-      "kind": "natural",
-      "type": "",
-      "index": 546
+      "type": "natural",
+      "comment": ""
     }
   ],
   "ports":
   [
     { "name": "clk",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": ""
     },
     { "name": "start",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": ""
     },
     { "name": "start_addr",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic_vector(31 downto 0)",
-      "index": 546
+      "comment": ""
     },
     { "name": "num_bytes",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic_vector(31 downto 0)",
-      "index": 546
+      "comment": ""
     },
     { "name": "burst_valid",
-      "kind": "out",
+      "direction": "out",
       "type": "std_logic",
-      "index": 546
+      "comment": ""
     },
     { "name": "burst_ready",
-      "kind": "in",
+      "direction": "in",
       "type": "std_logic",
-      "index": 546
+      "comment": ""
     },
     { "name": "burst_addr",
-      "kind": "out",
+      "direction": "out",
       "type": "std_logic_vector(31 downto 0)",
-      "index": 546
+      "comment": ""
     },
     { "name": "burst_length",
-      "kind": "out",
+      "direction": "out",
       "type": "natural range 1 to max_burst_length",
-      "index": 546
+      "comment": ""
     },
     { "name": "burst_last",
-      "kind": "out",
+      "direction": "out",
       "type": "std_logic",
-      "index": 546
+      "comment": ""
     }
   ],
   "signals":
