@@ -43,8 +43,9 @@ for (let m=0; m<custom_path.length;++m){
     /**************************************************************************** */
     /**** Linters verilog 
     /**************************************************************************** */
-    let linters = [General.LINTERS.ICARUS, General.LINTERS.VERILATOR, 
-      General.LINTERS.XVLOG];
+    // let linters = [General.LINTERS.ICARUS, General.LINTERS.VERILATOR, 
+    //   General.LINTERS.XVLOG];
+    let linters = [General.LINTERS.ICARUS, General.LINTERS.VERILATOR];
 
     for (let i=0; i<linters.length; ++i){
       let linter_name = linters[i];
@@ -73,7 +74,8 @@ for (let m=0; m<custom_path.length;++m){
     /**************************************************************************** */
     /**** Linters vhdl 
     /**************************************************************************** */
-    let linters_vhdl = [General.LINTERS.XVHDL,General.LINTERS.GHDL];
+    // let linters_vhdl = [General.LINTERS.XVHDL,General.LINTERS.GHDL];
+    let linters_vhdl = [General.LINTERS.GHDL];
 
     for (let i=0; i<linters_vhdl.length; ++i){
       let linter_name_vhdl = linters_vhdl[i];
