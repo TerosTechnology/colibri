@@ -63,7 +63,7 @@
     { "severity": "error",
       "location": {
         "file": "example_1.vhd",
-        "position": [13,44]
+        "position": [12,44]
       },
       "description": "missing \";\" at end of entity"
     },

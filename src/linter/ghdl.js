@@ -100,10 +100,6 @@ class Ghdl extends Base_linter {
 
 }
 
-
-
-
-
 module.exports = {
   Ghdl: Ghdl
 };
