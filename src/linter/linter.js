@@ -19,78 +19,66 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-const shell = require('shelljs');
-const os = require('os');
-const { dirname } = require('path');
+const Ghdl = require('./ghdl');
+const Icarus = require('./icarus');
+// const Modelsim = require('./modelsim');
+const Verilator = require('./verilator');
+const Xvlog = require('./xvlog');
+const Xvhdl = require('./xvhdl');
+const General = require('../general/general');
 
-class BaseLinter {
-  constructor(path) {
-    const pathOS = require('path');
-    if (path != null)
-      this.path = path + pathOS.sep;
-    else
-      this.path = "";
-    this.OUTPUT = {
-      OUT: 0,
-      ERR: 1
-    };
-  }
-
-  async lint(file) {
-    var str;
-    let exe_str = "";
-    if (os.platform() == "win32"){
-      exe_str = ".exe";
+class Linter {
+  constructor(linter_name){
+    if (linter_name === undefined){
+      throw new Error('Linter name is undefined.');
     }
-    var cmd = this.path + this.PARAMETERS['SYNT'] + exe_str + " " + file;
-    var element = this;
-
-    console.log(cmd)
-    
-    const exec = require('child_process').exec;
-     return new Promise((resolve, reject) => {
-      exec(cmd, (error, stdout, stderr) => {
-        if (element.PARAMETERS['OUTPUT'] == element.OUTPUT.OUT) {
-          str = stdout
-        } else if (element.PARAMETERS['OUTPUT'] == element.OUTPUT.ERR) {
-          str = stderr
-        }
-       resolve(element.parseErrors(str, file));
-      });
-     });
-  }
-
-  parseErrors(str, file) {
-    let errorRegex = this.PARAMETERS['ERROR']
-    let errors = [];
-    let result = errorRegex.exec(str);
-    while (result !== null) {
-      let severity;
-      if (result[this.PARAMETERS['TYPEPOSITION']] !== undefined) {
-        severity = result[this.PARAMETERS['TYPEPOSITION']];
-      } else {
-        severity = "error";
-      }
-      let cl = 0;
-      if (result[this.PARAMETERS['COLUMNPOSITION']] == undefined) {
-        cl = 0;
-      } else {
-        cl = parseInt(result[this.PARAMETERS['COLUMNPOSITION']]);
-      }
-      let error = {
-        'severity': severity.toLowerCase(),
-        'location': {
-          'file': file,
-          'position': [parseInt(result[this.PARAMETERS['ROWPOSITION']]), cl]
-        },
-        'description': result[this.PARAMETERS['DESCRIPTIONPOSITION']]
-      };
-      errors.push(error);
-      result = errorRegex.exec(str);
+    if (linter_name === General.LINTERS.GHDL) {
+      return this.get_ghdl();
     }
-    return errors;
+    else if (linter_name === General.LINTERS.ICARUS){
+      return this.get_icarus();
+    }
+    else if (linter_name === General.LINTERS.MODELSIM){
+      // return this.get_modelsim();
+    }
+    else if (linter_name === General.LINTERS.VERILATOR){
+      return this.get_verilator();
+    }
+    else if (linter_name === General.LINTERS.XVLOG){
+      return this.get_xvlog();
+    }
+    else if (linter_name === General.LINTERS.XVHDL){
+      return this.get_xvhdl();
+    }
+    else{
+      throw new Error('Linter name not supported.');
+    }
   }
 
+  get_ghdl() {
+    return new Ghdl.Ghdl();
+  }
+
+  get_icarus() {
+    return new Icarus.Icarus();
+  }
+
+  // get_modelsim() {
+  //   return new Modelsim.Modelsim();
+  // }
+
+  get_verilator() {
+    return new Verilator.Verilator();
+  }
+  get_xvlog() {
+    return new Xvlog.Xvlog();
+  }
+  get_xvhdl() {
+    return new Xvhdl.Xvhdl();
+  }
 }
 
-module.exports = BaseLinter
+// eslint-disable-next-line no-undef
+module.exports = {
+  Linter : Linter
+};

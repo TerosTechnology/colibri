@@ -26,6 +26,15 @@ const SIMULATORS = {
   VERILATOR : 'verilator'
 };
 
+const LINTERS = {
+  GHDL : 'ghdl',
+  ICARUS : 'icarus',
+  MODELSIM : 'modelsim',
+  VERILATOR : 'verilator',
+  XVLOG : 'xvlog',
+  XVHDL : 'xvhdl'
+};
+
 const VHDLSTANDARS = {
   VHDL2018 : '08'
 };
@@ -42,5 +51,6 @@ const LANGUAGES = {
 module.exports = {
   LANGUAGES : LANGUAGES,
   SIMULATORS : SIMULATORS,
-  VERILOGSTANDARS : VERILOGSTANDARS
-}
+  VERILOGSTANDARS : VERILOGSTANDARS,
+  LINTERS : LINTERS
+};
