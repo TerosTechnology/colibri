@@ -66,7 +66,7 @@ class Ghdl extends Base_linter {
               'description' : terms[3].trim(),
               'location' : {
                 'file': file,
-                'position': [line_num, column_num]
+                'position': [line_num-1, column_num-1]
               }
             };
             errors.push(error);
@@ -87,7 +87,7 @@ class Ghdl extends Base_linter {
               'description' : terms[3].trim(),
               'location' : {
                 'file': file,
-                'position': [line_num, column_num]
+                'position': [line_num-1, column_num-1]
               }
             };
             errors.push(error);
