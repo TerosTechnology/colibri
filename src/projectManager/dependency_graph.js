@@ -25,7 +25,7 @@ const d3_ease = require('d3-ease');
 const d3_transition = require('d3-transition');
 const d3_chromatic = require('d3-scale-chromatic');
 const shell = require('child_process');
-const nopy = require('nopy');
+// const nopy = require('nopy');
 
 class Dependency_graph {
   constructor(graph){
