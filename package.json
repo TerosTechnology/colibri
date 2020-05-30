@@ -37,13 +37,5 @@
     "babel-eslint": "*",
     "eslint-config-prettier": "*",
     "eslint-plugin-prettier": "*"
-  },
-  "python": {
-    "execPath": "python3",
-    "dependencies": {
-      "wheel": ">=0.34.2",
-      "vunit_hdl": "==4.2.0",
-      "vsg": "==1.9.0"
-    }
   }
 }
