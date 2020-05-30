@@ -38,6 +38,10 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
+      - name: Set up Python python 3.6
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.6
       - name: Test
         run: |
           npm install .
