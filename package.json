@@ -6,7 +6,7 @@
   "scripts": {
     "testLinter": "cd test && cd linter && node linter",
     "testTemplates": "cd test && cd templates && node cocoTest && node verilatorTest && node vunitRunpy && node tbVhdl && node tbVerilog && node component",
-    "testDocumenter": "cd test && cd documenter && node documenter",
+    "testDocumenter": "cd test && cd documenter && node documenter && python --version",
     "testProjectManager": "cd test && cd projectManager && node projectManager",
     "testParser": "cd test && node parser",
     "testSuites": "cd test && cd templates && sh runAllSuites.sh"
