@@ -25,7 +25,8 @@ function diagramGenerator(structure,bn){
   const SVG      = require('svg.js')(window)
   const document = window.document
 
-  const canvas = SVG(document.documentElement)
+  var canvas = SVG(document.documentElement)
+  canvas.clear();
   var border  = 'black'
   var genBox  = '#bdecb6'  //'blue'
   var portBox = '#fdfd96'  //'red'

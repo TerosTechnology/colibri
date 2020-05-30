@@ -54,3 +54,7 @@ exports.ProjectManager = require('./projectManager/projectManager');
 //Beautifuler
 //******************************************************************************
 exports.Beautifuler = require('./beautifuler/factory');
+//******************************************************************************
+//vsg
+//******************************************************************************
+exports.Vsg = require('./vsg/vsg');
