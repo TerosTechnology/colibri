@@ -34,7 +34,7 @@ class VhdlParser {
     const MAX_ARG_LENGTH = 32767;
     let reduce_str = str.slice(0,MAX_ARG_LENGTH);
 
-    let cmd = "python3 " + path_python + ' "' + this.comment_symbol + '" ' + ' "' + reduce_str + ' "';
+    let cmd = "python " + path_python + ' "' + this.comment_symbol + '" ' + ' "' + reduce_str + ' "';
     let structure = null;
     try {
       const execSync = require('child_process').execSync;
