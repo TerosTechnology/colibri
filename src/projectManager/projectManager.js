@@ -21,7 +21,7 @@
 const fs = require('fs');
 const Simulators = require('../simulators/simulators')
 const ParserLib = require('../parser/factory')
-const nopy = require('nopy');
+// const nopy = require('nopy');
 const path = require('path');
 const dependency = require('./dependency_graph');
 const run_python = require('./run_python');
