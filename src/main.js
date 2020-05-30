@@ -57,4 +57,4 @@ exports.Beautifuler = require('./beautifuler/factory');
 //******************************************************************************
 //vsg
 //******************************************************************************
-exports.Vsg = require('./vsg/vsg');
+// exports.Vsg = require('./vsg/vsg');
