@@ -19,14 +19,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 const fs = require('fs');
-const pathLib = require('path');
-const Diagram = require('./diagram')
-const StmVHDL = require('./statemachinevhdl')
-const StmVerilog = require('./statemachineverilog')
-const ParserLib = require('../parser/factory')
-const General = require('../general/general')
+const path_lib = require('path');
+const Diagram = require('./diagram');
+const StmVHDL = require('./statemachinevhdl');
+const StmVerilog = require('./statemachineverilog');
+const ParserLib = require('../parser/factory');
+const General = require('../general/general');
 
-class BaseStructure {
+class Documenter {
   constructor(code,lang,comment_symbol) {
     this.lang = lang;
     this.code = code;
@@ -45,36 +45,28 @@ class BaseStructure {
     this.comment_symbol = comment_symbol;
   }
 
-  async check_correct_file(){
-    return true;
-    let code_tree = await this._get_code_tree();
-    if (code_tree == null)
-      return false;
-    else
-      return true;
-  }
-
   // ***************************************************************************
-  async save_html(path){
-    let html_doc = await this.get_html();
+  // options = {"custom_css_path":"/custom_css/path"}
+  async save_html(path,options){
+    let html_doc = await this.get_html(options);
     fs.writeFileSync(path,html_doc);
   }
-  async save_pdf(path){
-    await this._get_pdf(path);
+  // options = {"custom_css_path":"/custom_css/path"}
+  async save_pdf(path,options){
+    await this._get_pdf(path,options);
   }
   async save_svg(path){
     let svg_diagram_str = await this._get_diagram_svg();
     await fs.writeFileSync(path,svg_diagram_str);
   }
   async save_markdown(path){
-    let file = pathLib.basename(path,pathLib.extname(path)) + ".svg";
-    let path_svg = pathLib.dirname(path) + pathLib.sep + file;
+    let file = path_lib.dirname(path) + path_lib.sep + path_lib.basename(path,path_lib.extname(path)) + ".svg";
+    // let path_svg = path_lib.dirname(path) + path_lib.sep + file;
     fs.writeFileSync(path,await this._get_markdown(file));
   }
   // ***************************************************************************
-  async get_html(extra_top_space){
-    let markdown_doc = await this._get_markdown(null, extra_top_space);
-    let html_doc = await this._get_html_from_markdown(markdown_doc);
+  async get_html(options){
+    let html_doc = await this._get_html_from_code(options);
     return html_doc;
   }
 
@@ -89,14 +81,9 @@ class BaseStructure {
     markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
     //Description
     markdown_doc += "## Diagram\n";
-    if (path == null || path == ""){
-      markdown_doc += await this._get_diagram_svg_from_code_tree(code_tree);
-    }
-    else{
-      await this._save_svg_from_code_tree(path, code_tree);
-      markdown_doc += '![Diagram](' + path + ' "Diagram")';
-    }
-    markdown_doc += "\n"
+    await this._save_svg_from_code_tree(path, code_tree);
+    markdown_doc += '![Diagram](' + path + ' "Diagram")';
+    markdown_doc += "\n";
     //Description
     markdown_doc += "## Description\n";
     markdown_doc  += code_tree['entity']['comment'];
@@ -113,53 +100,144 @@ class BaseStructure {
     return markdown_doc;
   }
 
-  async _get_html_from_markdown(markdown_str) {
-    let html = `
-    <style>
-    #teroshdl h1,#teroshdl h2,#teroshdl h3,#teroshdl table {margin-left:5%;}
-    div.templateTerosHDL { background-color: white;position:absolute; }
-    #teroshdl td,#teroshdl th,#teroshdl h1,#teroshdl h2,#teroshdl h3 {color: black;}
-    #teroshdl h1,#teroshdl h2 {font-weight:bold;}
-    #teroshdl tr:hover {background-color: #ddd;}
-    #teroshdl td, #teroshdl th {
-        border: 1px solid grey
-    }
-    #teroshdl p {color:black;}
-    #teroshdl p {margin:5%;}
-    #teroshdl th { background-color: #ffd78c;}
-    #teroshdl tr:nth-child(even){background-color: #f2f2f2;}
-    </style>
-    <div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%" >
-    `
+  async _get_html_from_code(options) {
+    let code_tree = await this._get_code_tree();
+    let html_style = `
+<style>
+  #teroshdl h1,#teroshdl h2,#teroshdl h3,#teroshdl table, #teroshdl svg {margin-left:5%;}
+  div.templateTerosHDL { background-color: white;position:absolute; }
+  #teroshdl td,#teroshdl th,#teroshdl h1,#teroshdl h2,#teroshdl h3 {color: black;}
+  #teroshdl h1,#teroshdl h2 {font-weight:bold;}
+  #teroshdl tr:hover {background-color: #ddd;}
+  #teroshdl td, #teroshdl th {
+    border: 1px solid grey
+  }
+  #teroshdl p {color:black;}
+  #teroshdl p {margin-left:5%;}
+  #teroshdl th { background-color: #ffd78c;}
+  #teroshdl tr:nth-child(even){background-color: #f2f2f2;}
+</style>
+<div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%">\n`;
 
-    let showdown = require('showdown');
-    showdown.setFlavor('github');
-    let converter = new showdown.Converter({
-      tables: true
-    });
-    html += converter.makeHtml(markdown_str);
-    html += `<\div`
+    let html_generics = this._generics_to_html_table(code_tree.generics);
+    let html_ports = this._generics_to_html_table(code_tree.ports);
+
+    //HTML style
+    let html = "";
+    if (options !== undefined && options.custom_css_path !== undefined){
+      try{
+        let custom_css_str = fs.readFileSync(options.custom_css_path, {encoding:'utf8'});
+        html = `<style>\n${custom_css_str}</style>\n`;
+        html += `<div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%">\n`;
+      }
+      catch(e){
+        // eslint-disable-next-line no-console
+        console.log(e);
+        html = html_style;
+      }
+    }
+    else{
+      html = html_style;
+    }
+    html += "<p>\n\n\n</p>";
+    //Title
+    html += `<h1 id="entity-${code_tree.entity.name}">Entity: ${code_tree.entity.name}</h1>\n`;
+    //Diagram
+    html += `<h2 id="diagram">Diagram</h2>\n`;
+    html += await this._get_diagram_svg_from_code_tree(code_tree);
+    //Entity description
+    html += `<h2 id="description">Description</h2>\n`;
+    html += `<p>${code_tree.entity.comment}\n</p>`;
+    //Ports table
+    html += `<h2 id="generics-and-ports">Generics and ports</h2>\n`;
+    html += `<h3 id="table-11-generics">Table 1.1 Generics</h3>\n`;
+    html += `${html_generics}\n`;
+    //Genercis table
+    html += `<h3 id="table-12-ports">Table 1.2 Ports</h3>\n`;
+    html += `${html_ports}\n`;
+
     return html;
   }
 
-  async _get_pdf(path) {
+  _generics_to_html_table(generics){
+    let html = `
+<table>
+  <thead>
+    <tr>
+      <th id="port_name">Generic name</th>
+      <th id="type">Type</th>
+      <th id="description">Description</th>
+    </tr>
+  <thead>
+  <tbody>`;
+
+  for (let i=0; i<generics.length; ++i){
+    html += `
+    <tr>
+      <td>${generics[i].name}</td>
+      <td>${generics[i].type}</td>
+      <td>${generics[i].comment}</td>
+    <tr>`;
+  }
+    html += `
+  </tbody>
+</table>`;
+    return html;
+  }
+
+  _ports_to_html_table(ports){
+    let html = `
+<table>
+  <thead>
+    <tr>
+      <th id="port_name">Port name</th>
+      <th id="direction">Direction</th>
+      <th id="type">Type</th>
+      <th id="description">Description</th>
+    </tr>
+  <thead>
+  <tbody>`;
+
+  for (let i=0; i<ports.length; ++i){
+    html += `
+    <tr>
+      <td>${ports[i].name}</td>
+      <td>${ports[i].direction}</td>
+      <td>${ports[i].type}</td>
+      <td>${ports[i].comment}</td>
+    <tr>`;
+  }
+    html += `
+  </tbody>
+</table>`;
+    return html;
+  }
+
+
+  async _get_pdf(path,options) {
     let code_tree = await this._get_code_tree();
 
-    let file_svg = pathLib.basename(path,pathLib.extname(path)) + ".svg";
-    let path_svg = pathLib.dirname(path) + pathLib.sep + file_svg;
+    let file_svg = path_lib.basename(path,path_lib.extname(path)) + ".svg";
+    let path_svg = path_lib.dirname(path) + path_lib.sep + file_svg;
     await this._save_svg_from_code_tree(path_svg, code_tree);
     let markdown_doc = await this._get_markdown(path_svg);
-    let markdownpdf = require("markdown-pdf")
-    let options = {
-      cssPath: __dirname + '/custom.css'
+    let markdownpdf = require("markdown-pdf");
+  
+    let options_md_pdf = {
+      cssPath: __dirname + path_lib.sep + 'custom.css'
+    };
+    if (options !== undefined && options.custom_css_path !== undefined){
+      options_md_pdf.cssPath = options.custom_css_path;
     }
-    markdownpdf(options).from.string(markdown_doc).to(path, function() {
+
+    markdownpdf(options_md_pdf).from.string(markdown_doc).to(path, function() {
       try {
-        fs.unlinkSync(path_svg)
+        fs.unlinkSync(path_svg);
       } catch(err) {
-        console.error(err)
+        // eslint-disable-next-line no-console
+        console.error(err);
       }
-    })
+    });
   }
 
   async _get_diagram_svg(){
@@ -193,17 +271,17 @@ class BaseStructure {
     //Title
     md += "## Generics and ports\n";
     //Tables
-    md += "### Table 1.1 Generics\n"
+    md += "### Table 1.1 Generics\n";
     md += this._get_doc_generics(generics);
-    md += "### Table 1.2 Ports\n"
+    md += "### Table 1.2 Ports\n";
     md += this._get_doc_ports(ports);
     return md;
   }
 
   _get_doc_ports(ports) {
     const md = require('./markdownTable');
-    let table = []
-    table.push(["Port name", "Direction", "Type", "Description"])
+    let table = [];
+    table.push(["Port name", "Direction", "Type", "Description"]);
     for (let i = 0; i < ports.length; ++i) {
       table.push([ports[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       ports[i]['direction'].replace(/\r/g, ' ').replace(/\n/g, ' '),
@@ -216,8 +294,8 @@ class BaseStructure {
 
   _get_doc_generics(generics) {
     const md = require('./markdownTable');
-    let table = []
-    table.push(["Generic name", "Type", "Description"])
+    let table = [];
+    table.push(["Generic name", "Type", "Description"]);
     for (let i = 0; i < generics.length; ++i) {
       table.push([generics[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       generics[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
@@ -237,11 +315,11 @@ function get_state_machine_hdl_svg(str,lang){
     state_machine_cl = new State_machine_verilog();
   }
   else
-    return null
+    return null;
 
   let state_machine_svg;
   try{
-    state_machine_svg = state_machine_cl.get_svg(str)
+    state_machine_svg = state_machine_cl.get_svg(str);
   }
   catch(error){
     return null;
@@ -252,7 +330,7 @@ function get_state_machine_hdl_svg(str,lang){
 
 class State_machine_vhdl extends StmVHDL.State_machine_vhdl{
   get_svg(str) {
-    const smcat = require("state-machine-cat")
+    const smcat = require("state-machine-cat");
     let go = this.getStateMachine(str);
     try {
       const svg = smcat.render(
@@ -262,32 +340,33 @@ class State_machine_vhdl extends StmVHDL.State_machine_vhdl{
       );
       return svg;
     } catch (pError) {
+      // eslint-disable-next-line no-console
       console.error(pError);
-      return null;
+      return undefined;
     }
   }
 }
 
 class State_machine_verilog extends StmVerilog.State_machine_verilog{
+  // eslint-disable-next-line no-unused-vars
   get_svg(str) {
-    return null;
+    return undefined;
   }
 }
 
 function get_md_doc_from_array(files,output_dir_doc,symbol_vhdl,symbol_verilog,
           graph,project_name,with_dependency_graph){
   //Main doc
-  let main_doc = "# Project documentation: " + project_name + "\n"
+  let main_doc = "# Project documentation: " + project_name + "\n";
   let lang = "vhdl";
   let symbol = "!";
-  let doc  = [];
   for (let i=0;i<files.length;++i){
-    let filename = pathLib.basename(files[i],pathLib.extname(files[i]));
-    if(pathLib.extname(files[i]) == '.vhd'){
+    let filename = path_lib.basename(files[i],path_lib.extname(files[i]));
+    if(path_lib.extname(files[i]) == '.vhd'){
       lang = "vhdl";
       symbol = symbol_vhdl;
     }
-    else if(pathLib.extname(files[i]) == '.v'){
+    else if(path_lib.extname(files[i]) == '.v'){
       lang = "verilog";
       symbol = symbol_verilog;
     }
@@ -297,19 +376,19 @@ function get_md_doc_from_array(files,output_dir_doc,symbol_vhdl,symbol_verilog,
 
     let contents = fs.readFileSync(files[i], 'utf8');
 
-    let doc_inst = new BaseStructure(contents,lang,symbol);
-    doc_inst.save_markdown(output_dir_doc + path.sep + filename + ".md");
+    let doc_inst = new Documenter(contents,lang,symbol);
+    doc_inst.save_markdown(output_dir_doc + path_lib.sep + filename + ".md");
   }
   if (with_dependency_graph == true){
-    main_doc += "# Project dependency graph\n"
-    main_doc += '![system](./dependency_graph.svg "System")'
-    fs.writeFileSync(output_dir_doc + pathLib.sep + "dependency_graph.svg",graph);
+    main_doc += "# Project dependency graph\n";
+    main_doc += '![system](./dependency_graph.svg "System")';
+    fs.writeFileSync(output_dir_doc + path_lib.sep + "dependency_graph.svg",graph);
   }
-  fs.writeFileSync(output_dir_doc + pathLib.sep + "README.md",main_doc);
+  fs.writeFileSync(output_dir_doc + path_lib.sep + "README.md",main_doc);
 }
 
 module.exports = {
   get_md_doc_from_array : get_md_doc_from_array,
-  BaseStructure: BaseStructure,
+  Documenter: Documenter,
   get_state_machine_hdl_svg: get_state_machine_hdl_svg
-}
+};
