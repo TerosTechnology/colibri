@@ -30,8 +30,6 @@ var tested = [Colibri.Templates.Codes.TYPESCOMPONENTS.COMPONENT,
               Colibri.Templates.Codes.TYPESCOMPONENTS.INSTANCE,
               Colibri.Templates.Codes.TYPESCOMPONENTS.SIGNALS];
 
-
-
 let options = {
     'type' : "normal",
     'language' : 'vhdl',

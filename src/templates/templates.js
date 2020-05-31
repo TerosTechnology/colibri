@@ -29,32 +29,38 @@ const Codes = require('./codes')
 const ParserLib = require('../parser/factory')
 
 class Templates {
-  async getTemplate(type,str,options){
-    let language = options["language"];
+  constructor(type,lang){
+    this.language = lang["language"];
+    this.type = type;
+  }
+  async getTemplate(str, options){
+    let template;
+    if(this.type == Codes.TYPES.VUNIT){
+      template = this.get_vunit_template(options);
+    }
+    else{
     let parser = new ParserLib.ParserFactory;
-    parser = parser.getParser(language,'');
+    parser = parser.getParser(this.language,'');
     let structure =  await parser.getAll(str);
     if (structure == null)
       return null;
-    let template;
-    if (type == Codes.TYPES.COCOTB)
+    if (this.type == Codes.TYPES.COCOTB)
       template = this.get_cocotb_template(structure);
-    else if(type == Codes.TYPES.VERILATOR)
-      template = this.get_verilator_template(structure);
-    else if(type == Codes.TYPES.VUNIT)
-      template = this.get_vunit_template(structure);
-    else if(type == Codes.TYPES.TESTBENCH){
-      if (language == General.LANGUAGES.VHDL)
+    else if(this.type == Codes.TYPES.VERILATOR)
+      template = this.get_verilator_template(structure);      
+    else if(this.type == Codes.TYPES.TESTBENCH){
+      if (this.language == General.LANGUAGES.VHDL)
         template = this.get_vhdl_testbench(structure,options);
-      else if(language == General.LANGUAGES.VERILOG)
+      else if(this.language == General.LANGUAGES.VERILOG)
         template = this.get_verilog_testbench(structure,options);
     }
-    else if(type == Codes.TYPES.COMPONENT){
-      if (language == General.LANGUAGES.VHDL)
+    else if(this.type == Codes.TYPES.COMPONENT){
+      if (this.language == General.LANGUAGES.VHDL)
         template = this.get_vhdl_component(structure,options);
-      else if(language == General.LANGUAGES.VERILOG)
+      else if(this.language == General.LANGUAGES.VERILOG)
         template = this.get_verilog_component(structure,options);
     }
+  }
     return template;
   }
 
