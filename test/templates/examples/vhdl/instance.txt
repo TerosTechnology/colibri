@@ -1,7 +1,7 @@
 example_vhdl_inst : example_vhdl
   generic map (
-    g_GENERIC_0 => g_GENERIC_0,
-    g_GENERIC_1 => g_GENERIC_1
+    BITS => BITS,
+    INIT => INIT
   )
   port map (
     clk => clk,
