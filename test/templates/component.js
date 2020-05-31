@@ -30,51 +30,56 @@ var tested = [Colibri.Templates.Codes.TYPESCOMPONENTS.COMPONENT,
               Colibri.Templates.Codes.TYPESCOMPONENTS.INSTANCE,
               Colibri.Templates.Codes.TYPESCOMPONENTS.SIGNALS];
 
-let options = []
-for (let x=0;x<tested.length;++x){
-  options[x] = {
+
+
+let options = {
     'type' : "normal",
+    'language' : 'vhdl',
     'version' : Colibri.General.VERILOGSTANDARS.VERILOG2001,
     'parameters' : [
       {'parameter' : "X"},
       {'parameter' : "Y"}
     ]
-  }
 }
-console.log('****************************************************************');
+
 var structure_vhdl = []
 var expected_vhdl = []
-var templates = []
 for (let x=0;x<tested.length;++x){
-  options[x]['type'] = tested[x];
   structure_vhdl[x] = fs.readFileSync('examples'+path.sep+language[0]+path.sep+'example_1.vhd','utf8');
-  expected_vhdl[x] = fs.readFileSync('examples'+path.sep+language[0]+path.sep+tested[x] + '.txt','utf8');
-  templates[x] = new Colibri.Templates.Templates();
-  templates[x].getTemplate(Colibri.Templates.Codes.TYPES.COMPONENT,structure_vhdl,options[x]).then(out =>{
-    if(expected_vhdl[x].replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '') === out.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '')){
-      console.log("Testing... " + tested[x] +" "+language[0]+": Ok!".green);
-    }
-    else{
-      console.log("Testing... " + tested[x] +" "+language[0]+": Fail!".red);
-      throw new Error('Test error.');
-    }
-  });
+  expected_vhdl[x]  = fs.readFileSync('examples'+path.sep+language[0]+path.sep+tested[x] + '.txt','utf8');
 }
+templates_vhdl = new Colibri.Templates.Templates();
+options['language'] = language[0]; // vhdl
+options['type'] = tested[0]; // component
+templates_vhdl.getTemplate(Codes.TYPES.COMPONENT,structure_vhdl[0],options).then(out =>{ check(expected_vhdl[0],out,tested[0],language[0]) });
+options['type'] = tested[1]; // instance
+templates_vhdl.getTemplate(Codes.TYPES.COMPONENT,structure_vhdl[1],options).then(out =>{ check(expected_vhdl[1],out,tested[1],language[0]) });
+options['type'] = tested[2]; // signals
+templates_vhdl.getTemplate(Codes.TYPES.COMPONENT,structure_vhdl[2],options).then(out =>{ check(expected_vhdl[2],out,tested[2],language[0]) });
 
-  // console.log('****************************************************************');
-  // options['language'] = language[1];
-  // for (let x=0;x<tested.length;++x){
-  //   options['type'] = tested[x];
-  //   var structure = fs.readFileSync('examples'+path.sep+language[i]+path.sep+'structure.json','utf8');
-  //   var expected = fs.readFileSync('examples'+path.sep+language[i]+path.sep+tested[x] + '.txt','utf8');
-  //   var templates = new Colibri.Templates.Templates();
-  //   var out = templates.getTemplate(Colibri.Templates.Codes.TYPES.COMPONENT,structure,options);
 
-  //   if(expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '') === out.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '')){
-  //     console.log("Testing... " + tested[x] +" "+language[i]+": Ok!".green);
-  //   }
-  //   else{
-  //     console.log("Testing... " + tested[x] +" "+language[i]+": Fail!".red);
-  //     throw new Error('Test error.');
-  //   }
-  // }
+var structure_verilog = []
+var expected_verilog = []
+for (let x=0;x<tested.length;++x){
+  structure_verilog[x] = fs.readFileSync('examples'+path.sep+language[1]+path.sep+'uart.v','utf8');
+  expected_verilog[x]  = fs.readFileSync('examples'+path.sep+language[1]+path.sep+tested[x] + '.txt','utf8');
+}
+templates_verilog = new Colibri.Templates.Templates();
+options['language'] = language[1]; // verilog 
+options['type'] = tested[0]; // component
+templates_verilog.getTemplate(Codes.TYPES.COMPONENT,structure_verilog[0],options).then(out =>{ check(expected_verilog[0],out,tested[0],language[1]) });
+options['type'] = tested[1]; // instance
+templates_verilog.getTemplate(Codes.TYPES.COMPONENT,structure_verilog[1],options).then(out =>{ check(expected_verilog[1],out,tested[1],language[1]) });
+options['type'] = tested[2]; // signals
+templates_verilog.getTemplate(Codes.TYPES.COMPONENT,structure_verilog[2],options).then(out =>{ check(expected_verilog[2],out,tested[2],language[1]) });
+
+function check(expected, out,tested,language) {
+  console.log('****************************************************************');
+  if(expected_vhdl[0].replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '') === out.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '')){
+    console.log("Testing... " + tested +" "+language+": Ok!".green);
+  }
+  else{
+    console.log("Testing... " + tested +" "+language+": Fail!".red);
+    throw new Error('Test error.');
+  }
+}
