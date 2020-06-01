@@ -1,19 +1,16 @@
 uart
-  #(
-    .g_PARAMETER_0 (g_PARAMETER_0)
-  )
-uart_dut (
-    .reset (reset),
-    .txclk (txclk),
-    .ld_tx_data (ld_tx_data),
-    .tx_data (tx_data),
-    .tx_enable (tx_enable),
-    .tx_out (tx_out),
-    .tx_empty (tx_empty),
-    .rxclk (rxclk),
-    .uld_rx_data (uld_rx_data),
-    .rx_data (rx_data),
-    .rx_enable (rx_enable),
-    .rx_in (rx_in),
-    .rx_empty (rx_empty)
-  );
+  uart_dut (
+      .reset (reset),
+      .txclk (txclk),
+      .ld_tx_data (ld_tx_data),
+      .tx_data (tx_data),
+      .tx_enable (tx_enable),
+      .rxclk (rxclk),
+      .uld_rx_data (uld_rx_data),
+      .rx_enable (rx_enable),
+      .rx_in (rx_in),
+      .tx_out (tx_out),
+      .tx_empty (tx_empty),
+      .rx_data (rx_data),
+      .rx_empty (rx_empty)
+    );

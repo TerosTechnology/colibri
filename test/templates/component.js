@@ -30,7 +30,6 @@ var tested = [Codes.TYPESCOMPONENTS.COMPONENT,
               Codes.TYPESCOMPONENTS.INSTANCE,
               Codes.TYPESCOMPONENTS.SIGNALS];
 
-let options_mult =[]
 let options = {
     'type' : "normal",
     'language' : 'vhdl',
@@ -40,24 +39,24 @@ let options = {
       {'parameter' : "Y"}
     ]
 }
-for (let x = 0; x < tested.length; x++) {
-  options_mult[x] = options;
-}
+
 var structure_vhdl = []
 var expected_vhdl = []
 for (let x=0;x<tested.length;++x){
   structure_vhdl[x] = fs.readFileSync('examples'+path.sep+language[0]+path.sep+'example_1.vhd','utf8');
   expected_vhdl[x]  = fs.readFileSync('examples'+path.sep+language[0]+path.sep+tested[x] + '.txt','utf8');
 }
-templates_vhdl = new Colibri.Templates.Templates(Codes.TYPES.COMPONENT,options);
-templates_vhdl = new Colibri.Templates.Templates(Codes.TYPES.COMPONENT,options);
-templates_vhdl = new Colibri.Templates.Templates(Codes.TYPES.COMPONENT,options);
-options_mult[0]['type'] = tested[0]; // component
-templates_vhdl.getTemplate(structure_vhdl[0],options_mult[0]).then(out =>{ check(expected_vhdl[0],out,tested[0],language[0]) });
-options_mult[1]['type'] = tested[1]; // instance
-templates_vhdl.getTemplate(structure_vhdl[1],options_mult[1]).then(out =>{ check(expected_vhdl[1],out,tested[1],language[0]) });
-options_mult[2]['type'] = tested[2]; // signals
-templates_vhdl.getTemplate(structure_vhdl[2],options_mult[2]).then(out =>{ check(expected_vhdl[2],out,tested[2],language[0]) });
+let options_c = {'type' : "normal"}
+let options_i = {'type' : "normal"}
+let options_s = {'type' : "normal"}
+templates_vhdl = new Colibri.Templates.TemplatesFactory();
+templates_vhdl.getTemplate(Codes.TYPES.COMPONENT,options)
+options_c['type'] = tested[0]; // component
+templates_vhdl.generate(options_c,structure_vhdl[0]).then(out =>{ check(expected_vhdl[0],out,tested[0],language[0]) });
+options_i['type'] = tested[1]; // instance
+templates_vhdl.generate(options_i,structure_vhdl[1]).then(out =>{ check(expected_vhdl[1],out,tested[1],language[0]) });
+options_s['type'] = tested[2]; // signals
+templates_vhdl.generate(options_s,structure_vhdl[2]).then(out =>{ check(expected_vhdl[2],out,tested[2],language[0]) });
 
 let options_verilog = {
   'type' : "normal",
@@ -68,23 +67,23 @@ let options_verilog = {
     {'parameter' : "Y"}
   ]
 }
-let options_mult_ver =[]
-for (let x = 0; x < tested.length; x++) {
-  options_mult_ver[x] = options_verilog;
-}
 var structure_verilog = []
 var expected_verilog = []
 for (let x=0;x<tested.length;++x){
   structure_verilog[x] = fs.readFileSync('examples'+path.sep+language[1]+path.sep+'uart.v','utf8');
   expected_verilog[x]  = fs.readFileSync('examples'+path.sep+language[1]+path.sep+tested[x] + '.txt','utf8');
 }
-templates_verilog = new Colibri.Templates.Templates(Codes.TYPES.COMPONENT,options_verilog);
-options_mult_ver[0]['type'] = tested[0]; // component
-templates_verilog.getTemplate(structure_verilog[0],options_mult_ver[0]).then(out =>{ check(expected_verilog[0],out,tested[0],language[1]) });
-options_mult_ver[1]['type'] = tested[1]; // instance
-templates_verilog.getTemplate(structure_verilog[1],options_mult_ver[1]).then(out =>{ check(expected_verilog[1],out,tested[1],language[1]) });
-options_mult_ver[2]['type'] = tested[2]; // signals
-templates_verilog.getTemplate(structure_verilog[2],options_mult_ver[2]).then(out =>{ check(expected_verilog[2],out,tested[2],language[1]) });
+let options_ver_c = {'type' : "normal"}
+let options_ver_i = {'type' : "normal"}
+let options_ver_s = {'type' : "normal"}
+templates_verilog = new Colibri.Templates.TemplatesFactory();
+templates_verilog.getTemplate(Codes.TYPES.COMPONENT,options_verilog);
+options_ver_c['type'] = tested[0]; // component
+templates_verilog.generate(options_ver_c,structure_verilog[0]).then(out =>{ check(expected_verilog[0],out,tested[0],language[1]) });
+options_ver_i['type'] = tested[1]; // instance
+templates_verilog.generate(options_ver_i,structure_verilog[1]).then(out =>{ check(expected_verilog[1],out,tested[1],language[1]) });
+options_ver_s['type'] = tested[2]; // signals
+templates_verilog.generate(options_ver_s,structure_verilog[2]).then(out =>{ check(expected_verilog[2],out,tested[2],language[1]) });
 
 function check(expected, out,tested,language) {
   console.log('****************************************************************');

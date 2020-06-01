@@ -1,7 +1,7 @@
-component example_vhdl
+component arith_counter_gray
   generic (
-    BITS : positive;
-    INIT : natural;
+    bits : positive;
+    init : natural
   );
   port (
     clk : in std_logic;
