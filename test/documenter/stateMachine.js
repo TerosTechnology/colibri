@@ -34,13 +34,13 @@ var language = ["vhdl"];
 for (let i=0;i<language.length;++i){
   console.log('****************************************************************');
   for (let x=0;x<7;++x){
-    var code     = fs.readFileSync('examples'+path.sep+'stateMachines'+path.sep+language[i]+path.sep+'sm_'+x+'.vhd','utf8');
-    var expected = fs.readFileSync('examples'+path.sep+'stateMachines'+path.sep+language[i]+path.sep+'sm_'+x+'.txt','utf8');
+    var code     = fs.readFileSync('resources'+path.sep+'state_machines'+path.sep+language[i]+path.sep+'sm_'+x+'.vhd','utf8');
+    var expected = fs.readFileSync('resources'+path.sep+'state_machines'+path.sep+language[i]+path.sep+'sm_'+x+'.txt','utf8');
     if (language[i] == "vhdl")
-      var stmGenerator = new Colibri.Documenter.StateMachineVHDL();
+      var stmGenerator = new Colibri.Documenter.get_state_machine_hdl_svg(code,"vhdl");
     else
-      var stmGenerator = new Colibri.Documenter.StateMachineVerilog();
-    var out      = stmGenerator.getStateMachine(code,options);
+      //var stmGenerator = new Colibri.Documenter.StateMachineVerilog();
+    var out      = stmGenerator.get_svg(code);
     if(expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') == expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
       console.log("Testing... state machine: " + x +" "+language[i]+": Ok!");
     }
