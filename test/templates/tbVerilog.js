@@ -40,8 +40,9 @@ let options = {
 ////////////////////////////////////////////////////////////////////////////////
 var structure = fs.readFileSync('examples'+path.sep+'verilog'+path.sep+'uart.v', 'utf8');
 var testExpected = fs.readFileSync('examples'+path.sep+'verilog'+path.sep+'tbVerilog2001.v', 'utf8');
-templates = new Colibri.Templates.Templates(Codes.TYPES.TESTBENCH,options);
-templates.getTemplate(structure, options).then(test => {
+templates = new Colibri.Templates.TemplatesFactory();
+templates.getTemplate(Codes.TYPES.TESTBENCH,options)
+templates.generate(options,structure).then(test => {
   console.log('****************************************************************');
 if (testExpected.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '') === test.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '')) {
   console.log("Testing... tbVerilog 2001: Ok!".green);
@@ -66,8 +67,9 @@ let options_vunit = {
 }
 
 testExpected_vunit = fs.readFileSync('examples'+path.sep+'verilog'+path.sep+'tbVerilogVunit2001.v', 'utf8');
-templates_vunit = new Colibri.Templates.Templates(Codes.TYPES.TESTBENCH,options_vunit);
-templates_vunit.getTemplate(structure, options_vunit).then(test_vunit => {
+templates_vunit = new Colibri.Templates.TemplatesFactory();
+templates_vunit.getTemplate(Codes.TYPES.TESTBENCH,options_vunit)
+templates_vunit.generate(options_vunit,structure).then(test_vunit => {
 console.log('****************************************************************');
 if (testExpected_vunit.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '') === test_vunit.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '')) {
   console.log("Testing... tbVerilogVunit 2001: Ok!".green);

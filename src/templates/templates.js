@@ -55,7 +55,7 @@ class TemplatesFactory {
       else if(this.type == Codes.TYPES.TESTBENCH){
         if (this.language == General.LANGUAGES.VHDL)
           template = this.get_vhdl_testbench(structure,options);
-        else if(language == General.LANGUAGES.VERILOG)
+        else if(this.language == General.LANGUAGES.VERILOG)
           template = this.get_verilog_testbench(structure,options);
       }
       else if(this.type == Codes.TYPES.COMPONENT){
