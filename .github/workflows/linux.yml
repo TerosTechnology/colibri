@@ -30,7 +30,7 @@ jobs:
   #         npm run-script testTemplates
   # ****************************************************************************
   # ****************************************************************************
-  test-documenter:
+  test-stm:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -41,7 +41,7 @@ jobs:
       - name: Test
         run: |
           npm install .
-          npm run-script testDocumenter
+          npm run-script test-stm
   # ****************************************************************************
   # ****************************************************************************
   test-ProjectManager:
