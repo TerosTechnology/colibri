@@ -44,6 +44,20 @@ jobs:
           npm run-script testDocumenter
   # ****************************************************************************
   # ****************************************************************************
+  test-stm:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v1
+      - name: Test
+        run: |
+          npm install .
+          npm run-script test-stm
+  # ****************************************************************************
+  # ****************************************************************************
   test-ProjectManager:
     runs-on: ${{ matrix.os }}
     strategy:
