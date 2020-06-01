@@ -30,6 +30,7 @@ var tested = [Codes.TYPESCOMPONENTS.COMPONENT,
               Codes.TYPESCOMPONENTS.INSTANCE,
               Codes.TYPESCOMPONENTS.SIGNALS];
 
+let options_mult =[]
 let options = {
     'type' : "normal",
     'language' : 'vhdl',
@@ -39,6 +40,9 @@ let options = {
       {'parameter' : "Y"}
     ]
 }
+for (let x = 0; x < tested.length; x++) {
+  options_mult[x] = options;
+}
 var structure_vhdl = []
 var expected_vhdl = []
 for (let x=0;x<tested.length;++x){
@@ -46,13 +50,12 @@ for (let x=0;x<tested.length;++x){
   expected_vhdl[x]  = fs.readFileSync('examples'+path.sep+language[0]+path.sep+tested[x] + '.txt','utf8');
 }
 templates_vhdl = new Colibri.Templates.Templates(Codes.TYPES.COMPONENT,options);
-options['language'] = language[0]; // vhdl
-options['type'] = tested[0]; // component
-templates_vhdl.getTemplate(structure_vhdl[0],options).then(out =>{ check(expected_vhdl[0],out,tested[0],language[0]) });
-options['type'] = tested[1]; // instance
-templates_vhdl.getTemplate(structure_vhdl[1],options).then(out =>{ check(expected_vhdl[1],out,tested[1],language[0]) });
-options['type'] = tested[2]; // signals
-templates_vhdl.getTemplate(structure_vhdl[2],options).then(out =>{ check(expected_vhdl[2],out,tested[2],language[0]) });
+options_mult[0]['type'] = tested[0]; // component
+templates_vhdl.getTemplate(structure_vhdl[0],options_mult[0]).then(out =>{ check(expected_vhdl[0],out,tested[0],language[0]) });
+options_mult[1]['type'] = tested[1]; // instance
+templates_vhdl.getTemplate(structure_vhdl[1],options_mult[1]).then(out =>{ check(expected_vhdl[1],out,tested[1],language[0]) });
+options_mult[2]['type'] = tested[2]; // signals
+templates_vhdl.getTemplate(structure_vhdl[2],options_mult[2]).then(out =>{ check(expected_vhdl[2],out,tested[2],language[0]) });
 
 let options_verilog = {
   'type' : "normal",
@@ -63,6 +66,10 @@ let options_verilog = {
     {'parameter' : "Y"}
   ]
 }
+let options_mult_ver =[]
+for (let x = 0; x < tested.length; x++) {
+  options_mult_ver[x] = options_verilog;
+}
 var structure_verilog = []
 var expected_verilog = []
 for (let x=0;x<tested.length;++x){
@@ -70,13 +77,12 @@ for (let x=0;x<tested.length;++x){
   expected_verilog[x]  = fs.readFileSync('examples'+path.sep+language[1]+path.sep+tested[x] + '.txt','utf8');
 }
 templates_verilog = new Colibri.Templates.Templates(Codes.TYPES.COMPONENT,options_verilog);
-options['language'] = language[1]; // verilog 
-options['type'] = tested[0]; // component
-templates_verilog.getTemplate(structure_verilog[0],options).then(out =>{ check(expected_verilog[0],out,tested[0],language[1]) });
-options['type'] = tested[1]; // instance
-templates_verilog.getTemplate(structure_verilog[1],options).then(out =>{ check(expected_verilog[1],out,tested[1],language[1]) });
-options['type'] = tested[2]; // signals
-templates_verilog.getTemplate(structure_verilog[2],options).then(out =>{ check(expected_verilog[2],out,tested[2],language[1]) });
+options_mult_ver[0]['type'] = tested[0]; // component
+templates_verilog.getTemplate(structure_verilog[0],options_mult_ver[0]).then(out =>{ check(expected_verilog[0],out,tested[0],language[1]) });
+options_mult_ver[1]['type'] = tested[1]; // instance
+templates_verilog.getTemplate(structure_verilog[1],options_mult_ver[1]).then(out =>{ check(expected_verilog[1],out,tested[1],language[1]) });
+options_mult_ver[2]['type'] = tested[2]; // signals
+templates_verilog.getTemplate(structure_verilog[2],options_mult_ver[2]).then(out =>{ check(expected_verilog[2],out,tested[2],language[1]) });
 
 function check(expected, out,tested,language) {
   console.log('****************************************************************');
