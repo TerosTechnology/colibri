@@ -50,6 +50,8 @@ for (let x=0;x<tested.length;++x){
   expected_vhdl[x]  = fs.readFileSync('examples'+path.sep+language[0]+path.sep+tested[x] + '.txt','utf8');
 }
 templates_vhdl = new Colibri.Templates.Templates(Codes.TYPES.COMPONENT,options);
+templates_vhdl = new Colibri.Templates.Templates(Codes.TYPES.COMPONENT,options);
+templates_vhdl = new Colibri.Templates.Templates(Codes.TYPES.COMPONENT,options);
 options_mult[0]['type'] = tested[0]; // component
 templates_vhdl.getTemplate(structure_vhdl[0],options_mult[0]).then(out =>{ check(expected_vhdl[0],out,tested[0],language[0]) });
 options_mult[1]['type'] = tested[1]; // instance
