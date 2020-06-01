@@ -57,20 +57,6 @@ jobs:
           npm install .
           npm run-script testProjectManager
   # ****************************************************************************
-  # ****************************************************************************
-  test-ProjectManager:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-18.04]
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v1
-      - name: Test
-        run: |
-          npm install .
-          npm run-script testProjectManager
-  # ****************************************************************************
   # test-Parser:
   #   runs-on: ${{ matrix.os }}
   #   strategy:
