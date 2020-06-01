@@ -32,9 +32,10 @@ let options = {
   "type": "verilator",
   "language": "verilog"
 };
-var veritest = new Colibri.Templates.Templates(Codes.TYPES.VERILATOR,options);
+var veritest = new Colibri.Templates.TemplatesFactory();
 let verilator_expected = fs.readFileSync(path_example+'veritest.cpp','utf8');
-veritest.getTemplate(structure_v,options).then(verilator_template => {
+veritest.getTemplate(Codes.TYPES.VERILATOR,options)
+veritest.generate(options,structure_v).then(verilator_template => {
   console.log('****************************************************************');
   if(verilator_expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === verilator_template.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
     console.log("---> Tested: verilator --> ok!".green);
