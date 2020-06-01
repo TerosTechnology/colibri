@@ -28,39 +28,43 @@ const General = require('../general/general')
 const Codes = require('./codes')
 const ParserLib = require('../parser/factory')
 
-class Templates {
-  constructor(type,lang){
+class TemplatesFactory {
+  constructor(){
+    this.type
+    this.language
+   }
+  
+  getTemplate(type,lang){
     this.language = lang["language"];
-    this.type = type;
-  }
-  async getTemplate(str, options){
+    this.type = type
+    }
+
+  async generate(options,str=""){
     let template;
     if(this.type == Codes.TYPES.VUNIT){
       template = this.get_vunit_template(options);
     }
     else{
-    let parser = new ParserLib.ParserFactory;
-    parser = parser.getParser(this.language,'');
-    let structure =  await parser.getAll(str);
-    if (structure == null)
-      return null;
-    if (this.type == Codes.TYPES.COCOTB)
-      template = this.get_cocotb_template(structure);
-    else if(this.type == Codes.TYPES.VERILATOR)
-      template = this.get_verilator_template(structure);      
-    else if(this.type == Codes.TYPES.TESTBENCH){
-      if (this.language == General.LANGUAGES.VHDL)
-        template = this.get_vhdl_testbench(structure,options);
-      else if(this.language == General.LANGUAGES.VERILOG)
-        template = this.get_verilog_testbench(structure,options);
+      let parser = new ParserLib.ParserFactory;
+      parser = parser.getParser(this.language,'');
+      let structure =  await parser.getAll(str);     
+      if (this.type == Codes.TYPES.COCOTB)
+        template = this.get_cocotb_template(structure);
+      else if(this.type == Codes.TYPES.VERILATOR)
+        template = this.get_verilator_template(structure);      
+      else if(this.type == Codes.TYPES.TESTBENCH){
+        if (this.language == General.LANGUAGES.VHDL)
+          template = this.get_vhdl_testbench(structure,options);
+        else if(language == General.LANGUAGES.VERILOG)
+          template = this.get_verilog_testbench(structure,options);
+      }
+      else if(this.type == Codes.TYPES.COMPONENT){
+        if (this.language == General.LANGUAGES.VHDL)
+          template = this.get_vhdl_component(structure,options);
+        else if(this.language == General.LANGUAGES.VERILOG)
+          template = this.get_verilog_component(structure,options);
+      }
     }
-    else if(this.type == Codes.TYPES.COMPONENT){
-      if (this.language == General.LANGUAGES.VHDL)
-        template = this.get_vhdl_component(structure,options);
-      else if(this.language == General.LANGUAGES.VERILOG)
-        template = this.get_verilog_component(structure,options);
-    }
-  }
     return template;
   }
 
@@ -99,5 +103,5 @@ class Templates {
 
 module.exports = {
   Codes : Codes,
-  Templates: Templates
+  TemplatesFactory: TemplatesFactory
 }
