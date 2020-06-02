@@ -24,12 +24,12 @@ const ParserLib = require('../parser/factory')
 class cocotb {
   constructor(){
     this.str     = "";
+    this.language = ""
     this.str_out = "";
-    this.path = require('path')
   }
-  async generate(options,src){
+  async generate(src,options){
     let parser = new ParserLib.ParserFactory;
-    parser = parser.getParser(options["language"],'');
+    parser = parser.getParser(this.language,'');
     let structure =  await parser.getAll(src);  
     this.str     = structure;
     this.header();
@@ -37,6 +37,10 @@ class cocotb {
     this.clockGen()
     this.cocoTest()
     return this.str_out;
+  }
+
+  lang(language){
+    this.language = language;
   }
 
   header(){

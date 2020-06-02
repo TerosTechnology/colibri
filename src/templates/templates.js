@@ -39,8 +39,10 @@ class TemplatesFactory {
       // let structure =  await parser.getAll(str);  
       if(type == Codes.TYPES.VUNIT)
         template = this.get_vunit_template(options);   
-      else if (type == Codes.TYPES.COCOTB)
+      else if (type == Codes.TYPES.COCOTB){
         template = this.get_cocotb_template();
+        template.lang(language);
+      }
       else if(type == Codes.TYPES.VERILATOR)
         template = this.get_verilator_template(structure);      
       else if(type == Codes.TYPES.TESTBENCH){
