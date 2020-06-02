@@ -26,51 +26,41 @@ const VHDLTestbench = require('./vhdleditor')
 const VerilogTestbench = require('./verilogeditor')
 const General = require('../general/general')
 const Codes = require('./codes')
-const ParserLib = require('../parser/factory')
 
 class TemplatesFactory {
-  constructor(){
-    this.type
-    this.language
-   }
+  constructor(){ }
   
   getTemplate(type,lang){
-    this.language = lang["language"];
-    this.type = type
-    }
-
-  async generate(options,str=""){
+    let language = lang["language"];
+    // let type = type
     let template;
-    if(this.type == Codes.TYPES.VUNIT){
-      template = this.get_vunit_template(options);
-    }
-    else{
-      let parser = new ParserLib.ParserFactory;
-      parser = parser.getParser(this.language,'');
-      let structure =  await parser.getAll(str);     
-      if (this.type == Codes.TYPES.COCOTB)
-        template = this.get_cocotb_template(structure);
-      else if(this.type == Codes.TYPES.VERILATOR)
+      // let parser = new ParserLib.ParserFactory;
+      // parser = parser.getParser(this.language,'');
+      // let structure =  await parser.getAll(str);  
+      if(type == Codes.TYPES.VUNIT)
+        template = this.get_vunit_template(options);   
+      else if (type == Codes.TYPES.COCOTB)
+        template = this.get_cocotb_template();
+      else if(type == Codes.TYPES.VERILATOR)
         template = this.get_verilator_template(structure);      
-      else if(this.type == Codes.TYPES.TESTBENCH){
-        if (this.language == General.LANGUAGES.VHDL)
+      else if(type == Codes.TYPES.TESTBENCH){
+        if (language == General.LANGUAGES.VHDL)
           template = this.get_vhdl_testbench(structure,options);
-        else if(this.language == General.LANGUAGES.VERILOG)
+        else if(language == General.LANGUAGES.VERILOG)
           template = this.get_verilog_testbench(structure,options);
       }
-      else if(this.type == Codes.TYPES.COMPONENT){
-        if (this.language == General.LANGUAGES.VHDL)
+      else if(type == Codes.TYPES.COMPONENT){
+        if (language == General.LANGUAGES.VHDL)
           template = this.get_vhdl_component(structure,options);
-        else if(this.language == General.LANGUAGES.VERILOG)
+        else if(language == General.LANGUAGES.VERILOG)
           template = this.get_verilog_component(structure,options);
       }
-    }
     return template;
   }
 
-  get_cocotb_template(structure) {
-    let template = new Cocotb.cocotb(structure);
-    return template.generate();
+  get_cocotb_template() {
+    let template = new Cocotb.cocotb();
+    return template;
   }
 
   get_verilator_template(structure) {

@@ -19,13 +19,19 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
+const ParserLib = require('../parser/factory')
+
 class cocotb {
-  constructor(estructure){
-    this.str     = estructure;
+  constructor(){
+    this.str     = "";
     this.str_out = "";
     this.path = require('path')
   }
-  generate(){
+  async generate(options,src){
+    let parser = new ParserLib.ParserFactory;
+    parser = parser.getParser(options["language"],'');
+    let structure =  await parser.getAll(src);  
+    this.str     = structure;
     this.header();
     this.pythonLibraries()
     this.clockGen()
