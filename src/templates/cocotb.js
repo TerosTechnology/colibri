@@ -22,9 +22,9 @@
 const ParserLib = require('../parser/factory')
 
 class cocotb {
-  constructor(){
+  constructor(language){
     this.str     = "";
-    this.language = ""
+    this.language = language;
     this.str_out = "";
   }
   async generate(src,options){
@@ -37,10 +37,6 @@ class cocotb {
     this.clockGen()
     this.cocoTest()
     return this.str_out;
-  }
-
-  lang(language){
-    this.language = language;
   }
 
   header(){

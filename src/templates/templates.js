@@ -40,8 +40,7 @@ class TemplatesFactory {
       if(type == Codes.TYPES.VUNIT)
         template = this.get_vunit_template(options);   
       else if (type == Codes.TYPES.COCOTB){
-        template = this.get_cocotb_template();
-        template.lang(language);
+        template = this.get_cocotb_template(language);
       }
       else if(type == Codes.TYPES.VERILATOR)
         template = this.get_verilator_template(structure);      
@@ -60,8 +59,8 @@ class TemplatesFactory {
     return template;
   }
 
-  get_cocotb_template() {
-    let template = new Cocotb.cocotb();
+  get_cocotb_template(language) {
+    let template = new Cocotb.cocotb(language);
     return template;
   }
 
