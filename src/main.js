@@ -51,10 +51,10 @@ exports.Documenter = require('./documenter/documenter');
 //******************************************************************************
 exports.ProjectManager = require('./projectManager/projectManager');
 //******************************************************************************
-//Beautifuler
+//Formatter
 //******************************************************************************
-exports.Beautifuler = require('./beautifuler/factory');
+exports.Formatter = require('./formatter/formatter');
 //******************************************************************************
 //vsg
 //******************************************************************************
-// exports.Vsg = require('./vsg/vsg');
+exports.Vsg = require('./vsg/vsg');

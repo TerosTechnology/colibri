@@ -1,7 +1,8 @@
-// Copyright 2020
+// Copyright 2020 Teros Technology
 //
-// Ismael Perez Rojo (ismaelprojo@gmail.com)
-// Carlos Alberto Ruiz Naranjo (carlosruiznaranjo@gmail.com)
+// Ismael Perez Rojo
+// Carlos Alberto Ruiz Naranjo
+// Alfredo Saez
 //
 // This file is part of Colibri.
 //
@@ -18,28 +19,20 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-const Vhdl = require('./vhdl/beautifuler')
-// const Verilog = require('./icarus')
+const Vhdl_formatter = require('./bin/standalone_vhdl/beautifuler');
 
-class BeautifulerFactory {
-  getBeautifuler(lang){
-    if (lang == "vhdl")
-      return this.getVhdlBeautifuler();
-    else if (lang == "verilog")
-      return this.getVerilogBeautifuler();
-    else
-      return null;
+class Standalone_vhdl {
+  constructor() {
   }
 
-  getVhdlBeautifuler() {
-    return new Vhdl.Beautifuler();
-  }
-
-  getVerilogBeautifuler() {
-    return new Verilog.Beautifuler();
+  //Options: {custom_path:"/path/to/bin, custom_bin:"bin", settings:""}
+  async format_from_code(code,options){
+    let beautifuler = new Vhdl_formatter.Beautifuler();
+    let formatted_code = beautifuler.beauty(code,options.settings);
+    return formatted_code;
   }
 }
 
 module.exports = {
-  BeautifulerFactory : BeautifulerFactory
-}
+  Standalone_vhdl: Standalone_vhdl
+};

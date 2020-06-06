@@ -20,18 +20,22 @@
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 const Base_linter = require('./base_linter');
 
-class Ghdl extends Base_linter {
-  constructor() {
+class Verible extends Base_linter {
+  constructor(type) {
     super();
-    this.PARAMETERS = {
-      'SYNT' : "ghdl -s -fno-color-diagnostics",
-      'SYNT_WINDOWS' : "ghdl -s -fno-color-diagnostics",
-      'ERROR' : /[\t\n ]*(.+){1}[\t]*.vhd:*([0-9]+):([0-9]+):*[\t ]*(error|warning)*:*[\t ]*(.+)/g,
-      'TYPEPOSITION': 4,
-      'ROWPOSITION': 2,
-      'COLUMNPOSITION': 3,
-      'DESCRIPTIONPOSITION': 5
-    };
+    if (type !== "syntax"){
+      this.PARAMETERS = {
+        'SYNT' : "verilog_lint ",
+        'SYNT_WINDOWS' : "verilog_lint "
+      };
+    }
+    else {
+      this.PARAMETERS = {
+        'SYNT' : "verilog_syntax ",
+        'SYNT_WINDOWS' : "verilog_syntax "
+      };
+    }
+
   }
 
   // options = {custom_bin:"", custom_arguments:""}
@@ -51,7 +55,7 @@ class Ghdl extends Base_linter {
     let result = await this._exec_linter(file,this.PARAMETERS.SYNT,
                           this.PARAMETERS.SYNT_WINDOWS,options);
     file = file.replace('\\ ',' ');
-    let errors_str = result.stderr;
+    let errors_str = result.stdout;
     let errors_str_lines = errors_str.split(/\r?\n/g);
     let errors = [];
     errors_str_lines.forEach((line) => {
@@ -60,9 +64,9 @@ class Ghdl extends Base_linter {
           let terms = line.split(':');
           let line_num = parseInt(terms[1].trim());
           let column_num = parseInt(terms[2].trim());
-          if(terms.length == 4){
+          if(terms.length === 3){
             let error = {
-              'severity' : "error",
+              'severity' : "warning",
               'description' : terms[3].trim(),
               'location' : {
                 'file': file,
@@ -71,22 +75,17 @@ class Ghdl extends Base_linter {
             };
             errors.push(error);
           }
-          else if(terms.length >= 4){
-            let sev;
-            if(terms[2].trim() == 'error'){
-              sev = "error";
+          else if(terms.length > 3){
+            let message = "";
+            for (let x=3;x<terms.length-1;++x){
+              message += terms[x].trim() + ":";
             }
-            else if(terms[2].trim() == 'warning'){
-              sev = "warning";
-            }
-            else{
-              sev = "information";
-            }
+            message += terms[terms.length-1].trim();
             let error = {
-              'severity' : sev,
-              'description' : terms[3].trim(),
+              'severity' : 'warning',
+              'description' : message,
               'location' : {
-                'file': file,
+                'file': "file",
                 'position': [line_num-1, column_num-1]
               }
             };
@@ -96,10 +95,8 @@ class Ghdl extends Base_linter {
     });
     return errors;
   }
-
-
 }
 
 module.exports = {
-  Ghdl: Ghdl
+  Verible: Verible
 };

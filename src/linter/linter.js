@@ -25,6 +25,8 @@ const Icarus = require('./icarus');
 const Verilator = require('./verilator');
 const Xvlog = require('./xvlog');
 const Xvhdl = require('./xvhdl');
+const Vsg = require('./vsg');
+const Verible = require('./verible');
 const General = require('../general/general');
 
 class Linter {
@@ -49,6 +51,12 @@ class Linter {
     }
     else if (linter_name === General.LINTERS.XVHDL){
       return this.get_xvhdl();
+    }
+    else if (linter_name === General.LINTERS.VSG){
+      return this.get_vsg();
+    }
+    else if (linter_name === General.LINTERS.VERIBLE){
+      return this.get_verible();
     }
     else{
       throw new Error('Linter name not supported.');
@@ -75,6 +83,12 @@ class Linter {
   }
   get_xvhdl() {
     return new Xvhdl.Xvhdl();
+  }
+  get_vsg() {
+    return new Vsg.Vsg();
+  }
+  get_verible() {
+    return new Verible.Verible();
   }
 }
 
