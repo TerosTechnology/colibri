@@ -54,7 +54,3 @@ exports.ProjectManager = require('./projectManager/projectManager');
 //Formatter
 //******************************************************************************
 exports.Formatter = require('./formatter/formatter');
-//******************************************************************************
-//vsg
-//******************************************************************************
-exports.Vsg = require('./vsg/vsg');
