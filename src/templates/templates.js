@@ -38,7 +38,7 @@ class TemplatesFactory {
       // parser = parser.getParser(this.language,'');
       // let structure =  await parser.getAll(str);  
       if(type == Codes.TYPES.VUNIT)
-        template = this.get_vunit_template(options);   
+        template = this.get_vunit_template();   
       else if (type == Codes.TYPES.COCOTB){
         template = this.get_cocotb_template(language);
       }
@@ -69,9 +69,9 @@ class TemplatesFactory {
     return template.generate();
   }
 
-  get_vunit_template(structure) {
-    let template = new VUnit.runpy(structure);
-    return template.generate();
+  get_vunit_template() {
+    let template = new VUnit.runpy();
+    return template;
   }
 
   get_vhdl_testbench(structure, options) {

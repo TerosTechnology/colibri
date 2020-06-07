@@ -30,7 +30,14 @@ class cocotb {
   async generate(src,options){
     let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(this.language,'');
-    let structure =  await parser.getAll(src);  
+    let structure =  await parser.getAll(src);
+    try {
+      if (structure == 'undefined'){
+        throw "Parsing error";
+      }
+  } catch(x){
+      console.log(x);
+  }  
     this.str     = structure;
     this.header();
     this.pythonLibraries()
