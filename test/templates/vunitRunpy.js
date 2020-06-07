@@ -35,7 +35,8 @@ for (let x=0;x<5;++x){
   structure     = JSON.parse(structure);
   let runpy_expected = fs.readFileSync(path_example+'run_'+x+'.py','utf8');
   var runpy_c = runpy.getTemplate(Codes.TYPES.VUNIT,lang)
-  runpy_c.generate(structure).then(out =>{check_runpy(runpy_expected,out,x)});
+  let out = runpy_c.generate(structure);
+  check_runpy(runpy_expected,out,x);
 }
 
 function check_runpy(runpy_expected,runpy_template,x){
