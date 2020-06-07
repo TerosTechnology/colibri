@@ -18,49 +18,31 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
+const Base_formatter = require('./base_formatter');
 
-const SIMULATORS = {
-  GHDL : 'ghdl',
-  ICARUS : 'icarus',
-  MODELSIM : 'modelsim',
-  VERILATOR : 'verilator'
-};
+class Verible extends Base_formatter {
+  constructor() {
+    super();
+    this.PARAMETERS = {
+      'SYNT' : "verilog_format ",
+      'SYNT_WINDOWS' : "verilog_format "
+    };
+  }
 
-const FORMATTERS = {
-  ISTYLE : 'istyle',
-  VERIBLE : 'verible',
-  VSG : 'vsg',
-  STANDALONE : 'standalone'
-};
+  //Options: {path:"/path/to/bin"}
+  async format_from_code(code,options){
+    let temp_file = await this._create_temp_file_of_code(code);
+    let formatted_code = await this._format(temp_file,options);
+    return formatted_code;
+  }
 
-const LINTERS = {
-  GHDL : 'ghdl',
-  ICARUS : 'icarus',
-  MODELSIM : 'modelsim',
-  VERILATOR : 'verilator',
-  XVLOG : 'xvlog',
-  XVHDL : 'xvhdl',
-  VSG : 'vsg',
-  VERIBLE : 'verible'
-};
-
-const VHDLSTANDARS = {
-  VHDL2018 : '08'
-};
-
-const VERILOGSTANDARS = {
-  VERILOG2001 : '2001',
-};
-
-const LANGUAGES = {
-  VHDL : 'vhdl',
-  VERILOG : 'verilog'
-};
+  async _format(file,options){
+    let formatted_code = await this._exec_linter(file,this.PARAMETERS.SYNT,
+                          this.PARAMETERS.SYNT_WINDOWS,options);
+    return formatted_code.stdout;
+  }
+}
 
 module.exports = {
-  LANGUAGES : LANGUAGES,
-  SIMULATORS : SIMULATORS,
-  VERILOGSTANDARS : VERILOGSTANDARS,
-  LINTERS : LINTERS,
-  FORMATTERS : FORMATTERS
+  Verible: Verible
 };

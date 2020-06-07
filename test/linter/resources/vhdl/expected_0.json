@@ -109,5 +109,43 @@
       },
       "description": "missing \";\" at end of entity"
     }
+  ],
+  "vsg":
+  [
+    { "severity": "warning",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [27,0]
+      },
+      "description": "[architecture_024] Add architecture name keyword."
+    },
+    { "severity": "warning",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [14,0]
+      },
+      "description": "[entity_019] Add the entity name."
+    },
+    { "severity": "warning",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [21,0]
+      },
+      "description": "[process_012] Add \"is\" keyword after the closing parenthesis."
+    },
+    { "severity": "warning",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [21,0]
+      },
+      "description": "[process_016] Add a label for the process."
+    },
+    { "severity": "warning",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [24,0]
+      },
+      "description": "[process_018] Add a label for the \"end process\"."
+    }
   ]
 }

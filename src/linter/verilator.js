@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-const Base_linter = require('./base_linter')
+const Base_linter = require('./base_linter');
 
 class Verilator extends Base_linter {
   constructor(path) {
