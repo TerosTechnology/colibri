@@ -37,9 +37,9 @@ class Formatter {
     else if (formatter_name === General.FORMATTERS.ISTYLE) {
       return this.get_istyle();
     }
-    // else if (formatter_name === General.FORMATTERS.VERIBLE) {
+    else if (formatter_name === General.FORMATTERS.VERIBLE) {
     //   return this.get_verible();
-    // }
+    }
     else if (formatter_name === General.FORMATTERS.STANDALONE) {
       return this.get_standalone_vhdl();
     }
@@ -51,9 +51,9 @@ class Formatter {
   get_istyle() {
     return new Istyle.Istyle();
   }
-  // get_verible() {
-  //   return new Verible.Verilbe();
-  // }
+  get_verible() {
+    return new Verible.Verilbe();
+  }
   get_standalone_vhdl() {
     return new Standalone_vhdl.Standalone_vhdl();
   }
