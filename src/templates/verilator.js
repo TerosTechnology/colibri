@@ -19,13 +19,28 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
+const ParserLib = require('../parser/factory')
+const General = require('../general/general')
+
 class verilator {
-  constructor(estructure){
-    this.str     = estructure;
+  constructor(){
+    this.str     = "";
     this.str_out = "";
+    this.language = General.LANGUAGES.VERILOG;
     this.path = require('path')
   }
-  generate(){
+  async generate(src){
+    let parser = new ParserLib.ParserFactory;
+    parser = parser.getParser(this.language,'');
+    let structure =  await parser.getAll(src);
+    try {
+      if (structure == 'undefined'){
+        throw "Parsing error";
+      }
+  } catch(x){
+      console.log(x);
+  }  
+    this.str     = structure;
     this.header();
     this.loop()
     this.verilatortb()

@@ -43,7 +43,7 @@ class TemplatesFactory {
         template = this.get_cocotb_template(language);
       }
       else if(type == Codes.TYPES.VERILATOR)
-        template = this.get_verilator_template(structure);      
+        template = this.get_verilator_template();      
       else if(type == Codes.TYPES.TESTBENCH){
         if (language == General.LANGUAGES.VHDL)
           template = this.get_vhdl_testbench(structure,options);
@@ -64,9 +64,9 @@ class TemplatesFactory {
     return template;
   }
 
-  get_verilator_template(structure) {
-    let template = new Verilator.verilator(structure);
-    return template.generate();
+  get_verilator_template() {
+    let template = new Verilator.verilator();
+    return template;
   }
 
   get_vunit_template() {
