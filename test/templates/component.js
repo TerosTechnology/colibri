@@ -50,13 +50,13 @@ let options_c = {'type' : "normal"}
 let options_i = {'type' : "normal"}
 let options_s = {'type' : "normal"}
 templates_vhdl = new Colibri.Templates.TemplatesFactory();
-templates_vhdl.getTemplate(Codes.TYPES.COMPONENT,options)
+templates_vhdl = templates_vhdl.getTemplate(Codes.TYPES.COMPONENT,options)
 options_c['type'] = tested[0]; // component
-templates_vhdl.generate(options_c,structure_vhdl[0]).then(out =>{ check(expected_vhdl[0],out,tested[0],language[0]) });
+templates_vhdl.generate(structure_vhdl[0],options_c).then(out =>{ check(expected_vhdl[0],out,tested[0],language[0]) });
 options_i['type'] = tested[1]; // instance
-templates_vhdl.generate(options_i,structure_vhdl[1]).then(out =>{ check(expected_vhdl[1],out,tested[1],language[0]) });
+templates_vhdl.generate(structure_vhdl[1],options_i).then(out =>{ check(expected_vhdl[1],out,tested[1],language[0]) });
 options_s['type'] = tested[2]; // signals
-templates_vhdl.generate(options_s,structure_vhdl[2]).then(out =>{ check(expected_vhdl[2],out,tested[2],language[0]) });
+templates_vhdl.generate(structure_vhdl[2],options_s).then(out =>{ check(expected_vhdl[2],out,tested[2],language[0]) });
 
 let options_verilog = {
   'type' : "normal",

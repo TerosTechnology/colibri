@@ -22,7 +22,7 @@
 const Cocotb = require('./cocotb')
 const Verilator = require('./verilator')
 const VUnit = require('./vunit')
-const VHDLTestbench = require('./vhdleditor')
+const VhdlEditor = require('./vhdleditor')
 const VerilogTestbench = require('./verilogeditor')
 const General = require('../general/general')
 const Codes = require('./codes')
@@ -46,13 +46,13 @@ class TemplatesFactory {
         template = this.get_verilator_template();      
       else if(type == Codes.TYPES.TESTBENCH){
         if (language == General.LANGUAGES.VHDL)
-          template = this.get_vhdl_testbench(structure,options);
+          template = this.get_vhdl_testbench();
         else if(language == General.LANGUAGES.VERILOG)
           template = this.get_verilog_testbench(structure,options);
       }
       else if(type == Codes.TYPES.COMPONENT){
         if (language == General.LANGUAGES.VHDL)
-          template = this.get_vhdl_component(structure,options);
+          template = this.get_vhdl_component();
         else if(language == General.LANGUAGES.VERILOG)
           template = this.get_verilog_component(structure,options);
       }
@@ -74,16 +74,16 @@ class TemplatesFactory {
     return template;
   }
 
-  get_vhdl_testbench(structure, options) {
-    return VHDLTestbench.createTestbench(structure, options);
+  get_vhdl_testbench() {
+    return new VhdlEditor.VhdlEditor();
   }
 
   get_verilog_testbench(structure, options) {
     return VerilogTestbench.createTestbench(structure, options);
   }
 
-  get_vhdl_component(structure, options) {
-    return VHDLTestbench.createComponent(structure, options);
+  get_vhdl_component() {
+    return new VhdlEditor.VhdlEditor();
   }
 
   get_verilog_component(structure, options) {
