@@ -37,8 +37,8 @@ let options = {
 var structure = fs.readFileSync('examples'+path.sep+'vhdl'+path.sep+'example_1.vhd','utf8');
 var test_expected_vhdl = fs.readFileSync('examples'+path.sep+'vhdl'+path.sep+'tbVhdl.vhd','utf8');
 templates = new Colibri.Templates.TemplatesFactory();
-templates.getTemplate(Codes.TYPES.TESTBENCH,options)
-templates.generate(options,structure).then(test_vhd => {
+let templates_class = templates.getTemplate(Codes.TYPES.TESTBENCH,options)
+templates_class.createTestbench(structure,options).then(test_vhd => {
   console.log('****************************************************************');
   if(test_expected_vhdl.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === test_vhd.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
     console.log("Testing... tbVhdl: Ok!".green);
@@ -64,8 +64,8 @@ let options_vunit = {
 }
 test_expected_vunit_tb = fs.readFileSync('examples'+path.sep+'vhdl'+path.sep+'tbVhdlVunit.vhd','utf8');
 templates = new Colibri.Templates.TemplatesFactory();
-templates.getTemplate(Codes.TYPES.TESTBENCH,options)
-templates.generate(options_vunit,structure).then(test_vhdl_vunit =>{
+let templates_vunit_class = templates.getTemplate(Codes.TYPES.TESTBENCH,options)
+templates_vunit_class.createTestbench(structure,options_vunit).then(test_vhdl_vunit =>{
   if(test_expected_vunit_tb.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '') === test_vhdl_vunit.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '')){
     console.log("Testing... tbVhdlVunit: Ok!".green);
   }

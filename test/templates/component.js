@@ -50,13 +50,13 @@ let options_c = {'type' : "normal"}
 let options_i = {'type' : "normal"}
 let options_s = {'type' : "normal"}
 templates_vhdl = new Colibri.Templates.TemplatesFactory();
-templates_vhdl = templates_vhdl.getTemplate(Codes.TYPES.COMPONENT,options)
+let templates_vhdl_class = templates_vhdl.getTemplate(Codes.TYPES.COMPONENT,options)
 options_c['type'] = tested[0]; // component
-templates_vhdl.generate(structure_vhdl[0],options_c).then(out =>{ check(expected_vhdl[0],out,tested[0],language[0]) });
+templates_vhdl_class.createComponent(structure_vhdl[0],options_c).then(out =>{ check(expected_vhdl[0],out,tested[0],language[0]) });
 options_i['type'] = tested[1]; // instance
-templates_vhdl.generate(structure_vhdl[1],options_i).then(out =>{ check(expected_vhdl[1],out,tested[1],language[0]) });
+templates_vhdl_class.createComponent(structure_vhdl[1],options_i).then(out =>{ check(expected_vhdl[1],out,tested[1],language[0]) });
 options_s['type'] = tested[2]; // signals
-templates_vhdl.generate(structure_vhdl[2],options_s).then(out =>{ check(expected_vhdl[2],out,tested[2],language[0]) });
+templates_vhdl_class.createComponent(structure_vhdl[2],options_s).then(out =>{ check(expected_vhdl[2],out,tested[2],language[0]) });
 
 let options_verilog = {
   'type' : "normal",
@@ -77,13 +77,13 @@ let options_ver_c = {'type' : "normal"}
 let options_ver_i = {'type' : "normal"}
 let options_ver_s = {'type' : "normal"}
 templates_verilog = new Colibri.Templates.TemplatesFactory();
-templates_verilog.getTemplate(Codes.TYPES.COMPONENT,options_verilog);
+let templates_verilog_class = templates_verilog.getTemplate(Codes.TYPES.COMPONENT,options_verilog);
 options_ver_c['type'] = tested[0]; // component
-templates_verilog.generate(options_ver_c,structure_verilog[0]).then(out =>{ check(expected_verilog[0],out,tested[0],language[1]) });
+templates_verilog_class.createComponent(structure_verilog[0],options_ver_c).then(out =>{ check(expected_verilog[0],out,tested[0],language[1]) });
 options_ver_i['type'] = tested[1]; // instance
-templates_verilog.generate(options_ver_i,structure_verilog[1]).then(out =>{ check(expected_verilog[1],out,tested[1],language[1]) });
+templates_verilog_class.createComponent(structure_verilog[1],options_ver_i).then(out =>{ check(expected_verilog[1],out,tested[1],language[1]) });
 options_ver_s['type'] = tested[2]; // signals
-templates_verilog.generate(options_ver_s,structure_verilog[2]).then(out =>{ check(expected_verilog[2],out,tested[2],language[1]) });
+templates_verilog_class.createComponent(structure_verilog[2],options_ver_s).then(out =>{ check(expected_verilog[2],out,tested[2],language[1]) });
 
 function check(expected, out,tested,language) {
   console.log('****************************************************************');

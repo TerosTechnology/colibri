@@ -29,7 +29,7 @@ const General = require('../general/general')
 class VhdlEditor{
   constructor(){}
 
-  async parseCode(src){
+  async createTestbench(src, options) {
     let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(General.LANGUAGES.VHDL,'');
     let structure =  await parser.getAll(src);
@@ -39,11 +39,7 @@ class VhdlEditor{
       }
     } catch(x){
         console.log(x);
-    }  
-  }
-
-  createTestbench(src, options) {
-    let structure = this.parseCode(src);
+    }
     var vunit = false;
     if (options != null){
       vunit = options['type'] == Codes.TYPESTESTBENCH.VUNIT
@@ -257,8 +253,17 @@ class VhdlEditor{
     return str;
   }
 
-  createComponent(src, options) {
-    let structure = this.parseCode(src);
+  async createComponent(src, options) {
+    let parser = new ParserLib.ParserFactory;
+    parser = parser.getParser(General.LANGUAGES.VHDL,'');
+    let structure =  await parser.getAll(src);
+    try {
+      if (structure == 'undefined'){
+        throw "VHDL parser error";
+      }
+    } catch(x){
+        console.log(x);
+    }
     if (options == null)
       return "";
     var component = "";
