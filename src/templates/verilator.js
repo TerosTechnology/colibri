@@ -33,13 +33,9 @@ class verilator {
     let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(this.language,'');
     let structure =  await parser.getAll(src);
-    try {
-      if (structure == 'undefined'){
-        throw "Parsing error";
-      }
-  } catch(x){
-      console.log(x);
-  }  
+    if (structure === undefined){
+      return undefined;
+    } 
     this.str     = structure;
     this.header();
     this.loop()

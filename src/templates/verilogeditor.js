@@ -35,12 +35,8 @@ class Verilog_editor{
     let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(General.LANGUAGES.VERILOG,'');
     let structure =  await parser.getAll(src);
-    try {
-      if (structure == 'undefined'){
-        throw "Verilog parser error";
-      }
-    } catch(x){
-        console.log(x);
+    if (structure === undefined){
+      return undefined;
     }
     var vunit = false;
     var version = General.VERILOGSTANDARS.VERILOG2001;
@@ -208,12 +204,8 @@ class Verilog_editor{
     let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(General.LANGUAGES.VERILOG,'');
     let structure =  await parser.getAll(src);
-    try {
-      if (structure == 'undefined'){
-        throw "Verilog parser error";
-      }
-    } catch(x){
-        console.log(x);
+    if (structure === undefined){
+      return undefined;
     }
     if (options == null)
       return "";

@@ -33,12 +33,8 @@ class Vhdl_editor{
     let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(General.LANGUAGES.VHDL,'');
     let structure =  await parser.getAll(src);
-    try {
-      if (structure == 'undefined'){
-        throw "VHDL parser error";
-      }
-    } catch(x){
-        console.log(x);
+    if (structure === undefined){
+      return undefined;
     }
     let vunit = false;
     if (options != null){
@@ -257,12 +253,8 @@ class Vhdl_editor{
     let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(General.LANGUAGES.VHDL,'');
     let structure =  await parser.getAll(src);
-    try {
-      if (structure == 'undefined'){
-        throw "VHDL parser error";
-      }
-    } catch(x){
-        console.log(x);
+    if (structure === undefined){
+      return undefined;
     }
     if (options == null)
       return "";

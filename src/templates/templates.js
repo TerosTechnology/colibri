@@ -37,24 +37,29 @@ class Templates_factory {
       // let parser = new ParserLib.ParserFactory;
       // parser = parser.getParser(this.language,'');
       // let structure =  await parser.getAll(str);  
-      if(type == Codes.TYPES.VUNIT)
+      if(type === Codes.TYPES.VUNIT)
         template = this.get_vunit_template();   
-      else if (type == Codes.TYPES.COCOTB){
+      else if (type === Codes.TYPES.COCOTB){
         template = this.get_cocotb_template(language);
       }
-      else if(type == Codes.TYPES.VERILATOR)
-        template = this.get_verilator_template();      
-      else if(type == Codes.TYPES.TESTBENCH){
-        if (language == General.LANGUAGES.VHDL)
+      else if(type === Codes.TYPES.VERILATOR){
+        template = this.get_verilator_template();   
+      }   
+      else if(type === Codes.TYPES.TESTBENCH){
+        if (language === General.LANGUAGES.VHDL){
           template = this.get_vhdl_testbench();
-        else if(language == General.LANGUAGES.VERILOG)
+        }
+        else if(language === General.LANGUAGES.VERILOG){
           template = this.get_verilog_testbench();
+        }
       }
-      else if(type == Codes.TYPES.COMPONENT){
-        if (language == General.LANGUAGES.VHDL)
+      else if(type === Codes.TYPES.COMPONENT){
+        if (language === General.LANGUAGES.VHDL){
           template = this.get_vhdl_component();
-        else if(language == General.LANGUAGES.VERILOG)
+        }
+        else if(language === General.LANGUAGES.VERILOG){
           template = this.get_verilog_component();
+        }
       }
     return template;
   }
