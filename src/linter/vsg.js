@@ -42,71 +42,39 @@ class Vsg {
   }
 
   async _parse_junit(junit_content){
-    const json_str = await convert.xml2json(junit_content, {compact: true, spaces: 2});
-    const json = await JSON.parse(json_str);
-    let errors_str = "";
-    try{
-      if (json.testsuite.testcase.failure[0] === undefined){
-        errors_str = json.testsuite.testcase.failure._text;
-      }
-      else{
-        errors_str = json.testsuite.testcase.failure[0]._text;
-      }
-    }
-    catch(e){
-      // eslint-disable-next-line no-console
-      console.log(e);
-      return ([]);
-    }
-
-    let split_errors = errors_str.split('\n');
+    const json = await JSON.parse(junit_content);
     let errors = [];
-    for (let i=0; i<split_errors.length; ++i){
-      let line = split_errors[i];
-      let split_line = line.split(':');
-      if (split_line.length === 3){
+    if (json.files !== undefined && json.files[0] !== undefined && json.files[0].violations !== undefined){
+      let errors_json = json.files[0].violations;
+      for (let i=0; i<errors_json.length; ++i){
         let error = {
           'severity' : 'warning',
-          'code' : split_line[0].trim(),
-          'description' : "[" + split_line[0].trim() + "] " + split_line[2].trim(),
+          'code' : errors_json[i].rule,
+          'description' : "[" + errors_json[i].rule + "] " + errors_json[i].solution,
           'location' : {
             'file': "file",
-            'position': [parseInt(split_line[1].trim())-1, 0]
+            'position': [errors_json[i].linenumber-1, 0]
           }
         };
         errors.push(error);
       }
-      else if(split_line.length > 3){
-        let message = "[" + split_line[0].trim() + "] " + split_line[2].trim() + ":";
-        for (let x=3;x<split_line.length-1;++x){
-          message += split_line[x].trim() + ":";
-        }
-        message += split_line[split_line.length-1].trim();
-        let error = {
-          'severity' : 'warning',
-          'code' : split_line[0].trim(),
-          'description' : message,
-          'location' : {
-            'file': "file",
-            'position': [parseInt(split_line[1].trim())-1, 0]
-          }
-        };
-        errors.push(error);
-      }
+      return errors;
     }
-    return errors;
+    else{
+      return errors;
+    }
   }
 
   async _svg_exec(code_file, junit_file) {  
     let code_file_normalized = code_file.replace(' ','\\ ');
-    let junit_file_file_normalized = junit_file.replace(' ','\\ ');
-    let command = `vsg -f ${code_file_normalized} --junit ${junit_file_file_normalized}`;  
+    let json_file_file_normalized = junit_file.replace(' ','\\ ');
+    let command = `vsg -f ${code_file_normalized} --js ${json_file_file_normalized}`;  
     const exec = require('child_process').exec;
       return new Promise((resolve) => {
         exec(command, (error, stdout, stderr) => {
           // eslint-disable-next-line no-unused-vars
           let result = {'stdout':stdout,'stderr':stderr};
-          let output_junit = fs.readFileSync(junit_file_file_normalized, 'utf8');
+          let output_junit = fs.readFileSync(json_file_file_normalized, 'utf8');
           resolve(output_junit);
       });
     });
