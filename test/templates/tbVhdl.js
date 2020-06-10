@@ -23,6 +23,7 @@ const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 const Colibri = require('../../src/main');
+const Codes = require('../../src/templates/codes')
 
 let options = {
   'type' : "normal",
@@ -33,39 +34,50 @@ let options = {
   ]
 }
 ////////////////////////////////////////////////////////////////////////////////
-var structure = fs.readFileSync('examples'+path.sep+'vhdl'+path.sep+'structure.json','utf8');
-structure     = JSON.parse(structure);
-var testExpected = fs.readFileSync('examples'+path.sep+'vhdl'+path.sep+'tbVhdl.vhd','utf8');
-templates = new Colibri.Templates.Templates();
-var test = templates.getTemplate(Colibri.Templates.Codes.TYPES.TESTBENCH,structure, options);
+let structure = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+'vhdl'+path.sep+'example_1.vhd','utf8');
+let test_expected_vhdl = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+'vhdl'+path.sep+'tbVhdl.vhd','utf8');
+templates = new Colibri.Templates.Templates_factory();
+let templates_class = templates.get_template(Codes.TYPES.TESTBENCH,options)
+templates_class.create_Testbench(structure,options).then(test_vhd => {
+  console.log('****************************************************************');
+  if(test_expected_vhdl.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === test_vhd.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
+    console.log("Testing... tbVhdl: Ok!".green);
+  }
+  else{
+    console.log("Expected -->".yellow);
+    console.log(test_expected_vhdl);
+    console.log("Real     -->".yellow);
+    console.log(test_vhd);
+    console.log("Testing... tbVhdl: Fail!".red);
+    throw new Error('Test error.');
+  }
+});
 
-console.log('****************************************************************');
-if(testExpected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === test.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
-  console.log("Testing... tbVhdl: Ok!".green);
-}
-else{
-  console.log("Expected -->".yellow);
-  console.log(testExpected);
-  console.log("Real     -->".yellow);
-  console.log(test);
-  console.log("Testing... tbVhdl: Fail!".red);
-  throw new Error('Test error.');
-}
 ////////////////////////////////////////////////////////////////////////////////
-options['type'] = "vunit";
-testExpected = fs.readFileSync('examples'+path.sep+'vhdl'+path.sep+'tbVhdlVunit.vhd','utf8');
-templates = new Colibri.Templates.Templates();
-var test = templates.getTemplate(Colibri.Templates.Codes.TYPES.TESTBENCH,structure, options)
+let options_vunit = {
+  'type' : "vunit",
+  'language' : Colibri.General.LANGUAGES.VHDL,
+  'parameters' : [
+    {'parameter' : "X"},
+    {'parameter' : "Y"}
+  ]
+}
+test_expected_vunit_tb = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+'vhdl'+path.sep+'tbVhdlVunit.vhd','utf8');
+templates = new Colibri.Templates.Templates_factory();
+let templates_vunit_class = templates.get_template(Codes.TYPES.TESTBENCH,options)
+templates_vunit_class.create_Testbench(structure,options_vunit).then(test_vhdl_vunit =>{
+  if(test_expected_vunit_tb.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '') === test_vhdl_vunit.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '')){
+    console.log("Testing... tbVhdlVunit: Ok!".green);
+  }
+  else{
+    console.log("Expected -->".yellow);
+    console.log(test_expected_vunit_tb);
+    console.log("Real     -->".yellow);
+    console.log(test_vhdl_vunit);
+    console.log("Testing... tbVhdlVunit: Fail!".red);
+    throw new Error('Test error.');
+  }
+  console.log('****************************************************************');
+} )
 
-if(testExpected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '') === test.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '')){
-  console.log("Testing... tbVhdlVunit: Ok!".green);
-}
-else{
-  console.log("Expected -->".yellow);
-  console.log(testExpected);
-  console.log("Real     -->".yellow);
-  console.log(test);
-  console.log("Testing... tbVhdlVunit: Fail!".red);
-  throw new Error('Test error.');
-}
-console.log('****************************************************************');
+

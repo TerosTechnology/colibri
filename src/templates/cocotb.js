@@ -19,27 +19,36 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
+const ParserLib = require('../parser/factory')
+
 class cocotb {
-  constructor(estructure){
-    this.str     = estructure;
+  constructor(language){
+    this.str     = "";
+    this.language = language;
     this.str_out = "";
-    this.path = require('path')
   }
-  generate(){
+  async generate(src,options){
+    let parser = new ParserLib.ParserFactory;
+    parser = parser.getParser(this.language,'');
+    let structure =  await parser.getAll(src);
+    if (structure === undefined){
+      return undefined;
+    } 
+    this.str     = structure;
     this.header();
-    this.pythonLibraries()
-    this.clockGen()
-    this.cocoTest()
+    this.python_libraries()
+    this.clock_gen()
+    this.coco_test()
     return this.str_out;
   }
 
   header(){
     this.str_out = "# -*- coding: utf-8 -*-\n"
   }
-  pythonLibraries(){
+  python_libraries(){
     this.str_out += "import cocotb\nfrom cocotb.triggers import Timer\nfrom cocotb.result import TestFailure\nimport random\n"
   }
-  clockGen(){
+  clock_gen(){
     this.str_out += '\n@cocotb.coroutine\n'
     this.str_out += 'def gen_clk(clk, period):\n'
     this.str_out += '    while True:\n'
@@ -48,7 +57,7 @@ class cocotb {
     this.str_out += '        clk.value = 1\n'
     this.str_out += '        yield Timer(period/2)\n'
   }
-  cocoTest(){
+  coco_test(){
     this.str_out += '\n@cocotb.test()\n'
     this.str_out += 'def ' + this.str.entity["name"] + '_testAlive(dut):\n'
     this.str_out += '    Period = 10\n'

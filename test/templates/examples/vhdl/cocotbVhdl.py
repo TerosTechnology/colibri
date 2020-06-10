@@ -13,7 +13,7 @@ def gen_clk(clk, period):
         yield Timer(period/2)
 
 @cocotb.test()
-def example_vhdl_testAlive(dut):
+def arith_counter_gray_testAlive(dut):
     Period = 10
     clk=dut.clk
     cocotb.fork(gen_clk(clk, Period))

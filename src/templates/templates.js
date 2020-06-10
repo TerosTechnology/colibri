@@ -22,76 +22,78 @@
 const Cocotb = require('./cocotb')
 const Verilator = require('./verilator')
 const VUnit = require('./vunit')
-const VHDLTestbench = require('./vhdleditor')
-const VerilogTestbench = require('./verilogeditor')
+const Vhdl_editor = require('./vhdleditor')
+const Verilog_editor = require('./verilogeditor')
 const General = require('../general/general')
 const Codes = require('./codes')
-const ParserLib = require('../parser/factory')
 
-class Templates {
-  async getTemplate(type,str,options){
-    let language = options["language"];
-    let parser = new ParserLib.ParserFactory;
-    parser = parser.getParser(language,'');
-    let structure =  await parser.getAll(str);
-    if (structure == null)
-      return null;
+class Templates_factory {
+  constructor(){ }
+  
+  get_template(type,lang){
+    let language = lang["language"];
     let template;
-    if (type == Codes.TYPES.COCOTB)
-      template = this.get_cocotb_template(structure);
-    else if(type == Codes.TYPES.VERILATOR)
-      template = this.get_verilator_template(structure);
-    else if(type == Codes.TYPES.VUNIT)
-      template = this.get_vunit_template(structure);
-    else if(type == Codes.TYPES.TESTBENCH){
-      if (language == General.LANGUAGES.VHDL)
-        template = this.get_vhdl_testbench(structure,options);
-      else if(language == General.LANGUAGES.VERILOG)
-        template = this.get_verilog_testbench(structure,options);
-    }
-    else if(type == Codes.TYPES.COMPONENT){
-      if (language == General.LANGUAGES.VHDL)
-        template = this.get_vhdl_component(structure,options);
-      else if(language == General.LANGUAGES.VERILOG)
-        template = this.get_verilog_component(structure,options);
-    }
+      if(type === Codes.TYPES.VUNIT)
+        template = this.get_vunit_template();   
+      else if (type === Codes.TYPES.COCOTB){
+        template = this.get_cocotb_template(language);
+      }
+      else if(type === Codes.TYPES.VERILATOR){
+        template = this.get_verilator_template();   
+      }   
+      else if(type === Codes.TYPES.TESTBENCH){
+        if (language === General.LANGUAGES.VHDL){
+          template = this.get_vhdl_testbench();
+        }
+        else if(language === General.LANGUAGES.VERILOG){
+          template = this.get_verilog_testbench();
+        }
+      }
+      else if(type === Codes.TYPES.COMPONENT){
+        if (language === General.LANGUAGES.VHDL){
+          template = this.get_vhdl_component();
+        }
+        else if(language === General.LANGUAGES.VERILOG){
+          template = this.get_verilog_component();
+        }
+      }
     return template;
   }
 
-  get_cocotb_template(structure) {
-    let template = new Cocotb.cocotb(structure);
-    return template.generate();
+  get_cocotb_template(language) {
+    let template = new Cocotb.cocotb(language);
+    return template;
   }
 
-  get_verilator_template(structure) {
-    let template = new Verilator.verilator(structure);
-    return template.generate();
+  get_verilator_template() {
+    let template = new Verilator.verilator();
+    return template;
   }
 
-  get_vunit_template(structure) {
-    let template = new VUnit.runpy(structure);
-    return template.generate();
+  get_vunit_template() {
+    let template = new VUnit.runpy();
+    return template;
   }
 
-  get_vhdl_testbench(structure, options) {
-    return VHDLTestbench.createTestbench(structure, options);
+  get_vhdl_testbench() {
+    return new Vhdl_editor.Vhdl_editor();
   }
 
-  get_verilog_testbench(structure, options) {
-    return VerilogTestbench.createTestbench(structure, options);
+  get_verilog_testbench() {
+    return new Verilog_editor.Verilog_editor();
   }
 
-  get_vhdl_component(structure, options) {
-    return VHDLTestbench.createComponent(structure, options);
+  get_vhdl_component() {
+    return new Vhdl_editor.Vhdl_editor();
   }
 
-  get_verilog_component(structure, options) {
-    return VerilogTestbench.createComponent(structure, options);
+  get_verilog_component() {
+    return new Verilog_editor.Verilog_editor();
   }
 
 }
 
 module.exports = {
   Codes : Codes,
-  Templates: Templates
+  Templates_factory: Templates_factory
 }

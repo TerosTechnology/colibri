@@ -20,12 +20,13 @@
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
 class runpy {
-  constructor(estructure){
-    this.str     = estructure;
+  constructor(){
+    this.str     = "";
     this.str_out = "";
     this.path = require('path')
   }
-  generate(){
+  generate(options){
+    this.str     = options;
     this.header();
     this.python_libraries()
     this.set_lang()

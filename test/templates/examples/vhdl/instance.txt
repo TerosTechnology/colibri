@@ -1,7 +1,7 @@
-example_vhdl_inst : example_vhdl
+arith_counter_gray_inst : arith_counter_gray
   generic map (
-    g_GENERIC_0 => g_GENERIC_0,
-    g_GENERIC_1 => g_GENERIC_1
+    bits => bits,
+    init => init
   )
   port map (
     clk => clk,
