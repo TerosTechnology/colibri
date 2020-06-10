@@ -38,8 +38,8 @@ let options = {
   ]
 }
 ////////////////////////////////////////////////////////////////////////////////
-let structure = fs.readFileSync('examples'+path.sep+'verilog'+path.sep+'uart.v', 'utf8');
-let test_Expected = fs.readFileSync('examples'+path.sep+'verilog'+path.sep+'tbVerilog2001.v', 'utf8');
+let structure = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+'verilog'+path.sep+'uart.v', 'utf8');
+let test_Expected = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+'verilog'+path.sep+'tbVerilog2001.v', 'utf8');
 templates = new Colibri.Templates.Templates_factory();
 let templates_class = templates.get_template(Codes.TYPES.TESTBENCH,options)
 templates_class.create_Testbench(structure,options).then(test => {
@@ -66,7 +66,7 @@ let options_vunit = {
   ]
 }
 
-test_Expected_vunit = fs.readFileSync('examples'+path.sep+'verilog'+path.sep+'tbVerilogVunit2001.v', 'utf8');
+test_Expected_vunit = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+'verilog'+path.sep+'tbVerilogVunit2001.v', 'utf8');
 templates_vunit = new Colibri.Templates.Templates_factory();
 let templates_vunit_class = templates_vunit.get_template(Codes.TYPES.TESTBENCH,options_vunit)
 templates_vunit_class.create_Testbench(structure,options_vunit).then(test_vunit => {

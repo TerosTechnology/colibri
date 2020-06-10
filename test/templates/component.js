@@ -43,8 +43,8 @@ let options = {
 var structure_vhdl = []
 var expected_vhdl = []
 for (let x=0;x<tested.length;++x){
-  structure_vhdl[x] = fs.readFileSync('examples'+path.sep+language[0]+path.sep+'example_1.vhd','utf8');
-  expected_vhdl[x]  = fs.readFileSync('examples'+path.sep+language[0]+path.sep+tested[x] + '.txt','utf8');
+  structure_vhdl[x] = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+language[0]+path.sep+'example_1.vhd','utf8');
+  expected_vhdl[x]  = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+language[0]+path.sep+tested[x] + '.txt','utf8');
 }
 let options_c = {'type' : "normal"}
 let options_i = {'type' : "normal"}
@@ -70,8 +70,8 @@ let options_verilog = {
 var structure_verilog = []
 var expected_verilog = []
 for (let x=0;x<tested.length;++x){
-  structure_verilog[x] = fs.readFileSync('examples'+path.sep+language[1]+path.sep+'uart.v','utf8');
-  expected_verilog[x]  = fs.readFileSync('examples'+path.sep+language[1]+path.sep+tested[x] + '.txt','utf8');
+  structure_verilog[x] = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+language[1]+path.sep+'uart.v','utf8');
+  expected_verilog[x]  = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+language[1]+path.sep+tested[x] + '.txt','utf8');
 }
 let options_ver_c = {'type' : "normal"}
 let options_ver_i = {'type' : "normal"}

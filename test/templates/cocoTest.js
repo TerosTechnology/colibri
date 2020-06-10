@@ -25,8 +25,8 @@ const fs = require('fs');
 const Colibri = require('../../src/main');
 const Codes = require('../../src/templates/codes')
 
-let path_example_vhdl = 'examples'+path.sep+'vhdl'+path.sep
-let path_example_verilog = 'examples'+path.sep+'verilog'+path.sep
+let path_example_vhdl = __dirname + path.sep + 'examples'+path.sep+'vhdl'+path.sep
+let path_example_verilog = __dirname + path.sep + 'examples'+path.sep+'verilog'+path.sep
 var structure_vhdl = fs.readFileSync(path_example_vhdl+'example_1.vhd','utf8');
 var structure_v = fs.readFileSync(path_example_verilog+'uart.v','utf8');
 

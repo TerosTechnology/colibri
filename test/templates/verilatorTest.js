@@ -25,7 +25,7 @@ const path = require('path');
 const Colibri = require('../../src/main');
 const Codes = require('../../src/templates/codes')
 
-let path_example = 'examples'+path.sep+'verilog'+path.sep
+let path_example = __dirname + path.sep + 'examples'+path.sep+'verilog'+path.sep
 let structure_v = fs.readFileSync(path_example+'uart.v','utf8');
 
 let options = {
