@@ -68,7 +68,7 @@ class Vsg {
   async _svg_exec(code_file, junit_file) {  
     let code_file_normalized = code_file.replace(' ','\\ ');
     let json_file_file_normalized = junit_file.replace(' ','\\ ');
-    let command = `vsg -f ${code_file_normalized} --js ${json_file_file_normalized}`;  
+    let command = `vsg -f ${code_file_normalized} --all_phases --js ${json_file_file_normalized}`;  
     const exec = require('child_process').exec;
       return new Promise((resolve) => {
         exec(command, (error, stdout, stderr) => {
