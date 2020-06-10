@@ -26,15 +26,15 @@ const Colibri = require('../../src/main');
 const Codes = require('../../src/templates/codes')
 
 let path_example = 'examples'+path.sep+'verilog'+path.sep
-var structure_v = fs.readFileSync(path_example+'uart.v','utf8');
+let structure_v = fs.readFileSync(path_example+'uart.v','utf8');
 
 let options = {
   "type": "verilator",
   "language": "verilog"
 };
-var veritest = new Colibri.Templates.TemplatesFactory();
+let veritest = new Colibri.Templates.Templates_factory();
 let verilator_expected = fs.readFileSync(path_example+'veritest.cpp','utf8');
-let veritest_gen = veritest.getTemplate(Codes.TYPES.VERILATOR,options)
+let veritest_gen = veritest.get_template(Codes.TYPES.VERILATOR,options)
 veritest_gen.generate(structure_v).then(verilator_template => {
   console.log('****************************************************************');
   if(verilator_expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === verilator_template.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){

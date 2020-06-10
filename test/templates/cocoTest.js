@@ -33,9 +33,9 @@ var structure_v = fs.readFileSync(path_example_verilog+'uart.v','utf8');
 let options = {
   "language": "vhdl"
 };
-var cocotbpyVhdl = new Colibri.Templates.TemplatesFactory();
+var cocotbpyVhdl = new Colibri.Templates.Templates_factory();
 let cocotb_vhdl_expected = fs.readFileSync(path_example_vhdl+'cocotbVhdl.py', 'utf8');
-var template = cocotbpyVhdl.getTemplate(Codes.TYPES.COCOTB,options)
+var template = cocotbpyVhdl.get_template(Codes.TYPES.COCOTB,options)
 template.generate(structure_vhdl).then(cocotb_vhdl => {
   console.log('****************************************************************');
   if(cocotb_vhdl_expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === cocotb_vhdl.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
@@ -50,9 +50,9 @@ template.generate(structure_vhdl).then(cocotb_vhdl => {
 let options_verilog = {
     "language": "verilog"
   };
-var cocotbpyV = new Colibri.Templates.TemplatesFactory();
+var cocotbpyV = new Colibri.Templates.Templates_factory();
 let cocotb_verilog_expected = fs.readFileSync(path_example_verilog+'cocotbV.py', 'utf8');
-var templateV = cocotbpyV.getTemplate(Codes.TYPES.COCOTB,options_verilog)
+var templateV = cocotbpyV.get_template(Codes.TYPES.COCOTB,options_verilog)
 templateV.generate(structure_v).then(cocotb_verilog => {
   console.log('****************************************************************');
   if(cocotb_verilog_expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === cocotb_verilog.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){

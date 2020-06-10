@@ -29,12 +29,12 @@ let path_example = 'examples'+path.sep+'vhdl'+path.sep+'runpy'+path.sep;
 lang= {
   'language': 'vhdl'
 }
-let runpy = new Colibri.Templates.TemplatesFactory();
+let runpy = new Colibri.Templates.Templates_factory();
 for (let x=0;x<5;++x){
   let structure = fs.readFileSync(path_example+'runpyConf_'+x+'.json','utf8');
   structure     = JSON.parse(structure);
   let runpy_expected = fs.readFileSync(path_example+'run_'+x+'.py','utf8');
-  var runpy_c = runpy.getTemplate(Codes.TYPES.VUNIT,lang)
+  let runpy_c = runpy.get_template(Codes.TYPES.VUNIT,lang)
   let out = runpy_c.generate(structure);
   check_runpy(runpy_expected,out,x);
 }

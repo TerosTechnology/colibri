@@ -22,15 +22,15 @@
 const Cocotb = require('./cocotb')
 const Verilator = require('./verilator')
 const VUnit = require('./vunit')
-const VhdlEditor = require('./vhdleditor')
-const VerilogEditor = require('./verilogeditor')
+const Vhdl_editor = require('./vhdleditor')
+const Verilog_editor = require('./verilogeditor')
 const General = require('../general/general')
 const Codes = require('./codes')
 
-class TemplatesFactory {
+class Templates_factory {
   constructor(){ }
   
-  getTemplate(type,lang){
+  get_template(type,lang){
     let language = lang["language"];
     // let type = type
     let template;
@@ -75,24 +75,24 @@ class TemplatesFactory {
   }
 
   get_vhdl_testbench() {
-    return new VhdlEditor.VhdlEditor();
+    return new Vhdl_editor.Vhdl_editor();
   }
 
   get_verilog_testbench() {
-    return new VerilogEditor.VerilogEditor();
+    return new Verilog_editor.Verilog_editor();
   }
 
   get_vhdl_component() {
-    return new VhdlEditor.VhdlEditor();
+    return new Vhdl_editor.Vhdl_editor();
   }
 
   get_verilog_component() {
-    return new VerilogEditor.VerilogEditor();
+    return new Verilog_editor.Verilog_editor();
   }
 
 }
 
 module.exports = {
   Codes : Codes,
-  TemplatesFactory: TemplatesFactory
+  Templates_factory: Templates_factory
 }

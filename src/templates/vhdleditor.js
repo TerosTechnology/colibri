@@ -26,10 +26,10 @@ const Codes = require('./codes')
 const ParserLib = require('../parser/factory')
 const General = require('../general/general')
 
-class VhdlEditor{
+class Vhdl_editor{
   constructor(){}
 
-  async createTestbench(src, options) {
+  async create_Testbench(src, options) {
     let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(General.LANGUAGES.VHDL,'');
     let structure =  await parser.getAll(src);
@@ -40,54 +40,54 @@ class VhdlEditor{
     } catch(x){
         console.log(x);
     }
-    var vunit = false;
+    let vunit = false;
     if (options != null){
       vunit = options['type'] == Codes.TYPESTESTBENCH.VUNIT
     }
-    var space = '  ';
-    var str = '';
+    let space = '  ';
+    let str = '';
     // str += setLibraries(structure['libraries']);
     str += "library ieee;\nuse ieee.std_logic_1164.all;\nuse ieee.numeric_std.all;\n";
     str += '\n'
     if (vunit == true) {
-      str += this.setVunitLibraries();
+      str += this.set_Vunit_Libraries();
       str += '\n'
     }
     if (vunit == true) {
-      str += this.setVunitEntity(structure['entity']);
+      str += this.set_Vunit_Entity(structure['entity']);
       str += '\n'
     } else {
-      str += this.setEntity(structure['entity']);
+      str += this.set_Entity(structure['entity']);
       str += '\n'
     }
-    str += this.setArchitecture(structure['architecture'], structure['entity']);
+    str += this.set_Architecture(structure['architecture'], structure['entity']);
     str += '\n'
     if (vunit === false) {
-      str += this.setComponent(space, structure['entity']['name'], structure['generics'],
+      str += this.set_Component(space, structure['entity']['name'], structure['generics'],
         structure['ports']);
     }
     str += '\n'
-    str += this.setConstants(space, structure['generics']);
+    str += this.set_Constants(space, structure['generics']);
     str += '\n'
     str += '  -- Ports\n';
-    str += this.setSignals(space, structure['ports']);
+    str += this.set_Signals(space, structure['ports']);
     str += '\n'
     str += 'begin\n'
     str += '\n'
-    str += this.setInstance(space, structure['entity']['name'], structure['generics'], structure['ports'], vunit);
+    str += this.set_Instance(space, structure['entity']['name'], structure['generics'], structure['ports'], vunit);
     str += '\n'
     if (vunit == true) {
-      str += this.setVunitProcess(space);
+      str += this.set_Vunit_Process(space);
       str += '\n'
     }
-    str += this.setClkProcess(space);
+    str += this.set_Clk_Process(space);
     str += '\n'
     str += 'end;\n'
 
     return str;
   }
 
-  setVunitLibraries() {
+  set_Vunit_Libraries() {
     var str = '';
     str += 'library src_lib;\n'
     str += '--\n';
@@ -111,7 +111,7 @@ class VhdlEditor{
     return str;
   }
 
-  setLibraries(m) {
+  set_Libraries(m) {
     var str = '';
     for (let x = 0; x < m.length; ++x) {
       str += 'use ' + m[x]['name'] + ';\n';
@@ -119,14 +119,14 @@ class VhdlEditor{
     return str;
   }
 
-  setEntity(m) {
+  set_Entity(m) {
     var str = '';
     str += 'entity ' + m['name'] + '_tb is\n';
     str += 'end;\n';
     return str;
   }
 
-  setVunitEntity(m) {
+  set_Vunit_Entity(m) {
     var str = '';
     str += 'entity ' + m['name'] + '_tb is\n';
     str += '  generic (runner_cfg : string);\n';
@@ -134,13 +134,13 @@ class VhdlEditor{
     return str;
   }
 
-  setArchitecture(m, n) {
+  set_Architecture(m, n) {
     var str = '';
     str += 'architecture bench of ' + n['name'] + '_tb is\n';
     return str;
   }
 
-  setConstants(space, m) {
+  set_Constants(space, m) {
     var str = '';
     str += space + '-- Clock period\n';
     str += space + 'constant clk_period : time := 5 ns;\n';
@@ -151,7 +151,7 @@ class VhdlEditor{
     return str;
   }
 
-  setSignals(space, m) {
+  set_Signals(space, m) {
     var str = '';
     for (let x = 0; x < m.length; ++x) {
       str += space + 'signal ' + m[x]['name'] + ' : ' + m[x]['type'] + ';\n';
@@ -159,7 +159,7 @@ class VhdlEditor{
     return str;
   }
 
-  setComponent(space, name, generics, ports) {
+  set_Component(space, name, generics, ports) {
     var str = '';
     //Component name
     str += space + 'component ' + name + '\n';
@@ -191,7 +191,7 @@ class VhdlEditor{
     return str;
   }
 
-  setInstance(space, name, generics, ports, vunit) {
+  set_Instance(space, name, generics, ports, vunit) {
     var str = '';
     //Instance name
     if (vunit === true) {
@@ -220,7 +220,7 @@ class VhdlEditor{
     return str;
   }
 
-  setVunitProcess(space) {
+  set_Vunit_Process(space) {
     var str = '';
     str += space + 'main : process\n';
     str += space + 'begin\n';
@@ -241,7 +241,7 @@ class VhdlEditor{
     return str;
   }
 
-  setClkProcess(space) {
+  set_Clk_Process(space) {
     var str = '';
     str += '-- ' + space + "clk_process : process\n";
     str += '-- ' + space + "begin\n";
@@ -253,7 +253,7 @@ class VhdlEditor{
     return str;
   }
 
-  async createComponent(src, options) {
+  async create_Component(src, options) {
     let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(General.LANGUAGES.VHDL,'');
     let structure =  await parser.getAll(src);
@@ -268,13 +268,13 @@ class VhdlEditor{
       return "";
     var component = "";
     if (options['type'] == Codes.TYPESCOMPONENTS.COMPONENT) {
-      component = this.setComponent('  ', structure['entity']['name'],
+      component = this.set_Component('  ', structure['entity']['name'],
         structure['generics'], structure['ports'], false);
     } else if (options['type'] == Codes.TYPESCOMPONENTS.INSTANCE) {
-      component = this.setInstance('  ', structure['entity']['name'],
+      component = this.set_Instance('  ', structure['entity']['name'],
         structure['generics'], structure['ports'], false);
     } else if (options['type'] == Codes.TYPESCOMPONENTS.SIGNALS) {
-      component = this.setSignals('  ', structure['ports']);
+      component = this.set_Signals('  ', structure['ports']);
     }
     else{
       console.log("error")
@@ -288,5 +288,5 @@ class VhdlEditor{
 //***************************** Exports ***************************************/
 //*****************************************************************************/
 module.exports = {
-  VhdlEditor: VhdlEditor
+  Vhdl_editor: Vhdl_editor
 }
