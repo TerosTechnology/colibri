@@ -32,11 +32,7 @@ class Templates_factory {
   
   get_template(type,lang){
     let language = lang["language"];
-    // let type = type
     let template;
-      // let parser = new ParserLib.ParserFactory;
-      // parser = parser.getParser(this.language,'');
-      // let structure =  await parser.getAll(str);  
       if(type === Codes.TYPES.VUNIT)
         template = this.get_vunit_template();   
       else if (type === Codes.TYPES.COCOTB){

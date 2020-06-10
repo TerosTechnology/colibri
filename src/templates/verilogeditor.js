@@ -46,8 +46,6 @@ class Verilog_editor{
     }
     var space = '  ';
     var str = '';
-    // str += setLibraries(structure['libraries']);
-    // str += '\n'
     if (vunit == true) {
       str += this.set_Vunit_Libraries();
       str += '\n'

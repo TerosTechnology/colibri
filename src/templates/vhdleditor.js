@@ -42,7 +42,6 @@ class Vhdl_editor{
     }
     let space = '  ';
     let str = '';
-    // str += setLibraries(structure['libraries']);
     str += "library ieee;\nuse ieee.std_logic_1164.all;\nuse ieee.numeric_std.all;\n";
     str += '\n'
     if (vunit == true) {
