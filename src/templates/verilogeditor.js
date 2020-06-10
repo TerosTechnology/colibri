@@ -28,10 +28,10 @@ const General = require('../general/general');
 const Codes = require('./codes');
 const ParserLib = require('../parser/factory')
 
-class VerilogEditor{
+class Verilog_editor{
   constructor(){}
 
-  async createTestbench(src, options) {
+  async create_Testbench(src, options) {
     let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(General.LANGUAGES.VERILOG,'');
     let structure =  await parser.getAll(src);
@@ -53,44 +53,44 @@ class VerilogEditor{
     // str += setLibraries(structure['libraries']);
     // str += '\n'
     if (vunit == true) {
-      str += this.setVunitLibraries();
+      str += this.set_Vunit_Libraries();
       str += '\n'
     }
-    str += this.setEntity(structure['entity']);
+    str += this.set_Entity(structure['entity']);
     str += '\n'
-    str += this.setConstants(space, structure['generics']);
+    str += this.set_Constants(space, structure['generics']);
     str += '\n'
     str += '  // Ports\n';
-    str += this.setSignals(space, structure['ports']);
+    str += this.set_Signals(space, structure['ports']);
     str += '\n'
 
     if (version == General.VERILOGSTANDARS.VERILOG2001) {
-      str += this.setInstance2001(space, structure['entity']['name'], structure['generics'], structure['ports']);
+      str += this.set_Instance2001(space, structure['entity']['name'], structure['generics'], structure['ports']);
     } else {
-      str += this.setInstance(space, structure['entity']['name'], structure['generics'], structure['ports']);
+      str += this.set_Instance(space, structure['entity']['name'], structure['generics'], structure['ports']);
     }
     str += '\n'
     if (vunit == true) {
-      str += this.setVunitProcess(space);
+      str += this.set_Vunit_Process(space);
       str += '\n'
     } else {
-      str += this.setMain(space);
+      str += this.set_Main(space);
       str += '\n'
     }
-    str += this.setClkProcess(space);
+    str += this.set_Clk_Process(space);
     str += '\n'
     str += 'endmodule\n'
 
     return str;
   }
 
-  setVunitLibraries() {
+  set_Vunit_Libraries() {
     var str = '';
     str += '`include "vunit_defines.svh"\n';
     return str;
   }
 
-  setLibraries(m) {
+  set_Libraries(m) {
     var str = '';
     for (let x = 0; x < m.length; ++x) {
       str += 'use ' + m[x]['name'] + ';\n';
@@ -98,13 +98,13 @@ class VerilogEditor{
     return str;
   }
 
-  setEntity(m) {
+  set_Entity(m) {
     var str = '';
     str += 'module ' + m['name'] + '_tb;\n';
     return str;
   }
 
-  setVunitEntity(m) {
+  set_Vunit_Entity(m) {
     var str = '';
     str += 'entity ' + m['name'] + '_tb is\n';
     str += '  generic (runner_cfg : string);\n';
@@ -112,7 +112,7 @@ class VerilogEditor{
     return str;
   }
 
-  setConstants(space, m) {
+  set_Constants(space, m) {
     var str = '';
     str += space + '// Parameters\n';
     for (let x = 0; x < m.length; ++x) {
@@ -121,7 +121,7 @@ class VerilogEditor{
     return str;
   }
 
-  setSignals(space, m) {
+  set_Signals(space, m) {
     var str = '';
     for (let x = 0; x < m.length; ++x) {
       str += space + 'reg ' + m[x]['type'] + ' ' + m[x]['name'] + ';\n';
@@ -129,7 +129,7 @@ class VerilogEditor{
     return str;
   }
 
-  setInstance(space, name, generics, ports) {
+  set_Instance(space, name, generics, ports) {
     var str = '';
     //Instance name
     str += space + name + '\n';
@@ -154,7 +154,7 @@ class VerilogEditor{
     return str;
   }
 
-  setInstance2001(space, name, generics, ports) {
+  set_Instance2001(space, name, generics, ports) {
     var str = '';
     //Instance name
     str += space + name + '\n';
@@ -179,7 +179,7 @@ class VerilogEditor{
     return str;
   }
 
-  setVunitProcess(space) {
+  set_Vunit_Process(space) {
     var str = '';
     str += space + '`TEST_SUITE begin\n';
     str += space + '  // It is possible to create a basic test bench without any test cases\n';
@@ -188,7 +188,7 @@ class VerilogEditor{
     return str;
   }
 
-  setMain(space) {
+  set_Main(space) {
     var str = '';
     str += space + "initial begin\n";
     str += space + "begin\n";
@@ -197,14 +197,14 @@ class VerilogEditor{
     return str;
   }
 
-  setClkProcess(space) {
+  set_Clk_Process(space) {
     var str = '';
     str += '// ' + space + "always\n";
     str += '// ' + space + "  #5  clk =  ! clk;\n";
     return str;
   }
 
-  async createComponent(src, options) {
+  async create_Component(src, options) {
     let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(General.LANGUAGES.VERILOG,'');
     let structure =  await parser.getAll(src);
@@ -221,10 +221,10 @@ class VerilogEditor{
     if (options['type'] == Codes.TYPESCOMPONENTS.COMPONENT) {
       component = "";
     } else if (options['type'] == Codes.TYPESCOMPONENTS.INSTANCE) {
-      component = this.setInstance2001('  ', structure['entity']['name'],
+      component = this.set_Instance2001('  ', structure['entity']['name'],
         structure['generics'], structure['ports'], false);
     } else if (options['type'] == Codes.TYPESCOMPONENTS.SIGNALS) {
-      component = this.setSignals('  ', structure['ports']);
+      component = this.set_Signals('  ', structure['ports']);
     }
     return component;
   }
@@ -234,5 +234,5 @@ class VerilogEditor{
 //***************************** Exports ***************************************/
 //*****************************************************************************/
 module.exports = {
-  VerilogEditor: VerilogEditor
+  Verilog_editor: Verilog_editor
 }

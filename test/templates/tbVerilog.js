@@ -38,13 +38,13 @@ let options = {
   ]
 }
 ////////////////////////////////////////////////////////////////////////////////
-var structure = fs.readFileSync('examples'+path.sep+'verilog'+path.sep+'uart.v', 'utf8');
-var testExpected = fs.readFileSync('examples'+path.sep+'verilog'+path.sep+'tbVerilog2001.v', 'utf8');
-templates = new Colibri.Templates.TemplatesFactory();
-let templates_class = templates.getTemplate(Codes.TYPES.TESTBENCH,options)
-templates_class.createTestbench(structure,options).then(test => {
+let structure = fs.readFileSync('examples'+path.sep+'verilog'+path.sep+'uart.v', 'utf8');
+let test_Expected = fs.readFileSync('examples'+path.sep+'verilog'+path.sep+'tbVerilog2001.v', 'utf8');
+templates = new Colibri.Templates.Templates_factory();
+let templates_class = templates.get_template(Codes.TYPES.TESTBENCH,options)
+templates_class.create_Testbench(structure,options).then(test => {
   console.log('****************************************************************');
-if (testExpected.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '') === test.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '')) {
+if (test_Expected.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '') === test.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '')) {
   console.log("Testing... tbVerilog 2001: Ok!".green);
 } else {
   console.log("Testing... tbVerilog 2001: Fail!".red);
@@ -66,11 +66,11 @@ let options_vunit = {
   ]
 }
 
-testExpected_vunit = fs.readFileSync('examples'+path.sep+'verilog'+path.sep+'tbVerilogVunit2001.v', 'utf8');
-templates_vunit = new Colibri.Templates.TemplatesFactory();
-let templates_vunit_class = templates_vunit.getTemplate(Codes.TYPES.TESTBENCH,options_vunit)
-templates_vunit_class.createTestbench(structure,options_vunit).then(test_vunit => {
-if (testExpected_vunit.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '') === test_vunit.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '')) {
+test_Expected_vunit = fs.readFileSync('examples'+path.sep+'verilog'+path.sep+'tbVerilogVunit2001.v', 'utf8');
+templates_vunit = new Colibri.Templates.Templates_factory();
+let templates_vunit_class = templates_vunit.get_template(Codes.TYPES.TESTBENCH,options_vunit)
+templates_vunit_class.create_Testbench(structure,options_vunit).then(test_vunit => {
+if (test_Expected_vunit.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '') === test_vunit.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '')) {
   console.log("Testing... tbVerilogVunit 2001: Ok!".green);
 } else {
   console.log("Testing... tbVerilogVunit 2001: Fail!".red);
