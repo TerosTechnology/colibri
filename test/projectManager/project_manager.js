@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Copyright 2020 Teros Technology
 //
 // Ismael Perez Rojo
@@ -20,7 +21,6 @@
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
 const fs = require('fs');
-const path = require('path');
 const Colibri = require('../../src/main');
 
 //Create and save trs
@@ -42,7 +42,7 @@ var sources_p = [
     name : "source_3.v",
     file_type: "verilogSource-2005"
   }
-]
+];
 var testbenches = ["testbench_0.v","testbench_1.v","testbench_2.v"];
 var testbenches_p = [
   {
@@ -57,7 +57,7 @@ var testbenches_p = [
     name : "testbench_2.v",
     file_type: "verilogSource-2005"
   }
-]
+];
 var configs = ["testbench_0.v","testbench_1.v","testbench_2.v"];
 var configs_p =
   {
@@ -79,41 +79,43 @@ var data = JSON.stringify(project);
 fs.writeFileSync("prj.trs",data);
 //*****************************************************************************
 //*****************************************************************************
-var projectManager = new Colibri.ProjectManager.Manager();
+var project_manager = new Colibri.Project_manager.Manager();
 //Load trs project
-projectManager.loadProject("prj.trs");
+project_manager.load_project("prj.trs");
 //Add source
 sources.push("source_4.v");
 sources.push("source_5.v");
-projectManager.addSource(["source_4.v","source_5.v"]);
+project_manager.add_source_from_array(["source_4.v","source_5.v"]);
 //Add testbench
 testbenches.push("testbench_3.v");
-projectManager.addTestbench(["testbench_3.v"]);
+project_manager.add_testbench_from_array(["testbench_3.v"]);
 //Delete source
 sources = sources.filter(e => e !== "source_2.v");
-projectManager.deleteSource(["source_2.v"]);
+project_manager.delete_source_from_array(["source_2.v"]);
 //Delete testbench
 testbenches = testbenches.filter(e => e !== "testbench_1.v");
 testbenches = testbenches.filter(e => e !== "testbench_2.v");
-projectManager.deleteTestbench(["testbench_1.v","testbench_2.v"]);
+project_manager.delete_testbench_from_array(["testbench_1.v","testbench_2.v"]);
 //Get source names
-var sourceNames = projectManager.getSourceName();
-if (sourceNames.toString() == sources.toString())
-  console.log("Testing... getSourceName()")
+var sourceNames = project_manager.get_source_name();
+if (sourceNames.toString() === sources.toString()){
+  console.log("Testing... getSourceName()");
+}
 else{
   console.log(sources);
-  console.log(sourceNames)
+  console.log(sourceNames);
   throw new Error('Test error source names');
 }
 //Get testbench names
-var testbenchNames = projectManager.getTestbenchName();
-if (testbenchNames.toString() == testbenches.toString())
-  console.log("Testing... getTestbenchName()")
+var testbenchNames = project_manager.get_testbench_name();
+if (testbenchNames.toString() === testbenches.toString()){
+  console.log("Testing... getTestbenchName()");
+}
 else {
   console.log(testbenches);
-  console.log(testbenchNames)
+  console.log(testbenchNames);
   throw new Error('Test error testbench names.');
 }
 //Save trs
-projectManager.saveProject("prj_created.trs");
+project_manager.save_project("prj_created.trs");
 process.exit(0);

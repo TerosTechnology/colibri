@@ -12,7 +12,7 @@ Test the project functionality
 from typing import Set, List, TypeVar, Generic, Dict, Mapping, Callable, Iterable
 from os.path import join, exists, dirname
 import itertools
-from graphviz import Digraph
+# from graphviz import Digraph
 import ntpath
 from fnmatch import fnmatch
 from os.path import exists, abspath, join, basename, normpath, dirname
