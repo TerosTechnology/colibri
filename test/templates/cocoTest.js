@@ -32,7 +32,7 @@ let path_example_verilog = __dirname + path.sep + 'examples'+path.sep+'verilog'+
 var structure_vhdl = fs.readFileSync(path_example_vhdl+'example_1.vhd','utf8');
 var structure_v = fs.readFileSync(path_example_verilog+'uart.v','utf8');
 
-let options = "vhdl";
+let options = Colibri.General.LANGUAGES.VHDL;
 var cocotbpyVhdl = new Colibri.Templates.Templates_factory();
 let cocotb_vhdl_expected = fs.readFileSync(path_example_vhdl+'cocotbVhdl.py', 'utf8');
 var template = cocotbpyVhdl.get_template(Codes.TYPES.COCOTB,options);
@@ -48,7 +48,7 @@ template.generate(structure_vhdl).then(cocotb_vhdl => {
   }
 });
 
-let options_verilog = "verilog";
+let options_verilog = Colibri.General.LANGUAGES.VERILOG;
 var cocotbpyV = new Colibri.Templates.Templates_factory();
 let cocotb_verilog_expected = fs.readFileSync(path_example_verilog+'cocotbV.py', 'utf8');
 var templateV = cocotbpyV.get_template(Codes.TYPES.COCOTB,options_verilog);

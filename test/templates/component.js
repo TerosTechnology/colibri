@@ -32,15 +32,6 @@ var tested = [Codes.TYPESCOMPONENTS.COMPONENT,
               Codes.TYPESCOMPONENTS.INSTANCE,
               Codes.TYPESCOMPONENTS.SIGNALS];
 
-let options = {
-    'type' : "normal",
-    'language' : 'vhdl',
-    'version' : Colibri.General.VERILOGSTANDARS.VERILOG2001,
-    'parameters' : [
-      {'parameter' : "X"},
-      {'parameter' : "Y"}
-    ]
-};
 
 var structure_vhdl = [];
 var expected_vhdl = [];
@@ -65,15 +56,6 @@ options_s['type'] = tested[2]; // signals
 templates_vhdl_class.generate(structure_vhdl[2],options_s).then(
             out =>{ check(expected_vhdl[2],out,tested[2],language[0]); });
 
-let options_verilog = {
-  'type' : "normal",
-  'language' : 'verilog',
-  'version' : Colibri.General.VERILOGSTANDARS.VERILOG2001,
-  'parameters' : [
-    {'parameter' : "X"},
-    {'parameter' : "Y"}
-  ]
-};
 var structure_verilog = [];
 var expected_verilog = [];
 for (let x=0;x<tested.length;++x){

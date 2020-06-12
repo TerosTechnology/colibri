@@ -29,13 +29,12 @@ const Codes = require('../../src/templates/codes');
 
 let options = {
   'type' : "normal",
-  'language' : Colibri.General.LANGUAGES.VHDL,
   'parameters' : [
     {'parameter' : "X"},
     {'parameter' : "Y"}
   ]
 };
-let language = "vhdl";
+let language = Colibri.General.LANGUAGES.VHDL;
 ////////////////////////////////////////////////////////////////////////////////
 let structure = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+'vhdl'+path.sep+'example_1.vhd','utf8');
 let test_expected_vhdl = fs.readFileSync(__dirname + path.sep +'examples'+path.sep+'vhdl'+path.sep+'tbVhdl.vhd','utf8');
@@ -60,7 +59,6 @@ templates_class.generate(structure,options).then(test_vhd => {
 ////////////////////////////////////////////////////////////////////////////////
 let options_vunit = {
   'type' : "vunit",
-  'language' : Colibri.General.LANGUAGES.VHDL,
   'parameters' : [
     {'parameter' : "X"},
     {'parameter' : "Y"}

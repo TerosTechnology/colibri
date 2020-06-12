@@ -28,7 +28,7 @@ const Colibri = require('../../src/main');
 const Codes = require('../../src/templates/codes')
 
 let path_example = __dirname + path.sep + 'examples'+path.sep+'vhdl'+path.sep+'runpy'+path.sep;
-let lang= "vhdl";
+let lang= Colibri.General.LANGUAGES.VHDL;
 let runpy = new Colibri.Templates.Templates_factory();
 for (let x=0;x<5;++x){
   let structure = fs.readFileSync(path_example+'runpyConf_'+x+'.json','utf8');

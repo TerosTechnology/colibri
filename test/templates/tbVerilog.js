@@ -30,7 +30,6 @@ const Codes = require('../../src/templates/codes');
 let options = {
   'type': "normal",
   'version' : Colibri.General.VERILOGSTANDARS.VERILOG2001,
-  'language' : Colibri.General.LANGUAGES.VERILOG,
   'parameters': [{
       'parameter': "X"
     },
@@ -39,7 +38,7 @@ let options = {
     }
   ]
 };
-let language = "verilog";
+let language = Colibri.General.LANGUAGES.VERILOG;
 ////////////////////////////////////////////////////////////////////////////////
 let structure = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+'verilog'+path.sep+'uart.v', 'utf8');
 let test_Expected = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+'verilog'
@@ -61,7 +60,6 @@ if (test_Expected.replace(/\n/g, '').replace(/ /g, '').replace(/\r/g, '')
 let options_vunit = {
   'type': "vunit",
   'version' : Colibri.General.VERILOGSTANDARS.VERILOG2001,
-  'language' : Colibri.General.LANGUAGES.VERILOG,
   'parameters': [{
       'parameter': "X"
     },

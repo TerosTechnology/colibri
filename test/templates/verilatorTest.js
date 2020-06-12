@@ -30,7 +30,7 @@ const Codes = require('../../src/templates/codes')
 let path_example = __dirname + path.sep + 'examples'+path.sep+'verilog'+path.sep
 let structure_v = fs.readFileSync(path_example+'uart.v','utf8');
 
-let options = "verilog";
+let options = Colibri.General.LANGUAGES.VERILOG;
 let veritest = new Colibri.Templates.Templates_factory();
 let verilator_expected = fs.readFileSync(path_example+'veritest.cpp','utf8');
 let veritest_gen = veritest.get_template(Codes.TYPES.VERILATOR,options);
