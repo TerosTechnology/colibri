@@ -139,7 +139,7 @@ class Manager extends Simulators.Simulators{
     if (with_dependency_graph === true){
       svg_dependency_graph = this.dependency_graph.get_dependency_graph_svg();
     }
-    documenter.get_md_doc_from_array(this.getSourceName(),output_dir_doc,symbol_vhdl,
+    documenter.get_md_doc_from_array(this.get_source_name(),output_dir_doc,symbol_vhdl,
                 symbol_verilog,svg_dependency_graph,project_name,with_dependency_graph);
   }
 
