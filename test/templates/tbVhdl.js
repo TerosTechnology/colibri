@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Copyright 2020 Teros Technology
 //
 // Ismael Perez Rojo
@@ -19,11 +20,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
+// eslint-disable-next-line no-unused-vars
 const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 const Colibri = require('../../src/main');
-const Codes = require('../../src/templates/codes')
+const Codes = require('../../src/templates/codes');
 
 let options = {
   'type' : "normal",
@@ -32,15 +34,17 @@ let options = {
     {'parameter' : "X"},
     {'parameter' : "Y"}
   ]
-}
+};
+let language = "vhdl";
 ////////////////////////////////////////////////////////////////////////////////
 let structure = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+'vhdl'+path.sep+'example_1.vhd','utf8');
-let test_expected_vhdl = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+'vhdl'+path.sep+'tbVhdl.vhd','utf8');
-templates = new Colibri.Templates.Templates_factory();
-let templates_class = templates.get_template(Codes.TYPES.TESTBENCH,options)
-templates_class.create_Testbench(structure,options).then(test_vhd => {
+let test_expected_vhdl = fs.readFileSync(__dirname + path.sep +'examples'+path.sep+'vhdl'+path.sep+'tbVhdl.vhd','utf8');
+let templates = new Colibri.Templates.Templates_factory();
+let templates_class = templates.get_template(Codes.TYPES.TESTBENCH,language);
+templates_class.generate(structure,options).then(test_vhd => {
   console.log('****************************************************************');
-  if(test_expected_vhdl.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === test_vhd.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
+  if(test_expected_vhdl.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') 
+        === test_vhd.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
     console.log("Testing... tbVhdl: Ok!".green);
   }
   else{
@@ -61,12 +65,14 @@ let options_vunit = {
     {'parameter' : "X"},
     {'parameter' : "Y"}
   ]
-}
-test_expected_vunit_tb = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+'vhdl'+path.sep+'tbVhdlVunit.vhd','utf8');
+};
+let test_expected_vunit_tb = fs.readFileSync(__dirname + path.sep + 'examples'
+                      +path.sep+'vhdl'+path.sep+'tbVhdlVunit.vhd','utf8');
 templates = new Colibri.Templates.Templates_factory();
-let templates_vunit_class = templates.get_template(Codes.TYPES.TESTBENCH,options)
-templates_vunit_class.create_Testbench(structure,options_vunit).then(test_vhdl_vunit =>{
-  if(test_expected_vunit_tb.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '') === test_vhdl_vunit.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '')){
+let templates_vunit_class = templates.get_template(Codes.TYPES.TESTBENCH,language);
+templates_vunit_class.generate(structure,options_vunit).then(test_vhdl_vunit =>{
+  if(test_expected_vunit_tb.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '') 
+        === test_vhdl_vunit.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g, '')){
     console.log("Testing... tbVhdlVunit: Ok!".green);
   }
   else{
@@ -78,6 +84,6 @@ templates_vunit_class.create_Testbench(structure,options_vunit).then(test_vhdl_v
     throw new Error('Test error.');
   }
   console.log('****************************************************************');
-} )
+} );
 
 

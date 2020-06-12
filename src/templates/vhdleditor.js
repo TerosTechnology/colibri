@@ -22,14 +22,14 @@
 //TODO: regular la tabulación.
 //TODO: estandarizar ports y genrics.
 
-const Codes = require('./codes')
-const ParserLib = require('../parser/factory')
-const General = require('../general/general')
+const Codes = require('./codes');
+const ParserLib = require('../parser/factory');
+const General = require('../general/general');
 
 class Vhdl_editor{
   constructor(){}
 
-  async create_Testbench(src, options) {
+  async generate(src, options) {
     let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(General.LANGUAGES.VHDL,'');
     let structure =  await parser.getAll(src);
@@ -37,54 +37,54 @@ class Vhdl_editor{
       return undefined;
     }
     let vunit = false;
-    if (options != null){
-      vunit = options['type'] == Codes.TYPESTESTBENCH.VUNIT
+    if (options !== null){
+      vunit = options['type'] === Codes.TYPESTESTBENCH.VUNIT;
     }
     let space = '  ';
     let str = '';
     str += "library ieee;\nuse ieee.std_logic_1164.all;\nuse ieee.numeric_std.all;\n";
-    str += '\n'
-    if (vunit == true) {
+    str += '\n';
+    if (vunit === true) {
       str += this.set_Vunit_Libraries();
-      str += '\n'
+      str += '\n';
     }
-    if (vunit == true) {
+    if (vunit === true) {
       str += this.set_Vunit_Entity(structure['entity']);
-      str += '\n'
+      str += '\n';
     } else {
       str += this.set_Entity(structure['entity']);
-      str += '\n'
+      str += '\n';
     }
     str += this.set_Architecture(structure['architecture'], structure['entity']);
-    str += '\n'
+    str += '\n';
     if (vunit === false) {
       str += this.set_Component(space, structure['entity']['name'], structure['generics'],
         structure['ports']);
     }
-    str += '\n'
+    str += '\n';
     str += this.set_Constants(space, structure['generics']);
-    str += '\n'
+    str += '\n';
     str += '  -- Ports\n';
     str += this.set_Signals(space, structure['ports']);
-    str += '\n'
-    str += 'begin\n'
-    str += '\n'
+    str += '\n';
+    str += 'begin\n';
+    str += '\n';
     str += this.set_Instance(space, structure['entity']['name'], structure['generics'], structure['ports'], vunit);
-    str += '\n'
-    if (vunit == true) {
+    str += '\n';
+    if (vunit === true) {
       str += this.set_Vunit_Process(space);
-      str += '\n'
+      str += '\n';
     }
     str += this.set_Clk_Process(space);
-    str += '\n'
-    str += 'end;\n'
+    str += '\n';
+    str += 'end;\n';
 
     return str;
   }
 
   set_Vunit_Libraries() {
     var str = '';
-    str += 'library src_lib;\n'
+    str += 'library src_lib;\n';
     str += '--\n';
     str += 'library vunit_lib;\n';
     str += 'context vunit_lib.vunit_context;\n';
@@ -166,7 +166,7 @@ class Vhdl_editor{
       }
       str += space + '    ' + generics[generics.length - 1]['name'] + ' : ' +
         generics[generics.length - 1]['type'] + '\n';
-      str += space + '  );\n'
+      str += space + '  );\n';
     }
     //Ports
     if (ports.length > 0) {
@@ -178,7 +178,7 @@ class Vhdl_editor{
       str += space + '    ' + ports[ports.length - 1]['name'] + ' : ' +
         ports[ports.length - 1]['direction'] + ' ' +
         ports[ports.length - 1]['type'] + '\n';
-      str += space + '  );\n'
+      str += space + '  );\n';
     }
     //End component
     str += space + 'end component;\n';
@@ -200,8 +200,9 @@ class Vhdl_editor{
       for (let x = 0; x < generics.length - 1; ++x) {
         str += space + '    ' + generics[x]['name'] + ' => ' + generics[x]['name'] + ',\n';
       }
-      str += space + '    ' + generics[generics.length - 1]['name'] + ' => ' + generics[generics.length - 1]['name'] + '\n';
-      str += space + '  )\n'
+      str += space + '    ' + generics[generics.length - 1]['name'] + ' => ' 
+            + generics[generics.length - 1]['name'] + '\n';
+      str += space + '  )\n';
     }
     //Ports
     if (ports.length > 0) {
@@ -247,37 +248,42 @@ class Vhdl_editor{
     str += '-- ' + space + "end process clk_process;\n";
     return str;
   }
+}
 
-  async create_Component(src, options) {
+class Vhdl_component extends Vhdl_editor{
+  async generate(src, options) {
     let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(General.LANGUAGES.VHDL,'');
     let structure =  await parser.getAll(src);
     if (structure === undefined){
       return undefined;
     }
-    if (options == null)
-      return "";
+    if (options === null)
+      {return "";}
     var component = "";
-    if (options['type'] == Codes.TYPESCOMPONENTS.COMPONENT) {
+    if (options['type'] === Codes.TYPESCOMPONENTS.COMPONENT) {
       component = this.set_Component('  ', structure['entity']['name'],
         structure['generics'], structure['ports'], false);
-    } else if (options['type'] == Codes.TYPESCOMPONENTS.INSTANCE) {
+    } else if (options['type'] === Codes.TYPESCOMPONENTS.INSTANCE) {
       component = this.set_Instance('  ', structure['entity']['name'],
         structure['generics'], structure['ports'], false);
-    } else if (options['type'] == Codes.TYPESCOMPONENTS.SIGNALS) {
+    } else if (options['type'] === Codes.TYPESCOMPONENTS.SIGNALS) {
       component = this.set_Signals('  ', structure['ports']);
     }
     else{
-      console.log("error")
+      // eslint-disable-next-line no-console
+      console.log("error");
     }
     return component;
   }
-
 }
+
+
 
 //*****************************************************************************/
 //***************************** Exports ***************************************/
 //*****************************************************************************/
 module.exports = {
-  Vhdl_editor: Vhdl_editor
-}
+  Vhdl_editor: Vhdl_editor,
+  Vhdl_component : Vhdl_component
+};

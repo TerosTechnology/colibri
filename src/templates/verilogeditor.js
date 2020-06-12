@@ -26,12 +26,12 @@
 
 const General = require('../general/general');
 const Codes = require('./codes');
-const ParserLib = require('../parser/factory')
+const ParserLib = require('../parser/factory');
 
 class Verilog_editor{
   constructor(){}
 
-  async create_Testbench(src, options) {
+  async generate(src, options) {
     let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(General.LANGUAGES.VERILOG,'');
     let structure =  await parser.getAll(src);
@@ -40,40 +40,40 @@ class Verilog_editor{
     }
     var vunit = false;
     var version = General.VERILOGSTANDARS.VERILOG2001;
-    if(options != null){
-      vunit = options['type'] == Codes.TYPESTESTBENCH.VUNIT
+    if(options !== null){
+      vunit = options['type'] === Codes.TYPESTESTBENCH.VUNIT;
       version = options['version'];
     }
     var space = '  ';
     var str = '';
-    if (vunit == true) {
+    if (vunit === true) {
       str += this.set_Vunit_Libraries();
-      str += '\n'
+      str += '\n';
     }
     str += this.set_Entity(structure['entity']);
-    str += '\n'
+    str += '\n';
     str += this.set_Constants(space, structure['generics']);
-    str += '\n'
+    str += '\n';
     str += '  // Ports\n';
     str += this.set_Signals(space, structure['ports']);
-    str += '\n'
+    str += '\n';
 
-    if (version == General.VERILOGSTANDARS.VERILOG2001) {
+    if (version === General.VERILOGSTANDARS.VERILOG2001) {
       str += this.set_Instance2001(space, structure['entity']['name'], structure['generics'], structure['ports']);
     } else {
       str += this.set_Instance(space, structure['entity']['name'], structure['generics'], structure['ports']);
     }
-    str += '\n'
-    if (vunit == true) {
+    str += '\n';
+    if (vunit === true) {
       str += this.set_Vunit_Process(space);
-      str += '\n'
+      str += '\n';
     } else {
       str += this.set_Main(space);
-      str += '\n'
+      str += '\n';
     }
     str += this.set_Clk_Process(space);
-    str += '\n'
-    str += 'endmodule\n'
+    str += '\n';
+    str += 'endmodule\n';
 
     return str;
   }
@@ -134,7 +134,7 @@ class Verilog_editor{
         str += space + '    ' + generics[x]['name'] + ',\n';
       }
       str += space + '    ' + generics[generics.length - 1]['name'] + '\n';
-      str += space + '  )\n'
+      str += space + '  )\n';
     }
     //Ports
     if (ports.length > 0) {
@@ -158,8 +158,9 @@ class Verilog_editor{
       for (let x = 0; x < generics.length - 1; ++x) {
         str += space + '    .' + generics[x]['name'] + '(' + generics[x]['name'] + '),\n';
       }
-      str += space + '    .' + generics[generics.length - 1]['name'] + ' (' + generics[generics.length - 1]['name'] + ')\n';
-      str += space + '  )\n'
+      str += space + '    .' + generics[generics.length - 1]['name'] + ' (' 
+            + generics[generics.length - 1]['name'] + ')\n';
+      str += space + '  )\n';
     }
     //Ports
     if (ports.length > 0) {
@@ -197,32 +198,36 @@ class Verilog_editor{
     str += '// ' + space + "  #5  clk =  ! clk;\n";
     return str;
   }
+}
 
-  async create_Component(src, options) {
+class Verilog_component extends Verilog_editor{
+  async generate(src, options) {
     let parser = new ParserLib.ParserFactory;
     parser = parser.getParser(General.LANGUAGES.VERILOG,'');
     let structure =  await parser.getAll(src);
     if (structure === undefined){
       return undefined;
     }
-    if (options == null)
-      return "";
+    if (options === null)
+      {return "";}
     var component = "";
-    if (options['type'] == Codes.TYPESCOMPONENTS.COMPONENT) {
+    if (options['type'] === Codes.TYPESCOMPONENTS.COMPONENT) {
       component = "";
-    } else if (options['type'] == Codes.TYPESCOMPONENTS.INSTANCE) {
+    } else if (options['type'] === Codes.TYPESCOMPONENTS.INSTANCE) {
       component = this.set_Instance2001('  ', structure['entity']['name'],
         structure['generics'], structure['ports'], false);
-    } else if (options['type'] == Codes.TYPESCOMPONENTS.SIGNALS) {
+    } else if (options['type'] === Codes.TYPESCOMPONENTS.SIGNALS) {
       component = this.set_Signals('  ', structure['ports']);
     }
     return component;
   }
 }
 
+
 //*****************************************************************************/
 //***************************** Exports ***************************************/
 //*****************************************************************************/
 module.exports = {
-  Verilog_editor: Verilog_editor
-}
+  Verilog_editor: Verilog_editor,
+  Verilog_component : Verilog_component
+};
