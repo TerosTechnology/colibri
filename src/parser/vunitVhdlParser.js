@@ -19,12 +19,11 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-const shell = require('child_process');
 const path  = require('path');
 
 class VhdlParser {
   constructor(comment_symbol) {
-    this.comment_symbol = comment_symbol
+    this.comment_symbol = comment_symbol;
   }
 
   getAll(str) {
@@ -35,17 +34,19 @@ class VhdlParser {
     let reduce_str = str.slice(0,MAX_ARG_LENGTH);
 
     let cmd = "python " + path_python + ' "' + this.comment_symbol + '" ' + ' "' + reduce_str + ' "';
-    let structure = null;
+    let structure = undefined;
     try {
       const execSync = require('child_process').execSync;
       let stdout = execSync(cmd).toString();
       structure = JSON.parse(stdout);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error);
+      // eslint-disable-next-line no-console
       console.error("Error parsing.");
     }
     return structure;
   }
 }
 
-module.exports =  VhdlParser
+module.exports =  VhdlParser;
