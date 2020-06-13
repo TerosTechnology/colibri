@@ -20,7 +20,6 @@
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 const temp = require('temp');
 const fs = require('fs');
-const convert = require('xml-js');
 
 class Vsg {
   constructor() {

@@ -19,22 +19,22 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-const Cocotb = require('./cocotb')
-const Verilator = require('./verilator')
-const VUnit = require('./vunit')
-const Vhdl_editor = require('./vhdleditor')
-const Verilog_editor = require('./verilogeditor')
-const General = require('../general/general')
-const Codes = require('./codes')
+const Cocotb = require('./cocotb');
+const Verilator = require('./verilator');
+const VUnit = require('./vunit');
+const Vhdl_editor = require('./vhdleditor');
+const Verilog_editor = require('./verilogeditor');
+const General = require('../general/general');
+const Codes = require('./codes');
 
 class Templates_factory {
   constructor(){ }
   
-  get_template(type,lang){
-    let language = lang["language"];
+  get_template(type,language){
     let template;
-      if(type === Codes.TYPES.VUNIT)
-        template = this.get_vunit_template();   
+      if(type === Codes.TYPES.VUNIT){
+        template = this.get_vunit_template();
+      }   
       else if (type === Codes.TYPES.COCOTB){
         template = this.get_cocotb_template(language);
       }
@@ -84,11 +84,11 @@ class Templates_factory {
   }
 
   get_vhdl_component() {
-    return new Vhdl_editor.Vhdl_editor();
+    return new Vhdl_editor.Vhdl_component();
   }
 
   get_verilog_component() {
-    return new Verilog_editor.Verilog_editor();
+    return new Verilog_editor.Verilog_component();
   }
 
 }
@@ -96,4 +96,4 @@ class Templates_factory {
 module.exports = {
   Codes : Codes,
   Templates_factory: Templates_factory
-}
+};
