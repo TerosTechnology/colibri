@@ -55,7 +55,7 @@ class Xvhdl extends Base_linter {
 
       let tokens = line.split(/:?\s*(?:\[|\])\s*/).filter(Boolean);
       if (tokens.length < 4
-          || tokens[0] != "ERROR"
+          || tokens[0] !== "ERROR"
           || !tokens[1].startsWith("VRFC")) {
           return;
       }

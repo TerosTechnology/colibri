@@ -50,51 +50,58 @@ class Ghdl extends Base_linter {
   async _lint(file,options){
     let result = await this._exec_linter(file,this.PARAMETERS.SYNT,
                           this.PARAMETERS.SYNT_WINDOWS,options);
-    file = file.replace('\\ ',' ');
-    let errors_str = result.stderr;
-    let errors_str_lines = errors_str.split(/\r?\n/g);
-    let errors = [];
-    errors_str_lines.forEach((line) => {
-      if(line.startsWith(file)){
-          line = line.replace(file, '');
-          let terms = line.split(':');
-          let line_num = parseInt(terms[1].trim());
-          let column_num = parseInt(terms[2].trim());
-          if(terms.length == 4){
-            let error = {
-              'severity' : "error",
-              'description' : terms[3].trim(),
-              'location' : {
-                'file': file,
-                'position': [line_num-1, column_num-1]
+    try {
+      file = file.replace('\\ ',' ');
+      let errors_str = result.stderr;
+      let errors_str_lines = errors_str.split(/\r?\n/g);
+      let errors = [];
+      errors_str_lines.forEach((line) => {
+        if(line.startsWith(file)){
+            line = line.replace(file, '');
+            let terms = line.split(':');
+            let line_num = parseInt(terms[1].trim());
+            let column_num = parseInt(terms[2].trim());
+            if(terms.length === 4){
+              let error = {
+                'severity' : "error",
+                'description' : terms[3].trim(),
+                'location' : {
+                  'file': file,
+                  'position': [line_num-1, column_num-1]
+                }
+              };
+              errors.push(error);
+            }
+            else if(terms.length >= 4){
+              let sev;
+              if(terms[2].trim() === 'error'){
+                sev = "error";
               }
-            };
-            errors.push(error);
-          }
-          else if(terms.length >= 4){
-            let sev;
-            if(terms[2].trim() == 'error'){
-              sev = "error";
-            }
-            else if(terms[2].trim() == 'warning'){
-              sev = "warning";
-            }
-            else{
-              sev = "information";
-            }
-            let error = {
-              'severity' : sev,
-              'description' : terms[3].trim(),
-              'location' : {
-                'file': file,
-                'position': [line_num-1, column_num-1]
+              else if(terms[2].trim() === 'warning'){
+                sev = "warning";
               }
-            };
-            errors.push(error);
+              else{
+                sev = "information";
+              }
+              let error = {
+                'severity' : sev,
+                'description' : terms[3].trim(),
+                'location' : {
+                  'file': file,
+                  'position': [line_num-1, column_num-1]
+                }
+              };
+              errors.push(error);
+            }
           }
-        }
-    });
-    return errors;
+      });
+      return errors;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+      return [];
+    }
+
   }
 
 
