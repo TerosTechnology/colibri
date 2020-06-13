@@ -87,7 +87,7 @@ class Verilator extends Base_linter {
   split_terms(line){
     let terms = line.split(':');
     for (var i = 0; i < terms.length; i++) {
-      if (terms[i] == ' ') {
+      if (terms[i] === ' ') {
         terms.splice(i, 1);
         i--;
       }

@@ -41,7 +41,14 @@ class Vsg {
   }
 
   async _parse_junit(junit_content){
-    const json = await JSON.parse(junit_content);
+    let json;
+    try {
+      json = await JSON.parse(junit_content);      
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+      return [];
+    }
     let errors = [];
     if (json.files !== undefined && json.files[0] !== undefined && json.files[0].violations !== undefined){
       let errors_json = json.files[0].violations;
