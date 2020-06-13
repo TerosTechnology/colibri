@@ -72,10 +72,13 @@ class Documenter {
 
   async _get_markdown(path, extra_top_space) {
     let extra_top_space_l = "";
-    if (extra_top_space != null && extra_top_space != false){
+    if (extra_top_space !== null && extra_top_space !== false){
       extra_top_space_l = "&nbsp;&nbsp;\n\n";
     }
     let code_tree = await this._get_code_tree();
+    if (code_tree === undefined){
+      return "";
+    }
     let markdown_doc = extra_top_space_l;
     //Title
     markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
@@ -101,7 +104,6 @@ class Documenter {
   }
 
   async _get_html_from_code(options) {
-    let code_tree = await this._get_code_tree();
     let html_style = `
 <style>
   #teroshdl h1,#teroshdl h2,#teroshdl h3,#teroshdl table, #teroshdl svg {margin-left:5%;}
@@ -118,9 +120,6 @@ class Documenter {
   #teroshdl tr:nth-child(even){background-color: #f2f2f2;}
 </style>
 <div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%">\n`;
-
-    let html_generics = this._generics_to_html_table(code_tree.generics);
-    let html_ports = this._generics_to_html_table(code_tree.ports);
 
     //HTML style
     let html = "";
@@ -139,6 +138,17 @@ class Documenter {
     else{
       html = html_style;
     }
+    let code_tree = await this._get_code_tree();
+    let html_generics;
+    let html_ports;
+    if (code_tree !== undefined){
+      html_generics = this._generics_to_html_table(code_tree.generics);
+      html_ports = this._generics_to_html_table(code_tree.ports);
+    }
+    else{
+      return html;
+    }
+
     html += "<p>\n\n\n</p>";
     //Title
     html += `<h1 id="entity-${code_tree.entity.name}">Entity: ${code_tree.entity.name}</h1>\n`;
@@ -216,6 +226,9 @@ class Documenter {
 
   async _get_pdf(path,options) {
     let code_tree = await this._get_code_tree();
+    if (code_tree === undefined){
+      return;
+    }
 
     let file_svg = path_lib.basename(path,path_lib.extname(path)) + ".svg";
     let path_svg = path_lib.dirname(path) + path_lib.sep + file_svg;
@@ -242,6 +255,9 @@ class Documenter {
 
   async _get_diagram_svg(){
     let code_tree = await this._get_code_tree();
+    if (code_tree === undefined){
+      return;
+    }
     return await Diagram.diagramGenerator(code_tree,0);
   }
 
@@ -308,14 +324,15 @@ class Documenter {
 
 function get_state_machine_hdl_svg(str,lang){
   let state_machine_cl;
-  if (lang == General.LANGUAGES.VHDL){
+  if (lang === General.LANGUAGES.VHDL){
     state_machine_cl = new State_machine_vhdl();
   }
-  else if (lang == General.LANGUAGES.VERILOG){
+  else if (lang === General.LANGUAGES.VERILOG){
     state_machine_cl = new State_machine_verilog();
   }
-  else
+  else{
     return null;
+  }
 
   let state_machine_svg;
   try{
@@ -362,16 +379,16 @@ function get_md_doc_from_array(files,output_dir_doc,symbol_vhdl,symbol_verilog,
   let symbol = "!";
   for (let i=0;i<files.length;++i){
     let filename = path_lib.basename(files[i],path_lib.extname(files[i]));
-    if(path_lib.extname(files[i]) == '.vhd'){
+    if(path_lib.extname(files[i]) === '.vhd'){
       lang = "vhdl";
       symbol = symbol_vhdl;
     }
-    else if(path_lib.extname(files[i]) == '.v'){
+    else if(path_lib.extname(files[i]) === '.v'){
       lang = "verilog";
       symbol = symbol_verilog;
     }
     else
-      break;
+      {break;}
     main_doc += "- [" + filename + "](./" + filename + ".md)\n";
 
     let contents = fs.readFileSync(files[i], 'utf8');
@@ -379,7 +396,7 @@ function get_md_doc_from_array(files,output_dir_doc,symbol_vhdl,symbol_verilog,
     let doc_inst = new Documenter(contents,lang,symbol);
     doc_inst.save_markdown(output_dir_doc + path_lib.sep + filename + ".md");
   }
-  if (with_dependency_graph == true){
+  if (with_dependency_graph === true){
     main_doc += "# Project dependency graph\n";
     main_doc += '![system](./dependency_graph.svg "System")';
     fs.writeFileSync(output_dir_doc + path_lib.sep + "dependency_graph.svg",graph);
