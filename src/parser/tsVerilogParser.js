@@ -46,7 +46,7 @@ class tsVerilogParser  {
         this.loaded_wasm = true;
       }
       var lines = this.fileLines(sourceCode);
-      const tree = this.parser.parse(sourceCode);
+      const tree = await this.parser.parse(sourceCode);
 
       var structure = {
         'libraries': this.get_libraries(tree.rootNode, lines),  // includes
@@ -343,7 +343,7 @@ class tsVerilogParser  {
   }
 
   fileLines(source) {
-    var array = source.toString().split(os.EOL);
+    var array = source.toString().split(/[\n\r]+/);
     return array;
   }
 }
