@@ -1205,7 +1205,8 @@ def get_comments(code):
 
 
 comment_symbol = sys.argv[1]
-code = sys.argv[2]
+f = open(sys.argv[2], "r")
+code = f.read()
 
 try:
     design_file = VHDLDesignFile.parse(code)
