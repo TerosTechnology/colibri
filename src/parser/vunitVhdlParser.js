@@ -35,8 +35,6 @@ class VhdlParser {
     let reduce_str = str.slice(0,MAX_ARG_LENGTH);
 
     let code_file = this._create_temp_file_of_code(reduce_str);
-
-    // let cmd = "python " + path_python + ' "' + this.comment_symbol + '" ' + ' "' + reduce_str + ' "';
     let cmd = "python " + path_python + ' "' + this.comment_symbol + '" "' + code_file + '"';
 
     let structure = undefined;
