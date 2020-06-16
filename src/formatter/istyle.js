@@ -37,16 +37,16 @@ class Istyle extends Base_formatter {
   }
 
   async _format(file,options){
-    let path_bin = `${__dirname}${path_lib.sep}resources${path_lib.sep}bin${path_lib.sep}istyle${path_lib.sep}`;
+    let path_bin = `${__dirname}${path_lib.sep}bin${path_lib.sep}istyle${path_lib.sep}`;
     let platform = os.platform();
     if (platform === "darwin"){
       path_bin += "istyle-darwin";
     }
-    else if (platform == "linux"){
+    else if (platform === "linux"){
       path_bin += "istyle-linux";
   
     }
-    else if (platform == "win32"){
+    else if (platform === "win32"){
       path_bin += "istyle-win32.exe";
     }
 
@@ -61,8 +61,9 @@ class Istyle extends Base_formatter {
     if (options !== undefined && options.extra_args !== undefined){
       synt += options.extra_args;
     }
+    synt += file;
 
-    await this._exec_formatter(file,synt, synt,options);
+    await this._exec_formatter(synt);
     let formatted_code = fs.readFileSync(file, 'utf8');
     return formatted_code;
   }

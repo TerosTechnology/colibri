@@ -25,7 +25,7 @@ class Ghdl extends Base_linter {
     super();
     this.PARAMETERS = {
       'SYNT' : "ghdl -s -fno-color-diagnostics",
-      'SYNT_WINDOWS' : "ghdl -s -fno-color-diagnostics",
+      'SYNT_WINDOWS' : "ghdl.exe -s -fno-color-diagnostics",
       'ERROR' : /[\t\n ]*(.+){1}[\t]*.vhd:*([0-9]+):([0-9]+):*[\t ]*(error|warning)*:*[\t ]*(.+)/g,
       'TYPEPOSITION': 4,
       'ROWPOSITION': 2,
