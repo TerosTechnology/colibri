@@ -25,6 +25,7 @@ const StmVHDL = require('./statemachinevhdl');
 const StmVerilog = require('./statemachineverilog');
 const ParserLib = require('../parser/factory');
 const General = require('../general/general');
+const showdown = require('showdown');
 
 class Documenter {
   constructor(code,lang,comment_symbol) {
@@ -90,18 +91,26 @@ class Documenter {
     //Description
     markdown_doc += "## Description\n";
     markdown_doc  += code_tree['entity']['comment'];
-    // //Architecture
-    // markdown_doc += "## Architectures\n";
     //Generics and ports
     markdown_doc += this._get_in_out_section(code_tree['ports'],code_tree['generics']);
-    // //Signals
-    // markdown_doc += "## Signals\n";
-    // //constants
-    // markdown_doc += "## Constants\n";
-    // //Processes
-    // markdown_doc += "## Processes\n";
     return markdown_doc;
   }
+
+  async _get_markdown_incrusted_svg_from_code_tree(code_tree, extra_top_space) {
+    let markdown_doc = "&nbsp;&nbsp;\n\n";
+    //Title
+    markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
+    //Description
+    markdown_doc += "## Diagram\n";
+    markdown_doc += await this._get_diagram_svg_from_code_tree(code_tree) + "\n"
+    //Description
+    markdown_doc += "## Description\n";
+    markdown_doc  += code_tree['entity']['comment'];
+    //Generics and ports
+    markdown_doc += this._get_in_out_section(code_tree['ports'],code_tree['generics']);
+    return markdown_doc;
+  }
+
 
   async _get_html_from_code(options) {
     let html_style = `
@@ -139,33 +148,13 @@ class Documenter {
       html = html_style;
     }
     let code_tree = await this._get_code_tree();
-    let html_generics;
-    let html_ports;
-    if (code_tree !== undefined){
-      html_generics = this._generics_to_html_table(code_tree.generics);
-      html_ports = this._generics_to_html_table(code_tree.ports);
-    }
-    else{
+    if (code_tree === undefined){
       return html;
     }
-
-    html += "<p>\n\n\n</p>";
-    //Title
-    html += `<h1 id="entity-${code_tree.entity.name}">Entity: ${code_tree.entity.name}</h1>\n`;
-    //Diagram
-    html += `<h2 id="diagram">Diagram</h2>\n`;
-    html += await this._get_diagram_svg_from_code_tree(code_tree);
-    //Entity description
-    html += `<h2 id="description">Description</h2>\n`;
-    html += `<p>${code_tree.entity.comment}\n</p>`;
-    //Ports table
-    html += `<h2 id="generics-and-ports">Generics and ports</h2>\n`;
-    html += `<h3 id="table-11-generics">Table 1.1 Generics</h3>\n`;
-    html += `${html_generics}\n`;
-    //Genercis table
-    html += `<h3 id="table-12-ports">Table 1.2 Ports</h3>\n`;
-    html += `${html_ports}\n`;
-
+    let markdown = await this._get_markdown_incrusted_svg_from_code_tree(code_tree);
+    let converter = new showdown.Converter({tables: true, ghCodeBlocks: true});
+    converter.setFlavor('github');
+    html += converter.makeHtml(markdown);
     return html;
   }
 
@@ -222,7 +211,6 @@ class Documenter {
 </table>`;
     return html;
   }
-
 
   async _get_pdf(path,options) {
     let code_tree = await this._get_code_tree();
@@ -288,9 +276,13 @@ class Documenter {
     md += "## Generics and ports\n";
     //Tables
     md += "### Table 1.1 Generics\n";
-    md += this._get_doc_generics(generics);
+    if (generics.length !== 0){
+      md += this._get_doc_generics(generics);
+    }
     md += "### Table 1.2 Ports\n";
-    md += this._get_doc_ports(ports);
+    if (ports.length !== 0){
+      md += this._get_doc_ports(ports);
+    }
     return md;
   }
 

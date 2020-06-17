@@ -62,26 +62,26 @@ for (let i=0;i<custom_css.length;++i){
     }
     console.log("Test HTML -> OK!");
   });
-  // //Test Markdown
-  // documenter_vhdl.save_markdown(__dirname + path_lib.sep + type + "output_test_0_md.md").then(function() {
-  //   let filename_expected = base_name_resources + "output_test_0_md.md";
-  //   let expected_file_buffer = fs.readFileSync(filename_expected);
-  //   let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_md.md");
-  //   if (file_buffer.equals(expected_file_buffer) !== true){
-  //     throw new Error("Error Markdown.");
-  //   }
-  //   console.log("Test Markdown -> OK!");
-  // });
-  // //Test PDF
-  // documenter_vhdl.save_pdf(__dirname + path_lib.sep + type + "output_test_0_pdf.pdf",options).then(function() {
-  //   let filename_expected = base_name_resources + "output_test_0_pdf.pdf";
-  //   let expected_file_buffer = fs.readFileSync(filename_expected);
-  //   let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_pdf.pdf");
-  //   if (file_buffer.equals(expected_file_buffer) !== true){
-  //     throw new Error("Error pdf.");
-  //   }
-  //   console.log("Test pdf -> OK!");
-  // });
+  //Test Markdown
+  documenter_vhdl.save_markdown(__dirname + path_lib.sep + type + "output_test_0_md.md").then(function() {
+    let filename_expected = base_name_resources + "output_test_0_md.md";
+    let expected_file_buffer = fs.readFileSync(filename_expected);
+    let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_md.md");
+    if (file_buffer.equals(expected_file_buffer) !== true){
+      throw new Error("Error Markdown.");
+    }
+    console.log("Test Markdown -> OK!");
+  });
+  //Test PDF
+  documenter_vhdl.save_pdf(__dirname + path_lib.sep + type + "output_test_0_pdf.pdf",options).then(function() {
+    let filename_expected = base_name_resources + "output_test_0_pdf.pdf";
+    let expected_file_buffer = fs.readFileSync(filename_expected);
+    let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_pdf.pdf");
+    if (file_buffer.equals(expected_file_buffer) !== true){
+      throw new Error("Error pdf.");
+    }
+    console.log("Test pdf -> OK!");
+  });
   //Test SVG
   documenter_vhdl.save_svg(__dirname + path_lib.sep + type + "output_test_0_svg.svg").then(function() {
     let filename_expected = base_name_resources + "output_test_0_svg.svg";
