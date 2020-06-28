@@ -17,7 +17,7 @@
 // You should have received a copy of the GNU General Public License
 // along with TerosHDL.  If not, see <https://www.gnu.org/licenses/>.
 
-const nopy = require('nopy');
+const nopy = require('./api');
 const path_lib = require('path');
 
 class Dependency_graph {
@@ -35,7 +35,10 @@ class Dependency_graph {
     }
     else{
       //check if python path is python3
+      command = "python --version";
+      result_command = await this._exec_command(command);
       let stdout_arr = result_command.stdout.replace('Python ','').split('.');
+
       let python_version = stdout_arr[0];
       if (python_version !== '3'){
         return undefined;
@@ -69,10 +72,12 @@ class Dependency_graph {
     if (python_exec_path === undefined){
       return undefined;
     }
+    // eslint-disable-next-line no-unused-vars
     return new Promise(function(resolve, reject) {
       nopy.spawnPython([py_path, str], { interop: "buffer", 
-                    execPath: python_exec_path}).then(({ code, stdout, stderr }) => {
-        resolve(stdout);
+        // eslint-disable-next-line no-unused-vars
+        execPath: python_exec_path}).then(({ code, stdout, stderr }) => {
+          resolve(stdout);
       });
     });
   }
