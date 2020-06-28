@@ -26,6 +26,7 @@ const StmVerilog = require('./statemachineverilog');
 const ParserLib = require('../parser/factory');
 const General = require('../general/general');
 const showdown = require('showdown');
+const json5 = require('json5');
 
 class Documenter {
   constructor(code,lang,comment_symbol) {
@@ -91,25 +92,28 @@ class Documenter {
     //Description
     markdown_doc += "## Description\n";
     markdown_doc  += code_tree['entity']['comment'];
+    // markdown_doc  += this._get_wavedrom_svg(code_tree['entity']['comment']);
+
     //Generics and ports
     markdown_doc += this._get_in_out_section(code_tree['ports'],code_tree['generics']);
     return markdown_doc;
   }
 
-  async _get_markdown_incrusted_svg_from_code_tree(code_tree, extra_top_space) {
-    let markdown_doc = "&nbsp;&nbsp;\n\n";
-    //Title
-    markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
-    //Description
-    markdown_doc += "## Diagram\n";
-    markdown_doc += await this._get_diagram_svg_from_code_tree(code_tree) + "\n"
-    //Description
-    markdown_doc += "## Description\n";
-    markdown_doc  += code_tree['entity']['comment'];
-    //Generics and ports
-    markdown_doc += this._get_in_out_section(code_tree['ports'],code_tree['generics']);
-    return markdown_doc;
-  }
+  // async _get_markdown_incrusted_svg_from_code_tree(code_tree, extra_top_space) {
+  //   let markdown_doc = "&nbsp;&nbsp;\n\n";
+  //   //Title
+  //   markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
+  //   //Description
+  //   markdown_doc += "## Diagram\n";
+  //   // markdown_doc += await this._get_diagram_svg_from_code_tree(code_tree) + "\n";
+  //   //Description
+  //   markdown_doc += "## Description\n";
+  //   markdown_doc  += this._get_wavedrom_svg(code_tree['entity']['comment']);
+  //   // markdown_doc  += code_tree['entity']['comment'];
+  //   //Generics and ports
+  //   markdown_doc += this._get_in_out_section(code_tree['ports'],code_tree['generics']);
+  //   return markdown_doc;
+  // }
 
 
   async _get_html_from_code(options) {
@@ -151,10 +155,28 @@ class Documenter {
     if (code_tree === undefined){
       return html;
     }
-    let markdown = await this._get_markdown_incrusted_svg_from_code_tree(code_tree);
+
     let converter = new showdown.Converter({tables: true, ghCodeBlocks: true});
     converter.setFlavor('github');
-    html += converter.makeHtml(markdown);
+    // html += converter.makeHtml(markdown);
+
+
+    html += converter.makeHtml("&nbsp;&nbsp;\n\n");
+    //Title
+    html += converter.makeHtml("# Entity: " + code_tree['entity']['name'] + "\n");
+    //Description
+    html += converter.makeHtml("## Diagram\n");
+    html += converter.makeHtml(await this._get_diagram_svg_from_code_tree(code_tree) + "\n");
+    //Description
+    html += converter.makeHtml("## Description\n");
+    const {description, wavedrom} = this._get_wavedrom_svg(code_tree['entity']['comment']);
+
+    let html_description = converter.makeHtml(description);
+    html_description = html_description.replace("$cholosimeone$",wavedrom);
+    html += html_description;
+    //Generics and ports
+    html += converter.makeHtml(this._get_in_out_section(code_tree['ports'],code_tree['generics']));
+
     return html;
   }
 
@@ -261,13 +283,34 @@ class Documenter {
 
   async _get_code_tree(){
     let parser = new ParserLib.ParserFactory;
-    parser = parser.getParser(this.lang,this.comment_symbol);
+    parser = await parser.getParser(this.lang,this.comment_symbol);
     let code_tree = await parser.getAll(this.code);
     return code_tree;
   }
 
   async _gen_code_tree(){
-    this.code_tree = this._get_code_tree();
+    this.code_tree = await this._get_code_tree();
+  }
+
+  _get_wavedrom_svg(description){
+    //regex wavedrom
+    const regex = /(\{([ ]+|)signal([ ]+|)+:([ ]+|)\[[^]+\})/gm;
+    let match = regex.exec(description);
+    if ( match !== null && match[0] !== null){
+      let normalized_diagram = match[0];
+      normalized_diagram = normalized_diagram.replace(/\\"/g,'"');
+      let normalized_diagram_json5 = json5.parse(normalized_diagram);
+
+      let wavedrom = require('wavedrom');
+      let diagram = wavedrom.renderAny(0,normalized_diagram_json5,wavedrom.waveSkin);
+
+      let onml = require('onml');
+      let diagram_svg = onml.s(diagram);
+
+      let description_replace = description.replace(match[0],"\n" + "$cholosimeone$" + "\n");
+      return {description: description_replace, wavedrom: diagram_svg};
+    }
+    return {description: description, wavedrom: ""};
   }
 
   _get_in_out_section(ports,generics) {
