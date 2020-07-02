@@ -23,15 +23,20 @@ const ln = require('../src/documenter/documenter');
 const fs = require('fs');
 const path = require('path');
 
-let code = fs.readFileSync(__dirname + path.sep + './examples/vhdl/example_0.vhd','utf8');
 let build_folfer = 'build_diagram';
-fs.mkdirSync(__dirname + path.sep + build_folfer);
-let D = new ln.Documenter(code,"vhdl","!");
+let build_folfer_path = __dirname + path.sep + build_folfer;
+if ((fs.accessSync(build_folfer_path))!==undefined) {
+    fs.mkdirSync(__dirname + path.sep + build_folfer);
+}
 
-D.save_markdown(__dirname + path.sep + build_folfer + path.sep + 'md.md');
-D.save_html(__dirname + path.sep + build_folfer + path.sep + 'html.html');
-D.save_svg(__dirname + path.sep + build_folfer + path.sep + 'svg.svg');
+for (let x=0;x<7;++x){
+    let code = fs.readFileSync(__dirname + path.sep + './examples/vhdl_diagram/example_'+x+'.vhd','utf8');
+    let D = new ln.Documenter(code,"vhdl","!");
+    D.save_markdown(__dirname + path.sep + build_folfer + path.sep + x + '_md.md');
+    D.save_html(__dirname + path.sep + build_folfer + path.sep + x +'_html.html');
+    D.save_svg(__dirname + path.sep + build_folfer + path.sep + x +'_svg.svg');
 // console.log(md)
 // console.log(html)
+}
 
 
