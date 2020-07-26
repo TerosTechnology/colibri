@@ -18,6 +18,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
+
 const fs = require('fs');
 const path_lib = require('path');
 const Diagram = require('./diagram');
@@ -115,7 +116,6 @@ class Documenter {
   //   return markdown_doc;
   // }
 
-
   async _get_html_from_code(options) {
     let html_style = `
 <style>
@@ -172,7 +172,11 @@ class Documenter {
     const {description, wavedrom} = this._get_wavedrom_svg(code_tree['entity']['comment']);
 
     let html_description = converter.makeHtml(description);
-    html_description = html_description.replace("$cholosimeone$",wavedrom);
+
+    for(let i=0;i<wavedrom.length;++i){
+      html_description = html_description.replace("$cholosimeone$"+i,wavedrom[i]);
+    }
+    // html_description = html_description.replace("$cholosimeone$",wavedrom);
     html += html_description;
     //Generics and ports
     html += converter.makeHtml(this._get_in_out_section(code_tree['ports'],code_tree['generics']));
@@ -295,22 +299,45 @@ class Documenter {
   _get_wavedrom_svg(description){
     //regex wavedrom
     const regex = /(\{([ ]+|)signal([ ]+|)+:([ ]+|)\[[^]+\})/gm;
-    let match = regex.exec(description);
-    if ( match !== null && match[0] !== null){
-      let normalized_diagram = match[0];
-      normalized_diagram = normalized_diagram.replace(/\\"/g,'"');
-      let normalized_diagram_json5 = json5.parse(normalized_diagram);
+    let match;
+    let wavedrom_diagram = [];
+    let counter = 0;
 
-      let wavedrom = require('wavedrom');
-      let diagram = wavedrom.renderAny(0,normalized_diagram_json5,wavedrom.waveSkin);
+    let description_normalized = description.replace(/{[ \t]*signal[ \t]*:[ \t]*\[/gm,"{signal:[");
+    let description_replace = description_normalized;
 
-      let onml = require('onml');
-      let diagram_svg = onml.s(diagram);
 
-      let description_replace = description.replace(match[0],"\n" + "$cholosimeone$" + "\n");
-      return {description: description_replace, wavedrom: diagram_svg};
+    let description_replace_split = description_normalized.split(/{[ \t]*signal[ \t]*:[ \t]*\[/gm);
+    if (description_replace_split.length === 0){
+      return {description: description_normalized, wavedrom: wavedrom_diagram};
     }
-    return {description: description, wavedrom: ""};
+
+    for (let x=0; x<description_replace_split.length;++x){
+      let description_replace_split_inst = "{signal:[" + description_replace_split[x];
+      while ((match = regex.exec(description_replace_split_inst)) !== null) {
+        // This is necessary to avoid infinite loops with zero-width matches
+        if (match.index === regex.lastIndex) {
+            regex.lastIndex++;
+        }
+        if ( match !== null && match[0] !== null){
+          let normalized_diagram = match[0];
+          normalized_diagram = normalized_diagram.replace(/\\"/g,'"');
+          let normalized_diagram_json5 = json5.parse(normalized_diagram);
+  
+          let wavedrom = require('wavedrom');
+          let diagram = wavedrom.renderAny(0,normalized_diagram_json5,wavedrom.waveSkin);
+  
+          let onml = require('onml');
+          let diagram_svg = onml.s(diagram);
+          wavedrom_diagram.push(diagram_svg);
+
+          description_replace = description_replace.replace(match[0],"\n" + "$cholosimeone$" + counter + " \n");
+          counter += 1;
+        }
+      }
+    }
+    
+    return {description: description_replace, wavedrom: wavedrom_diagram};
   }
 
   _get_in_out_section(ports,generics) {

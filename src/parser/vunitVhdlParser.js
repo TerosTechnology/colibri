@@ -28,9 +28,7 @@ class VhdlParser {
   }
 
   getAll(str) {
-    let path_python = __dirname + path.sep + "parser.py"
-    str = str.replace(/"/g,'\\"');
-    str = str.replace(/`/g,'\\`');
+    let path_python = __dirname + path.sep + "parser.py";
     const MAX_ARG_LENGTH = 32767;
     let reduce_str = str.slice(0,MAX_ARG_LENGTH);
 
