@@ -141,7 +141,23 @@ class Vhdl_editor{
     str += space + 'constant clk_period : time := 5 ns;\n';
     str += space + '-- Generics\n';
     for (let x = 0; x < m.length; ++x) {
-      str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ';\n';
+      var normalized_type = m[x]['type'].replace(/\s/g, '').toLowerCase();
+      if (normalized_type === "integer"){
+        str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ' := 0;\n';
+      }
+      else if(normalized_type === "signed" || normalized_type === "unsigned"){
+        str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + " := (others => '0');\n";
+
+      }
+      else if(normalized_type === "string"){
+        str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ' := "";\n';
+      }
+      else if(normalized_type === "boolean"){
+        str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ' := false;\n';
+      }
+      else{
+        str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ';\n';
+      }
     }
     return str;
   }
