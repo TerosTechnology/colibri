@@ -297,16 +297,17 @@ class Documenter {
 
   _get_wavedrom_svg(description){
     //regex wavedrom
-    const regex = /(\{([ ]+|)signal([ ]+|)+:([ ]+|)\[[^]+\})/gm;
+    const regex = /(\{([ "\n]+|)signal([\n" ]+|)+:([ ]+|)\[[^]+\})/gm;
+    const regex_replace = /{[ \t"\n]*signal[\n" \t]*:[ \t]*\[/gm;
+    const regex_split = /{[ \t"\n]*signal["\n \t]*:[ \t]*\[/gm;
     let match;
     let wavedrom_diagram = [];
     let counter = 0;
 
-    let description_normalized = description.replace(/{[ \t]*signal[ \t]*:[ \t]*\[/gm,"{signal:[");
+    let description_normalized = description.replace(regex_replace,"{signal:[");
     let description_replace = description_normalized;
 
-
-    let description_replace_split = description_normalized.split(/{[ \t]*signal[ \t]*:[ \t]*\[/gm);
+    let description_replace_split = description_normalized.split(regex_split);
     if (description_replace_split.length === 0){
       return {description: description_normalized, wavedrom: wavedrom_diagram};
     }
@@ -321,17 +322,24 @@ class Documenter {
         if ( match !== null && match[0] !== null){
           let normalized_diagram = match[0];
           normalized_diagram = normalized_diagram.replace(/\\"/g,'"');
-          let normalized_diagram_json5 = json5.parse(normalized_diagram);
+          try{
+            let normalized_diagram_json5 = json5.parse(normalized_diagram);
+            let wavedrom = require('wavedrom');
+            let diagram = wavedrom.renderAny(0,normalized_diagram_json5,wavedrom.waveSkin);
+    
+            let onml = require('onml');
+            let diagram_svg = onml.s(diagram);
+            wavedrom_diagram.push(diagram_svg);
   
-          let wavedrom = require('wavedrom');
-          let diagram = wavedrom.renderAny(0,normalized_diagram_json5,wavedrom.waveSkin);
-  
-          let onml = require('onml');
-          let diagram_svg = onml.s(diagram);
-          wavedrom_diagram.push(diagram_svg);
-
-          description_replace = description_replace.replace(match[0],"\n" + "$cholosimeone$" + counter + " \n");
-          counter += 1;
+            description_replace = description_replace.replace(match[0],"\n" + "$cholosimeone$" + counter + " \n");
+            counter += 1;
+          }
+          catch(error){
+            // eslint-disable-next-line no-console
+            console.log(error);
+            // eslint-disable-next-line no-console
+            console.log(normalized_diagram);
+          }
         }
       }
     }
