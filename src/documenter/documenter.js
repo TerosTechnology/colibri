@@ -64,7 +64,6 @@ class Documenter {
   }
   async save_markdown(path){
     let file = path_lib.dirname(path) + path_lib.sep + path_lib.basename(path,path_lib.extname(path)) + ".svg";
-    // let path_svg = path_lib.dirname(path) + path_lib.sep + file;
     fs.writeFileSync(path,await this._get_markdown(file));
   }
   // ***************************************************************************
@@ -88,7 +87,7 @@ class Documenter {
     //Description
     markdown_doc += "## Diagram\n";
     await this._save_svg_from_code_tree(path, code_tree);
-    markdown_doc += '![Diagram](' + path + ' "Diagram")';
+    markdown_doc += '![Diagram](' + path_lib.basename(path) + ' "Diagram")';
     markdown_doc += "\n";
     //Description
     markdown_doc += "## Description\n";
