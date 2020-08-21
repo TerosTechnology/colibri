@@ -38,6 +38,7 @@ function diagramGenerator(structure,bn){
   var size  = 20;
   var font='Helvetica';
   var offset = 10;
+  var text_offset = 7;
   var text_space = 15;
   var text_space_pin = text_space/3;
   var separator = 10;
@@ -72,8 +73,8 @@ function diagramGenerator(structure,bn){
     //write generics
     for (let i = 0; i < generics[0].length; i++) {
       locy=size*i+offset/2
-      var textleft=canvas.text(generics[kind][i]).move(locx-text_space-text_space_pin,locy).font({family:   font, size: size, anchor:   'end'});
-      var textleft=canvas.text(generics[name][i]).move(locx+text_space,locy).font({family:   font, size: size, anchor:   'start'});
+      var textleft=canvas.text(generics[kind][i]).move(locx-text_space-text_space_pin,locy-text_offset).font({family:   font, size: size, anchor:   'end'});
+      var textleft=canvas.text(generics[name][i]).move(locx+text_space,locy-text_offset).font({family:   font, size: size, anchor:   'start'});
       min_x = Math.min(min_x,textleft['node'].getAttribute('x'));
       var pins=canvas.line(locx-text_space,0, locx, 0 ).move(locx-text_space,locy+size*2/4).stroke({ color: 'black', width: size/4, linecap: 'rec' });
     }
@@ -87,19 +88,26 @@ function diagramGenerator(structure,bn){
   //write ports
   for (let i = 0; i < inPorts[0].length; i++) {
     locy=size*generics[0].length+offset+size*i+separator;
-    var textleft = canvas.text(inPorts[kind][i]).move(locx-text_space-text_space_pin,locy).font({family:   font, size: size, anchor:   'end'});
-    var textleft = canvas.text(inPorts[name][i]).move(locx+text_space,locy).font({family:   font, size: size, anchor:   'start'});
+    var textleft = canvas.text(inPorts[kind][i]).move(locx-text_space-text_space_pin,locy-text_offset).font({family:   font, size: size, anchor:   'end'});
+    var textleft = canvas.text(inPorts[name][i]).move(locx+text_space,locy-text_offset).font({family:   font, size: size, anchor:   'start'});
+    let max_local = inPorts[name][i].length + inPorts[kind][i].length;
+    max_leght_text_x = Math.max(max_leght_text_x,max_local);
+    max_x = max_leght_text_x;
     min_x = Math.min(min_x,textleft['node'].getAttribute('x'));
     var pins=canvas.line(locx-text_space,0, locx, 0 ).move(locx-text_space,locy+size*2/4).stroke({ color: 'black', width: size/4, linecap: 'rec' });
   }
-  for (let i = 0; i < outPorts[0].length; i++) {
-    locy=size*generics[0].length+offset+size*i+separator;
-    var textright= canvas.text(outPorts[kind][i]).move(locx+width+text_space+text_space_pin,locy).font({family:   font, size: size, anchor:   'start'});
-    var textright= canvas.text(outPorts[name][i]).move(locx+width-text_space,locy).font({family:   font, size: size, anchor:   'end'});
-    let max_local = outPorts[name][i].length + outPorts[kind][i].length;
-    max_leght_text_x = Math.max(max_leght_text_x,max_local);
-    max_x = Math.max(max_x,textright['node'].getAttribute('x'));
-    var pins=canvas.line(locx-text_space,0, locx, 0 ).move(locx+width,locy+size*2/4).stroke({ color: 'black', width: size/4, linecap: 'rec' });
+  if (outPorts[0].length>0) {
+    max_leght_text_x = 0;
+    max_x = 0;
+    for (let i = 0; i < outPorts[0].length; i++) {
+      locy=size*generics[0].length+offset+size*i+separator;
+      var textright= canvas.text(outPorts[kind][i]).move(locx+width+text_space+text_space_pin,locy-text_offset).font({family:   font, size: size, anchor:   'start'});
+      var textright= canvas.text(outPorts[name][i]).move(locx+width-text_space,locy-text_offset).font({family:   font, size: size, anchor:   'end'});
+      let max_local = outPorts[name][i].length + outPorts[kind][i].length;
+      max_leght_text_x = Math.max(max_leght_text_x,max_local);
+      max_x = Math.max(max_x,textright['node'].getAttribute('x'));
+      var pins=canvas.line(locx-text_space,0, locx, 0 ).move(locx+width,locy+size*2/4).stroke({ color: 'black', width: size/4, linecap: 'rec' });
+    }
   }
 
   let total_width = max_x + 0.7*size*max_leght_text_x;
