@@ -82,7 +82,7 @@ function diagramGenerator(structure,bn){
   //ports square
   locy=high+offset/2+separator
   high = size*Math.max(inPorts[0].length,outPorts[0].length);
-  total_high = total_high + high + + offset/2;
+  total_high = total_high + high + offset/2;
   var recta = canvas.rect(width,high+offset).fill(border).move(locx,locy);
   canvas.rect(width-4,high+offset/2).fill(portBox).move(locx+2,locy+2);
   //write ports
@@ -111,8 +111,8 @@ function diagramGenerator(structure,bn){
   }
 
   let total_width = max_x + 0.7*size*max_leght_text_x;
-  canvas.size(total_width, 1.15*total_high);
-  canvas.viewbox(0,0,total_width,1.15*total_high);
+  canvas.size(total_width, 2*offset+total_high);
+  canvas.viewbox(0,0,total_width,2*offset+total_high);
 
   return canvas.svg();
 }
