@@ -21,17 +21,22 @@
 
 const ln = require('../src/documenter/documenter');
 const fs = require('fs');
+const path = require('path');
 
-var structure = fs.readFileSync('./documenter/examples/vhdl/structure.vhd','utf8');
+let build_folfer = 'build_diagram';
+let build_folfer_path = __dirname + path.sep + build_folfer;
+if ((fs.accessSync(build_folfer_path))!==undefined) {
+    fs.mkdirSync(__dirname + path.sep + build_folfer);
+}
 
-var D = new ln.BaseStructure(structure,"vhdl","!");
-var md = D.getMdDoc();
-// D.getPdfDoc('./');
-D.getHtmlDoc();
-var html = D.html;
+for (let x=0;x<10;++x){
+    let code = fs.readFileSync(__dirname + path.sep + './examples/vhdl_diagram/example_'+x+'.vhd','utf8');
+    let D = new ln.Documenter(code,"vhdl","!");
+    D.save_markdown(__dirname + path.sep + build_folfer + path.sep + x + '_md.md');
+    D.save_html(__dirname + path.sep + build_folfer + path.sep + x +'_html.html');
+    D.save_svg(__dirname + path.sep + build_folfer + path.sep + x +'_svg.svg');
 // console.log(md)
 // console.log(html)
-var svg = D.getDiagram();
-// fs.writeFileSync("svg.svg",svg)
-fs.writeFileSync("html.html",html)
-fs.writeFileSync("md.md",md)
+}
+
+

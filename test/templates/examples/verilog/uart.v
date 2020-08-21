@@ -4,8 +4,10 @@
 // Function    : Simple UART
 // Coder       : Deepak Kumar Tala
 //-----------------------------------------------------
+
+//! documentacion
 module uart (
-reset          ,
+reset          , //! esto es un reset
 txclk          ,
 ld_tx_data     ,
 tx_data        ,
