@@ -35,6 +35,7 @@ for (let x=0;x<10;++x){
     D.save_markdown(__dirname + path.sep + build_folfer + path.sep + x + '_md.md');
     D.save_html(__dirname + path.sep + build_folfer + path.sep + x +'_html.html');
     D.save_svg(__dirname + path.sep + build_folfer + path.sep + x +'_svg.svg');
+    D.save_pdf(__dirname + path.sep + build_folfer + path.sep + x +'_pdf.pdf');
 // console.log(md)
 // console.log(html)
 }
