@@ -22,7 +22,7 @@
 const colors = require('colors');
 const fs = require('fs');
 const Colibri = require('../src/main');
-const general = require('../src/general/general')
+const general = require('../src/general/general');
 const General = Colibri.General;
 const Parser = Colibri.Parser;
 // const VhdlParser = require('../src/parser/vhdlparser')
@@ -56,7 +56,7 @@ for (let x=0;x<7;++x){
   // console.log(example_result);
   let rs = compareVhdl(example_result,example_exp_result,"example_"+x+".vhd");
   console.log("Test " + rs + " ["+"example_"+x+".vhd"+"]");
-  if (rs!= true) {
+  if (rs!== true) {
     test_result= false;
   }
 }
@@ -76,7 +76,7 @@ function compareVhdl(m,n,file){
 }
 function compareVerilog(m,n,file){
   var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
-  if(m['entity']['name'] != n['entity']['name']) { return false; }
+  if(m['entity']['name'] !== n['entity']['name']) { return false; }
   var ch1 = check(m['generics'],n['generics'],['name','type'],"generics",file);
   var ch2 = check(m['ports'],n['ports'],['name','kind','type'],"ports",file);
   var ch3 = check(m['regs'],n['regs'],['name','kind','type'],"regs",file);
@@ -87,7 +87,7 @@ function compareVerilog(m,n,file){
 }
 function compareVerilogTs(m,n,file){
   var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
-  if(m['entity']['name'] != n['entity']['name']) { return false; }
+  if(m['entity']['name'] !== n['entity']['name']) { return false; }
   var ch1 = check(m['generics'],n['generics'],['name','type','comment'],"generics",file);
   var ch2 = check(m['ports'],n['ports'],['name','direction','type','comment'],"ports",file);
   // var ch3 = check(m['regs'],n['regs'],['name','kind','type'],"regs",file);
@@ -99,13 +99,13 @@ function compareVerilogTs(m,n,file){
 
 function check(m,n,cmp,type,file){
   if(m.length != n.length) {
-    console.log("*************************************************************")
+    console.log("*************************************************************");
     console.log("Fail: " + type.yellow + " in file: " + file.red);
     console.log("Real ----->".yellow);
     console.log(m);
     console.log("Expected ----->".yellow);
     console.log(n);
-    console.log("*************************************************************")
+    console.log("*************************************************************");
     return false;
   }
   for (let i=0;i<m.length;++i) {
@@ -117,7 +117,7 @@ function check(m,n,cmp,type,file){
 
       let name_m;
       let name_n;
-      if(m[i][cmp[z]] == undefined){
+      if(m[i][cmp[z]] === undefined){
         name_m = "";
       }
       else{
@@ -125,8 +125,8 @@ function check(m,n,cmp,type,file){
       }
       name_n = n[i][cmp[z]].toLowerCase().replace(/\s/g,'').replace(/\t/g,'');
 
-      if(name_m != name_n) {
-        console.log("*********************************************************")
+      if(name_m !== name_n) {
+        console.log("*********************************************************");
         console.log(JSON.stringify(name_m));
         console.log(JSON.stringify(name_n));
         console.log("Fail: " + type.yellow + " in file: " + file.red);
@@ -134,7 +134,7 @@ function check(m,n,cmp,type,file){
         console.log(m);
         console.log("Expected ----->".yellow);
         console.log(n);
-        console.log("*********************************************************")
+        console.log("*********************************************************");
         return false;
       }
     }
@@ -142,8 +142,8 @@ function check(m,n,cmp,type,file){
   return true;
 }
 
-if (test_result == true)
-  console.log("All test...  OK!".green)
+if (test_result === true)
+  console.log("All test...  OK!".green);
 else{
   throw new Error('Test errors'.red);
 }

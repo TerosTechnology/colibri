@@ -29,13 +29,25 @@ if ((fs.accessSync(build_folfer_path))!==undefined) {
     fs.mkdirSync(__dirname + path.sep + build_folfer);
 }
 
-for (let x=0;x<10;++x){
+for (let x=0;x<12;++x){
     let code = fs.readFileSync(__dirname + path.sep + './examples/vhdl_diagram/example_'+x+'.vhd','utf8');
     let D = new ln.Documenter(code,"vhdl","!");
     D.save_markdown(__dirname + path.sep + build_folfer + path.sep + x + '_md.md');
     D.save_html(__dirname + path.sep + build_folfer + path.sep + x +'_html.html');
     D.save_svg(__dirname + path.sep + build_folfer + path.sep + x +'_svg.svg');
     D.save_pdf(__dirname + path.sep + build_folfer + path.sep + x +'_pdf.pdf');
+// console.log(md)
+// console.log(html)
+}
+
+let build_folfer_v = 'build_diagram_v';
+for (let x=1;x<2;++x){
+    let code = fs.readFileSync(__dirname + path.sep + './examples/verilog_diagram/example_'+x+'.v','utf8');
+    let D = new ln.Documenter(code,"verilog","!");
+    D.save_markdown(__dirname + path.sep + build_folfer_v + path.sep + x + '_md.md');
+    D.save_html(__dirname + path.sep + build_folfer_v + path.sep + x +'_html.html');
+    D.save_svg(__dirname + path.sep + build_folfer_v + path.sep + x +'_svg.svg');
+    D.save_pdf(__dirname + path.sep + build_folfer_v + path.sep + x +'_pdf.pdf');
 // console.log(md)
 // console.log(html)
 }
