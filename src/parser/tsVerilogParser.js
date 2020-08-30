@@ -198,7 +198,6 @@ class tsVerilogParser  {
   getPorts(tree, lines) {
     var items = [];
     var comments = [];
-    var item = {};
     var element = tree;
     //Comments
     comments = this.getComments(element, lines);
@@ -343,7 +342,7 @@ class tsVerilogParser  {
   }
 
   fileLines(source) {
-    var array = source.toString().split(/[\n\r]+/);
+    var array = source.toString().split("\n");
     return array;
   }
 }
