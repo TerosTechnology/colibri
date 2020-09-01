@@ -41,7 +41,7 @@ for (let x=0;x<14;++x){
 }
 
 let build_folfer_v = 'build_diagram_v';
-for (let x=0;x<3;++x){
+for (let x=0;x<10;++x){
     let code = fs.readFileSync(__dirname + path.sep + './examples/verilog_diagram/example_'+x+'.v','utf8');
     let D = new ln.Documenter(code,"verilog","!");
     D.save_markdown(__dirname + path.sep + build_folfer_v + path.sep + x + '_md.md');
