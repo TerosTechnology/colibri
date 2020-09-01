@@ -143,7 +143,7 @@ function getPortsOut(structure,name,kind){
   var str_in= [[],[]];
   var cont_in = 0;
   for (let x = 0; x <= structure.ports.length-1; ++x){
-    if (structure.ports[x]['direction']=== "out" || structure.ports[x]['direction']=== "output") {
+    if (structure.ports[x]['direction']=== "out" || structure.ports[x]['direction']=== "output" || structure.ports[x]['direction']=== "inout" || structure.ports[x]['direction']=== "buffer") {
       str_in[name][cont_in] = '   ' + structure.ports[x]['name'] + ' ';
       str_in[kind][cont_in] = '   ' + structure.ports[x]['type'] + ' ';
       cont_in++;
