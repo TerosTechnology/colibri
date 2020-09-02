@@ -58,11 +58,7 @@ class Verilog_editor{
     str += this.set_Signals(space, structure['ports']);
     str += '\n';
 
-    if (version === General.VERILOGSTANDARS.VERILOG2001) {
-      str += this.set_Instance2001(space, structure['entity']['name'], structure['generics'], structure['ports']);
-    } else {
-      str += this.set_Instance(space, structure['entity']['name'], structure['generics'], structure['ports']);
-    }
+    str += this.set_Instance2001(space, structure['entity']['name'], structure['generics'], structure['ports']);
     str += '\n';
     if (vunit === true) {
       str += this.set_Vunit_Process(space);
@@ -118,7 +114,12 @@ class Verilog_editor{
   set_Signals(space, m) {
     var str = '';
     for (let x = 0; x < m.length; ++x) {
-      str += space + 'reg ' + m[x]['type'] + ' ' + m[x]['name'] + ';\n';
+      if (m[x]['type'] === ''){
+        str += space + 'reg ' + m[x]['name'] + ';\n';
+      }
+      else{
+        str += space + 'reg ' + m[x]['type'] + ' ' + m[x]['name'] + ';\n';
+      }
     }
     return str;
   }
