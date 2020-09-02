@@ -117,9 +117,8 @@ function diagramGenerator(structure,bn){
   }
 
   let total_width = max_x + (size/2)*max_leght_text_out_kind + 2*offset;
-  canvas.size(total_width, 2*offset+total_high);
   canvas.viewbox(0,0,total_width,2*offset+total_high);
-
+  
   return canvas.svg();
 }
 
