@@ -57,12 +57,13 @@ function diagramGenerator(structure,bn){
   generics=getGenerics(structure,name, kind);
   inPorts=getPortsIn(structure,name,kind);
   outPorts=getPortsOut(structure,name,kind);
-  locx=(size/2)*maxString(generics,inPorts,[0,0],kind);
+  locx=(size/2)*maxString(generics,inPorts,[0,0],kind)+2*offset;
   width=(size)*maxString(generics,inPorts,outPorts,name);
 
   let min_x = 0;
   let max_x = 0;
   let max_leght_text_x = 0;
+  let max_leght_text_out_kind = 0;
 
   //generic square
   high = size*generics[0].length;
@@ -75,6 +76,9 @@ function diagramGenerator(structure,bn){
       locy=size*i+offset/2
       var textleft=canvas.text(generics[kind][i]).move(locx-text_space-text_space_pin,locy-text_offset).font({family:   font, size: size, anchor:   'end'});
       var textleft=canvas.text(generics[name][i]).move(locx+text_space,locy-text_offset).font({family:   font, size: size, anchor:   'start'});
+      let max_local = generics[name][i].length + generics[kind][i].length;
+      max_leght_text_x = Math.max(max_leght_text_x,max_local);
+      max_x = max_leght_text_x;
       min_x = Math.min(min_x,textleft['node'].getAttribute('x'));
       var pins=canvas.line(locx-text_space,0, locx, 0 ).move(locx-text_space,locy+size*2/4).stroke({ color: 'black', width: size/4, linecap: 'rec' });
     }
@@ -96,24 +100,25 @@ function diagramGenerator(structure,bn){
     min_x = Math.min(min_x,textleft['node'].getAttribute('x'));
     var pins=canvas.line(locx-text_space,0, locx, 0 ).move(locx-text_space,locy+size*2/4).stroke({ color: 'black', width: size/4, linecap: 'rec' });
   }
+  max_x = max_leght_text_x;
+  max_leght_text_out_kind = 4*offset;
   if (outPorts[0].length>0) {
-    max_leght_text_x = 0;
     max_x = 0;
+    max_leght_text_out_kind = 0;
     for (let i = 0; i < outPorts[0].length; i++) {
       locy=size*generics[0].length+offset+size*i+separator;
       var textright= canvas.text(outPorts[kind][i]).move(locx+width+text_space+text_space_pin,locy-text_offset).font({family:   font, size: size, anchor:   'start'});
       var textright= canvas.text(outPorts[name][i]).move(locx+width-text_space,locy-text_offset).font({family:   font, size: size, anchor:   'end'});
-      let max_local = outPorts[name][i].length + outPorts[kind][i].length;
-      max_leght_text_x = Math.max(max_leght_text_x,max_local);
+      let max_local = outPorts[kind][i].length;
+      max_leght_text_out_kind = Math.max(max_leght_text_out_kind,max_local);
       max_x = Math.max(max_x,textright['node'].getAttribute('x'));
       var pins=canvas.line(locx-text_space,0, locx, 0 ).move(locx+width,locy+size*2/4).stroke({ color: 'black', width: size/4, linecap: 'rec' });
     }
   }
 
-  let total_width = max_x + 0.7*size*max_leght_text_x;
-  canvas.size(total_width, 2*offset+total_high);
+  let total_width = max_x + (size/2)*max_leght_text_out_kind + 2*offset;
   canvas.viewbox(0,0,total_width,2*offset+total_high);
-
+  
   return canvas.svg();
 }
 
@@ -143,7 +148,7 @@ function getPortsOut(structure,name,kind){
   var str_in= [[],[]];
   var cont_in = 0;
   for (let x = 0; x <= structure.ports.length-1; ++x){
-    if (structure.ports[x]['direction']=== "out" || structure.ports[x]['direction']=== "output") {
+    if (structure.ports[x]['direction']=== "out" || structure.ports[x]['direction']=== "output" || structure.ports[x]['direction']=== "inout" || structure.ports[x]['direction']=== "buffer") {
       str_in[name][cont_in] = '   ' + structure.ports[x]['name'] + ' ';
       str_in[kind][cont_in] = '   ' + structure.ports[x]['type'] + ' ';
       cont_in++;
