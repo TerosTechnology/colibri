@@ -32,7 +32,8 @@
     "nopy": "^0.2.3",
     "wavedrom": "*",
     "onml": "*",
-    "json5": "*"
+    "json5": "*",
+    "bit-field": "*"
   },
   "devDependencies": {
     "colors": "x",
