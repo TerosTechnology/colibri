@@ -266,6 +266,82 @@ class Documenter {
     });
   }
 
+  _get_wavedrom_svg(text){
+    //Search json candidates
+    let json_candidates = this._get_json_candidates(text);
+    let svg_diagrams = [];
+    let text_modified = text;
+
+    let wavedrom = require('wavedrom');
+    var render = require('bit-field/lib/render');
+    let onml = require('onml');
+
+    let counter = 0;
+    for (let i=0;i<json_candidates.length;++i){
+      try{
+        let json = json5.parse(json_candidates[i]);
+        let diagram = wavedrom.renderAny(0,json,wavedrom.waveSkin);
+        let diagram_svg = onml.s(diagram);
+        svg_diagrams.push(diagram_svg);
+        text_modified = text_modified.replace(json_candidates[i],"\n" + "$cholosimeone$" + counter + " \n");
+        ++ counter;
+      }
+      catch(error){
+        try{
+          let json = json5.parse(json_candidates[i]);
+          let options = {
+            hspace: 888
+          };
+          let jsonml = render(json, options);
+          let diagram_svg = onml.stringify(jsonml);
+
+          svg_diagrams.push(diagram_svg);
+          text_modified = text_modified.replace(json_candidates[i],"\n" + "$cholosimeone$" + counter + " \n");
+          ++ counter;
+        }
+        // eslint-disable-next-line no-console
+        catch(error){console.log("");}
+      }
+
+    }
+    return {description: text_modified, wavedrom: svg_diagrams};
+  }
+
+  _get_json_candidates(text){
+    let json = [];
+    let i = 0;
+    let brackets = 0;
+    let character_number_begin = 0;
+    while( i<text.length ){
+      if (text[i] === '{'){
+        character_number_begin = i;
+        ++brackets;
+        ++i;
+        while(i<text.length){
+          if(text[i] === '{'){
+            ++brackets;
+            ++i;
+          }
+          else if(text[i] === '}'){
+            --brackets;
+            if (brackets === 0){
+              json.push(text.slice(character_number_begin,i+1));
+              break;
+            }
+            ++i;
+          }
+          else{
+            ++i;
+          }
+        }
+      }
+      else{
+        ++i;
+      }
+    }
+    return json;
+  }
+
   async _get_diagram_svg(){
     let code_tree = await this._get_code_tree();
     if (code_tree === undefined){
@@ -293,58 +369,6 @@ class Documenter {
 
   async _gen_code_tree(){
     this.code_tree = await this._get_code_tree();
-  }
-
-  _get_wavedrom_svg(description){
-    //regex wavedrom
-    const regex = /(\{([ "\n]+|)signal([\n" ]+|)+:([ ]+|)\[[^]+\})/gm;
-    const regex_replace = /{[ \t"\n]*signal[\n" \t]*:[ \t]*\[/gm;
-    const regex_split = /{[ \t"\n]*signal["\n \t]*:[ \t]*\[/gm;
-    let match;
-    let wavedrom_diagram = [];
-    let counter = 0;
-
-    let description_normalized = description.replace(regex_replace,"{signal:[");
-    let description_replace = description_normalized;
-
-    let description_replace_split = description_normalized.split(regex_split);
-    if (description_replace_split.length === 0){
-      return {description: description_normalized, wavedrom: wavedrom_diagram};
-    }
-
-    for (let x=0; x<description_replace_split.length;++x){
-      let description_replace_split_inst = "{signal:[" + description_replace_split[x];
-      while ((match = regex.exec(description_replace_split_inst)) !== null) {
-        // This is necessary to avoid infinite loops with zero-width matches
-        if (match.index === regex.lastIndex) {
-            regex.lastIndex++;
-        }
-        if ( match !== null && match[0] !== null){
-          let normalized_diagram = match[0];
-          normalized_diagram = normalized_diagram.replace(/\\"/g,'"');
-          try{
-            let normalized_diagram_json5 = json5.parse(normalized_diagram);
-            let wavedrom = require('wavedrom');
-            let diagram = wavedrom.renderAny(0,normalized_diagram_json5,wavedrom.waveSkin);
-    
-            let onml = require('onml');
-            let diagram_svg = onml.s(diagram);
-            wavedrom_diagram.push(diagram_svg);
-  
-            description_replace = description_replace.replace(match[0],"\n" + "$cholosimeone$" + counter + " \n");
-            counter += 1;
-          }
-          catch(error){
-            // eslint-disable-next-line no-console
-            console.log(error);
-            // eslint-disable-next-line no-console
-            console.log(normalized_diagram);
-          }
-        }
-      }
-    }
-    
-    return {description: description_replace, wavedrom: wavedrom_diagram};
   }
 
   _get_in_out_section(ports,generics) {
