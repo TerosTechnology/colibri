@@ -29,7 +29,7 @@ if ((fs.accessSync(build_folfer_path))!==undefined) {
     fs.mkdirSync(__dirname + path.sep + build_folfer);
 }
 
-for (let x=0;x<15;++x){
+for (let x=0;x<16;++x){
     let code = fs.readFileSync(__dirname + path.sep + './examples/vhdl_diagram/example_'+x+'.vhd','utf8');
     let D = new ln.Documenter(code,"vhdl","!");
     D.save_markdown(__dirname + path.sep + build_folfer + path.sep + x + '_md.md');
