@@ -28,6 +28,7 @@ const ParserLib = require('../parser/factory');
 const General = require('../general/general');
 const showdown = require('showdown');
 const json5 = require('json5');
+const temp = require('temp');
 
 class Documenter {
   constructor(code,lang,comment_symbol) {
@@ -51,6 +52,12 @@ class Documenter {
   // ***************************************************************************
   // options = {"custom_css_path":"/custom_css/path"}
   async save_html(path,options){
+    if (options === undefined){
+      options = {'html_style':'save'};
+    }
+    else{
+      options.html_style = 'save';
+    }
     let html_doc = await this.get_html(options);
     fs.writeFileSync(path,html_doc);
   }
@@ -84,41 +91,80 @@ class Documenter {
     let markdown_doc = extra_top_space_l;
     //Title
     markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
-    //Description
-    markdown_doc += "## Diagram\n";
+    //Diagram
     await this._save_svg_from_code_tree(path, code_tree);
+    markdown_doc += "## Diagram\n";
     markdown_doc += '![Diagram](' + path_lib.basename(path) + ' "Diagram")';
     markdown_doc += "\n";
     //Description
     markdown_doc += "## Description\n";
-    markdown_doc  += code_tree['entity']['comment'];
-    // markdown_doc  += this._get_wavedrom_svg(code_tree['entity']['comment']);
+
+    const {description, wavedrom} = this._get_wavedrom_svg(code_tree['entity']['comment']);
+    let wavedrom_description = description;
+    for(let i=0;i<wavedrom.length;++i){
+      let random_id = this._makeid(4);
+      let img = `![alt text](wavedrom_${random_id}${i}.svg "title")`;
+      let path_img = path_lib.dirname(path) + path_lib.sep + `wavedrom_${random_id}${i}.svg`;
+      fs.writeFileSync(path_img,wavedrom[i]);
+      wavedrom_description = wavedrom_description.replace("$cholosimeone$"+i,img);
+    }
+    markdown_doc  += wavedrom_description;
 
     //Generics and ports
     markdown_doc += this._get_in_out_section(code_tree['ports'],code_tree['generics']);
     return markdown_doc;
   }
 
-  // async _get_markdown_incrusted_svg_from_code_tree(code_tree, extra_top_space) {
-  //   let markdown_doc = "&nbsp;&nbsp;\n\n";
-  //   //Title
-  //   markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
-  //   //Description
-  //   markdown_doc += "## Diagram\n";
-  //   // markdown_doc += await this._get_diagram_svg_from_code_tree(code_tree) + "\n";
-  //   //Description
-  //   markdown_doc += "## Description\n";
-  //   markdown_doc  += this._get_wavedrom_svg(code_tree['entity']['comment']);
-  //   // markdown_doc  += code_tree['entity']['comment'];
-  //   //Generics and ports
-  //   markdown_doc += this._get_in_out_section(code_tree['ports'],code_tree['generics']);
-  //   return markdown_doc;
-  // }
+  _makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+ }
+
+  async _get_markdown_for_pdf() {
+    let code_tree = await this._get_code_tree();
+    if (code_tree === undefined){
+      return "";
+    }
+    let markdown_doc = "";
+    //Title
+    markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
+    //Diagram
+    markdown_doc += "## Diagram\n";
+    let path_diagram = temp.openSync().path;
+
+    await this._save_svg_from_code_tree(path_diagram + ".svg", code_tree);
+    markdown_doc += '![Diagram](' + path_diagram + '.svg "Diagram")';
+    markdown_doc += "\n";
+    //Description
+    markdown_doc += "## Description\n";
+
+    const {description, wavedrom} = this._get_wavedrom_svg(code_tree['entity']['comment']);
+    let wavedrom_description = description;
+    for(let i=0;i<wavedrom.length;++i){
+      let path_img = path_lib.dirname(path_diagram) + path_lib.sep + `wavedrom_${i}.svg`;
+      fs.writeFileSync(path_img,wavedrom[i]);
+      let img = `![alt text](${path_img} "title")`;
+      wavedrom_description = wavedrom_description.replace("$cholosimeone$"+i,img);
+    }
+    markdown_doc  += wavedrom_description;
+
+    //Generics and ports
+    markdown_doc += this._get_in_out_section(code_tree['ports'],code_tree['generics']);
+    return markdown_doc;
+  }
 
   async _get_html_from_code(options) {
-    let html_style = `
+    let html_style = "";
+    let html_style_preview = `
 <style>
-  #teroshdl h1,#teroshdl h2,#teroshdl h3,#teroshdl table, #teroshdl svg {margin-left:5%;}
+  #teroshdl h1,#teroshdl h2,#teroshdl h3,#teroshdl table, #teroshdl svg {margin-left:2.5%;}
+  svg {width:100%;height:100%;}
+  code {color:#545253;}
   div.templateTerosHDL { background-color: white;position:absolute; }
   #teroshdl td,#teroshdl th,#teroshdl h1,#teroshdl h2,#teroshdl h3 {color: black;}
   #teroshdl h1,#teroshdl h2 {font-weight:bold;}
@@ -127,11 +173,37 @@ class Documenter {
     border: 1px solid grey
   }
   #teroshdl p {color:black;}
-  #teroshdl p {margin-left:5%;}
+  #teroshdl p {margin-left:2.5%;}
   #teroshdl th { background-color: #ffd78c;}
   #teroshdl tr:nth-child(even){background-color: #f2f2f2;}
 </style>
 <div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%">\n`;
+
+  let html_style_save = `
+  <style>
+    #teroshdl h1,#teroshdl h2,#teroshdl h3,#teroshdl table, #teroshdl svg {margin-left:2.5%;width:60%}
+    code {color:#545253;}
+    div.templateTerosHDL { background-color: white;position:absolute; }
+    #teroshdl td,#teroshdl th,#teroshdl h1,#teroshdl h2,#teroshdl h3 {color: black;}
+    #teroshdl h1,#teroshdl h2 {font-weight:bold}
+    #teroshdl tr:hover {background-color: #ddd;}
+    #teroshdl td, #teroshdl th {
+      border: 1px solid grey;
+    }
+    #teroshdl p {color:black;}
+    #teroshdl p {margin-left:2.5%;}
+    #teroshdl th { background-color: #ffd78c;}
+    #teroshdl tr:nth-child(even){background-color: #f2f2f2;}
+  </style>
+  <div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%">\n`;
+
+    if (options !== undefined && options.html_style !== undefined 
+          && options.html_style === "save"){
+      html_style = html_style_save;
+    }
+    else{
+      html_style = html_style_preview;
+    }
 
     //HTML style
     let html = "";
@@ -175,65 +247,10 @@ class Documenter {
     for(let i=0;i<wavedrom.length;++i){
       html_description = html_description.replace("$cholosimeone$"+i,wavedrom[i]);
     }
-    // html_description = html_description.replace("$cholosimeone$",wavedrom);
     html += html_description;
     //Generics and ports
     html += converter.makeHtml(this._get_in_out_section(code_tree['ports'],code_tree['generics']));
 
-    return html;
-  }
-
-  _generics_to_html_table(generics){
-    let html = `
-<table>
-  <thead>
-    <tr>
-      <th id="port_name">Generic name</th>
-      <th id="type">Type</th>
-      <th id="description">Description</th>
-    </tr>
-  <thead>
-  <tbody>`;
-
-  for (let i=0; i<generics.length; ++i){
-    html += `
-    <tr>
-      <td>${generics[i].name}</td>
-      <td>${generics[i].type}</td>
-      <td>${generics[i].comment}</td>
-    <tr>`;
-  }
-    html += `
-  </tbody>
-</table>`;
-    return html;
-  }
-
-  _ports_to_html_table(ports){
-    let html = `
-<table>
-  <thead>
-    <tr>
-      <th id="port_name">Port name</th>
-      <th id="direction">Direction</th>
-      <th id="type">Type</th>
-      <th id="description">Description</th>
-    </tr>
-  <thead>
-  <tbody>`;
-
-  for (let i=0; i<ports.length; ++i){
-    html += `
-    <tr>
-      <td>${ports[i].name}</td>
-      <td>${ports[i].direction}</td>
-      <td>${ports[i].type}</td>
-      <td>${ports[i].comment}</td>
-    <tr>`;
-  }
-    html += `
-  </tbody>
-</table>`;
     return html;
   }
 
@@ -243,10 +260,7 @@ class Documenter {
       return;
     }
 
-    let file_svg = path_lib.basename(path,path_lib.extname(path)) + ".svg";
-    let path_svg = path_lib.dirname(path) + path_lib.sep + file_svg;
-    await this._save_svg_from_code_tree(path_svg, code_tree);
-    let markdown_doc = await this._get_markdown(path_svg);
+    let markdown_doc = await this._get_markdown_for_pdf();
     let markdownpdf = require("markdown-pdf");
   
     let options_md_pdf = {
@@ -256,14 +270,7 @@ class Documenter {
       options_md_pdf.cssPath = options.custom_css_path;
     }
 
-    markdownpdf(options_md_pdf).from.string(markdown_doc).to(path, function() {
-      try {
-        fs.unlinkSync(path_svg);
-      } catch(err) {
-        // eslint-disable-next-line no-console
-        console.error(err);
-      }
-    });
+    markdownpdf(options_md_pdf).from.string(markdown_doc).to(path);
   }
 
   _get_wavedrom_svg(text){
@@ -357,7 +364,7 @@ class Documenter {
 
   async _save_svg_from_code_tree(path, code_tree){
     let svg_diagram_str = await this._get_diagram_svg_from_code_tree(code_tree);
-    await fs.writeFileSync(path,svg_diagram_str);
+    fs.writeFileSync(path,svg_diagram_str);
   }
 
   async _get_code_tree(){
