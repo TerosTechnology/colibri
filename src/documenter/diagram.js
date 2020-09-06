@@ -94,14 +94,13 @@ function diagramGenerator(structure,bn){
     locy=size*generics[0].length+offset+size*i+separator;
     var textleft = canvas.text(inPorts[kind][i]).move(locx-text_space-text_space_pin,locy-text_offset).font({family:   font, size: size, anchor:   'end'});
     var textleft = canvas.text(inPorts[name][i]).move(locx+text_space,locy-text_offset).font({family:   font, size: size, anchor:   'start'});
-    let max_local = inPorts[name][i].length + inPorts[kind][i].length;
+    let max_local = inPorts[kind][i].length;
     max_leght_text_x = Math.max(max_leght_text_x,max_local);
-    max_x = max_leght_text_x;
     min_x = Math.min(min_x,textleft['node'].getAttribute('x'));
     var pins=canvas.line(locx-text_space,0, locx, 0 ).move(locx-text_space,locy+size*2/4).stroke({ color: 'black', width: size/4, linecap: 'rec' });
   }
-  max_x = 0;
-  max_leght_text_out_kind = Math.max(max_leght_text_x+offset,2*offset);
+  max_x = width;
+  max_leght_text_out_kind = Math.max(max_leght_text_x+offset,offset);
   if (outPorts[0].length>0) {
     max_x = 0;
     max_leght_text_out_kind = 0;
