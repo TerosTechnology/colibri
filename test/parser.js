@@ -28,9 +28,9 @@ const Parser = Colibri.Parser;
 
 for (let x=0;x<8;++x){
   var ParserLang = [General.LANGUAGES.VERILOG];
-  let example_exp_result = fs.readFileSync('./examples/verilog/example_'+x+'.json','utf8');
+  let example_exp_result = fs.readFileSync(__dirname+'/examples/verilog/example_'+x+'.json','utf8');
   example_exp_result     = JSON.parse(example_exp_result);
-  let example_verilog = fs.readFileSync('./examples/verilog/example_'+x+'.v' ,'utf8');
+  let example_verilog = fs.readFileSync(__dirname+'/examples/verilog/example_'+x+'.v' ,'utf8');
   get_structure(ParserLang,"!",example_verilog).then(example_result => {
   // console.log(example_result);
     let rs = compareVerilogTs(example_result,example_exp_result,"example_"+x+".v");
@@ -47,11 +47,11 @@ for (let x=0;x<8;++x){
 //////////////////////////////////////////////////////////////////////////////
 for (let x=0;x<7;++x){
   var ParserLang = [General.LANGUAGES.VHDL];
-  let example_exp_result = fs.readFileSync('./examples/vhdl/example_'+x+'.json','utf8');
+  let example_exp_result = fs.readFileSync(__dirname+'/examples/vhdl/example_'+x+'.json','utf8');
   example_exp_result     = JSON.parse(example_exp_result);
-  let example_vhd = fs.readFileSync('./examples/vhdl/example_'+x+'.vhd' ,'utf8');
+  let example_vhd = fs.readFileSync(__dirname+'/examples/vhdl/example_'+x+'.vhd' ,'utf8');
   get_structure(ParserLang,"!",example_vhd).then(example_result => {
-    // console.log(example_result);
+    //console.log(example_result);
     let rs = compareVhdl(example_result,example_exp_result,"example_"+x+".vhd");
     console.log("Test " + rs + " ["+"example_"+x+".vhd"+"]");
     if (rs === true){
@@ -67,7 +67,7 @@ for (let x=0;x<7;++x){
 //////////////////////////////////////////////////////////////////////////////
 function compareVhdl(m,n,file){
   //var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
-  if(m['entity']['name'] != n['entity']['name']) { return false; }
+  if(m['entity']['name'] !== n['entity']['name']) { return false; }
   // if(m['architecture']['name'] != n['architecture']['name']) { return false; }
   var ch1 = check(m['generics'],n['generics'],['name','type','comment'],"generics",file);
   var ch2 = check(m['ports'],n['ports'],['name','direction','type','comment'],"ports",file);
@@ -102,7 +102,7 @@ function compareVerilogTs(m,n,file){
 }
 
 function check(m,n,cmp,type,file){
-  if(m.length != n.length) {
+  if(m.length !== n.length) {
     console.log("*************************************************************");
     console.log("Fail: " + type.yellow + " in file: " + file.red);
     console.log("Real ----->".yellow);

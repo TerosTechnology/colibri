@@ -61,7 +61,7 @@ class VHDLDesignFile(object):  # pylint: disable=too-many-instance-attributes
         Return a new VHDLDesignFile instance by parsing the code
         """
         code_with_comments = code
-        code = remove_comments(code).lower()
+        code = remove_comments(code)
         return cls(
             entities=list(VHDLEntity.find(code,code_with_comments)),
             # architectures=list(VHDLArchitecture.find(code)),
