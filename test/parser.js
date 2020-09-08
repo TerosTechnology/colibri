@@ -39,25 +39,28 @@ for (let x=0;x<8;++x){
       console.log("Test...  OK!".green);
       }
       else{
+        console.log("Test...  fail!".red);
         throw new Error('Test errors'.red);
       }
     });
 }
 //////////////////////////////////////////////////////////////////////////////
-for (let x=0;x<5;++x){
+for (let x=0;x<7;++x){
   var ParserLang = [General.LANGUAGES.VHDL];
   let example_exp_result = fs.readFileSync('./examples/vhdl/example_'+x+'.json','utf8');
   example_exp_result     = JSON.parse(example_exp_result);
   let example_vhd = fs.readFileSync('./examples/vhdl/example_'+x+'.vhd' ,'utf8');
   get_structure(ParserLang,"!",example_vhd).then(example_result => {
-  // console.log(example_result);
+    // console.log(example_result);
     let rs = compareVhdl(example_result,example_exp_result,"example_"+x+".vhd");
     console.log("Test " + rs + " ["+"example_"+x+".vhd"+"]");
     if (rs === true){
     console.log("Test...  OK!".green);
     }
     else{
+      console.log("Test...  fail!".red);
       throw new Error('Test errors'.red);
+      
     }
   });
 }
