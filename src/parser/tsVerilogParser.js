@@ -47,7 +47,7 @@ class tsVerilogParser  {
       }
       var lines = this.fileLines(sourceCode);
       const tree = await this.parser.parse(sourceCode);
-
+      
       var structure = {
         'libraries': this.get_libraries(tree.rootNode, lines),  // includes
         "entity": this.getEntityName(tree.rootNode, lines), // module
