@@ -31,8 +31,11 @@ files = files_string.split(',')
 project = pj.Project()
 project.add_library("src_lib", "work_path")
 for i in range(0,len(files)):
-    if (Path(files[i]).suffix == ".v"):
+    suffix = Path(files[i]).suffix
+    if (suffix == ".v" or suffix == ".vh" or suffix == ".vl"):
         filetype = "verilog"
+    elif (suffix == ".sv" or suffix == ".svh"):
+        filetype = "systemverilog"
     else:
         filetype = "vhdl"
     project.add_source_file(files[i],"src_lib",file_type=filetype,vhdl_standard=VHDL.STD_2008)
