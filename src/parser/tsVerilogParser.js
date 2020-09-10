@@ -241,9 +241,9 @@ class tsVerilogParser  {
     //comments
     let comments = this.getComments(element, lines);
     //Inputs
-    var arr = this.searchTree(element, 'parameter_declaration');
-    if (arr == null) {
-      arr = this.searchTree(element, 'parameter_port_declaration');
+    var arr = this.searchTree(element, 'parameter_port_declaration');
+    if (arr.length === 0 ) {
+      arr = this.searchTree(element, 'parameter_declaration');
     }
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
