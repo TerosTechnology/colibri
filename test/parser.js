@@ -25,45 +25,49 @@ const Colibri = require('../src/main');
 const general = require('../src/general/general');
 const General = Colibri.General;
 const Parser = Colibri.Parser;
-// const VhdlParser = require('../src/parser/vhdlparser')
 
-var test_result = true;
-
-for (let x=0;x<8;++x){
+for (let x=0;x<9;++x){
   var ParserLang = [General.LANGUAGES.VERILOG];
-  let parser = new Parser.ParserFactory;
-  parser = parser.getParser(ParserLang,"!");
-  let example_verilog = fs.readFileSync('./examples/verilog/example_'+x+'.v' ,'utf8');
-  let example_result  = parser.getAll(example_verilog);
-  let example_exp_result = fs.readFileSync('./examples/verilog/example_'+x+'.json','utf8');
+  let example_exp_result = fs.readFileSync(__dirname+'/examples/verilog/example_'+x+'.json','utf8');
   example_exp_result     = JSON.parse(example_exp_result);
+  let example_verilog = fs.readFileSync(__dirname+'/examples/verilog/example_'+x+'.v' ,'utf8');
+  get_structure(ParserLang,"!",example_verilog).then(example_result => {
   // console.log(example_result);
-  let rs = compareVerilogTs(example_result,example_exp_result,"example_"+x+".v");
-  console.log("Test " + rs + " ["+"example_"+x+".v"+"]");
-  if (rs!= true) {
-    test_result= false;
-  }
+    let rs = compareVerilogTs(example_result,example_exp_result,"example_"+x+".v");
+    console.log("Test " + rs + " ["+"example_"+x+".v"+"]");
+    if (rs === true){
+      console.log("Test...  OK!".green);
+      }
+      else{
+        console.log("Test...  fail!".red);
+        throw new Error('Test errors'.red);
+      }
+    });
 }
 //////////////////////////////////////////////////////////////////////////////
 for (let x=0;x<7;++x){
   var ParserLang = [General.LANGUAGES.VHDL];
-  let parser = new Parser.ParserFactory;
-  parser = parser.getParser(ParserLang,"!");
-  let example_vhd = fs.readFileSync('./examples/vhdl/example_'+x+'.vhd' ,'utf8');
-  let example_result  = parser.getAll(example_vhd);
-  let example_exp_result = fs.readFileSync('./examples/vhdl/example_'+x+'.json','utf8');
+  let example_exp_result = fs.readFileSync(__dirname+'/examples/vhdl/example_'+x+'.json','utf8');
   example_exp_result     = JSON.parse(example_exp_result);
-  // console.log(example_result);
-  let rs = compareVhdl(example_result,example_exp_result,"example_"+x+".vhd");
-  console.log("Test " + rs + " ["+"example_"+x+".vhd"+"]");
-  if (rs!== true) {
-    test_result= false;
-  }
+  let example_vhd = fs.readFileSync(__dirname+'/examples/vhdl/example_'+x+'.vhd' ,'utf8');
+  get_structure(ParserLang,"!",example_vhd).then(example_result => {
+    //console.log(example_result);
+    let rs = compareVhdl(example_result,example_exp_result,"example_"+x+".vhd");
+    console.log("Test " + rs + " ["+"example_"+x+".vhd"+"]");
+    if (rs === true){
+    console.log("Test...  OK!".green);
+    }
+    else{
+      console.log("Test...  fail!".red);
+      throw new Error('Test errors'.red);
+      
+    }
+  });
 }
 //////////////////////////////////////////////////////////////////////////////
 function compareVhdl(m,n,file){
-  var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
-  if(m['entity']['name'] != n['entity']['name']) { return false; }
+  //var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
+  if(m['entity']['name'] !== n['entity']['name']) { return false; }
   // if(m['architecture']['name'] != n['architecture']['name']) { return false; }
   var ch1 = check(m['generics'],n['generics'],['name','type','comment'],"generics",file);
   var ch2 = check(m['ports'],n['ports'],['name','direction','type','comment'],"ports",file);
@@ -72,7 +76,7 @@ function compareVhdl(m,n,file){
   // var ch5 = check(m['types'],n['types'],['name','type'],"types",file);
   // var ch6 = check(m['process'],n['process'],['name'],"process",file);
 
-  return ch0 && ch1 && ch2;
+  return ch1 && ch2;
 }
 function compareVerilog(m,n,file){
   var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
@@ -86,7 +90,7 @@ function compareVerilog(m,n,file){
   return ch0 && ch1 && ch2 && ch3 && ch4 && ch5;
 }
 function compareVerilogTs(m,n,file){
-  var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
+  //var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
   if(m['entity']['name'] !== n['entity']['name']) { return false; }
   var ch1 = check(m['generics'],n['generics'],['name','type','comment'],"generics",file);
   var ch2 = check(m['ports'],n['ports'],['name','direction','type','comment'],"ports",file);
@@ -94,11 +98,11 @@ function compareVerilogTs(m,n,file){
   // var ch4 = check(m['nets'],n['nets'],['name','kind','type'],"nets",file);
   // var ch5 = check(m['constants'],n['constants'],['name','kind'],"constants",file);
 
-  return ch0 && ch1 && ch2;
+  return ch1 && ch2;
 }
 
 function check(m,n,cmp,type,file){
-  if(m.length != n.length) {
+  if(m.length !== n.length) {
     console.log("*************************************************************");
     console.log("Fail: " + type.yellow + " in file: " + file.red);
     console.log("Real ----->".yellow);
@@ -142,8 +146,10 @@ function check(m,n,cmp,type,file){
   return true;
 }
 
-if (test_result === true)
-  console.log("All test...  OK!".green);
-else{
-  throw new Error('Test errors'.red);
+async function get_structure(ParserLang,symbol,src){
+  let parser = new Parser.ParserFactory;
+  parser = parser.getParser(ParserLang,symbol);
+  let structure = await parser.getAll(src);
+  return structure;
 }
+

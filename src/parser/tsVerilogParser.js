@@ -47,7 +47,7 @@ class tsVerilogParser  {
       }
       var lines = this.fileLines(sourceCode);
       const tree = await this.parser.parse(sourceCode);
-
+      
       var structure = {
         'libraries': this.get_libraries(tree.rootNode, lines),  // includes
         "entity": this.getEntityName(tree.rootNode, lines), // module
@@ -117,6 +117,9 @@ class tsVerilogParser  {
 
   getPortType(port, lines) {
     var arr = this.searchTree(port, 'net_port_type1');
+    if (arr[0] == null) {
+      arr = this.searchTree(port, 'packed_dimension');
+    }
     if (arr[0] == null) {
       return "";
     }
@@ -241,9 +244,9 @@ class tsVerilogParser  {
     //comments
     let comments = this.getComments(element, lines);
     //Inputs
-    var arr = this.searchTree(element, 'parameter_declaration');
-    if (arr == null) {
-      arr = this.searchTree(element, 'parameter_port_declaration');
+    var arr = this.searchTree(element, 'parameter_port_declaration');
+    if (arr.length === 0 ) {
+      arr = this.searchTree(element, 'parameter_declaration');
     }
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {

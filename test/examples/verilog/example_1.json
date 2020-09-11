@@ -41,7 +41,7 @@
     {
       "name": "sum",
       "direction": "output",
-      "type": "",
+      "type": "[WIDTH-1:0]",
       "comment": ""
     },
     {
