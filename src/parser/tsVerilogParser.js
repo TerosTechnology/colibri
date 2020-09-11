@@ -118,6 +118,9 @@ class tsVerilogParser  {
   getPortType(port, lines) {
     var arr = this.searchTree(port, 'net_port_type1');
     if (arr[0] == null) {
+      arr = this.searchTree(port, 'packed_dimension');
+    }
+    if (arr[0] == null) {
       return "";
     }
     var port_type = this.extractData(arr[0], lines);
