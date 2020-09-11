@@ -32,23 +32,23 @@ architecture bench of arith_counter_gray_tb is
   -- Clock period
   constant clk_period : time := 5 ns;
   -- Generics
-  constant bits : positive;
-  constant init : natural;
+  constant BITS : positive;
+  constant INIT : natural;
 
   -- Ports
   signal clk : std_logic;
   signal rst : std_logic;
   signal inc : std_logic;
   signal dec : std_logic;
-  signal val : std_logic_vector(bits-1 downto 0);
+  signal val : std_logic_vector(BITS-1 downto 0);
   signal cry : std_logic;
 
 begin
 
   arith_counter_gray_inst : entity src_lib.arith_counter_gray
     generic map (
-      bits => bits,
-      init => init
+      BITS => BITS,
+      INIT => INIT
     )
     port map (
       clk => clk,
