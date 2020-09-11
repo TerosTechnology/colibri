@@ -1,7 +1,7 @@
 arith_counter_gray_inst : arith_counter_gray
   generic map (
-    bits => bits,
-    init => init
+    BITS => BITS,
+    INIT => INIT
   )
   port map (
     clk => clk,
