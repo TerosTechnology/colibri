@@ -37,14 +37,13 @@ class Istyle extends Base_formatter {
   }
 
   async _format(file,options){
-    let path_bin = `${__dirname}${path_lib.sep}bin${path_lib.sep}istyle${path_lib.sep}`;
+    let path_bin = `${__dirname}${path_lib.sep}bin${path_lib.sep}svistyle${path_lib.sep}`;
     let platform = os.platform();
     if (platform === "darwin"){
       path_bin += "istyle-darwin";
     }
     else if (platform === "linux"){
       path_bin += "istyle-linux";
-  
     }
     else if (platform === "win32"){
       path_bin += "istyle-win32.exe";

@@ -21,22 +21,31 @@
 // SOFTWARE.
 
 const Base_linter = require('./base_linter');
+const General = require('../general/general');
 
 class Modelsim extends Base_linter {
-  constructor(path) {
-    super(path);
-    this.PARAMETERS = {
-      'SYNT': "vcom -2008",
-      // From https://github.com/dave2pi/SublimeLinter-contrib-vlog/blob/master/linter.py
-      'ERROR': /"^\\*\\* (((Error)|(Warning))( \\(suppressible\\))?: )(\\([a-z]+-[0-9]+\\) )?([^\\(]*)\\(([0-9]+)\\): (\\([a-z]+-[0-9]+\\) )?((((near|Unknown identifier|Undefined variable):? )?[\"\']([\\w:;\\.]+)[\"\'][ :.]*)?.*)";/ig,
-      'TYPEPOSITION': 1,
-      'ROWPOSITION': 3,
-      'COLUMNPOSITION': 6,
-      'DESCRIPTIONPOSITION': 4,
-      'OUTPUT': this.OUTPUT.OUT,
-    };
-  }
 
+  constructor(language) {
+    super(language);
+    // VHDL
+    if (language !== undefined && language === General.LANGUAGES.VHDL){
+      this.PARAMETERS = {
+        'SYNT': "vcom -quiet -nologo -2008"
+      };
+    }
+    // SystemVerilog
+    else if(language !== undefined && language === General.LANGUAGES.SYSTEMVERILOG){
+      this.PARAMETERS = {
+        'SYNT': "vlog -quiet -nologo -sv"
+      };
+    }
+    // Verilog
+    else{
+      this.PARAMETERS = {
+        'SYNT': "vlog -quiet -nologo"
+      };
+    }
+  }
 
   // options = {custom_bin:"", custom_arguments:""}
   async lint_from_file(file,options){
@@ -50,16 +59,59 @@ class Modelsim extends Base_linter {
     return errors;
   }
 
-  // async _lint(file,synt,synt_windows,options){
-  //   // let result = await this._exec_linter(file,this.PARAMETERS.SYNT,
-  //   //                       this.PARAMETERS.SYNT_WINDOWS,options);
-  //   // let errors_str = result.stderr;
-  //   // let errors_str_lines = errors_str.split(/\r?\n/g);
-  //   // let errors = [];
-  // }
+  async _lint(file,options){
+    let result = await this._exec_linter(file,this.PARAMETERS.SYNT,
+                          this.PARAMETERS.SYNT_WINDOWS,options);
+    file = file.replace('\\ ',' ');
+    let errors_str = result.stdout;
+    let errors_str_lines = errors_str.split(/\r?\n/g);
+    let errors = [];
 
+    // Parse output lines
+    errors_str_lines.forEach((line) => {
+      if (line.startsWith('**')) {
+        // eslint-disable-next-line max-len
+        let regex_exp = /(Error|Warning).+?(?: *?(?:.+?(?:\\|\/))+.+?\((\d+?)\):|)(?: *?near "(.+?)":|)(?: *?\((.+?)\)|) +?(.+)/gm;
+        // From https://github.com/dave2pi/SublimeLinter-contrib-vlog/blob/master/linter.py
+        let m = regex_exp.exec(line);
+        try {
+          //Severity
+          let sev = "warning";
+          if (m[1] === "Error"){
+            sev = "error";
+          }
+          else if (m[1] === "Warning"){
+            sev = "warning";
+          }
+          else{
+            sev = "note";
+          }
 
-
+          if (sev !== "note"){
+            let message = m[5];
+            let code = m[4];
+            let line = parseInt(m[2]) - 1;
+  
+            let error = {
+              'severity' : sev,
+              'description' : message,
+              'code' : code,
+              'location' : {
+                'file': file,
+                'position': [line, 0]
+              }
+            };
+            errors.push(error);
+          }
+        }
+        catch (e) {
+          // eslint-disable-next-line no-console
+          console.log(e);
+        }
+      }
+    });
+    return errors;
+  }
 }
 
 module.exports = {

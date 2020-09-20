@@ -21,16 +21,17 @@
 
 const Ghdl = require('./ghdl');
 const Icarus = require('./icarus');
-// const Modelsim = require('./modelsim');
 const Verilator = require('./verilator');
 const Xvlog = require('./xvlog');
+const Modelsim = require('./modelsim');
 const Xvhdl = require('./xvhdl');
 const Vsg = require('./vsg');
 const Verible = require('./verible');
+const Svlint = require('./svlint');
 const General = require('../general/general');
 
 class Linter {
-  constructor(linter_name){
+  constructor(linter_name, language){
     if (linter_name === undefined){
       throw new Error('Linter name is undefined.');
     }
@@ -38,16 +39,16 @@ class Linter {
       return this.get_ghdl();
     }
     else if (linter_name === General.LINTERS.ICARUS){
-      return this.get_icarus();
+      return this.get_icarus(language);
     }
     else if (linter_name === General.LINTERS.MODELSIM){
-      // return this.get_modelsim();
+      return this.get_modelsim(language);
     }
     else if (linter_name === General.LINTERS.VERILATOR){
-      return this.get_verilator();
+      return this.get_verilator(language);
     }
     else if (linter_name === General.LINTERS.XVLOG){
-      return this.get_xvlog();
+      return this.get_xvlog(language);
     }
     else if (linter_name === General.LINTERS.XVHDL){
       return this.get_xvhdl();
@@ -58,6 +59,9 @@ class Linter {
     else if (linter_name === General.LINTERS.VERIBLE){
       return this.get_verible();
     }
+    else if (linter_name === General.LINTERS.SVLINT){
+      return this.get_svlint();
+    }
     else{
       throw new Error('Linter name not supported.');
     }
@@ -67,19 +71,19 @@ class Linter {
     return new Ghdl.Ghdl();
   }
 
-  get_icarus() {
-    return new Icarus.Icarus();
+  get_icarus(language) {
+    return new Icarus.Icarus(language);
   }
 
-  // get_modelsim() {
-  //   return new Modelsim.Modelsim();
-  // }
-
-  get_verilator() {
-    return new Verilator.Verilator();
+  get_modelsim(language) {
+    return new Modelsim.Modelsim(language);
   }
-  get_xvlog() {
-    return new Xvlog.Xvlog();
+
+  get_verilator(language) {
+    return new Verilator.Verilator(language);
+  }
+  get_xvlog(language) {
+    return new Xvlog.Xvlog(language);
   }
   get_xvhdl() {
     return new Xvhdl.Xvhdl();
@@ -89,6 +93,9 @@ class Linter {
   }
   get_verible() {
     return new Verible.Verible();
+  }
+  get_svlint() {
+    return new Svlint.Svlint();
   }
 }
 
