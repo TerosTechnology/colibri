@@ -41,7 +41,8 @@ const LINTERS = {
   XVLOG : 'xvlog',
   XVHDL : 'xvhdl',
   VSG : 'vsg',
-  VERIBLE : 'verible'
+  VERIBLE : 'verible',
+  SVLINT : 'svlint'
 };
 
 const VHDLSTANDARS = {

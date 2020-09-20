@@ -27,6 +27,7 @@ const Modelsim = require('./modelsim');
 const Xvhdl = require('./xvhdl');
 const Vsg = require('./vsg');
 const Verible = require('./verible');
+const Svlint = require('./svlint');
 const General = require('../general/general');
 
 class Linter {
@@ -57,6 +58,9 @@ class Linter {
     }
     else if (linter_name === General.LINTERS.VERIBLE){
       return this.get_verible();
+    }
+    else if (linter_name === General.LINTERS.SVLINT){
+      return this.get_svlint();
     }
     else{
       throw new Error('Linter name not supported.');
@@ -89,6 +93,9 @@ class Linter {
   }
   get_verible() {
     return new Verible.Verible();
+  }
+  get_svlint() {
+    return new Svlint.Svlint();
   }
 }
 
