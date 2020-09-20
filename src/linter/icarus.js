@@ -21,14 +21,25 @@
 // SOFTWARE.
 
 const Base_linter = require('./base_linter');
+const General = require('../general/general');
 
 class Icarus extends Base_linter {
-  constructor() {
+  constructor(language) {
     super();
-    this.PARAMETERS = {
-      'SYNT': "iverilog -Wall",
-      'SYNT_WINDOWS': "iverilog.exe -Wall"
-    };
+    // SystemVerilog
+    if (language !== undefined && language === General.LANGUAGES.SYSTEMVERILOG){
+      this.PARAMETERS = {
+        'SYNT': "iverilog -Wall",
+        'SYNT_WINDOWS': "iverilog.exe -Wall"
+      };
+    }
+    // Verilog
+    else{
+      this.PARAMETERS = {
+        'SYNT': "iverilog -Wall",
+        'SYNT_WINDOWS': "iverilog.exe -Wall"
+      };
+    }
   }
 
   // options = {custom_bin:"", custom_arguments:""}

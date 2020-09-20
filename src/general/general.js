@@ -54,7 +54,8 @@ const VERILOGSTANDARS = {
 
 const LANGUAGES = {
   VHDL : 'vhdl',
-  VERILOG : 'verilog'
+  VERILOG : 'verilog',
+  SYSTEMVERILOG : 'systemverilog',
 };
 
 module.exports = {
