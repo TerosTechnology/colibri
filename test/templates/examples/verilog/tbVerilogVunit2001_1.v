@@ -8,13 +8,15 @@ module behav_counter_tb;
   localparam  HDR_WIDTH = 1;
 
   // Ports
-  reg [7:0]d;
+  reg [7:0] d;
   reg clk;
   reg clear;
   reg load;
+  reg [7:0] load_b;
   reg up_down;
-  reg [7:0]qd;
+  reg [7:0] qd;
   reg qd_b;
+  reg qd_c;
 
   behav_counter
     #(
@@ -27,9 +29,11 @@ module behav_counter_tb;
       .clk (clk),
       .clear (clear),
       .load (load),
+      .load_b (load_b),
       .up_down (up_down),
       .qd (qd),
-      .qd_b (qd_b)
+      .qd_b (qd_b),
+      .qd_c (qd_c)
     );
 
   `TEST_SUITE begin

@@ -40,7 +40,7 @@ let options = {
 };
 let language = Colibri.General.LANGUAGES.VERILOG;
 ////////////////////////////////////////////////////////////////////////////////
-for (let x = 0; x < 2; x++) {
+for (let x = 0; x < 3; x++) {
   let structure = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+'verilog'+path.sep+'example_'+x+'.v', 'utf8');
   let test_Expected = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+'verilog'
                         +path.sep+'tbVerilog2001_'+x+'.v','utf8');
@@ -53,6 +53,7 @@ for (let x = 0; x < 2; x++) {
     console.log("Testing... tbVerilog 2001: Ok!".green);
   } else {
     console.log("Testing... tbVerilog 2001: Fail!".red);
+    console.log(test);
     throw new Error('Test error.');
   }
   });
@@ -70,7 +71,7 @@ let options_vunit = {
     }
   ]
 };
-for (let x = 0; x < 2; x++) {
+for (let x = 0; x < 3; x++) {
   let structure = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+'verilog'+path.sep+'example_'+x+'.v', 'utf8');
   let test_Expected_vunit = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep
               +'verilog'+path.sep+'tbVerilogVunit2001_'+x+'.v', 'utf8');
@@ -82,6 +83,7 @@ for (let x = 0; x < 2; x++) {
     console.log("Testing... tbVerilogVunit 2001: Ok!".green);
   } else {
     console.log("Testing... tbVerilogVunit 2001: Fail!".red);
+    console.log(test_vunit);
     throw new Error('Test error.');
   }
   console.log('****************************************************************');

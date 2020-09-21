@@ -118,7 +118,14 @@ class Verilog_editor{
         str += space + 'reg ' + m[x]['name'] + ';\n';
       }
       else{
-        str += space + 'reg ' + m[x]['type'].replace('wire','') + '' + m[x]['name'] + ';\n';
+        const regex = /\[(.*?)\]/;
+        let type = m[x]['type'].match(regex);
+        if (type === null) {
+          type = '';
+        }else{
+          type = type[0];
+        }
+        str += space + 'reg ' + type + ' ' + m[x]['name'] + ';\n';
       }
     }
     return str;

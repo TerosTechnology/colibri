@@ -12,10 +12,12 @@ module behav_counter( d, clk, clear, load, up_down, qd);
 input   [7:0] d; //! input 1 comment
 input   clk; //!input 2 comment
 input   clear; //! input 3 comment
-input wire   load;
+input wire  load;
+input wire [7:0] load_b;
 input  up_down;
 output reg  [7:0] qd;
 output reg qd_b;
+output reg qd_c = 1;
 
 reg     [7:0] cnt;
 
