@@ -19,16 +19,26 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-
+const General = require('../general/general');
 const Base_linter = require('./base_linter');
 
 class Verilator extends Base_linter {
-  constructor(path) {
-    super(path);
-    this.PARAMETERS = {
-      'SYNT': "verilator --lint-only -bbox-sys --bbox-unsup -DGLBL",
-      'SYNT_WINDOWS': "verilator.exe --lint-only -bbox-sys --bbox-unsup -DGLBL"
-    };
+  constructor(language) {
+    super(language);
+    // SystemVerilog
+    if (language !== undefined && language === General.LANGUAGES.SYSTEMVERILOG){
+      this.PARAMETERS = {
+        'SYNT': "verilator --lint-only -sv -Wall -bbox-sys --bbox-unsup -DGLBL",
+        'SYNT_WINDOWS': "verilator.exe --lint-only -sv -Wall -bbox-sys --bbox-unsup -DGLBL"
+      };
+    }
+    // Verilog
+    else{
+      this.PARAMETERS = {
+        'SYNT': "verilator --lint-only -Wall -bbox-sys --bbox-unsup -DGLBL",
+        'SYNT_WINDOWS': "verilator.exe --lint-only -Wall -bbox-sys --bbox-unsup -DGLBL"
+      };
+    }
   }
 
   // options = {custom_bin:"", custom_arguments:"", custom_path:""}
@@ -106,7 +116,7 @@ class Verilator extends Base_linter {
     }
     else if (severity_string.startsWith('Warning'))
     {
-      severity = "warning;";
+      severity = "warning";
     }
     return severity;
   }

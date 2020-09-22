@@ -106,7 +106,7 @@ class Verilog_editor{
     var str = '';
     str += space + '// Parameters\n';
     for (let x = 0; x < m.length; ++x) {
-      str += space + 'localparam ' + m[x]['type'] + ' ' + m[x]['name'] + ';\n';
+      str += space + 'localparam ' + m[x]['type'] + ' ' + m[x]['name'] + ' = 1' + ';\n';
     }
     return str;
   }
@@ -118,7 +118,14 @@ class Verilog_editor{
         str += space + 'reg ' + m[x]['name'] + ';\n';
       }
       else{
-        str += space + 'reg ' + m[x]['type'] + ' ' + m[x]['name'] + ';\n';
+        const regex = /\[(.*?)\]/;
+        let type = m[x]['type'].match(regex);
+        if (type === null) {
+          type = '';
+        }else{
+          type = type[0];
+        }
+        str += space + 'reg ' + type + ' ' + m[x]['name'] + ';\n';
       }
     }
     return str;

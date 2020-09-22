@@ -30,7 +30,7 @@ class Base_linter {
     if (options !== undefined && options.custom_bin !== undefined){
       command += options.custom_bin + " ";
     }
-    else if(os.platform() == "win32"){
+    else if(os.platform() === "win32"){
       if (options !== undefined && options.custom_path !== undefined){
         command += options.custom_path + path_lib.sep + synt_windows + " ";
       }

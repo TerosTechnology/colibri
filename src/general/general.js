@@ -41,7 +41,8 @@ const LINTERS = {
   XVLOG : 'xvlog',
   XVHDL : 'xvhdl',
   VSG : 'vsg',
-  VERIBLE : 'verible'
+  VERIBLE : 'verible',
+  SVLINT : 'svlint'
 };
 
 const VHDLSTANDARS = {
@@ -54,7 +55,8 @@ const VERILOGSTANDARS = {
 
 const LANGUAGES = {
   VHDL : 'vhdl',
-  VERILOG : 'verilog'
+  VERILOG : 'verilog',
+  SYSTEMVERILOG : 'systemverilog',
 };
 
 module.exports = {

@@ -21,14 +21,25 @@
 // SOFTWARE.
 
 const Base_linter = require('./base_linter');
+const General = require('../general/general');
 
 class Xvlog extends Base_linter {
-  constructor() {
+  constructor(language) {
     super();
-    this.PARAMETERS = {
-      'SYNT': "xvlog -nolog",
-      'SYNT_WINDOWS': "xvlog.exe -nolog"
-    };
+    // SystemVerilog
+    if (language !== undefined && language === General.LANGUAGES.SYSTEMVERILOG){
+      this.PARAMETERS = {
+        'SYNT': "xvlog --sv --nolog",
+        'SYNT_WINDOWS': "xvlog.exe --sv --nolog"
+      };
+    }
+    // Verilog
+    else{
+      this.PARAMETERS = {
+        'SYNT': "xvlog -nolog",
+        'SYNT_WINDOWS': "xvlog.exe -nolog"
+      };
+    }
   }
 
   // options = {custom_bin:"", custom_arguments:""}
@@ -55,7 +66,7 @@ class Xvlog extends Base_linter {
 
       let tokens = line.split(/:?\s*(?:\[|\])\s*/).filter(Boolean);
       if (tokens.length < 4
-          || tokens[0] != "ERROR"
+          || tokens[0] !== "ERROR"
           || !tokens[1].startsWith("VRFC")) {
           return;
       }

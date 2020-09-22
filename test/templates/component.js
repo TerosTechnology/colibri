@@ -60,7 +60,7 @@ var structure_verilog = [];
 var expected_verilog = [];
 for (let x=0;x<tested.length;++x){
   structure_verilog[x] = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+language[1]
-                          +path.sep+'uart.v','utf8');
+                          +path.sep+'example_0.v','utf8');
   expected_verilog[x]  = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+language[1]
                           +path.sep+tested[x] + '.txt','utf8');
 }
