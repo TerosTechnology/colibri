@@ -1,3 +1,25 @@
+// MIT License
+
+// Copyright (c) 2017 Al Patrick
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 "use strict";
 
 const child_process = require('child_process');
@@ -9,7 +31,6 @@ const { promisify } = require("./promisify");
 const readFile = promisify(fs.readFile);
 const realpath = promisify(fs.realpath);
 const stat = promisify(fs.stat);
-const writeFile = promisify(fs.writeFile);
 
 const PACKAGE_JSON = "package.json";
 const PYTHON_MODULES = "python_modules";
@@ -25,7 +46,7 @@ const findSourceArg = (args) => {
 
     // Check for an option that signals there will be no python source path.
     if (TERMINATE_RE.test(arg))
-      break;
+      {break;}
 
     // Skip option and its argument.
     if (ARGUMENT_OPTION_RE.test(arg)) {
@@ -35,13 +56,13 @@ const findSourceArg = (args) => {
 
     // Skip other options.
     if (OPTION_RE.test(arg))
-      continue;
+      {continue;}
 
     return i;
   }
 
   return -1;
-}
+};
 
 const getPythonInfo = (execPaths, packageDir, env = process.env) => {
   if (!Array.isArray(execPaths)) {
@@ -99,9 +120,9 @@ json.dump(result, sys.stdout)
     child.on("error", reject);
     child.on("close", code => {
       if (code !== 0)
-        reject(new Error(`Python site module exited with code ${code}.\n${stderr}`));
+        {reject(new Error(`Python site module exited with code ${code}.\n${stderr}`));}
       resolve(stdout);
-    })
+    });
   }).then(stdout => {
     let result = JSON.parse(stdout);
     return result;
@@ -112,28 +133,28 @@ json.dump(result, sys.stdout)
       throw error;
     }
   });
-}
+};
 
 const joinPaths = (...paths) => {
   let sep = ":";
   if (process.platform === "win32")
-    sep = ";";
+    {sep = ";";}
   return paths.filter(p => p).join(sep);
-}
+};
 
 // Environment variables are case insensitive on Windows.
 const fixEnv = (env) => {
   if (process.platform !== "win32")
-    return env;
+    {return env;}
 
   let upperEnv = {};
   for (let key in env) {
     if (Object.prototype.hasOwnProperty.call(env, key))
-      upperEnv[key.toUpperCase()] = env[key];
+      {upperEnv[key.toUpperCase()] = env[key];}
   }
 
   return upperEnv;
-}
+};
 
 class Package {
   constructor(dir) {
@@ -153,7 +174,7 @@ class Package {
         path: ".",
       }, json.python);
       if (!Array.isArray(json.python.path))
-        json.python.path = [json.python.path];
+        {json.python.path = [json.python.path];}
       return json;
     });
     this.readJSON = () => result;
@@ -188,9 +209,9 @@ class Package {
 
 const findPackage = (descendent) => {
   if (descendent)
-    descendent = path.resolve(descendent);
+    {descendent = path.resolve(descendent);}
   else
-    descendent = process.cwd();
+    {descendent = process.cwd();}
 
   let ancestor = descendent;
   let ancestors = [];
@@ -198,22 +219,22 @@ const findPackage = (descendent) => {
     ancestors.push(ancestor);
     let p = path.dirname(ancestor);
     if (!p || p == ancestor)
-      break;
+      {break;}
     ancestor = p;
   }
 
   return Promise.all(ancestors.map((ancestor) => {
     return stat(path.join(ancestor, PACKAGE_JSON))
       .then(obj => obj.isFile() && ancestor)
-      .catch(() => false)
+      .catch(() => false);
   }))
   .then(packages => {
     packages = packages.filter(pkg => pkg);
     if (packages.length === 0)
-      throw new Error("Could not find directory containing package.json");
+      {throw new Error("Could not find directory containing package.json");}
     return new Package(packages[0]);
   });
-}
+};
 
 const spawnPython = (args, options = {}) => {
   args = args.slice(0);
@@ -232,12 +253,12 @@ const spawnPython = (args, options = {}) => {
     let sourcePathIdx = findSourceArg(args);
     let sourcePath;
     if (sourcePathIdx >= 0)
-      sourcePath = args[sourcePathIdx];
+      {sourcePath = args[sourcePathIdx];}
 
     if (sourcePath !== undefined)
-      pkg = realpath(sourcePath).then(findPackage);
+      {pkg = realpath(sourcePath).then(findPackage);}
     else
-      pkg = findPackage(process.cwd());
+      {pkg = findPackage(process.cwd());}
   }
 
   return pkg
@@ -245,7 +266,7 @@ const spawnPython = (args, options = {}) => {
   .then(env => {
     options.spawn.env = env;
     if (options.execPath === undefined)
-      options.execPath = env.NOPY_PYTHON_EXEC_PATH;
+      {options.execPath = env.NOPY_PYTHON_EXEC_PATH;}
 
     let child = child_process.spawn(options.execPath, args, options.spawn);
     switch (options.interop) {
@@ -264,7 +285,7 @@ const spawnPython = (args, options = {}) => {
         child.on("error", reject);
         child.on("close", code => {
           if (options.throwNonZeroStatus && code !== 0)
-            reject(new Error(`Exited with code ${code}.\n${stderr}`));
+            {reject(new Error(`Exited with code ${code}.\n${stderr}`));}
           resolve({ code, stdout, stderr });
         });
       });
@@ -273,13 +294,46 @@ const spawnPython = (args, options = {}) => {
         child.on("error", reject);
         child.on("close", code => {
           if (options.throwNonZeroStatus && code !== 0)
-            reject(new Error(`Exited with code ${code}.`));
+            {reject(new Error(`Exited with code ${code}.`));}
           resolve(code);
         });
       });
     default:
       throw new Error(`Unexpected interop mode ${options.interop}`);
     }
+  });
+};
+
+async function get_python_exec(){
+  let command = "python3 --version";
+  let result_command = await _exec_command(command);
+  //python3 exec exists
+  if (result_command.stderr === ""){
+    return "python3";
+  }
+  else{
+    //check if python path is python3
+    command = "python --version";
+    result_command = await _exec_command(command);
+    let stdout_arr = result_command.stdout.replace('Python ','').split('.');
+
+    let python_version = stdout_arr[0];
+    if (python_version !== '3'){
+      return undefined;
+    }
+    else{
+      return "python";
+    }
+  }
+}
+
+async function _exec_command(command) {  
+  const exec = require('child_process').exec;
+    return new Promise((resolve) => {
+      exec(command, (error, stdout, stderr) => {
+        let result = {'error': error, 'stdout':stdout,'stderr':stderr};
+        resolve(result);
+    });
   });
 }
 
@@ -288,4 +342,5 @@ module.exports = {
   findPackage,
   findSourceArg,
   spawnPython,
-}
+  get_python_exec
+};

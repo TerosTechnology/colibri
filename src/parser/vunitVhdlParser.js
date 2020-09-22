@@ -21,25 +21,37 @@
 const path  = require('path');
 const temp = require('temp');
 const fs = require('fs');
+const nopy = require('../nopy/api');
 
 class VhdlParser {
   constructor(comment_symbol) {
     this.comment_symbol = comment_symbol;
   }
 
-  getAll(str) {
-    let path_python = __dirname + path.sep + "parser.py";
+  async getAll(str) {
     const MAX_ARG_LENGTH = 32767;
     let reduce_str = str.slice(0,MAX_ARG_LENGTH);
-
     let code_file = this._create_temp_file_of_code(reduce_str);
-    let cmd = "python " + path_python + ' "' + this.comment_symbol + '" "' + code_file + '"';
 
     let structure = undefined;
     try {
-      const execSync = require('child_process').execSync;
-      let stdout = execSync(cmd).toString();
-      structure = JSON.parse(stdout);
+
+      let python_exec_path = await nopy.get_python_exec();
+      let py_path = __dirname + path.sep + "parser.py";
+      let args = code_file + ',' + this.comment_symbol;
+
+      if (python_exec_path === undefined){
+        return undefined;
+      }
+      // eslint-disable-next-line no-unused-vars
+      return new Promise(function(resolve, reject) {
+        nopy.spawnPython([py_path, args], { interop: "buffer", 
+          // eslint-disable-next-line no-unused-vars
+          execPath: python_exec_path}).then(({ code, stdout, stderr }) => {
+            structure = JSON.parse(stdout);
+            resolve(structure);
+        });
+      });
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error);
@@ -59,7 +71,6 @@ class VhdlParser {
     fs.closeSync(temp_file.fd);
     return temp_file.path;
   }
-
 }
 
 module.exports =  VhdlParser;

@@ -17,46 +17,13 @@
 // You should have received a copy of the GNU General Public License
 // along with TerosHDL.  If not, see <https://www.gnu.org/licenses/>.
 
-const nopy = require('./api');
+const nopy = require('../nopy/api');
 const path_lib = require('path');
 
 class Dependency_graph {
   constructor(graph){
     this.graph = graph;
     this.dependency_graph_svg = "";
-  }
-
-  async _get_python_exec(){
-    let command = "python3 --version";
-    let result_command = await this._exec_command(command);
-    //python3 exec exists
-    if (result_command.stderr === ""){
-      return "python3";
-    }
-    else{
-      //check if python path is python3
-      command = "python --version";
-      result_command = await this._exec_command(command);
-      let stdout_arr = result_command.stdout.replace('Python ','').split('.');
-
-      let python_version = stdout_arr[0];
-      if (python_version !== '3'){
-        return undefined;
-      }
-      else{
-        return "python";
-      }
-    }
-  }
-
-  async _exec_command(command) {  
-    const exec = require('child_process').exec;
-      return new Promise((resolve) => {
-        exec(command, (error, stdout, stderr) => {
-          let result = {'error': error, 'stdout':stdout,'stderr':stderr};
-          resolve(result);
-      });
-    });
   }
 
   async create_dependency_graph(sources) {
@@ -67,7 +34,7 @@ class Dependency_graph {
       }
       str += sources[sources.length-1]['name'];
     }
-    let python_exec_path = await this._get_python_exec();
+    let python_exec_path = await nopy.get_python_exec();
     let py_path = __dirname + path_lib.sep + "vunit_dependency.py";
     if (python_exec_path === undefined){
       return undefined;
