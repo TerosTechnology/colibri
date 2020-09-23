@@ -71,36 +71,46 @@ class Svlint extends Base_linter {
     let errors_str = result.stdout;
     let errors_str_lines = errors_str.split(/\r?\n/g);
     let errors = [];
-    // Parse output lines
-    errors_str_lines.forEach((line) => {
-      // was it for a submodule
-      if (line.search(file_split_space) > 0) {
-        // remove the filename
-        line = line.replace(file_split_space, '');
-                     
-        let terms = this.split_terms(line);
-        let severity = this.getSeverity(terms[0]);
-        let message = terms[3].slice(6);
-        let lineNum = parseInt(terms[1].split(':')[1]) - 1;
-        let columnNum = parseInt(terms[1].split(':')[2]) - 1;
-      
-        if (!isNaN(lineNum)){
-          let error = {
-            'severity' : severity,
-            'description' : message,
-            'location' : {
-              'file': file.replace('\\ ',' '),
-              'position': [lineNum, columnNum]
-            }
-          };
-          errors.push(error);
+    try{
+      // Parse output lines
+      errors_str_lines.forEach((line) => {
+        // was it for a submodule
+        if (line.search(file_split_space) > 0) {
+          // remove the filename
+          line = line.replace(file_split_space, '');
+                      
+          let terms = this.split_terms(line);
+          let severity = this.getSeverity(terms[0]);
+          let message = terms[2];
+          let lineNum = parseInt(terms[1].split(':')[1]) - 1;
+          let columnNum = parseInt(terms[1].split(':')[2]) - 1;
+        
+          if (!isNaN(lineNum)){
+            let error = {
+              'severity' : severity,
+              'description' : message,
+              'location' : {
+                'file': file.replace('\\ ',' '),
+                'position': [lineNum, columnNum]
+              }
+            };
+            errors.push(error);
+          }
         }
-      }
-    });
+      });
+    }
+    catch(e){
+      // eslint-disable-next-line no-console
+      console.log(e);
+    }
     return errors;
   }
   split_terms(line){
-    let terms = line.split('\t');
+    let terms = [];
+    let split_line = line.split('\t',2);
+    terms.push(split_line[0]);
+    terms.push(split_line[1]);
+    terms.push(line.split('\thint: ')[1]);
     return terms;
    }
   getSeverity(severity_string){
