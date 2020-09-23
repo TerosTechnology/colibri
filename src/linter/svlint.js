@@ -77,13 +77,12 @@ class Svlint extends Base_linter {
       if (line.search(file_split_space) > 0) {
         // remove the filename
         line = line.replace(file_split_space, '');
-        line = line.replace(/\s+/g,' ').trim();
                      
         let terms = this.split_terms(line);
         let severity = this.getSeverity(terms[0]);
-        let message = terms.slice(3).join(' ');
-        let lineNum = parseInt(terms[1].trim()) - 1;
-        let columnNum = parseInt(terms[2].split(' ')[0]) - 1;
+        let message = terms[3].slice(6);
+        let lineNum = parseInt(terms[1].split(':')[1]) - 1;
+        let columnNum = parseInt(terms[1].split(':')[2]) - 1;
       
         if (!isNaN(lineNum)){
           let error = {
@@ -101,17 +100,7 @@ class Svlint extends Base_linter {
     return errors;
   }
   split_terms(line){
-    let terms = line.split(':');
-    for (var i = 0; i < terms.length; i++) {
-      if (terms[i] === ' ') {
-        terms.splice(i, 1);
-        i--;
-      }
-      else
-      {
-        terms[i] = terms[i].trim();
-      }
-    }
+    let terms = line.split('\t');
     return terms;
    }
   getSeverity(severity_string){
