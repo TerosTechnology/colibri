@@ -1204,8 +1204,10 @@ def get_comments(code):
     return comments
 
 
-comment_symbol = sys.argv[1]
-f = open(sys.argv[2], "r")
+args_input = sys.argv[1].split(',',1)
+
+comment_symbol = args_input[1]
+f = open(args_input[0], "r")
 code = f.read()
 
 try:
