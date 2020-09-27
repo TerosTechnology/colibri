@@ -92,7 +92,6 @@ function check(expected, out,tested,language) {
   }
   else{
     console.log("Testing... " + tested +" "+language+": Fail!".red);
-    console.log(out);
     throw new Error('Test error.');
   }
 }
