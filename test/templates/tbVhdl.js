@@ -36,7 +36,7 @@ let options = {
 };
 let language = Colibri.General.LANGUAGES.VHDL;
 ////////////////////////////////////////////////////////////////////////////////
-let structure = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+'vhdl'+path.sep+'example_1.vhd','utf8');
+let structure = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+'vhdl'+path.sep+'example_0.vhd','utf8');
 let test_expected_vhdl = fs.readFileSync(__dirname + path.sep +'examples'+path.sep+'vhdl'+path.sep+'tbVhdl.vhd','utf8');
 let templates = new Colibri.Templates.Templates_factory();
 let templates_class = templates.get_template(Codes.TYPES.TESTBENCH,language);

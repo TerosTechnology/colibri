@@ -25,7 +25,7 @@ const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 const Colibri = require('../../src/main');
-const Codes = require('../../src/templates/codes')
+const Codes = require('../../src/templates/codes');
 
 let path_example = __dirname + path.sep + 'examples'+path.sep+'vhdl'+path.sep+'runpy'+path.sep;
 let lang= Colibri.General.LANGUAGES.VHDL;
@@ -34,7 +34,7 @@ for (let x=0;x<5;++x){
   let structure = fs.readFileSync(path_example+'runpyConf_'+x+'.json','utf8');
   structure     = JSON.parse(structure);
   let runpy_expected = fs.readFileSync(path_example+'run_'+x+'.py','utf8');
-  let runpy_c = runpy.get_template(Codes.TYPES.VUNIT,lang)
+  let runpy_c = runpy.get_template(Codes.TYPES.VUNIT,lang);
   let out = runpy_c.generate(structure);
   check_runpy(runpy_expected,out,x);
 }
