@@ -205,7 +205,7 @@ class Vhdl_editor{
   set_Instance(space, name, generics, ports, vunit, vhdl2008) {
     var str = '';
     //Instance name
-    if (vunit === true) {
+    if (vunit!==undefined && vunit === true) {
       str += space + name + '_inst : entity src_lib.' + name + '\n';
     } else if(vhdl2008!==undefined && vhdl2008 === true){
       str += space + name + '_inst : entity work.' + name + '\n';
