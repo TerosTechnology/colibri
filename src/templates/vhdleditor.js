@@ -207,7 +207,7 @@ class Vhdl_editor{
     //Instance name
     if (vunit === true) {
       str += space + name + '_inst : entity src_lib.' + name + '\n';
-    } else if(vhdl2008){
+    } else if(vhdl2008!==undefined && vhdl2008 === true){
       str += space + name + '_inst : entity work.' + name + '\n';
     }else{
       str += space + name + '_inst : ' + name + '\n';
