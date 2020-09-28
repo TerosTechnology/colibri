@@ -30,35 +30,40 @@ const Codes = require('../../src/templates/codes');
 var language = [Colibri.General.LANGUAGES.VHDL,Colibri.General.LANGUAGES.VERILOG];
 var tested = [Codes.TYPESCOMPONENTS.COMPONENT,
               Codes.TYPESCOMPONENTS.INSTANCE,
-              Codes.TYPESCOMPONENTS.SIGNALS];
+              Codes.TYPESCOMPONENTS.SIGNALS,
+              Codes.TYPESCOMPONENTS.INSTANCE_VHDL2008];
 
 
 var structure_vhdl = [];
 var expected_vhdl = [];
 for (let x=0;x<tested.length;++x){
   structure_vhdl[x] = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+language[0]
-        +path.sep+'example_1.vhd','utf8');
+        +path.sep+'example_0.vhd','utf8');
   expected_vhdl[x]  = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+language[0]
         +path.sep+tested[x] + '.txt','utf8');
 }
 let options_c = {'type' : "normal"};
 let options_i = {'type' : "normal"};
+let options_i_2008 = {'type' : "normal"};
 let options_s = {'type' : "normal"};
 let templates_vhdl = new Colibri.Templates.Templates_factory();
 let templates_vhdl_class = templates_vhdl.get_template(Codes.TYPES.COMPONENT,language[0]);
 options_c['type'] = tested[0]; // component
 templates_vhdl_class.generate(structure_vhdl[0],options_c).then(
-            out =>{ check(expected_vhdl[0],out,tested[0],language[0]); });
+  out =>{ check(expected_vhdl[0],out,tested[0],language[0]); });
 options_i['type'] = tested[1]; // instance
 templates_vhdl_class.generate(structure_vhdl[1],options_i).then(
-            out =>{ check(expected_vhdl[1],out,tested[1],language[0]); });
+  out =>{ check(expected_vhdl[1],out,tested[1],language[0]); });
 options_s['type'] = tested[2]; // signals
 templates_vhdl_class.generate(structure_vhdl[2],options_s).then(
-            out =>{ check(expected_vhdl[2],out,tested[2],language[0]); });
+  out =>{ check(expected_vhdl[2],out,tested[2],language[0]); });
+  options_i_2008['type'] = tested[3]; // instance 2008
+templates_vhdl_class.generate(structure_vhdl[3],options_i_2008).then(
+  out =>{ check(expected_vhdl[3],out,tested[3],language[0]); });
 
 var structure_verilog = [];
 var expected_verilog = [];
-for (let x=0;x<tested.length;++x){
+for (let x=0;x<tested.length-1;++x){
   structure_verilog[x] = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+language[1]
                           +path.sep+'example_0.v','utf8');
   expected_verilog[x]  = fs.readFileSync(__dirname + path.sep + 'examples'+path.sep+language[1]

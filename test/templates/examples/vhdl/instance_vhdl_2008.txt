@@ -1,0 +1,13 @@
+arith_counter_gray_inst : entity work.arith_counter_gray
+  generic map (
+    BITS => BITS,
+    INIT => INIT
+  )
+  port map (
+    clk => clk,
+    rst => rst,
+    inc => inc,
+    dec => dec,
+    val => val,
+    cry => cry
+  );

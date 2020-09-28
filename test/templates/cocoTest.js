@@ -29,7 +29,7 @@ const Codes = require('../../src/templates/codes');
 
 let path_example_vhdl = __dirname + path.sep + 'examples'+path.sep+'vhdl'+path.sep;
 let path_example_verilog = __dirname + path.sep + 'examples'+path.sep+'verilog'+path.sep;
-var structure_vhdl = fs.readFileSync(path_example_vhdl+'example_1.vhd','utf8');
+var structure_vhdl = fs.readFileSync(path_example_vhdl+'example_0.vhd','utf8');
 var structure_v = fs.readFileSync(path_example_verilog+'example_0.v','utf8');
 
 let options = Colibri.General.LANGUAGES.VHDL;

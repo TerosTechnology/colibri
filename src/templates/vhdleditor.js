@@ -202,12 +202,14 @@ class Vhdl_editor{
     return str;
   }
 
-  set_Instance(space, name, generics, ports, vunit) {
+  set_Instance(space, name, generics, ports, vunit, vhdl2008) {
     var str = '';
     //Instance name
-    if (vunit === true) {
+    if (vunit!==undefined && vunit === true) {
       str += space + name + '_inst : entity src_lib.' + name + '\n';
-    } else {
+    } else if(vhdl2008!==undefined && vhdl2008 === true){
+      str += space + name + '_inst : entity work.' + name + '\n';
+    }else{
       str += space + name + '_inst : ' + name + '\n';
     }
     //Generics
@@ -282,7 +284,10 @@ class Vhdl_component extends Vhdl_editor{
         structure['generics'], structure['ports'], false);
     } else if (options['type'] === Codes.TYPESCOMPONENTS.INSTANCE) {
       component = this.set_Instance('  ', structure['entity']['name'],
-        structure['generics'], structure['ports'], false);
+        structure['generics'], structure['ports'], false,false);
+    } else if (options['type'] === Codes.TYPESCOMPONENTS.INSTANCE_VHDL2008) {
+      component = this.set_Instance('  ', structure['entity']['name'],
+        structure['generics'], structure['ports'], false,true);
     } else if (options['type'] === Codes.TYPESCOMPONENTS.SIGNALS) {
       component = this.set_Signals('  ', structure['ports']);
     }
