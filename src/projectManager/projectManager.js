@@ -136,7 +136,6 @@ class Manager extends Simulators.Simulators {
   async save_markdown_doc(output_dir_doc, symbol_vhdl, symbol_verilog, with_dependency_graph = true) {
     let project_name = this.configurator.get_name();
     let svg_dependency_graph;
-    with_dependency_graph = true;
     if (with_dependency_graph === true) {
       svg_dependency_graph = await this.dependency_graph.get_dependency_graph_svg(this.source);
     }
@@ -147,7 +146,6 @@ class Manager extends Simulators.Simulators {
   async save_html_doc(output_dir_doc, symbol_vhdl, symbol_verilog, with_dependency_graph = true) {
     let project_name = this.configurator.get_name();
     let svg_dependency_graph;
-    with_dependency_graph = true;
     if (with_dependency_graph === true) {
       svg_dependency_graph = await this.dependency_graph.get_dependency_graph_svg(this.source);
     }
