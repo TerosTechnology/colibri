@@ -19,6 +19,8 @@
 
 const nopy = require('../nopy/api');
 const path_lib = require('path');
+const Viz = require('./viz/viz');
+const worker = require('./viz/full.render');
 
 class Dependency_graph {
   constructor(graph){
@@ -48,6 +50,18 @@ class Dependency_graph {
       });
     });
   }
+  async get_dependency_graph_svg(sources){
+    let dependencies = await this.create_dependency_graph(sources);
+    var viz = new Viz(worker);
+    return new Promise(function(resolve) {
+      viz.renderString(dependencies).then(function(string) {
+        resolve(string);
+      });
+    });
+  }
+
+
+
 }
 
 module.exports = {
