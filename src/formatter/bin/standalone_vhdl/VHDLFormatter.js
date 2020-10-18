@@ -492,7 +492,7 @@ function AlignSigns(result, startIndex, endIndex, mode) {
     AlignSign_(result, startIndex, endIndex, ":=", mode);
     AlignSign_(result, startIndex, endIndex, "<=", mode);
     AlignSign_(result, startIndex, endIndex, "=>", mode);
-    AlignSign_(result, startIndex, endIndex, "@@comments", mode);
+    // AlignSign_(result, startIndex, endIndex, "@@comments", mode);
 }
 exports.AlignSigns = AlignSigns;
 function AlignSign_(result, startIndex, endIndex, symbol, mode) {
