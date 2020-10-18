@@ -18,7 +18,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
-const path  = require('path');
+const path = require('path');
 const temp = require('temp');
 const fs = require('fs');
 const nopy = require('../nopy/api');
@@ -30,7 +30,7 @@ class VhdlParser {
 
   async getAll(str) {
     const MAX_ARG_LENGTH = 32767;
-    let reduce_str = str.slice(0,MAX_ARG_LENGTH);
+    let reduce_str = str.slice(0, MAX_ARG_LENGTH);
     let code_file = this._create_temp_file_of_code(reduce_str);
 
     let structure = undefined;
@@ -40,16 +40,28 @@ class VhdlParser {
       let py_path = __dirname + path.sep + "parser.py";
       let args = code_file + ',' + this.comment_symbol;
 
-      if (python_exec_path === undefined){
+      if (python_exec_path === undefined) {
         return undefined;
       }
       // eslint-disable-next-line no-unused-vars
-      return new Promise(function(resolve, reject) {
-        nopy.spawnPython([py_path, args], { interop: "buffer", 
+      return new Promise(function (resolve, reject) {
+        nopy.spawnPython([py_path, args], {
+          interop: "buffer",
           // eslint-disable-next-line no-unused-vars
-          execPath: python_exec_path}).then(({ code, stdout, stderr }) => {
-            structure = JSON.parse(stdout);
-            resolve(structure);
+          execPath: python_exec_path
+        }).then(({ code, stdout, stderr }) => {
+          try {
+            if (stdout === "null\n" || stdout === "null\r") {
+              structure = undefined;
+            }
+            else {
+              structure = JSON.parse(stdout);
+            }
+          }
+          catch (e) {
+            structure = undefined;
+          }
+          resolve(structure);
         });
       });
     } catch (error) {
@@ -73,4 +85,4 @@ class VhdlParser {
   }
 }
 
-module.exports =  VhdlParser;
+module.exports = VhdlParser;
