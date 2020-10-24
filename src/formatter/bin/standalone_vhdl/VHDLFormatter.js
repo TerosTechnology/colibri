@@ -257,10 +257,11 @@ class signAlignSettings {
 }
 exports.signAlignSettings = signAlignSettings;
 class BeautifierSettings {
-    constructor(removeComments, removeReport, checkAlias, signAlignSettings, keywordCase, typeNameCase, indentation, newLineSettings, endOfLine, addNewLine) {
+    constructor(removeComments, removeReport, checkAlias, alignComments, signAlignSettings, keywordCase, typeNameCase, indentation, newLineSettings, endOfLine, addNewLine) {
         this.RemoveComments = removeComments;
         this.RemoveAsserts = removeReport;
         this.CheckAlias = checkAlias;
+        this.AlignComments = alignComments;
         this.SignAlignSettings = signAlignSettings;
         this.KeywordCase = keywordCase;
         this.TypeNameCase = typeNameCase;
@@ -337,7 +338,7 @@ function beautify(input, settings) {
     beautify3(arr, result, settings, 0, 0);
     var alignSettings = settings.SignAlignSettings;
     if (alignSettings != null && alignSettings.isAll) {
-        AlignSigns(result, 0, result.length - 1, alignSettings.mode);
+        AlignSigns(result, 0, result.length - 1, alignSettings.mode, settings.AlignComments);
     }
     arr = FormattedLineToString(result, settings.Indentation);
     input = arr.join("\r\n");
@@ -481,18 +482,20 @@ function beautifyPortGenericBlock(inputs, result, settings, startIndex, parentEn
             && alignSettings.keyWords != null
             && alignSettings.keyWords.indexOf(mode) >= 0) {
             blockBodyStartIndex++;
-            AlignSigns(result, blockBodyStartIndex, blockBodyEndIndex, alignSettings.mode);
+            AlignSigns(result, blockBodyStartIndex, blockBodyEndIndex, alignSettings.mode, settings.AlignComments);
         }
     }
     return [i, parentEndIndex];
 }
 exports.beautifyPortGenericBlock = beautifyPortGenericBlock;
-function AlignSigns(result, startIndex, endIndex, mode) {
+function AlignSigns(result, startIndex, endIndex, mode, alignComments) {
     AlignSign_(result, startIndex, endIndex, ":", mode);
     AlignSign_(result, startIndex, endIndex, ":=", mode);
     AlignSign_(result, startIndex, endIndex, "<=", mode);
     AlignSign_(result, startIndex, endIndex, "=>", mode);
-    // AlignSign_(result, startIndex, endIndex, "@@comments", mode);
+    if (alignComments) {
+        AlignSign_(result, startIndex, endIndex, "@@comments", mode);
+    }
 }
 exports.AlignSigns = AlignSigns;
 function AlignSign_(result, startIndex, endIndex, symbol, mode) {
