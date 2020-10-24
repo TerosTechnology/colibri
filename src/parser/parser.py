@@ -19,6 +19,7 @@ import json
 HDL_FILE_ENCODING = "latin-1"
 comment_symbol = ""
 
+
 def coords_of_str_index(s, index):
     """Get (line_number, col) of `index` in `s`."""
     lines = s.splitlines(True)
@@ -27,6 +28,7 @@ def coords_of_str_index(s, index):
         if curr_pos + len(line) > index:
             return linenum + 1, index-curr_pos
         curr_pos += len(line)
+
 
 class VHDLDesignFile(object):  # pylint: disable=too-many-instance-attributes
     """
@@ -63,7 +65,7 @@ class VHDLDesignFile(object):  # pylint: disable=too-many-instance-attributes
         code_with_comments = code
         code = remove_comments(code)
         return cls(
-            entities=list(VHDLEntity.find(code,code_with_comments)),
+            entities=list(VHDLEntity.find(code, code_with_comments)),
             # architectures=list(VHDLArchitecture.find(code)),
             # packages=list(VHDLPackage.find(code)),
             # package_bodies=list(VHDLPackageBody.find(code)),
@@ -228,7 +230,7 @@ class VHDLPackage(object):
                 """,
                 re.MULTILINE | re.IGNORECASE | re.VERBOSE,
             )
-            sub_code = code[package.start() :]
+            sub_code = code[package.start():]
             match = package_end.search(sub_code)
             if match:
                 yield cls.parse(sub_code[: match.end()])
@@ -276,7 +278,7 @@ class VHDLEntity(object):
     """
 
     def __init__(self, identifier, description, generics=None, ports=None):
-        self.identifier  = identifier
+        self.identifier = identifier
         self.description = description
 
         if generics is not None:
@@ -333,7 +335,7 @@ class VHDLEntity(object):
         """
         for entity in cls._entity_start_re.finditer(code):
             identifier = entity.group("id")
-            sub_code = code[entity.start() :]
+            sub_code = code[entity.start():]
             entity_end_re = re.compile(
                 r"""
                 \b                            # Word boundary
@@ -352,7 +354,7 @@ class VHDLEntity(object):
             match = entity_end_re.search(sub_code)
             if match:
                 end = match.end()
-                yield VHDLEntity.parse(sub_code[: match.end()],code_with_comments)
+                yield VHDLEntity.parse(sub_code[: match.end()], code_with_comments)
 
     @classmethod
     def parse(cls, code, code_with_comments):
@@ -376,15 +378,16 @@ class VHDLEntity(object):
         identifier = entity_start.match(code).group("id")
         match_position = entity_start.match(code).group()
 
-
         supercode_no_comments = remove_comments(code_with_comments)
-        substr = re.search(re.sub(r"^\s+", "", match_position),supercode_no_comments,re.IGNORECASE)
-        index  = coords_of_str_index(supercode_no_comments, substr.start())
+        substr = re.search(re.sub(r"^\s+", "", match_position),
+                           supercode_no_comments, re.IGNORECASE)
+        index = coords_of_str_index(supercode_no_comments, substr.start())
 
         comments = get_comments(code_with_comments)
         description = ""
-        for matchNum,match in enumerate(comments, start=1):
-            comment_index = coords_of_str_index(code_with_comments,match.start())
+        for matchNum, match in enumerate(comments, start=1):
+            comment_index = coords_of_str_index(
+                code_with_comments, match.start())
             if(comment_index[0] > index[0]):
                 break
             if(comment_index[0] < index[0]):
@@ -401,8 +404,8 @@ class VHDLEntity(object):
                     # description += "\n"
 
         # Find generics and ports
-        generics = cls._find_generic_clause(code,code_with_comments)
-        ports = cls._find_port_clause(code,code_with_comments)
+        generics = cls._find_generic_clause(code, code_with_comments)
+        ports = cls._find_port_clause(code, code_with_comments)
 
         return cls(identifier, description, generics, ports)
 
@@ -423,7 +426,8 @@ class VHDLEntity(object):
         )
         match = generic_clause_start.search(code)
         if match:
-            closing_pos = find_closing_delimiter("\\(", "\\)", code[match.end() :])
+            closing_pos = find_closing_delimiter(
+                "\\(", "\\)", code[match.end():])
             semicolon = re.compile(
                 r"""
                 [\s]*   # Potential whitespaces
@@ -431,11 +435,11 @@ class VHDLEntity(object):
                 """,
                 re_flags,
             )
-            match_semicolon = semicolon.match(code[match.end() + closing_pos :])
+            match_semicolon = semicolon.match(code[match.end() + closing_pos:])
             if match_semicolon:
                 return cls._parse_generic_clause(
                     code[
-                        match.start() : match.end()
+                        match.start(): match.end()
                         + closing_pos
                         + match_semicolon.end()
                     ],
@@ -461,7 +465,8 @@ class VHDLEntity(object):
         )
         match = port_clause_start.search(code)
         if match:
-            closing_pos = find_closing_delimiter("\\(", "\\)", code[match.end() :])
+            closing_pos = find_closing_delimiter(
+                "\\(", "\\)", code[match.end():])
             semicolon = re.compile(
                 r"""
                 [\s]*   # Potential whitespaces
@@ -469,11 +474,11 @@ class VHDLEntity(object):
                 """,
                 re_flags,
             )
-            match_semicolon = semicolon.match(code[match.end() + closing_pos :])
+            match_semicolon = semicolon.match(code[match.end() + closing_pos:])
             if match_semicolon:
                 return cls._parse_port_clause(
                     code[
-                        match.start() : match.end()
+                        match.start(): match.end()
                         + closing_pos
                         + match_semicolon.end()
                     ],
@@ -521,7 +526,8 @@ class VHDLEntity(object):
             result.append("".join(split))
         return result
 
-    _package_generic_re = re.compile(r"\s*package\s+", re.MULTILINE | re.IGNORECASE)
+    _package_generic_re = re.compile(
+        r"\s*package\s+", re.MULTILINE | re.IGNORECASE)
     _type_generic_re = re.compile(r"\s*type\s+", re.MULTILINE | re.IGNORECASE)
     _function_generic_re = re.compile(
         r"\s*(impure\s+)?(function|procedure)\s+", re.MULTILINE | re.IGNORECASE
@@ -533,7 +539,7 @@ class VHDLEntity(object):
         Parse the generic clause and return a list of interface elements
         """
         # The generic list is between the outer parenthesis
-        generic_list_string = code[code.find("(") + 1 : code.rfind(")")]
+        generic_list_string = code[code.find("(") + 1: code.rfind(")")]
 
         # Split the interface elements
         interface_elements = cls._split_not_in_par(generic_list_string, ";")
@@ -554,7 +560,8 @@ class VHDLEntity(object):
                 # Ignore function generics
                 continue
 
-            generic_list.append(VHDLInterfaceElement.parse(interface_element,code_with_comments))
+            generic_list.append(VHDLInterfaceElement.parse(
+                interface_element, code_with_comments))
 
         return generic_list
 
@@ -565,8 +572,8 @@ class VHDLEntity(object):
         """
         # The port list is between the outer parenthesis
         start = code.find("(") + 1
-        stop  = code.rfind(")")
-        port_list_string = code[start : stop]
+        stop = code.rfind(")")
+        port_list_string = code[start: stop]
 
         # Split the interface elements
         interface_elements = port_list_string.split(";")
@@ -575,7 +582,8 @@ class VHDLEntity(object):
         # Add interface elements to the port list
         for interface_element in interface_elements:
             port_list.append(
-                VHDLInterfaceElement.parse(interface_element, code_with_comments, is_signal=True)
+                VHDLInterfaceElement.parse(
+                    interface_element, code_with_comments, is_signal=True)
             )
 
         return port_list
@@ -655,7 +663,7 @@ class VHDLInterfaceElement(object):
     Represents a VHDL interface element
     """
 
-    def __init__(self, identifier, subtype_indication, mode=None, init_value=None, description="", position=[0,0]):
+    def __init__(self, identifier, subtype_indication, mode=None, init_value=None, description="", position=[0, 0]):
         self.identifier = identifier
         self.mode = mode
         self.subtype_indication = subtype_indication
@@ -684,24 +692,26 @@ class VHDLInterfaceElement(object):
 
         supercode_no_comments = remove_comments(code_with_comments)
         normalized = re.sub(r"^\s+", "", code)
-        normalized = normalized.replace("(","\(")
-        normalized = normalized.replace(")","\)")
-        normalized = normalized.replace("+","\+")
-        normalized = normalized.replace("*","\*")
-        normalized = normalized.replace("/","\/+")
-        normalized = normalized.replace("^","\^")
-        substr = re.search(re.sub(r"^\s+", "", normalized),supercode_no_comments,re.IGNORECASE)
-        index  = coords_of_str_index(supercode_no_comments, substr.start())
+        normalized = normalized.replace("(", "\(")
+        normalized = normalized.replace(")", "\)")
+        normalized = normalized.replace("+", "\+")
+        normalized = normalized.replace("*", "\*")
+        normalized = normalized.replace("/", "\/+")
+        normalized = normalized.replace("^", "\^")
+        substr = re.search(re.sub(r"^\s+", "", normalized),
+                           supercode_no_comments, re.IGNORECASE)
+        index = coords_of_str_index(supercode_no_comments, substr.start())
 
         comments = get_comments(code_with_comments)
         description = ""
-        for matchNum,match in enumerate(comments, start=1):
-            comment_index = coords_of_str_index(code_with_comments,match.start())
+        for matchNum, match in enumerate(comments, start=1):
+            comment_index = coords_of_str_index(
+                code_with_comments, match.start())
             if(comment_index[0] > index[0]):
                 break
 
             if(comment_index[0] == index[0]):
-                str_description = match.group().replace("--","") + "\n"
+                str_description = match.group().replace("--", "") + "\n"
                 if (comment_symbol == ""):
                     description += str_description
                     # description += "\n"
@@ -714,7 +724,8 @@ class VHDLInterfaceElement(object):
 
         # Extract subtype indication and mode (if any)
 
-        mode_split = interface_element_string.split(":")[1].strip().split(None, 1)
+        mode_split = interface_element_string.split(
+            ":")[1].strip().split(None, 1)
         if cls._is_mode(mode_split[0]):
             mode = mode_split[0]
             subtype_indication = VHDLSubtypeIndication.parse(mode_split[1])
@@ -783,7 +794,8 @@ class VHDLEnumerationType(object):
         """
         for enum_type in cls._enum_declaration_re.finditer(code):
             identifier = enum_type.group("id")
-            literals = [e.strip() for e in enum_type.group("literals").split(",")]
+            literals = [e.strip()
+                        for e in enum_type.group("literals").split(",")]
             yield cls(identifier, literals)
 
 
@@ -836,7 +848,8 @@ class VHDLRecordType(object):
                         identifier_list_and_subtype_indication[1].strip()
                     )
                     parsed_elements.append(
-                        VHDLElementDeclaration(identifier_list, subtype_indication)
+                        VHDLElementDeclaration(
+                            identifier_list, subtype_indication)
                     )
             yield cls(identifier, parsed_elements)
 
@@ -949,7 +962,7 @@ class VHDLArrayType(object):
         if "," in ranges:
             for char in ranges:
                 if char == "," and level == 0:
-                    return ranges[:index], ranges[index + 1 :]
+                    return ranges[:index], ranges[index + 1:]
 
                 if char == "(":
                     level += 1
@@ -1045,7 +1058,8 @@ class VHDLReference(object):
             """
             ids = [match.group("id").strip()]
             if match.group("extra"):
-                ids += [name.strip() for name in match.group("extra").split(",")[1:]]
+                ids += [name.strip()
+                        for name in match.group("extra").split(",")[1:]]
             return ids
 
         references = []
@@ -1080,7 +1094,8 @@ class VHDLReference(object):
         references = []
         for match in cls._entity_reference_re.finditer(code):
             if match.group("arch") is None:
-                references.append(cls("entity", match.group("lib"), match.group("ent")))
+                references.append(
+                    cls("entity", match.group("lib"), match.group("ent")))
             else:
                 references.append(
                     cls(
@@ -1120,7 +1135,8 @@ class VHDLReference(object):
         """
         references = []
         for match in cls._package_instance_re.finditer(code):
-            references.append(cls("package", match.group("lib"), match.group("name")))
+            references.append(
+                cls("package", match.group("lib"), match.group("name")))
         return references
 
     @classmethod
@@ -1176,7 +1192,8 @@ class VHDLReference(object):
 
 
 VHDL_REMOVE_COMMENT_RE = r"(?:(?:\"[^\"]*\")|(--[^\n]*))"
-VHDL_REMOVE_COMMENT_COMPILED_RE = re.compile(VHDL_REMOVE_COMMENT_RE, re.MULTILINE)
+VHDL_REMOVE_COMMENT_COMPILED_RE = re.compile(
+    VHDL_REMOVE_COMMENT_RE, re.MULTILINE)
 
 
 def _comment_repl(match):
@@ -1196,6 +1213,7 @@ def remove_comments(code):
     """
     return VHDL_REMOVE_COMMENT_COMPILED_RE.sub(_comment_repl, code)
 
+
 def get_comments(code):
     """
     Return the code with comments removed
@@ -1204,7 +1222,7 @@ def get_comments(code):
     return comments
 
 
-args_input = sys.argv[1].split(',',1)
+args_input = sys.argv[1].split(',', 1)
 
 comment_symbol = args_input[1]
 f = open(args_input[0], "r")
@@ -1214,25 +1232,34 @@ try:
     design_file = VHDLDesignFile.parse(code)
     entity = design_file.entities[0]
 except:
-    print("Exception error.")
-    sys.exit(1)
+    entity_obj = {'name': '',
+                  'comment': ''
+                  }
+    vhdl_parsed = {
+        'entity': entity_obj,
+        'generics': [],
+        'ports': []
+    }
+    # print(json.dumps(vhdl_parsed))
+    print("null")
+    sys.exit(0)
 
 entity_obj = {'name': entity.identifier,
-            'comment': entity.description
-            }
+              'comment': entity.description
+              }
 
 generics = []
-for i in range(0,len(entity.generics)):
+for i in range(0, len(entity.generics)):
     generic_name_split = entity.generics[i].identifier.split(',')
     for temp in generic_name_split:
         generic = {'name': temp,
                    'type': entity.generics[i].subtype_indication.code,
-                    'comment': entity.generics[i].description
-                }
+                   'comment': entity.generics[i].description
+                   }
         generics.append(generic)
 
 ports = []
-for i in range(0,len(entity.ports)):
+for i in range(0, len(entity.ports)):
     port_name_split = entity.ports[i].identifier.split(',')
     for temp in port_name_split:
         port = {'name': temp,
