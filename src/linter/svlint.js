@@ -31,66 +31,74 @@ class Svlint extends Base_linter {
   }
 
   // options = {custom_bin:"", custom_arguments:"", custom_path:""}
-  async lint_from_file(file,options){
-    let normalized_file = file.replace(' ','\\ ');
+  async lint_from_file(file, options) {
+    let normalized_file = file.replace(' ', '\\ ');
     let errors = await this._lint(normalized_file, options);
     return errors;
   }
 
-  async lint_from_code(file,code,options){
+  async lint_from_code(file, code, options) {
     let temp_file = await this._create_temp_file_of_code(code);
-    let errors = await this._lint(temp_file,options);
+    let errors = await this._lint(temp_file, options);
     return errors;
   }
 
-  async _exec_linter(file) { 
+  async _exec_linter(file, options) {
+    let custom_config = '';
+    if (options !== undefined && options.custom_config !== undefined && options.custom_config !== '') {
+      custom_config += options.custom_config;
+    }
+    else {
+      custom_config = `${__dirname}${path_lib.sep}.svlint.toml`;
+    }
+
     let command = `${__dirname}${path_lib.sep}bin${path_lib.sep}`;
-    if(os.platform() === "win32"){
+    if (os.platform() === "win32") {
       command += "svlint-win.exe -1";
     }
-    else if (os.platform() === "darwin"){
+    else if (os.platform() === "darwin") {
       command += "svlint-mac -1";
     }
-    else if (os.platform() === "linux"){
+    else if (os.platform() === "linux") {
       command += "svlint-linux -1";
     }
-    command += " " + file;
+    command += " -c " + custom_config + " " + file;
 
     const exec = require('child_process').exec;
-      return new Promise((resolve) => {
-        exec(command, (error, stdout, stderr) => {
-          let result = {'stdout':stdout,'stderr':stderr};
-          resolve(result);
+    return new Promise((resolve) => {
+      exec(command, (error, stdout, stderr) => {
+        let result = { 'stdout': stdout, 'stderr': stderr };
+        resolve(result);
       });
     });
   }
 
-  async _lint(file,options){
-    let result = await this._exec_linter(file);
+  async _lint(file, options) {
+    let result = await this._exec_linter(file, options);
     let file_split_space = file.split('\\ ')[0];
     let errors_str = result.stdout;
     let errors_str_lines = errors_str.split(/\r?\n/g);
     let errors = [];
-    try{
+    try {
       // Parse output lines
       errors_str_lines.forEach((line) => {
         // was it for a submodule
         if (line.search(file_split_space) > 0) {
           // remove the filename
           line = line.replace(file_split_space, '');
-                      
+
           let terms = this.split_terms(line);
           let severity = this.getSeverity(terms[0]);
           let message = terms[2];
           let lineNum = parseInt(terms[1].split(':')[1]) - 1;
           let columnNum = parseInt(terms[1].split(':')[2]) - 1;
-        
-          if (!isNaN(lineNum)){
+
+          if (!isNaN(lineNum)) {
             let error = {
-              'severity' : severity,
-              'description' : message,
-              'location' : {
-                'file': file.replace('\\ ',' '),
+              'severity': severity,
+              'description': message,
+              'location': {
+                'file': file.replace('\\ ', ' '),
                 'position': [lineNum, columnNum]
               }
             };
@@ -99,32 +107,29 @@ class Svlint extends Base_linter {
         }
       });
     }
-    catch(e){
+    catch (e) {
       // eslint-disable-next-line no-console
       console.log(e);
     }
     return errors;
   }
-  split_terms(line){
+  split_terms(line) {
     let terms = [];
-    let split_line = line.split('\t',2);
+    let split_line = line.split('\t', 2);
     terms.push(split_line[0]);
     terms.push(split_line[1]);
     terms.push(line.split('\thint: ')[1]);
     return terms;
-   }
-  getSeverity(severity_string){
+  }
+  getSeverity(severity_string) {
     let severity = "warning";
-    if (severity_string.startsWith('Fail'))
-    {
+    if (severity_string.startsWith('Fail')) {
       severity = "error";
     }
-    else if (severity_string.startsWith('Error'))
-    {
+    else if (severity_string.startsWith('Error')) {
       severity = "error";
     }
-    else if (severity_string.startsWith('Warning'))
-    {
+    else if (severity_string.startsWith('Warning')) {
       severity = "warning";
     }
     return severity;
