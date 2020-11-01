@@ -59,8 +59,6 @@ for i in range(0, len(nodes)):
     diagram += '    "' + \
         str(complete_nodes[i]) + '" [label="' + str(nodes[i]) + '"]\n'
 
-print(dependencies)
-
 # Add edge node
 for i in range(0, len(dependencies)):
     for j in range(0, len(dependencies[i])):

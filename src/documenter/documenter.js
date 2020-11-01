@@ -250,6 +250,7 @@ class Documenter {
     html += html_description;
     //Generics and ports
     html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], code_tree['generics']));
+    html += '<br><br><br><br><br><br>'
 
     return html;
   }
