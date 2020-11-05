@@ -29,8 +29,9 @@ module comp_tb;
     );
 
   initial begin
-  begin
-    $finish;
+    begin
+      $finish;
+    end
   end
 
 //   always
