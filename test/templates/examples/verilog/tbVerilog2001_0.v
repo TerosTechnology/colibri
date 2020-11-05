@@ -35,10 +35,10 @@ module uart_tb;
     );
 
   initial begin
-  begin
-    $finish;
+    begin
+      $finish;
+    end
   end
-
 //   always
 //     #5  clk =  ! clk;
 

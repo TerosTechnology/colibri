@@ -28,19 +28,19 @@ const General = require('../general/general');
 const Codes = require('./codes');
 const ParserLib = require('../parser/factory');
 
-class Verilog_editor{
-  constructor(){}
+class Verilog_editor {
+  constructor() { }
 
   async generate(src, options) {
     let parser = new ParserLib.ParserFactory;
-    parser = parser.getParser(General.LANGUAGES.VERILOG,'');
-    let structure =  await parser.getAll(src);
-    if (structure === undefined){
+    parser = parser.getParser(General.LANGUAGES.VERILOG, '');
+    let structure = await parser.getAll(src);
+    if (structure === undefined) {
       return undefined;
     }
     var vunit = false;
     var version = General.VERILOGSTANDARS.VERILOG2001;
-    if(options !== null){
+    if (options !== null) {
       vunit = options['type'] === Codes.TYPESTESTBENCH.VUNIT;
       version = options['version'];
     }
@@ -114,15 +114,15 @@ class Verilog_editor{
   set_Signals(space, m) {
     var str = '';
     for (let x = 0; x < m.length; ++x) {
-      if (m[x]['type'] === ''){
+      if (m[x]['type'] === '') {
         str += space + 'reg ' + m[x]['name'] + ';\n';
       }
-      else{
+      else {
         const regex = /\[(.*?)\]/;
         let type = m[x]['type'].match(regex);
         if (type === null) {
           type = '';
-        }else{
+        } else {
           type = type[0];
         }
         str += space + 'reg ' + type + ' ' + m[x]['name'] + ';\n';
@@ -166,8 +166,8 @@ class Verilog_editor{
       for (let x = 0; x < generics.length - 1; ++x) {
         str += space + '    .' + generics[x]['name'] + '(' + generics[x]['name'] + '),\n';
       }
-      str += space + '    .' + generics[generics.length - 1]['name'] + ' (' 
-            + generics[generics.length - 1]['name'] + ')\n';
+      str += space + '    .' + generics[generics.length - 1]['name'] + ' ('
+        + generics[generics.length - 1]['name'] + ')\n';
       str += space + '  )\n';
     }
     //Ports
@@ -194,8 +194,9 @@ class Verilog_editor{
   set_Main(space) {
     var str = '';
     str += space + "initial begin\n";
-    str += space + "begin\n";
-    str += space + "  $finish;\n";
+    str += space + "  begin\n";
+    str += space + "    $finish;\n";
+    str += space + "  end\n";
     str += space + "end\n";
     return str;
   }
@@ -208,16 +209,15 @@ class Verilog_editor{
   }
 }
 
-class Verilog_component extends Verilog_editor{
+class Verilog_component extends Verilog_editor {
   async generate(src, options) {
     let parser = new ParserLib.ParserFactory;
-    parser = parser.getParser(General.LANGUAGES.VERILOG,'');
-    let structure =  await parser.getAll(src);
-    if (structure === undefined){
+    parser = parser.getParser(General.LANGUAGES.VERILOG, '');
+    let structure = await parser.getAll(src);
+    if (structure === undefined) {
       return undefined;
     }
-    if (options === null)
-      {return "";}
+    if (options === null) { return ""; }
     var component = "";
     if (options['type'] === Codes.TYPESCOMPONENTS.COMPONENT) {
       component = "";
@@ -237,5 +237,5 @@ class Verilog_component extends Verilog_editor{
 //*****************************************************************************/
 module.exports = {
   Verilog_editor: Verilog_editor,
-  Verilog_component : Verilog_component
+  Verilog_component: Verilog_component
 };
