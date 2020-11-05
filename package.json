@@ -1,6 +1,6 @@
 {
   "name": "jsteros",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "Backend for terosHDL IDE",
   "main": "src/main.js",
   "scripts": {
