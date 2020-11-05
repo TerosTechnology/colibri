@@ -29,11 +29,11 @@ exports.Simulators = require('./simulators/simulators');
 //******************************************************************************
 //General
 //******************************************************************************
-exports.General = require('./general/general')
+exports.General = require('./general/general');
 //******************************************************************************
 //Linter
 //******************************************************************************
-exports.Linter    = require('./linter/factory');
+exports.Linter    = require('./linter/linter');
 //******************************************************************************
 //Parser
 //******************************************************************************
@@ -49,8 +49,8 @@ exports.Documenter = require('./documenter/documenter');
 //******************************************************************************
 //ProjectManager
 //******************************************************************************
-exports.ProjectManager = require('./projectManager/projectManager');
+exports.Project_manager = require('./projectManager/projectManager');
 //******************************************************************************
-//Beautifuler
+//Formatter
 //******************************************************************************
-exports.Beautifuler = require('./beautifuler/factory');
+exports.Formatter = require('./formatter/formatter');

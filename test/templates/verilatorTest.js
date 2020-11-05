@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Copyright 2020 Teros Technology
 //
 // Ismael Perez Rojo
@@ -19,25 +20,28 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
+// eslint-disable-next-line no-unused-vars
 const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 const Colibri = require('../../src/main');
+const Codes = require('../../src/templates/codes')
 
-let path_example = 'examples'+path.sep+'verilog'+path.sep
-var structure = fs.readFileSync(path_example+'structure.json','utf8');
-structure_v     = JSON.parse(structure);
+let path_example = __dirname + path.sep + 'examples'+path.sep+'verilog'+path.sep
+let structure_v = fs.readFileSync(path_example+'example_0.v','utf8');
 
-var veritest = new Colibri.Templates.Templates();
-
+let options = Colibri.General.LANGUAGES.VERILOG;
+let veritest = new Colibri.Templates.Templates_factory();
 let verilator_expected = fs.readFileSync(path_example+'veritest.cpp','utf8');
-let verilator_template = veritest.getVerilatorTemplate(structure_v);
-
-console.log('****************************************************************');
-if(verilator_expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') === verilator_template.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
-  console.log("---> Tested: verilator --> ok!".green);
-}
-else{
-  console.log("---> Tested: verilator --> fail!".red);
-  throw new Error('Test error.');
-}
+let veritest_gen = veritest.get_template(Codes.TYPES.VERILATOR,options);
+veritest_gen.generate(structure_v).then(verilator_template => {
+  console.log('****************************************************************');
+  if(verilator_expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') 
+    === verilator_template.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
+    console.log("---> Tested: verilator --> ok!".green);
+  }
+  else{
+    console.log("---> Tested: verilator --> fail!".red);
+    throw new Error('Test error.');
+  }
+});

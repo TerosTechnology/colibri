@@ -30,6 +30,7 @@ const TYPES = {
 const TYPESCOMPONENTS = {
   COMPONENT : 'component',
   INSTANCE : 'instance',
+  INSTANCE_VHDL2008 : 'instance_vhdl_2008',
   SIGNALS : 'signals'
 };
 
@@ -45,4 +46,4 @@ module.exports = {
   TYPES : TYPES,
   TYPESCOMPONENTS: TYPESCOMPONENTS,
   TYPESTESTBENCH : TYPESTESTBENCH
-}
+};

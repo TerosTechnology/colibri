@@ -2,46 +2,46 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity example_vhdl_tb is
+entity arith_counter_gray_tb is
 end;
 
-architecture bench of example_vhdl_tb is
+architecture bench of arith_counter_gray_tb is
 
-  component example_vhdl
+  component arith_counter_gray
     generic (
-      g_GENERIC_0 : integer;
-      g_GENERIC_1 : integer
+      BITS : positive;
+      INIT : natural
     );
     port (
       clk : in std_logic;
       rst : in std_logic;
       inc : in std_logic;
       dec : in std_logic;
-      val : out std_logic_vector(g_GENERIC_0-1 downto 0);
-      cry : out std_logic_vector(10 downto 0)
+      val : out std_logic_vector(BITS-1 downto 0);
+      cry : out std_logic
     );
   end component;
 
   -- Clock period
   constant clk_period : time := 5 ns;
   -- Generics
-  constant g_GENERIC_0 : integer;
-  constant g_GENERIC_1 : integer;
+  constant BITS : positive;
+  constant INIT : natural;
 
   -- Ports
   signal clk : std_logic;
   signal rst : std_logic;
   signal inc : std_logic;
   signal dec : std_logic;
-  signal val : std_logic_vector(g_GENERIC_0-1 downto 0);
-  signal cry : std_logic_vector(10 downto 0);
+  signal val : std_logic_vector(BITS-1 downto 0);
+  signal cry : std_logic;
 
 begin
 
-  example_vhdl_inst : example_vhdl
+  arith_counter_gray_inst : arith_counter_gray
     generic map (
-      g_GENERIC_0 => g_GENERIC_0,
-      g_GENERIC_1 => g_GENERIC_1
+      BITS => BITS,
+      INIT => INIT
     )
     port map (
       clk => clk,

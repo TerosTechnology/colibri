@@ -23,3 +23,5 @@ vunit_out
 *.gcno
 /obj_dir
 *.info
+*.pb
+xsim.dir

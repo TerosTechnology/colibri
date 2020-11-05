@@ -22,32 +22,33 @@ context vunit_lib.vunit_context;
 -- use vunit_lib.run_base_pkg.all;
 -- use vunit_lib.run_pkg.all;
 
-entity example_vhdl_tb is
+entity arith_counter_gray_tb is
   generic (runner_cfg : string);
 end;
 
-architecture bench of example_vhdl_tb is
+architecture bench of arith_counter_gray_tb is
+
 
   -- Clock period
   constant clk_period : time := 5 ns;
   -- Generics
-  constant g_GENERIC_0 : integer;
-  constant g_GENERIC_1 : integer;
+  constant BITS : positive;
+  constant INIT : natural;
 
   -- Ports
   signal clk : std_logic;
   signal rst : std_logic;
   signal inc : std_logic;
   signal dec : std_logic;
-  signal val : std_logic_vector(g_GENERIC_0-1 downto 0);
-  signal cry : std_logic_vector(10 downto 0);
+  signal val : std_logic_vector(BITS-1 downto 0);
+  signal cry : std_logic;
 
 begin
 
-  example_vhdl_inst : entity src_lib.example_vhdl
+  arith_counter_gray_inst : entity src_lib.arith_counter_gray
     generic map (
-      g_GENERIC_0 => g_GENERIC_0,
-      g_GENERIC_1 => g_GENERIC_1
+      BITS => BITS,
+      INIT => INIT
     )
     port map (
       clk => clk,
@@ -66,7 +67,7 @@ begin
         info("Hello world test_alive");
         wait for 100 ns;
         test_runner_cleanup(runner);
-
+        
       elsif run("test_0") then
         info("Hello world test_0");
         wait for 100 ns;

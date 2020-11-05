@@ -1,13 +1,14 @@
 {
   "name": "jsteros",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "Backend for terosHDL IDE",
   "main": "src/main.js",
   "scripts": {
-    "testLinter": "cd test; node linter",
+    "testLinter": "cd test && cd linter && node linter",
     "testTemplates": "cd test && cd templates && node cocoTest && node verilatorTest && node vunitRunpy && node tbVhdl && node tbVerilog && node component",
-    "testDocumenter": "cd test && cd documenter && node stateMachine",
-    "testProjectManager": "cd test && cd projectManager && node projectManager",
+    "testDocumenter": "cd test && cd documenter && node documenter",
+    "test-stm": "cd test && cd documenter && node stateMachine",
+    "testProjectManager": "cd test && cd project_manager && node project_manager",
     "testParser": "cd test && node parser",
     "testSuites": "cd test && cd templates && sh runAllSuites.sh",
     "nopy": "nopy",
@@ -19,29 +20,33 @@
     "markdown-pdf": "10.0.0",
     "svg.js": "2.7.1",
     "svgdom": "0.0.21",
-    "showdown": "1.9.0",
     "shelljs": "0.8.3",
     "state-machine-cat": "4.1.0",
     "sequelize": "x",
     "axios": "x",
-    "nopy": "^0.2.3",
     "d3": "5.12.0",
     "d3-graphviz": "2.6.1",
-    "web-tree-sitter": "^0.16.2"
+    "web-tree-sitter": "^0.16.2",
+    "temp": "^0.9.0",
+    "showdown": "^1.9.0",
+    "nopy": "^0.2.3",
+    "wavedrom": "*",
+    "onml": "*",
+    "json5": "*",
+    "bit-field": "*"
   },
   "devDependencies": {
     "colors": "x",
     "eslint": "*",
     "prettier": "*",
     "babel-eslint": "*",
-    "eslint-config-prettier": "*"
+    "eslint-config-prettier": "*",
+    "eslint-plugin-prettier": "*"
   },
   "python": {
-    "execPath": "python3",
+    "execPath": "python",
     "dependencies": {
-      "wheel": ">=0.34.2",
-      "vunit_hdl": "==4.2.0",
-      "git+https://github.com/TerosTechnology/triel.git@master": ""
+      "vunit_hdl": "==4.2.0"
     }
   }
 }
