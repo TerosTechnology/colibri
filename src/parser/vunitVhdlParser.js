@@ -18,34 +18,71 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
-
-const shell = require('child_process');
-const path  = require('path');
+const path = require('path');
+const temp = require('temp');
+const fs = require('fs');
+const nopy = require('../nopy/api');
 
 class VhdlParser {
   constructor(comment_symbol) {
-    this.comment_symbol = comment_symbol
+    this.comment_symbol = comment_symbol;
   }
 
-  getAll(str) {
-    let path_python = __dirname + path.sep + "parser.py"
-    str = str.replace(/"/g,'\\"');
-    str = str.replace(/`/g,'\\`');
+  async getAll(str) {
     const MAX_ARG_LENGTH = 32767;
-    let reduce_str = str.slice(0,MAX_ARG_LENGTH);
+    let reduce_str = str.slice(0, MAX_ARG_LENGTH);
+    let code_file = this._create_temp_file_of_code(reduce_str);
 
-    let cmd = "python3 " + path_python + ' "' + this.comment_symbol + '" ' + ' "' + reduce_str + ' "';
-    let structure = null;
+    let structure = undefined;
     try {
-      const execSync = require('child_process').execSync;
-      let stdout = execSync(cmd).toString();
-      structure = JSON.parse(stdout);
+
+      let python_exec_path = await nopy.get_python_exec();
+      let py_path = __dirname + path.sep + "parser.py";
+      let args = code_file + ',' + this.comment_symbol;
+
+      if (python_exec_path === undefined) {
+        return undefined;
+      }
+      // eslint-disable-next-line no-unused-vars
+      return new Promise(function (resolve, reject) {
+        nopy.spawnPython([py_path, args], {
+          interop: "buffer",
+          // eslint-disable-next-line no-unused-vars
+          execPath: python_exec_path
+        }).then(({ code, stdout, stderr }) => {
+          try {
+            if (stdout === "null\n" || stdout === "null\r") {
+              structure = undefined;
+            }
+            else {
+              structure = JSON.parse(stdout);
+            }
+          }
+          catch (e) {
+            structure = undefined;
+          }
+          resolve(structure);
+        });
+      });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error);
+      // eslint-disable-next-line no-console
       console.error("Error parsing.");
     }
     return structure;
   }
+
+  _create_temp_file_of_code(content) {
+    const temp_file = temp.openSync();
+    if (temp_file === undefined) {
+      // eslint-disable-next-line no-throw-literal
+      throw "Unable to create temporary file";
+    }
+    fs.writeSync(temp_file.fd, content);
+    fs.closeSync(temp_file.fd);
+    return temp_file.path;
+  }
 }
 
-module.exports =  VhdlParser
+module.exports = VhdlParser;

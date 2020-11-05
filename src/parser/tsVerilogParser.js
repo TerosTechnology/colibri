@@ -19,7 +19,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-const fs = require('fs');
 const os = require("os");
 const path = require('path');
 // var Parser = []
@@ -29,37 +28,44 @@ const path = require('path');
 //   VerilogParser = Parser.Language.load('/home/carlos/repo/colibri/src/parser/parsers/tree-sitter-verilog.wasm');
 // }
 const Parser = require('web-tree-sitter');
-const initParser = Parser.init()
+const initParser = Parser.init();
 
 class tsVerilogParser  {
   constructor(comment_symbol) {
-    this.comment_symbol = comment_symbol
+    this.comment_symbol = comment_symbol;
     this.loaded_wasm = false;
   }
 
   async getAll(sourceCode) {
-    await initParser;
-    this.parser = new Parser();
-    if (this.loaded_wasm === false){
-      let Lang = await Parser.Language.load(path.join(__dirname, path.sep + "parsers" + path.sep + "tree-sitter-verilog.wasm"));
-      this.parser.setLanguage(Lang);
-      this.loaded_wasm = true;
+    try{
+      await initParser;
+      this.parser = new Parser();
+      if (this.loaded_wasm === false){
+        let Lang = await Parser.Language.load(path.join(__dirname, path.sep + "parsers" + path.sep + "tree-sitter-verilog.wasm"));
+        this.parser.setLanguage(Lang);
+        this.loaded_wasm = true;
+      }
+      var lines = this.fileLines(sourceCode);
+      const tree = await this.parser.parse(sourceCode);
+      
+      var structure = {
+        'libraries': this.get_libraries(tree.rootNode, lines),  // includes
+        "entity": this.getEntityName(tree.rootNode, lines), // module
+        "generics": this.getGenerics(tree.rootNode, lines), // parameters
+        "ports": this.getPorts(tree.rootNode, lines),
+        // 'architecture': this.getArchitectureName(str),
+        // 'signals': this.getSignals(str),  // regs
+        // 'constants': this.getConstants(str),
+        // 'types': this.getTypes(str),
+        // 'process': this.getProcess(str)
+      };
+      return structure;
     }
-    var lines = this.fileLines(sourceCode)
-    const tree = this.parser.parse(sourceCode);
-
-    var structure = {
-      'libraries': this.get_libraries(tree.rootNode, lines),  // includes
-      "entity": this.getEntityName(tree.rootNode, lines), // module
-      "generics": this.getGenerics(tree.rootNode, lines), // parameters
-      "ports": this.getPorts(tree.rootNode, lines),
-      // 'architecture': this.getArchitectureName(str),
-      // 'signals': this.getSignals(str),  // regs
-      // 'constants': this.getConstants(str),
-      // 'types': this.getTypes(str),
-      // 'process': this.getProcess(str)
-    };
-    return structure;
+    catch(error){
+      // eslint-disable-next-line no-console
+      console.log(error);
+      return undefined;
+    }
   }
 
   searchTree(element, matchingTitle) {
@@ -85,13 +91,13 @@ class tsVerilogParser  {
     var arr = this.searchTree(port, 'list_of_variable_identifiers');
     if (arr.length == 0) {
       arr = this.searchTree(port, 'simple_identifier');
-      var port_name = this.extractData(arr[0], lines)
+      var port_name = this.extractData(arr[0], lines);
       return port_name;
     } else {
-      var port_name = this.extractData(arr[0], lines)
-      var split_port_name = port_name.split(',')
+      var port_name = this.extractData(arr[0], lines);
+      var split_port_name = port_name.split(',');
       for (var x = 0; x < split_port_name.length; ++x)
-        return port_name;
+        {return port_name;}
     }
   }
 
@@ -99,22 +105,25 @@ class tsVerilogParser  {
     var arr = this.searchTree(port, 'port_identifier');
     if (arr.length == 0) {
       arr = this.searchTree(port, 'simple_identifier');
-      var port_name = this.extractData(arr[0], lines)
+      var port_name = this.extractData(arr[0], lines);
       return port_name;
     } else {
-      var port_name = this.extractData(arr[0], lines)
-      var split_port_name = port_name.split(',')
+      var port_name = this.extractData(arr[0], lines);
+      var split_port_name = port_name.split(',');
       for (var x = 0; x < split_port_name.length; ++x)
-        return port_name;
+        {return port_name;}
     }
   }
 
   getPortType(port, lines) {
     var arr = this.searchTree(port, 'net_port_type1');
     if (arr[0] == null) {
+      arr = this.searchTree(port, 'packed_dimension');
+    }
+    if (arr[0] == null) {
       return "";
     }
-    var port_type = this.extractData(arr[0], lines)
+    var port_type = this.extractData(arr[0], lines);
     return port_type;
   }
 
@@ -123,7 +132,7 @@ class tsVerilogParser  {
     if (arr[0] == null) {
       return;
     }
-    var port_type = this.extractData(arr[0], lines)
+    var port_type = this.extractData(arr[0], lines);
     return port_type;
   }
 
@@ -133,26 +142,26 @@ class tsVerilogParser  {
     var arr = this.searchTree(element, key);
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
-      var port_name
+      var port_name;
       switch (name) {
         case 'getPortName':
-          port_name = this.getPortName(inputs[x], lines)
+          port_name = this.getPortName(inputs[x], lines);
           break;
         case 'getPortNameAnsi':
-          port_name = this.getPortNameAnsi(inputs[x], lines)
+          port_name = this.getPortNameAnsi(inputs[x], lines);
           break;
         default:
-          name = this.getPortName
+          name = this.getPortName;
       }
-      port_name = port_name.split(',')
-      var directionVar = this.getPortKind(inputs[x], lines)
-      var typeVar
+      port_name = port_name.split(',');
+      var directionVar = this.getPortKind(inputs[x], lines);
+      var typeVar;
       switch (type) {
         case 'getPortType':
-          typeVar = this.getPortType(inputs[x], lines)
+          typeVar = this.getPortType(inputs[x], lines);
           break;
         default:
-          typeVar = this.getPortType(inputs[x], lines)
+          typeVar = this.getPortType(inputs[x], lines);
       }
       var port_ref = this.searchTree(element, 'port_reference');
       var comment = "";
@@ -174,7 +183,7 @@ class tsVerilogParser  {
         }
       }
         else if (this.comment_symbol == "" ||  comment_str[0] == this.comment_symbol)
-          comment = comment_str.substring(1);
+          {comment = comment_str.substring(1);}
 
         item = {
           'name': port_name[i],
@@ -182,29 +191,28 @@ class tsVerilogParser  {
           'type': typeVar,
           "index": this.index(inputs[x]),
           "comment": comment
-        }
+        };
         items.push(item);
       }
     }
-    return items
+    return items;
   }
 
   getPorts(tree, lines) {
     var items = [];
     var comments = [];
-    var item = {};
     var element = tree;
     //Comments
-    comments = this.getComments(element, lines)
+    comments = this.getComments(element, lines);
     //Inputs
-    items = this.addPort(element, 'input_declaration', 'getPortName', 'input', 'getPortType', false, items, comments, lines)
+    items = this.addPort(element, 'input_declaration', 'getPortName', 'input', 'getPortType', false, items, comments, lines);
     //Outputs
-    items = this.addPort(element, 'output_declaration', 'getPortName', 'output', 'getPortType', false, items, comments, lines)
+    items = this.addPort(element, 'output_declaration', 'getPortName', 'output', 'getPortType', false, items, comments, lines);
     //ansi_port_declaration
-    items = this.addPort(element, 'ansi_port_declaration', 'getPortNameAnsi', 'getPortKind', 'getPortType', true, items, comments, lines)
+    items = this.addPort(element, 'ansi_port_declaration', 'getPortNameAnsi', 'getPortKind', 'getPortType', true, items, comments, lines);
     //inouts
-    items = this.addPort(element, 'inout_declaration', 'getPortName', "inout", 'getPortType', false, items, comments, lines)
-    return items
+    items = this.addPort(element, 'inout_declaration', 'getPortName', "inout", 'getPortType', false, items, comments, lines);
+    return items;
   }
 
   getComments(tree, lines) {
@@ -213,9 +221,9 @@ class tsVerilogParser  {
     var arr = this.searchTree(tree, 'comment');
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
-      item[inputs[x].startPosition.row] = this.extractData(inputs[x], lines).substr(2)
+      item[inputs[x].startPosition.row] = this.extractData(inputs[x], lines).substr(2);
     }
-    return item
+    return item;
   }
 
   get_libraries(tree, lines) {
@@ -225,17 +233,7 @@ class tsVerilogParser  {
     var element = tree;
     //fix bug
     return items;
-    //Inputs
-    var arr = this.searchTree(element, 'include_compiler_directive');
 
-    inputs = arr;
-    for (var x = 0; x < inputs.length; ++x) {
-      item = {
-        "name": this.get_library_name(inputs[x], lines),
-      }
-      items.push(item);
-    }
-    return items
   }
 
   getGenerics(tree, lines) {
@@ -246,13 +244,13 @@ class tsVerilogParser  {
     //comments
     let comments = this.getComments(element, lines);
     //Inputs
-    var arr = this.searchTree(element, 'parameter_declaration');
-    if (arr == null) {
-      arr = this.searchTree(element, 'parameter_port_declaration');
+    var arr = this.searchTree(element, 'parameter_port_declaration');
+    if (arr.length === 0 ) {
+      arr = this.searchTree(element, 'parameter_declaration');
     }
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
-      let comment = ""
+      let comment = "";
       let pre_comment = comments[inputs[x].startPosition.row];
       if (pre_comment != undefined) {
         if (this.comment_symbol == "" ||  pre_comment[0] == this.comment_symbol){
@@ -266,22 +264,22 @@ class tsVerilogParser  {
         "type": this.getGenericKind(inputs[x], lines),
         "index": this.index(inputs[x]),
         "comment": comment
-      }
+      };
       items.push(item);
     }
-    return items
+    return items;
   }
 
   get_library_name(port, lines) {
     var arr = this.searchTree(port, 'double_quoted_string');
     if (arr.length == 0) {
-      var lib = this.extractData(arr[0], lines)
+      var lib = this.extractData(arr[0], lines);
       return lib;
     } else {
       var lib = this.extractData(arr[0], lines).substr(1,this.extractData(arr[0], lines).length - 2);
-      var split_lib = lib.split(',')
+      var split_lib = lib.split(',');
       for (var x = 0; x < split_lib.length; ++x)
-        return lib;
+        {return lib;}
     }
   }
 
@@ -289,13 +287,13 @@ class tsVerilogParser  {
     var arr = this.searchTree(port, 'list_of_variable_identifiers');
     if (arr.length == 0) {
       arr = this.searchTree(port, 'simple_identifier');
-      var port_name = this.extractData(arr[0], lines)
+      var port_name = this.extractData(arr[0], lines);
       return port_name;
     } else {
-      var port_name = this.extractData(arr[0], lines)
-      var split_port_name = port_name.split(',')
+      var port_name = this.extractData(arr[0], lines);
+      var split_port_name = port_name.split(',');
       for (var x = 0; x < split_port_name.length; ++x)
-        return port_name;
+        {return port_name;}
     }
   }
 
@@ -304,17 +302,17 @@ class tsVerilogParser  {
     if (arr.length == 0) {
       return "";
     } else {
-      var port_name = this.extractData(arr[0], lines)
-      var split_port_name = port_name.split(',')
+      var port_name = this.extractData(arr[0], lines);
+      var split_port_name = port_name.split(',');
       for (var x = 0; x < split_port_name.length; ++x)
-        return port_name;
+        {return port_name;}
     }
   }
 
   getEntityName(tree, lines) {
     var element = tree;
     var arr = this.searchTree(element, 'module_header');
-    element = arr
+    element = arr;
     var arr = this.searchTree(element[0], 'simple_identifier');
     var module_index = this.index(arr[0]);
     let item = {
@@ -327,28 +325,28 @@ class tsVerilogParser  {
     var comments = this.searchTree(tree, 'comment');
     for (var x=0; x< comments.length; ++x){
       if (comments[x].startPosition.row >= module_index[0])
-        break;
+        {break;}
       var comment_str = this.extractData(comments[x], lines).substr(2) + '\n ';
       if (this.comment_symbol == "" ||  comment_str[0] == this.comment_symbol)
-        description += comment_str.substring(1);
+        {description += comment_str.substring(1);}
     }
     description += '\n';
     item["comment"] = description;
 
-    return item
+    return item;
   }
 
   extractData(node, lines) {
-    return lines[node.startPosition.row].substr(node.startPosition.column, node.endPosition.column - node.startPosition.column)
+    return lines[node.startPosition.row].substr(node.startPosition.column, node.endPosition.column - node.startPosition.column);
   }
 
   index(node) {
-    return [node.startPosition.row, node.startPosition.column]
+    return [node.startPosition.row, node.startPosition.column];
   }
 
   fileLines(source) {
-    var array = source.toString().split(os.EOL);
-    return array
+    var array = source.toString().split("\n");
+    return array;
   }
 }
-module.exports = tsVerilogParser
+module.exports = tsVerilogParser;

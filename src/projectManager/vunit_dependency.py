@@ -12,7 +12,7 @@ Test the project functionality
 from typing import Set, List, TypeVar, Generic, Dict, Mapping, Callable, Iterable
 from os.path import join, exists, dirname
 import itertools
-from graphviz import Digraph
+# from graphviz import Digraph
 import ntpath
 from fnmatch import fnmatch
 from os.path import exists, abspath, join, basename, normpath, dirname
@@ -30,18 +30,22 @@ files = files_string.split(',')
 
 project = pj.Project()
 project.add_library("src_lib", "work_path")
-for i in range(0,len(files)):
-    if (Path(files[i]).suffix == ".v"):
+for i in range(0, len(files)):
+    suffix = Path(files[i]).suffix
+    if (suffix == ".v" or suffix == ".vh" or suffix == ".vl"):
         filetype = "verilog"
+    elif (suffix == ".sv" or suffix == ".svh"):
+        filetype = "systemverilog"
     else:
         filetype = "vhdl"
-    project.add_source_file(files[i],"src_lib",file_type=filetype,vhdl_standard=VHDL.STD_2008)
+    project.add_source_file(
+        files[i], "src_lib", file_type=filetype, vhdl_standard=VHDL.STD_2008)
 
-files,dependencies = project.get_direct_dependencies()
+files, dependencies = project.get_direct_dependencies()
 
 nodes = []
 complete_nodes = []
-for i in range(0,len(files)):
+for i in range(0, len(files)):
     complete_nodes.append(files[i].name)
     name = ntpath.basename(files[i].name)
     nodes.append(name)
@@ -51,13 +55,16 @@ diagram = """
 digraph {
     node [color="#069302" fillcolor=lightgray fontname=helvetica shape=component splines=line style="filled,rounded"]
 """
-for i in range(0,len(nodes)):
-    diagram += '    "' + str(complete_nodes[i]) + '" [label="' + str(nodes[i]) + '"]\n'
+for i in range(0, len(nodes)):
+    diagram += '    "' + \
+        str(complete_nodes[i]) + '" [label="' + str(nodes[i]) + '"]\n'
 
 # Add edge node
-for i in range(0,len(dependencies)):
-    for j in range(0,len(dependencies[i])):
-        if ( str(complete_nodes[i]) != str(dependencies[i][j]) ):
-            diagram += '    "' + str(complete_nodes[i]) + '" -> "' + str(dependencies[i][j]) + '"\n'
+for i in range(0, len(dependencies)):
+    for j in range(0, len(dependencies[i])):
+        if (str(complete_nodes[i]) != str(dependencies[i][j])):
+            diagram += '    "' + \
+                str(complete_nodes[i]) + '" -> "' + \
+                str(dependencies[i][j]) + '"\n'
 diagram += '}'
 print(diagram)

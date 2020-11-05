@@ -41,7 +41,7 @@
     {
       "name": "tdata",
       "direction": "output",
-      "type": "",
+      "type": "[7:0]",
       "comment": ""
     }
   ]

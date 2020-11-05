@@ -1,3 +1,4 @@
+const { test } = require('shelljs');
 // Copyright 2020 Teros Technology
 //
 // Ismael Perez Rojo
@@ -19,84 +20,97 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
+const ParserLib = require('../parser/factory');
+
 class cocotb {
-  constructor(estructure){
-    this.str     = estructure;
+  constructor(language) {
+    this.str = "";
+    this.language = language;
     this.str_out = "";
-    this.path = require('path')
   }
-  generate(){
-    this.header();
-    this.pythonLibraries()
-    this.clockGen()
-    this.cocoTest()
-    return this.str_out;
+  // eslint-disable-next-line no-unused-vars
+  async generate(src, options) {
+    let parser = new ParserLib.ParserFactory;
+    parser = parser.getParser(this.language, '');
+    let structure = await parser.getAll(src);
+    if (structure === undefined) {
+      return undefined;
+    }
+    let test = "";
+
+    test += this.header();
+    test += this.python_libraries();
+    test += this.coco_test(structure);
+    test += this.register_test();
+    return test;
   }
 
-  header(){
-    this.str_out = "# -*- coding: utf-8 -*-\n"
+  header() {
+    let test = "# -*- coding: utf-8 -*-\n";
+    return test;
   }
-  pythonLibraries(){
-    this.str_out += "import cocotb\nfrom cocotb.triggers import Timer\nfrom cocotb.result import TestFailure\nimport random\n"
+  python_libraries() {
+    let test = "import cocotb\n";
+    test += "from cocotb.clock import Clock\n";
+    test += "from cocotb.triggers import Timer\n";
+    test += "from cocotb.regression import TestFactory\n";
+    return test;
   }
-  clockGen(){
-    this.str_out += '\n@cocotb.coroutine\n'
-    this.str_out += 'def gen_clk(clk, period):\n'
-    this.str_out += '    while True:\n'
-    this.str_out += '        clk.value = 0\n'
-    this.str_out += '        yield Timer(period/2)\n'
-    this.str_out += '        clk.value = 1\n'
-    this.str_out += '        yield Timer(period/2)\n'
+  coco_test(structure) {
+    let test_instance = "";
+    test_instance += '\n@cocotb.test()\n';
+    test_instance += 'async def run_test(dut):\n';
+    test_instance += '    PERIOD = 10\n';
+
+    let ports = structure.ports;
+    // Search clock
+    let clock_ports_index = [];
+    for (let i = 0; i < ports.length; i++) {
+      const port = ports[i];
+      let is_clk = (port["direction"] === "in" || port["direction"] === "input")
+        && (port["name"] === "clk" || port["name"].startsWith("clk")
+          || port["name"] === "clk" || port["name"].startsWith("aclk"));
+
+      if (is_clk === true) {
+        clock_ports_index.push(i);
+        //Clock instance
+        test_instance += `    cocotb.fork(Clock(dut.${port['name']}, PERIOD, 'ns').start(start_high=False))\n`;
+      }
+    }
+    test_instance += '\n';
+    //Ports instance to 0
+    for (let i = 0; i < ports.length; i++) {
+      const port = ports[i];
+      if (clock_ports_index.includes(i) === false) {
+        test_instance += `    dut.${port['name']} = 0\n`;
+      }
+    }
+    test_instance += '\n';
+    test_instance += `    await Timer(20*PERIOD, units='ns')\n\n`;
+    //Ports instance to 1
+    for (let i = 0; i < ports.length; i++) {
+      const port = ports[i];
+      if (clock_ports_index.includes(i) === false) {
+        test_instance += `    dut.${port['name']} = 1\n`;
+      }
+    }
+    test_instance += '\n';
+    test_instance += `    await Timer(20*PERIOD, units='ns')\n`;
+
+    return test_instance;
   }
-  cocoTest(){
-    this.str_out += '\n@cocotb.test()\n'
-    this.str_out += 'def ' + this.str.entity["name"] + '_testAlive(dut):\n'
-    this.str_out += '    Period = 10\n'
-    let x=0
-    while (((this.str.ports[x]["direction"] != "in" && this.str.ports[x]["direction"] != "input") && (this.str.ports[x]["type"] != "std_logic" && this.str.ports[x]["type"] != "")) && x<this.str.ports.length  ) {
-      x++;
-      if (x==this.str.ports.length) {
-        break
-      }
-    }
-    if (x<this.str.ports.length) { // There is a valid input for clok
-      this.str_out += '    clk=dut.' + this.str.ports[x]["name"] + '\n'
-      this.str_out += '    cocotb.fork(gen_clk(clk, Period))\n'
-    }
-    this.str_out += '    yield Timer(20*Period)\n'
-    for (var i = 0; i < this.str.ports.length-1; i++) {
-      if ((this.str.ports[i]["direction"] == "in" || this.str.ports[i]["direction"] == "input") && i !=x) {
-        this.str_out += '    '+ this.str.ports[i]["name"]+' = random.randint(0, 1)\n'
-      }
-    }
-    for (var i = 0; i < this.str.ports.length-1; i++) {
-      if ((this.str.ports[i]["direction"] == "in" || this.str.ports[i]["direction"] == "input") && i !=x) {
-        this.str_out += '    dut.'+ this.str.ports[i]["name"] + ' = ' + this.str.ports[i]["name"] + '\n'
-      }
-    }
-    this.str_out += '    yield Timer(20*Period)\n'
-    x = 0
-    while (x<this.str.ports.length) {
-      if ((this.str.ports[x]["direction"] == "out" || this.str.ports[x]["direction"] == "output")) {
-        this.str_out += '    print(dut.'+this.str.ports[x]["name"]+')\n'
-      }
-      x++;
-      if (x==this.str.ports.length) {
-        break
-      }
-    }
-    x = 0
-    while ((this.str.ports[x]["direction"] != "out" && this.str.ports[x]["direction"] != "output") && x<this.str.ports.length-1) {
-      x++;
-    }
-    this.str_out += '    if int(dut.' + this.str.ports[x]["name"] + ') == int(dut.' + this.str.ports[x]["name"] + '):\n'
-    this.str_out += '        raise TestFailure(\n'
-    this.str_out += '        "result is incorrect: %s != %s" % str(dut.'+this.str.ports[x]["name"]+'))\n'
-    this.str_out += '    else:\n'
-    this.str_out += '        dut._log.info("Ok!")\n'
+  register_test() {
+    let test_instance = "";
+    test_instance += `
+# Register the test.
+factory = TestFactory(run_test)
+factory.generate_tests()
+    `;
+    return test_instance;
   }
+
 }
 
 module.exports = {
-  cocotb : cocotb
-}
+  cocotb: cocotb
+};

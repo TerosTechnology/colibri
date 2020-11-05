@@ -1,0 +1,123 @@
+{
+  "libraries":[],
+  "entity": {
+    "name": "axis_baser_tx_64"
+  },
+  "generics": [{
+      "name": "DATA_WIDTH",
+      "type": "",
+      "comment": ""
+    },
+
+    {
+      "name": "KEEP_WIDTH",
+      "type": "",
+      "comment": "**Data width parameter**"
+    },
+    {
+      "name": "HDR_WIDTH",
+      "type": "",
+      "comment": ""
+    },
+    {
+      "name": "ENABLE_PADDING",
+      "type": "",
+      "comment": ""
+    },
+    {
+      "name": "ENABLE_DIC",
+      "type": "",
+      "comment": "enable"
+    },
+    {
+      "name": "MIN_FRAME_LENGTH",
+      "type": "",
+      "comment": ""
+    }
+  ],
+  "ports": [{
+      "name": "clk",
+      "direction": "input",
+      "type": "wire",
+      "comment": ""
+    },
+    {
+      "name": "rst",
+      "direction": "input",
+      "type": "wire",
+      "comment": ""
+    },
+    {
+      "name": "s_axis_tdata",
+      "direction": "input",
+      "type": "wire [DATA_WIDTH-1:0]",
+      "comment": ""
+    },
+    {
+      "name": "s_axis_tkeep",
+      "direction": "input",
+      "type": "wire [KEEP_WIDTH-1:0]",
+      "comment": ""
+    },
+    {
+      "name": "s_axis_tvalid",
+      "direction": "input",
+      "type": "wire",
+      "comment": ""
+    },
+    {
+      "name": "s_axis_tready",
+      "direction": "output",
+      "type": "wire",
+      "comment": ""
+    },
+    {
+      "name": "s_axis_tlast",
+      "direction": "input",
+      "type": "wire",
+      "comment": ""
+    },
+    {
+      "name": "s_axis_tuser",
+      "direction": "input",
+      "type": "wire",
+      "comment": ""
+    },
+    {
+      "name": "encoded_tx_data",
+      "direction": "output",
+      "type": "wire [DATA_WIDTH-1:0]",
+      "comment": ""
+    },
+    {
+      "name": "encoded_tx_hdr",
+      "direction": "output",
+      "type": "wire [HDR_WIDTH-1:0]",
+      "comment": ""
+    },
+    {
+      "name": "ifg_delay",
+      "direction": "input",
+      "type": "wire [7:0]",
+      "comment": ""
+    },
+    {
+      "name": "start_packet_0",
+      "direction": "output",
+      "type": "wire",
+      "comment": ""
+    },
+    {
+      "name": "start_packet_4",
+      "direction": "output",
+      "type": "wire",
+      "comment": ""
+    },
+    {
+      "name": "error_underflow",
+      "direction": "output",
+      "type": "wire",
+      "comment": ""
+    }
+  ]
+}

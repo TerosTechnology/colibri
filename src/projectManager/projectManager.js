@@ -19,167 +19,194 @@
 // along with TerosHDL.  If not, see <https://www.gnu.org/licenses/>.
 
 const fs = require('fs');
-const Simulators = require('../simulators/simulators')
-const ParserLib = require('../parser/factory')
-const nopy = require('nopy');
+const Simulators = require('../simulators/simulators');
+const ParserLib = require('../parser/factory');
+// const nopy = require('nopy');
 const path = require('path');
 const dependency = require('./dependency_graph');
-const run_python = require('./run_python');
+// const run_python = require('./run_python');
 const documenter = require('../documenter/documenter');
 
-class Manager extends Simulators.Simulators{
-  constructor(graph,configurator,autosave_file){
-    let server_path = __dirname + path.sep + "server_triel.py"
-    run_python.spawnPython([server_path], { interop: "buffer" }).then(({ code, stdout, stderr }) => {
-    });
+class Manager extends Simulators.Simulators {
+  constructor(graph, configurator, autosave_file) {
+    // let server_path = __dirname + path.sep + "server_triel.py"
+    // run_python.spawnPython([server_path], { interop: "buffer" }).then(({ code, stdout, stderr }) => {
+    // });
     super();
     this.source = [];
     this.testbench = [];
     this.autosave_file = autosave_file;
-    if (configurator == null)
+    if (configurator === undefined) {
       this.configurator = new Configurator();
-    else
+    } else {
       this.configurator = configurator;
+    }
     this.dependency_graph = new dependency.Dependency_graph(graph);
   }
-  loadProject(file){
-    let json_f = fs.readFileSync(file,'utf8');
+  load_project(file) {
+    let json_f = fs.readFileSync(file, 'utf8');
     this.source = JSON.parse(json_f)['src'];
     this.testbench = JSON.parse(json_f)['tb'];
-    this.configurator.setAll(JSON.parse(json_f)['config']);
-    console.log(json_f)
+    this.configurator.set_all(JSON.parse(json_f)['config']);
     this.autosave();
   }
-  autosave(){
-    if (this.autosave_file != null)
-      this.saveProject(this.autosave_file);
+  autosave() {
+    if (this.autosave_file !== undefined) {
+      this.save_project(this.autosave_file);
+    }
   }
-  saveProject(file){
+  save_project(file) {
     let prj = {
-      src : this.source,
-      tb : this.testbench,
-      config : this.configurator.getAll()
+      src: this.source,
+      tb: this.testbench,
+      config: this.configurator.get_all()
     };
     let data = JSON.stringify(prj);
-    fs.writeFileSync(file,data);
+    fs.writeFileSync(file, data);
   }
-  getConfig(){
-    return this.configurator.getAll();
+  get_config() {
+    return this.configurator.get_all();
   }
-  clear(){
+  clear() {
     this.source = [];
     this.testbench = [];
     this.configurator = new Configurator();
     this.autosave();
   }
-  addSource(newSource){
-    for (let i=0;i<newSource.length;++i) {
+  add_source_from_array(newSource) {
+    for (let i = 0; i < newSource.length; ++i) {
       let f = {
         name: newSource[i],
-        file_type: this.getFileType(newSource[i])
-      }
+        file_type: this.get_file_type(newSource[i])
+      };
       this.source = this.source.concat(f);
     }
     this.autosave();
   }
-  deleteSource(source){
-    for(let i=0;i<source.length;++i)
-      this.source = this.source.filter(function( obj ) {
-          return obj.name !== source[i];
-    });
+  delete_source_from_array(source) {
+    for (let i = 0; i < source.length; ++i) {
+      this.source = this.source.filter(function (obj) {
+        return obj.name !== source[i];
+      });
+    }
     this.autosave();
   }
-  addTestbench(newTestbench){
-    for (let i=0;i<newTestbench.length;++i) {
+  add_testbench_from_array(newTestbench) {
+    for (let i = 0; i < newTestbench.length; ++i) {
       let f = {
         name: newTestbench[i],
-        file_type: this.getFileType(newTestbench[i])
-      }
+        file_type: this.get_file_type(newTestbench[i])
+      };
       this.testbench = this.testbench.concat(f);
     }
     this.autosave();
   }
-  deleteTestbench(testbench){
-    for(let i=0;i<testbench.length;++i)
-      this.testbench = this.testbench.filter(function( obj ) {
-          return obj.name !== testbench[i];
-    });
+  delete_testbench_from_array(testbench) {
+    for (let i = 0; i < testbench.length; ++i) {
+      this.testbench = this.testbench.filter(function (obj) {
+        return obj.name !== testbench[i];
+      });
+    }
     this.autosave();
   }
-  setConfiguration(configurator){
+  set_configuration(configurator) {
     this.configurator = configurator;
     this.autosave();
   }
-  getConfigurator(configurator){
+  // eslint-disable-next-line no-unused-vars
+  get_configurator(configurator) {
     return this.configurator;
   }
-  getSourceName(){
+  get_source_name() {
     let names = [];
-    for(let i=0; i<this.source.length;++i)
+    for (let i = 0; i < this.source.length; ++i) {
       names = names.concat(this.source[i]['name']);
+    }
     return names;
   }
-  getTestbenchName(){
+  get_testbench_name() {
     let names = [];
-    for(let i=0; i<this.testbench.length;++i)
-      if (this.testbench[i] != null)
+    for (let i = 0; i < this.testbench.length; ++i) {
+      if (this.testbench[i] !== null) {
         names = names.concat(this.testbench[i]['name']);
+      }
+    }
     return names;
   }
-  save_md_doc(output_dir_doc,symbol_vhdl,symbol_verilog,with_dependency_graph=false){
-    let project_name = this.configurator.getName();
-    let svg_dependency_graph = this.dependency_graph.get_dependency_graph_svg();
-    documenter.get_md_doc_from_array(this.getSourceName(),output_dir_doc,symbol_vhdl,
-                symbol_verilog,svg_dependency_graph,project_name,with_dependency_graph);
+  async save_markdown_doc(output_dir_doc, symbol_vhdl, symbol_verilog, with_dependency_graph = true) {
+    let project_name = this.configurator.get_name();
+    let svg_dependency_graph;
+    if (with_dependency_graph === true) {
+      svg_dependency_graph = await this.dependency_graph.get_dependency_graph_svg(this.source);
+    }
+    documenter.get_md_doc_from_array(this.get_source_name(), output_dir_doc, symbol_vhdl,
+      symbol_verilog, svg_dependency_graph, project_name, with_dependency_graph);
   }
 
-  getFileType(f){
-    if (typeof f != "string")
+  async save_html_doc(output_dir_doc, symbol_vhdl, symbol_verilog, with_dependency_graph = true) {
+    let project_name = this.configurator.get_name();
+    let svg_dependency_graph;
+    if (with_dependency_graph === true) {
+      svg_dependency_graph = await this.dependency_graph.get_dependency_graph_svg(this.source);
+    }
+    documenter.get_html_doc_from_array(this.get_source_name(), output_dir_doc, symbol_vhdl,
+      symbol_verilog, svg_dependency_graph, project_name, with_dependency_graph);
+  }
+
+  get_file_type(f) {
+    if (typeof f !== "string") {
       return "none";
+    }
     let ext = f.split('.').pop();
     let file_type = "";
-    if (ext == "py")
-      file_type = "py"
-    else if(ext == "v")
-      file_type = "verilogSource-2005"
-    else if(ext == "vhd")
-      file_type = "vhdlSource-2008"
+    if (ext === "py") {
+      file_type = "py";
+    }
+    else if (ext === "v") {
+      file_type = "verilogSource-2005";
+    }
+    else if (ext === "vhd") {
+      file_type = "vhdlSource-2008";
+    }
     return file_type;
   }
-  getEdamFormat(){
+  get_edam_format() {
     let edam = {
-      'name': this.configurator.getName(),
-      'suite': this.configurator.getSuite(),
-      'tool' : this.configurator.getTool(),
-      'working_dir' : this.configurator.getWorkingDir(),
-      'top_level_file' : this.configurator.getTopLevelFile(),
-      'top_level' : this.configurator.getTopLevel(),
-      'files'  : this.source.concat(this.testbench),
-      'gtkwave' : ''
-    }
+      'name': this.configurator.get_name(),
+      'suite': this.configurator.get_suite(),
+      'tool': this.configurator.get_tool(),
+      'working_dir': this.configurator.get_working_dir(),
+      'top_level_file': this.configurator.get_top_level_file(),
+      'top_level': this.configurator.get_top_level(),
+      'files': this.source.concat(this.testbench),
+      'gtkwave': ''
+    };
     return edam;
   }
-  getSuites(server,port){
-    return super.getSuites(server,port);
+  get_suites(server, port) {
+    return super.get_suites(server, port);
   }
-  simulate(ip,port){
-    let edam = this.getEdamFormat();
-    return super.simulate(ip,port,edam);
+  simulate(ip, port) {
+    let edam = this.get_edam_format();
+    return super.simulate(ip, port, edam);
   }
-  get_entity(str,lang){
+  get_entity(str, lang) {
     let parser = new ParserLib.ParserFactory;
-    parser = parser.getParser(lang,'');
-    let structure =  parser.getAll(str);
+    parser = parser.getParser(lang, '');
+    let structure = parser.getAll(str);
     return structure['entity']['name'];
   }
-  generate_svg(sources,function_open,top_level){
-    this.dependency_graph.generate_svg(sources,function_open,top_level);
+  generate_svg(sources, function_open, top_level) {
+    this.dependency_graph.generate_svg(sources, function_open, top_level);
   }
-  set_top_dependency_graph(file){
+  async get_dependency_graph_dot() {
+    return await this.dependency_graph.create_dependency_graph(this.source);
+  }
+  set_top_dependency_graph(file) {
     this.dependency_graph.set_top_dependency_graph(file);
     this.autosave();
   }
-  check_project(){
+  check_project() {
     let errors = this.check_vunit();
     return errors;
     // if(){
@@ -196,21 +223,21 @@ class Manager extends Simulators.Simulators{
     // }
   }
 
-  check_project_name(){
-    let configurator = this.getConfigurator();
+  check_project_name() {
+    let configurator = this.get_configurator();
     let error_sources_msg = [];
     //Check project name
-    if (configurator.getName() == ""){
+    if (configurator.get_name() === "") {
       let msg = "Set your project name";
       error_sources_msg.push(msg);
     }
     return error_sources_msg;
   }
 
-  check_vunit(){
+  check_vunit() {
     let errors = {
-      'is_good' : true,
-      'error_messages' : []
+      'is_good': true,
+      'error_messages': []
     };
     let error_sources_msg = [];
 
@@ -218,39 +245,39 @@ class Manager extends Simulators.Simulators{
     error_sources_msg = error_sources_msg.concat(this.check_project_name());
 
     //Check number of sources
-    if (this.source.length != 0){
+    if (this.source.length !== 0) {
       let msg = "Your current suite is VUnit. " +
-      "Your project has " + this.source.length + " source files. " +
-      "You don't need to add source files. Please, remove the source files.";
+        "Your project has " + this.source.length + " source files. " +
+        "You don't need to add source files. Please, remove the source files.";
       error_sources_msg.push(msg);
     }
     //Check number of testbenches
-    if (this.testbench.length != 1){
+    if (this.testbench.length !== 1) {
       let msg = "Your current suite is VUnit. Your project has " +
-                this.testbench.length + " testbench files. You only need " +
-                "to add your VUnit script (run.py).";
+        this.testbench.length + " testbench files. You only need " +
+        "to add your VUnit script (run.py).";
       error_sources_msg.push(msg);
     }
     //Check .py extension
-    else if (this.testbench.length == 1){
+    else if (this.testbench.length === 1) {
       let file_extension = path.extname(this.testbench[0]['name']);
-      if (file_extension != ".py"){
+      if (file_extension !== ".py") {
         let msg = "Your current suite is VUnit. Your testbench " +
-                  "file extension isn't .py. You only need " +
-                  "to add your VUnit script (run.py).";
+          "file extension isn't .py. You only need " +
+          "to add your VUnit script (run.py).";
         error_sources_msg.push(msg);
       }
     }
     errors['error_messages'] = error_sources_msg;
-    if (error_sources_msg.length > 0){
+    if (error_sources_msg.length > 0) {
       errors['is_good'] = false;
     }
     return errors;
   }
-  check_standalone(){
+  check_standalone() {
     let errors = {
-      'is_good' : true,
-      'error_messages' : []
+      'is_good': true,
+      'error_messages': []
     };
     let error_sources_msg = [];
 
@@ -258,15 +285,15 @@ class Manager extends Simulators.Simulators{
     error_sources_msg.concat(this.check_project_name());
 
     errors['error_messages'] = error_sources_msg;
-    if (error_sources_msg.length > 0){
+    if (error_sources_msg.length > 0) {
       errors['is_good'] = false;
     }
     return errors;
   }
-  check_cocotb(){
+  check_cocotb() {
     let errors = {
-      'is_good' : true,
-      'error_messages' : []
+      'is_good': true,
+      'error_messages': []
     };
     let error_sources_msg = [];
 
@@ -274,111 +301,111 @@ class Manager extends Simulators.Simulators{
     error_sources_msg.concat(this.check_project_name());
 
     errors['error_messages'] = error_sources_msg;
-    if (error_sources_msg.length > 0){
+    if (error_sources_msg.length > 0) {
       errors['is_good'] = false;
     }
     return errors;
   }
 }
 
-class Configurator{
-  constructor(){
-    this.configuration = this.setDefaults();
+class Configurator {
+  constructor() {
+    this.configuration = this.set_defaults();
   }
-  setDefaults(){
+  set_defaults() {
     let configuration = {
-      'suite':'',
-      'tool':'',
-      'language':'',
-      'name':'',
-      'top_level':'',
-      'top_level_file':'',
-      'working_dir':'',
-      'gtkwave':''
-    }
+      'suite': '',
+      'tool': '',
+      'language': '',
+      'name': '',
+      'top_level': '',
+      'top_level_file': '',
+      'working_dir': '',
+      'gtkwave': ''
+    };
     return configuration;
   }
-  setSuite(suite){
-    if (typeof suite != 'string') {
-        throw new Error('You must pass requiredParam to function setSuite!');
+  seg_suite(suite) {
+    if (typeof suite !== 'string') {
+      throw new Error('You must pass requiredParam to function setSuite!');
     }
     this.configuration["suite"] = suite;
   }
-  setTool(tool){
-    if (typeof tool != 'string') {
-        throw new Error('You must pass requiredParam to function settool!');
+  set_tool(tool) {
+    if (typeof tool !== 'string') {
+      throw new Error('You must pass requiredParam to function settool!');
     }
     this.configuration["tool"] = tool;
   }
-  setLanguage(language){
-    if (typeof language != 'string') {
-        throw new Error('You must pass requiredParam to function setLanguage!');
+  set_language(language) {
+    if (typeof language !== 'string') {
+      throw new Error('You must pass requiredParam to function setLanguage!');
     }
     this.configuration["language"] = language;
   }
-  setName(name){
-    if (typeof name != 'string') {
-        throw new Error('You must pass requiredParam to function setName!');
+  set_name(name) {
+    if (typeof name !== 'string') {
+      throw new Error('You must pass requiredParam to function setName!');
     }
     this.configuration["name"] = name;
   }
-  setTopLevel(topLevel){
-    if (typeof topLevel != 'string') {
-        throw new Error('You must pass requiredParam to function setTopLevel!');
+  set_top_level(topLevel) {
+    if (typeof topLevel !== 'string') {
+      throw new Error('You must pass requiredParam to function setTopLevel!');
     }
     this.configuration["top_level"] = topLevel;
   }
-  setTopLevelFile(topLevelFile){
-    if (typeof topLevelFile != 'string') {
-        throw new Error('You must pass requiredParam to function setTopLevelFile!');
+  set_top_level_file(topLevelFile) {
+    if (typeof topLevelFile !== 'string') {
+      throw new Error('You must pass requiredParam to function setTopLevelFile!');
     }
     this.configuration["top_level_file"] = topLevelFile;
   }
-  setWorkingDir(workingDir){
-    if (typeof workingDir != 'string') {
-        throw new Error('You must pass requiredParam to function setWorkingDir!');
+  set_woking_dir(workingDir) {
+    if (typeof workingDir !== 'string') {
+      throw new Error('You must pass requiredParam to function setWorkingDir!');
     }
     this.configuration["working_dir"] = workingDir;
   }
-  getSuite(){
+  get_suite() {
     return this.configuration['suite'];
   }
-  getTool(){
+  get_tool() {
     return this.configuration['tool'];
   }
-  getLanguage(){
+  get_language() {
     return this.configuration['language'];
   }
-  getName(){
+  get_name() {
     return this.configuration['name'];
   }
-  getTopLevel(){
+  get_top_level() {
     return this.configuration['top_level'];
   }
-  getTopLevelFile(){
+  get_top_level_file() {
     return this.configuration['top_level_file'];
   }
-  getWorkingDir(){
+  get_working_dir() {
     return this.configuration['working_dir'];
   }
-  getAll(){
+  get_all() {
     return this.configuration;
   }
-  setAll(config){
+  set_all(config) {
     this.configuration = {
-      'suite':config['suite'],
-      'tool':config['tool'],
-      'language':config['language'],
-      'name':config['name'],
-      'top_level':config['top_level'],
-      'top_level_file':config['top_level_file'],
-      'working_dir':config['working_dir'],
-      'gtkwave':config['gtkwave']
-    }
+      'suite': config['suite'],
+      'tool': config['tool'],
+      'language': config['language'],
+      'name': config['name'],
+      'top_level': config['top_level'],
+      'top_level_file': config['top_level_file'],
+      'working_dir': config['working_dir'],
+      'gtkwave': config['gtkwave']
+    };
   }
 }
 
 module.exports = {
-  Configurator   : Configurator,
-  Manager : Manager
-}
+  Configurator: Configurator,
+  Manager: Manager
+};

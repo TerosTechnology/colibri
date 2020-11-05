@@ -1,0 +1,67 @@
+{
+  "icarus":
+  [
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [6,0]
+      },
+      "description": "syntax error"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [5,0]
+      },
+      "description": "Invalid module instantiation"
+    },
+    { "severity": "warning",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [7,0]
+      },
+      "description": "implicit definition of wire 'mon'."
+    }
+  ],
+  "verilator":
+  [
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [6,0]
+      },
+      "description": "syntax error, unexpected wire, expecting IDENTIFIER"
+    }
+  ],
+  "xvlog":
+  [
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [6,0]
+      },
+      "description": "[VRFC 10-1412] syntax error near wire"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [6,0]
+      },
+      "description": "[VRFC 10-2790] Verilog 2000 keyword wire used in incorrect context"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [5,0]
+      },
+      "description": "[VRFC 10-2939] 's' is an unknown type"
+    },
+    { "severity": "error",
+      "location": {
+        "file": "example_1.vhd",
+        "position": [5,0]
+      },
+      "description": "[VRFC 10-2865] module 'top' ignored due to previous errors"
+    }
+  ]
+}
