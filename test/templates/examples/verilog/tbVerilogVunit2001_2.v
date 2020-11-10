@@ -11,9 +11,9 @@ module comp_tb;
   reg [p_size - 1 : 0] i_param;
   reg [p_size - 1 : 0] i_param_2;
   reg ena;
-  reg [2*p_size - 1 : 0] o_param;
-  reg [2*p_size - 1 : 0] o_param_2;
-  reg  dv;
+  wire [2*p_size - 1 : 0] o_param;
+  wire [2*p_size - 1 : 0] o_param_2;
+  wire dv;
 
   comp
     #(

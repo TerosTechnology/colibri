@@ -12,9 +12,9 @@ module behav_counter_tb;
   reg load;
   reg [7:0] load_b;
   reg up_down;
-  reg [7:0] qd;
-  reg qd_b;
-  reg qd_c;
+  wire [7:0] qd;
+  wire qd_b;
+  wire qd_c;
 
   behav_counter
     #(

@@ -115,7 +115,12 @@ class Verilog_editor {
     var str = '';
     for (let x = 0; x < m.length; ++x) {
       if (m[x]['type'] === '') {
-        str += space + 'reg ' + m[x]['name'] + ';\n';
+        if (m[x]['direction'] === "input") {
+          str += space + 'reg ' + m[x]['name'] + ';\n';
+        }else{
+          str += space + 'wire ' + m[x]['name'] + ';\n';
+        }
+        
       }
       else {
         const regex = /\[(.*?)\]/;
@@ -125,7 +130,12 @@ class Verilog_editor {
         } else {
           type = type[0];
         }
-        str += space + 'reg ' + type + ' ' + m[x]['name'] + ';\n';
+        if (m[x]['direction'] === "input") {
+          str += space + 'reg ' + type + ' ' + m[x]['name'] + ';\n';
+        }else{
+          str += space + 'wire ' + type + ' ' + m[x]['name'] + ';\n';
+        }
+        
       }
     }
     return str;
