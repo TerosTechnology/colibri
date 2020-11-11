@@ -238,7 +238,7 @@ class Verilog_editor {
 
   set_Clk_Process(space, ports) {
     var str = '';
-    for (let x = 0; x < ports.length - 1; ++x) {
+    for (let x = 0; x < ports.length; ++x) {
       let is_clk = (ports[x]["direction"] === "input") &&
         (ports[x]["name"].includes("clk") || ports[x]["name"].includes("clock"));
       if (is_clk === true) {
