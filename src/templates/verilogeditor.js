@@ -116,7 +116,7 @@ class Verilog_editor {
     for (let x = 0; x < m.length; ++x) {
       if (m[x]['type'] === '') {
         if (m[x]['direction'] === "input") {
-          str += space + 'reg ' + m[x]['name'] + ';\n';
+          str += space + 'reg ' + m[x]['name'] + ' = 0;\n';
         } else {
           str += space + 'wire ' + m[x]['name'] + ';\n';
         }
@@ -131,7 +131,11 @@ class Verilog_editor {
           type = type[0];
         }
         if (m[x]['direction'] === "input") {
-          str += space + 'reg ' + type + ' ' + m[x]['name'] + ';\n';
+          if (type === '') {
+            str += space + 'reg ' + type + ' ' + m[x]['name'] + ' = 0;\n';
+          } else {
+            str += space + 'reg ' + type + ' ' + m[x]['name'] + ';\n';
+          }
         } else {
           str += space + 'wire ' + type + ' ' + m[x]['name'] + ';\n';
         }
@@ -145,11 +149,7 @@ class Verilog_editor {
     var str = '';
     for (let x = 0; x < m.length; ++x) {
       if (m[x]['type'] === '') {
-        if (m[x]['direction'] === "input") {
-          str += space + 'wire ' + m[x]['name'] + ';\n';
-        } else {
-          str += space + 'reg ' + m[x]['name'] + ';\n';
-        }
+        str += space + 'reg r_' + m[x]['name'] + ';\n';
 
       }
       else {
@@ -160,12 +160,7 @@ class Verilog_editor {
         } else {
           type = type[0];
         }
-        if (m[x]['direction'] === "input") {
-          str += space + 'wire ' + type + ' ' + m[x]['name'] + ';\n';
-        } else {
-          str += space + 'reg ' + type + ' ' + m[x]['name'] + ';\n';
-        }
-
+        str += space + 'reg ' + type + ' r_' + m[x]['name'] + ';\n';
       }
     }
     return str;
@@ -247,8 +242,8 @@ class Verilog_editor {
       let is_clk = (ports[x]["direction"] === "input") &&
         (ports[x]["name"].includes("clk") || ports[x]["name"].includes("clock"));
       if (is_clk === true) {
-        str += '// ' + space + "always\n";
-        str += '// ' + space + "  #5  " + ports[x]["name"] + " =  ! " + ports[x]["name"] + ";\n";
+        str += space + "always\n";
+        str += space + "  #5  " + ports[x]["name"] + " =  ! " + ports[x]["name"] + ";\n";
       }
     }
     return str;

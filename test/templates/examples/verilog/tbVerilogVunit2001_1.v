@@ -9,11 +9,11 @@ module behav_counter_tb;
 
   // Ports
   reg [7:0] d;
-  reg clk;
-  reg clear;
-  reg load;
+  reg clk = 0;
+  reg clear = 0;
+  reg load = 0;
   reg [7:0] load_b;
-  reg up_down;
+  reg up_down = 0;
   wire [7:0] qd;
   wire qd_b;
   wire qd_c;
@@ -41,7 +41,7 @@ module behav_counter_tb;
     $display("Hello world");
   end
 
-//   always
-//     #5  clk =  ! clk;
+  always
+    #5  clk =  ! clk;
 
 endmodule
