@@ -42,6 +42,8 @@ module uart_tb;
   end
 
 //   always
-//     #5  clk =  ! clk;
+//     #5  txclk =  ! txclk;
+//   always
+//     #5  rxclk =  ! rxclk;
 
 endmodule

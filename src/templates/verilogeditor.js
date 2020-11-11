@@ -55,7 +55,7 @@ class Verilog_editor {
     str += this.set_Constants(space, structure['generics']);
     str += '\n';
     str += '  // Ports\n';
-    str += this.set_Signals(space, structure['ports']);
+    str += this.set_Signals_Tb(space, structure['ports']);
     str += '\n';
 
     str += this.set_Instance2001(space, structure['entity']['name'], structure['generics'], structure['ports']);
@@ -67,7 +67,7 @@ class Verilog_editor {
       str += this.set_Main(space);
       str += '\n';
     }
-    str += this.set_Clk_Process(space);
+    str += this.set_Clk_Process(space, structure['ports']);
     str += '\n';
     str += 'endmodule\n';
 
@@ -111,16 +111,16 @@ class Verilog_editor {
     return str;
   }
 
-  set_Signals(space, m) {
+  set_Signals_Tb(space, m) {
     var str = '';
     for (let x = 0; x < m.length; ++x) {
       if (m[x]['type'] === '') {
         if (m[x]['direction'] === "input") {
           str += space + 'reg ' + m[x]['name'] + ';\n';
-        }else{
+        } else {
           str += space + 'wire ' + m[x]['name'] + ';\n';
         }
-        
+
       }
       else {
         const regex = /\[(.*?)\]/;
@@ -132,10 +132,40 @@ class Verilog_editor {
         }
         if (m[x]['direction'] === "input") {
           str += space + 'reg ' + type + ' ' + m[x]['name'] + ';\n';
-        }else{
+        } else {
           str += space + 'wire ' + type + ' ' + m[x]['name'] + ';\n';
         }
-        
+
+      }
+    }
+    return str;
+  }
+
+  set_Signals(space, m) {
+    var str = '';
+    for (let x = 0; x < m.length; ++x) {
+      if (m[x]['type'] === '') {
+        if (m[x]['direction'] === "input") {
+          str += space + 'wire ' + m[x]['name'] + ';\n';
+        } else {
+          str += space + 'reg ' + m[x]['name'] + ';\n';
+        }
+
+      }
+      else {
+        const regex = /\[(.*?)\]/;
+        let type = m[x]['type'].match(regex);
+        if (type === null) {
+          type = '';
+        } else {
+          type = type[0];
+        }
+        if (m[x]['direction'] === "input") {
+          str += space + 'wire ' + type + ' ' + m[x]['name'] + ';\n';
+        } else {
+          str += space + 'reg ' + type + ' ' + m[x]['name'] + ';\n';
+        }
+
       }
     }
     return str;
@@ -211,10 +241,16 @@ class Verilog_editor {
     return str;
   }
 
-  set_Clk_Process(space) {
+  set_Clk_Process(space, ports) {
     var str = '';
-    str += '// ' + space + "always\n";
-    str += '// ' + space + "  #5  clk =  ! clk;\n";
+    for (let x = 0; x < ports.length - 1; ++x) {
+      let is_clk = (ports[x]["direction"] === "input") &&
+        (ports[x]["name"].includes("clk") || ports[x]["name"].includes("clock"));
+      if (is_clk === true) {
+        str += '// ' + space + "always\n";
+        str += '// ' + space + "  #5  " + ports[x]["name"] + " =  ! " + ports[x]["name"] + ";\n";
+      }
+    }
     return str;
   }
 }
