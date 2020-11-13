@@ -47,54 +47,54 @@ class Verilog_editor {
     var space = '  ';
     var str = '';
     if (vunit === true) {
-      str += this.set_Vunit_Libraries();
+      str += this.set_vunit_libraries();
       str += '\n';
     }
-    str += this.set_Entity(structure['entity']);
+    str += this.set_entity(structure['entity']);
     str += '\n';
-    str += this.set_Constants(space, structure['generics']);
+    str += this.set_constants(space, structure['generics']);
     str += '\n';
     str += '  // Ports\n';
-    str += this.set_Signals(space, structure['ports']);
+    str += this.set_signals_tb(space, structure['ports']);
     str += '\n';
 
-    str += this.set_Instance2001(space, structure['entity']['name'], structure['generics'], structure['ports']);
+    str += this.set_instance2001(space, structure['entity']['name'], structure['generics'], structure['ports']);
     str += '\n';
     if (vunit === true) {
-      str += this.set_Vunit_Process(space);
+      str += this.set_vunit_process(space);
       str += '\n';
     } else {
-      str += this.set_Main(space);
+      str += this.set_main(space);
       str += '\n';
     }
-    str += this.set_Clk_Process(space);
+    str += this.set_clk_process(space, structure['ports']);
     str += '\n';
     str += 'endmodule\n';
 
     return str;
   }
 
-  set_Vunit_Libraries() {
+  set_vunit_libraries() {
     var str = '';
     str += '`include "vunit_defines.svh"\n';
     return str;
   }
 
-  set_Libraries(m) {
+  set_libraries(m) {
     var str = '';
     for (let x = 0; x < m.length; ++x) {
-      str += 'use ' + m[x]['name'] + ';\n';
+      str += `use ${m[x]['name']};\n`;
     }
     return str;
   }
 
-  set_Entity(m) {
+  set_entity(m) {
     var str = '';
-    str += 'module ' + m['name'] + '_tb;\n';
+    str += `module ${m['name']}_tb;\n`;
     return str;
   }
 
-  set_Vunit_Entity(m) {
+  set_vunit_entity(m) {
     var str = '';
     str += 'entity ' + m['name'] + '_tb is\n';
     str += '  generic (runner_cfg : string);\n';
@@ -102,20 +102,25 @@ class Verilog_editor {
     return str;
   }
 
-  set_Constants(space, m) {
+  set_constants(space, m) {
     var str = '';
-    str += space + '// Parameters\n';
+    str += `${space}// Parameters\n`;
     for (let x = 0; x < m.length; ++x) {
-      str += space + 'localparam ' + m[x]['type'] + ' ' + m[x]['name'] + ' = 1' + ';\n';
+      str += `${space}localparam ${m[x]['type']} ${m[x]['name']} = 1;\n`;
     }
     return str;
   }
 
-  set_Signals(space, m) {
+  set_signals_tb(space, m) {
     var str = '';
     for (let x = 0; x < m.length; ++x) {
       if (m[x]['type'] === '') {
-        str += space + 'reg ' + m[x]['name'] + ';\n';
+        if (m[x]['direction'] === "input") {
+          str += `${space}reg ${m[x]['name']} = 0;\n`;
+        } else {
+          str += `${space}wire ${m[x]['name']};\n`;
+        }
+
       }
       else {
         const regex = /\[(.*?)\]/;
@@ -125,86 +130,122 @@ class Verilog_editor {
         } else {
           type = type[0];
         }
-        str += space + 'reg ' + type + ' ' + m[x]['name'] + ';\n';
+        if (m[x]['direction'] === "input") {
+          if (type === '') {
+            str += `${space}reg ${type} ${m[x]['name']} = 0;\n`;
+          } else {
+            str += `${space}reg ${type} ${m[x]['name']};\n`;
+          }
+        } else {
+          str += `${space}wire ${type} ${m[x]['name']};\n`;
+        }
+
       }
     }
     return str;
   }
 
-  set_Instance(space, name, generics, ports) {
+  set_signals(space, m) {
+    var str = '';
+    for (let x = 0; x < m.length; ++x) {
+      if (m[x]['type'] === '') {
+        str += `${space}reg r_${m[x]['name']};\n`;
+
+      }
+      else {
+        const regex = /\[(.*?)\]/;
+        let type = m[x]['type'].match(regex);
+        if (type === null) {
+          type = '';
+        } else {
+          type = type[0];
+        }
+        str += `${space}reg ${type} r_${m[x]['name']};\n`;
+      }
+    }
+    return str;
+  }
+
+  set_instance(space, name, generics, ports) {
     var str = '';
     //Instance name
-    str += space + name + '\n';
+    str += `${space}${name}\n`;
     //Parameters
     if (generics.length > 0) {
-      str += space + '  #(\n';
+      str += `${space}  #(\n`;
       for (let x = 0; x < generics.length - 1; ++x) {
-        str += space + '    ' + generics[x]['name'] + ',\n';
+        str += `${space}    ${generics[x]['name']},\n`;
       }
-      str += space + '    ' + generics[generics.length - 1]['name'] + '\n';
-      str += space + '  )\n';
+      str += `${space}    ${generics[generics.length - 1]['name']}\n`;
+      str += `${space}  )\n`;
     }
     //Ports
     if (ports.length > 0) {
-      str += space + name + '_dut (\n';
+      str += `${space} ${name}_dut (\n`;
       for (let x = 0; x < ports.length - 1; ++x) {
-        str += space + '    ' + ports[x]['name'] + ',\n';
+        str += `${space}    ${ports[x]['name']},\n`;
       }
-      str += space + '    ' + ports[ports.length - 1]['name'] + '\n';
-      str += space + '  );\n';
+      str += `${space}    ${ports[ports.length - 1]['name']}\n`;
+      str += `${space}  );\n`;
     }
     return str;
   }
 
-  set_Instance2001(space, name, generics, ports) {
+  set_instance2001(space, name, generics, ports) {
     var str = '';
     //Instance name
-    str += space + name + '\n';
+    str += `${space} ${name} \n`;
     //Parameters
     if (generics.length > 0) {
-      str += space + '  #(\n';
+      str += `${space}  #(\n`;
       for (let x = 0; x < generics.length - 1; ++x) {
-        str += space + '    .' + generics[x]['name'] + '(' + generics[x]['name'] + '),\n';
+        str += `${space}    .${generics[x]['name']}(${generics[x]['name']} ),\n`;
       }
-      str += space + '    .' + generics[generics.length - 1]['name'] + ' ('
-        + generics[generics.length - 1]['name'] + ')\n';
-      str += space + '  )\n';
+      str += `${space}    .${generics[generics.length - 1]['name']} (
+        ${generics[generics.length - 1]['name']} )\n`;
+      str += `${space}  )\n`;
     }
     //Ports
     if (ports.length > 0) {
-      str += space + name + '_dut (\n';
+      str += `${space} ${name}_dut (\n`;
       for (let x = 0; x < ports.length - 1; ++x) {
-        str += space + '    .' + ports[x]['name'] + ' (' + ports[x]['name'] + '),\n';
+        str += `${space}    .${ports[x]['name']} (${ports[x]['name']} ),\n`;
       }
-      str += space + '    .' + ports[ports.length - 1]['name'] + ' (' + ports[ports.length - 1]['name'] + ')\n';
-      str += space + '  );\n';
+      str += `${space}    .${ports[ports.length - 1]['name']}  ( ${ports[ports.length - 1]['name']})\n`;
+      str += `${space}  );\n`;
     }
     return str;
   }
 
-  set_Vunit_Process(space) {
+  set_vunit_process(space) {
     var str = '';
-    str += space + '`TEST_SUITE begin\n';
-    str += space + '  // It is possible to create a basic test bench without any test cases\n';
-    str += space + '  $display("Hello world");\n';
-    str += space + 'end\n';
+    str += `${space}\`TEST_SUITE begin\n`;
+    str += `${space}  // It is possible to create a basic test bench without any test cases\n`;
+    str += `${space}  $display("Hello world");\n`;
+    str += `${space}end\n`;
     return str;
   }
 
-  set_Main(space) {
+  set_main(space) {
     var str = '';
-    str += space + "initial begin\n";
-    str += space + "  begin\n";
-    str += space + "    $finish;\n";
-    str += space + "  end\n";
-    str += space + "end\n";
+    str += `${space}initial begin\n`;
+    str += `${space}  begin\n`;
+    str += `${space}    $finish;\n`;
+    str += `${space}  end\n`;
+    str += `${space}end\n`;
     return str;
   }
 
-  set_Clk_Process(space) {
+  set_clk_process(space, ports) {
     var str = '';
-    str += '// ' + space + "always\n";
-    str += '// ' + space + "  #5  clk =  ! clk;\n";
+    for (let x = 0; x < ports.length; ++x) {
+      let is_clk = (ports[x]["direction"] === "input") &&
+        (ports[x]["name"].includes("clk") || ports[x]["name"].includes("clock"));
+      if (is_clk === true) {
+        str += `${space}always\n`;
+        str += `${space}  #5  ${ports[x]["name"]} = ! ${ports[x]["name"]} ;\n`;
+      }
+    }
     return str;
   }
 }
@@ -222,10 +263,10 @@ class Verilog_component extends Verilog_editor {
     if (options['type'] === Codes.TYPESCOMPONENTS.COMPONENT) {
       component = "";
     } else if (options['type'] === Codes.TYPESCOMPONENTS.INSTANCE) {
-      component = this.set_Instance2001('  ', structure['entity']['name'],
+      component = this.set_instance2001('  ', structure['entity']['name'],
         structure['generics'], structure['ports'], false);
     } else if (options['type'] === Codes.TYPESCOMPONENTS.SIGNALS) {
-      component = this.set_Signals('  ', structure['ports']);
+      component = this.set_signals('  ', structure['ports']);
     }
     return component;
   }

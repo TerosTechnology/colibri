@@ -6,14 +6,14 @@ module comp_tb;
   localparam  p_size = 1;
 
   // Ports
-  reg clk;
-  reg rst;
+  reg clk = 0;
+  reg rst = 0;
   reg [p_size - 1 : 0] i_param;
   reg [p_size - 1 : 0] i_param_2;
-  reg ena;
-  reg [2*p_size - 1 : 0] o_param;
-  reg [2*p_size - 1 : 0] o_param_2;
-  reg  dv;
+  reg ena = 0;
+  wire [2*p_size - 1 : 0] o_param;
+  wire [2*p_size - 1 : 0] o_param_2;
+  wire dv;
 
   comp
     #(
@@ -35,7 +35,7 @@ module comp_tb;
     $display("Hello world");
   end
 
-//   always
-//     #5  clk =  ! clk;
+  always
+    #5  clk =  ! clk;
 
 endmodule
