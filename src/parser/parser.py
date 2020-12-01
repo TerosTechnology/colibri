@@ -676,8 +676,8 @@ class VHDLInterfaceElement(object):
         @returns A copy of this interface element without a mode
         """
         return VHDLInterfaceElement(
-            self.identifier, self.subtype_indication, init_value=self.init_value, description=self.description, position=self.position
-        )
+            self.identifier, self.subtype_indication, init_value=self.init_value, description=self.description,
+            position=self.position)
 
     @classmethod
     def parse(cls, code, code_with_comments, is_signal=False):
@@ -726,7 +726,7 @@ class VHDLInterfaceElement(object):
 
         mode_split = interface_element_string.split(
             ":")[1].strip().split(None, 1)
-        if cls._is_mode(mode_split[0]):
+        if cls._is_mode(mode_split[0].lower()):
             mode = mode_split[0]
             subtype_indication = VHDLSubtypeIndication.parse(mode_split[1])
         else:
@@ -1252,9 +1252,9 @@ generics = []
 for i in range(0, len(entity.generics)):
     generic_name_split = entity.generics[i].identifier.split(',')
     for temp in generic_name_split:
-        generic = {'name': temp,
-                   'type': entity.generics[i].subtype_indication.code,
-                   'comment': entity.generics[i].description
+        generic = {'name': str(temp),
+                   'type': str(entity.generics[i].subtype_indication.code),
+                   'comment': str(entity.generics[i].description)
                    }
         generics.append(generic)
 
@@ -1263,9 +1263,9 @@ for i in range(0, len(entity.ports)):
     port_name_split = entity.ports[i].identifier.split(',')
     for temp in port_name_split:
         port = {'name': temp,
-                'direction': entity.ports[i].mode,
-                'type': entity.ports[i].subtype_indication.code,
-                'comment': entity.ports[i].description
+                'direction': str(entity.ports[i].mode).lower(),
+                'type': str(entity.ports[i].subtype_indication.code),
+                'comment': str(entity.ports[i].description)
                 }
         ports.append(port)
 
