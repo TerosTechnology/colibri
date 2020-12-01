@@ -58,7 +58,8 @@ class Documenter {
     else {
       options.html_style = 'save';
     }
-    let html_doc = await this.get_html(options);
+    let html_value = await this.get_html(options);
+    let html_doc = html_value.html;
     fs.writeFileSync(path, html_doc);
   }
   // options = {"custom_css_path":"/custom_css/path"}
@@ -224,13 +225,11 @@ class Documenter {
     }
     let code_tree = await this._get_code_tree();
     if (code_tree === undefined) {
-      return html;
+      return { 'html': html, error: true };
     }
 
     let converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
     converter.setFlavor('github');
-    // html += converter.makeHtml(markdown);
-
 
     html += converter.makeHtml("&nbsp;&nbsp;\n\n");
     //Title
@@ -252,7 +251,7 @@ class Documenter {
     html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], code_tree['generics']));
     html += '<br><br><br><br><br><br>'
 
-    return html;
+    return { 'html': html, error: false };
   }
 
   async _get_pdf(path, options) {

@@ -25,29 +25,29 @@ const fs = require('fs');
 const path_lib = require('path');
 
 class Base_linter {
-  _get_command(file, synt, synt_windows, options){
+  _get_command(file, synt, synt_windows, options) {
     let command = "";
-    if (options !== undefined && options.custom_bin !== undefined){
+    if (options !== undefined && options.custom_bin !== undefined) {
       command += options.custom_bin + " ";
     }
-    else if(os.platform() === "win32"){
-      if (options !== undefined && options.custom_path !== undefined){
+    else if (os.platform() === "win32") {
+      if (options !== undefined && options.custom_path !== undefined) {
         command += options.custom_path + path_lib.sep + synt_windows + " ";
       }
-      else{
+      else {
         command += synt_windows + " ";
       }
     }
-    else{
-      if (options !== undefined && options.custom_path !== undefined){
+    else {
+      if (options !== undefined && options.custom_path !== undefined) {
         command += options.custom_path + path_lib.sep + synt + " ";
       }
-      else{
+      else {
         command += synt + " ";
       }
     }
 
-    if (options !== undefined && options.custom_arguments !== undefined){
+    if (options !== undefined && options.custom_arguments !== undefined) {
       command += options.custom_arguments + " ";
     }
 
@@ -66,13 +66,17 @@ class Base_linter {
     return temp_file.path;
   }
 
-  async _exec_linter(file, synt, synt_windows, options) {  
-    var command = this._get_command(file,synt,synt_windows,options);  
+  async _exec_linter(file, synt, synt_windows, options) {
+    let command = this._get_command(file, synt, synt_windows, options);
+    console.log(`[colibri][info] Linting with command: ${command}`);
     const exec = require('child_process').exec;
-      return new Promise((resolve) => {
-        exec(command, (error, stdout, stderr) => {
-          let result = {'stdout':stdout,'stderr':stderr};
-          resolve(result);
+    return new Promise((resolve) => {
+      exec(command, (error, stdout, stderr) => {
+        let result = { 'stdout': stdout, 'stderr': stderr };
+        if (stderr !== '') {
+          console.log(`[colibri][error] ${stderr}`);
+        }
+        resolve(result);
       });
     });
   }

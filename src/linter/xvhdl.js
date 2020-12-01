@@ -27,27 +27,27 @@ class Xvhdl extends Base_linter {
     super();
     this.PARAMETERS = {
       'SYNT': "xvhdl -nolog",
-      'SYNT_WINDOWS': "xvhdl.exe -nolog"
+      'SYNT_WINDOWS': "xvhdl -nolog"
     };
   }
 
   // options = {custom_bin:"", custom_arguments:""}
-  async lint_from_file(file,options){
-    let normalized_file = file.replace(' ','\\ ');
+  async lint_from_file(file, options) {
+    let normalized_file = file.replace(' ', '\\ ');
     let errors = await this._lint(normalized_file, options);
     return errors;
   }
 
-  async lint_from_code(file,code,options){
+  async lint_from_code(file, code, options) {
     let temp_file = await this._create_temp_file_of_code(code);
-    let errors = await this._lint(temp_file,options);
+    let errors = await this._lint(temp_file, options);
     return errors;
   }
 
-  async _lint(file,options){
-    let result = await this._exec_linter(file,this.PARAMETERS.SYNT,
-                          this.PARAMETERS.SYNT_WINDOWS,options);
-    file = file.replace('\\ ',' ');
+  async _lint(file, options) {
+    let result = await this._exec_linter(file, this.PARAMETERS.SYNT,
+      this.PARAMETERS.SYNT_WINDOWS, options);
+    file = file.replace('\\ ', ' ');
     let errors_str = result.stdout;
     let errors_str_lines = errors_str.split(/\r?\n/g);
     let errors = [];
@@ -55,9 +55,9 @@ class Xvhdl extends Base_linter {
 
       let tokens = line.split(/:?\s*(?:\[|\])\s*/).filter(Boolean);
       if (tokens.length < 4
-          || tokens[0] !== "ERROR"
-          || !tokens[1].startsWith("VRFC")) {
-          return;
+        || tokens[0] !== "ERROR"
+        || !tokens[1].startsWith("VRFC")) {
+        return;
       }
 
       // Get filename and line number
@@ -69,10 +69,10 @@ class Xvhdl extends Base_linter {
       //     return;
 
       let error = {
-        'severity' : "error",
-        'description' : "[" + tokens[1] + "] " + tokens[2],
-        'code' : tokens[1],
-        'location' : {
+        'severity': "error",
+        'description': "[" + tokens[1] + "] " + tokens[2],
+        'code': tokens[1],
+        'location': {
           'file': file,
           'position': [lineno, 0]
         }

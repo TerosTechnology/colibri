@@ -31,38 +31,39 @@ const Svlint = require('./svlint');
 const General = require('../general/general');
 
 class Linter {
-  constructor(linter_name, language){
-    if (linter_name === undefined){
+  constructor(linter_name, language) {
+    if (linter_name === undefined) {
       throw new Error('Linter name is undefined.');
     }
     if (linter_name === General.LINTERS.GHDL) {
       return this.get_ghdl();
     }
-    else if (linter_name === General.LINTERS.ICARUS){
+    else if (linter_name === General.LINTERS.ICARUS) {
       return this.get_icarus(language);
     }
-    else if (linter_name === General.LINTERS.MODELSIM){
+    else if (linter_name === General.LINTERS.MODELSIM) {
       return this.get_modelsim(language);
     }
-    else if (linter_name === General.LINTERS.VERILATOR){
+    else if (linter_name === General.LINTERS.VERILATOR) {
       return this.get_verilator(language);
     }
-    else if (linter_name === General.LINTERS.XVLOG){
+    else if (linter_name === General.LINTERS.XVLOG) {
       return this.get_xvlog(language);
     }
-    else if (linter_name === General.LINTERS.XVHDL){
+    else if (linter_name === General.LINTERS.XVHDL) {
       return this.get_xvhdl();
     }
-    else if (linter_name === General.LINTERS.VSG){
+    else if (linter_name === General.LINTERS.VSG) {
       return this.get_vsg();
     }
-    else if (linter_name === General.LINTERS.VERIBLE){
+    else if (linter_name === General.LINTERS.VERIBLE) {
       return this.get_verible();
     }
-    else if (linter_name === General.LINTERS.SVLINT){
+    else if (linter_name === General.LINTERS.SVLINT) {
       return this.get_svlint();
     }
-    else{
+    else {
+      console.log(`[colibri][error] Linter name ${linter_name} not supported `);
       throw new Error('Linter name not supported.');
     }
   }
@@ -101,5 +102,5 @@ class Linter {
 
 // eslint-disable-next-line no-undef
 module.exports = {
-  Linter : Linter
+  Linter: Linter
 };
