@@ -30,24 +30,24 @@ const path = require('path');
 const Parser = require('web-tree-sitter');
 const initParser = Parser.init();
 
-class tsVerilogParser  {
+class tsVerilogParser {
   constructor(comment_symbol) {
     this.comment_symbol = comment_symbol;
     this.loaded_wasm = false;
   }
 
   async getAll(sourceCode) {
-    try{
+    try {
       await initParser;
       this.parser = new Parser();
-      if (this.loaded_wasm === false){
+      if (this.loaded_wasm === false) {
         let Lang = await Parser.Language.load(path.join(__dirname, path.sep + "parsers" + path.sep + "tree-sitter-verilog.wasm"));
         this.parser.setLanguage(Lang);
         this.loaded_wasm = true;
       }
       var lines = this.fileLines(sourceCode);
       const tree = await this.parser.parse(sourceCode);
-      
+
       var structure = {
         'libraries': this.get_libraries(tree.rootNode, lines),  // includes
         "entity": this.getEntityName(tree.rootNode, lines), // module
@@ -61,7 +61,7 @@ class tsVerilogParser  {
       };
       return structure;
     }
-    catch(error){
+    catch (error) {
       // eslint-disable-next-line no-console
       console.log(error);
       return undefined;
@@ -96,8 +96,7 @@ class tsVerilogParser  {
     } else {
       var port_name = this.extractData(arr[0], lines);
       var split_port_name = port_name.split(',');
-      for (var x = 0; x < split_port_name.length; ++x)
-        {return port_name;}
+      for (var x = 0; x < split_port_name.length; ++x) { return port_name; }
     }
   }
 
@@ -110,8 +109,7 @@ class tsVerilogParser  {
     } else {
       var port_name = this.extractData(arr[0], lines);
       var split_port_name = port_name.split(',');
-      for (var x = 0; x < split_port_name.length; ++x)
-        {return port_name;}
+      for (var x = 0; x < split_port_name.length; ++x) { return port_name; }
     }
   }
 
@@ -167,23 +165,22 @@ class tsVerilogParser  {
       var comment = "";
       var comment_str = comments[inputs[x].startPosition.row];
       for (var i = 0; i < port_name.length; i++) {
-        if (comment_str == undefined ){
+        if (comment_str == undefined) {
           for (var z = 0; z < port_ref.length; z++) {
-            var port_ref_name = this.extractData(port_ref[z],lines);
-            if(port_ref_name == port_name[i].trim()){
-              var pre_comment =  comments[port_ref[z].startPosition.row];
+            var port_ref_name = this.extractData(port_ref[z], lines);
+            if (port_ref_name == port_name[i].trim()) {
+              var pre_comment = comments[port_ref[z].startPosition.row];
               if (pre_comment != undefined) {
-                if (this.comment_symbol == "" ||  pre_comment[0] == this.comment_symbol){
+                if (this.comment_symbol == "" || pre_comment[0] == this.comment_symbol) {
                   comment = pre_comment.substring(1);
-                }else {
+                } else {
                   comment = "";
                 }
+              }
             }
           }
         }
-      }
-        else if (this.comment_symbol == "" ||  comment_str[0] == this.comment_symbol)
-          {comment = comment_str.substring(1);}
+        else if (this.comment_symbol == "" || comment_str[0] == this.comment_symbol) { comment = comment_str.substring(1); }
 
         item = {
           'name': port_name[i],
@@ -245,7 +242,7 @@ class tsVerilogParser  {
     let comments = this.getComments(element, lines);
     //Inputs
     var arr = this.searchTree(element, 'parameter_port_declaration');
-    if (arr.length === 0 ) {
+    if (arr.length === 0) {
       arr = this.searchTree(element, 'parameter_declaration');
     }
     inputs = arr;
@@ -253,9 +250,9 @@ class tsVerilogParser  {
       let comment = "";
       let pre_comment = comments[inputs[x].startPosition.row];
       if (pre_comment != undefined) {
-        if (this.comment_symbol == "" ||  pre_comment[0] == this.comment_symbol){
+        if (this.comment_symbol == "" || pre_comment[0] == this.comment_symbol) {
           comment = pre_comment.substring(1);
-        }else {
+        } else {
           comment = "";
         }
       }
@@ -276,10 +273,9 @@ class tsVerilogParser  {
       var lib = this.extractData(arr[0], lines);
       return lib;
     } else {
-      var lib = this.extractData(arr[0], lines).substr(1,this.extractData(arr[0], lines).length - 2);
+      var lib = this.extractData(arr[0], lines).substr(1, this.extractData(arr[0], lines).length - 2);
       var split_lib = lib.split(',');
-      for (var x = 0; x < split_lib.length; ++x)
-        {return lib;}
+      for (var x = 0; x < split_lib.length; ++x) { return lib; }
     }
   }
 
@@ -292,8 +288,7 @@ class tsVerilogParser  {
     } else {
       var port_name = this.extractData(arr[0], lines);
       var split_port_name = port_name.split(',');
-      for (var x = 0; x < split_port_name.length; ++x)
-        {return port_name;}
+      for (var x = 0; x < split_port_name.length; ++x) { return port_name; }
     }
   }
 
@@ -304,8 +299,7 @@ class tsVerilogParser  {
     } else {
       var port_name = this.extractData(arr[0], lines);
       var split_port_name = port_name.split(',');
-      for (var x = 0; x < split_port_name.length; ++x)
-        {return port_name;}
+      for (var x = 0; x < split_port_name.length; ++x) { return port_name; }
     }
   }
 
@@ -323,12 +317,10 @@ class tsVerilogParser  {
 
     var description = "";
     var comments = this.searchTree(tree, 'comment');
-    for (var x=0; x< comments.length; ++x){
-      if (comments[x].startPosition.row >= module_index[0])
-        {break;}
+    for (var x = 0; x < comments.length; ++x) {
+      if (comments[x].startPosition.row >= module_index[0]) { break; }
       var comment_str = this.extractData(comments[x], lines).substr(2) + '\n ';
-      if (this.comment_symbol == "" ||  comment_str[0] == this.comment_symbol)
-        {description += comment_str.substring(1);}
+      if (this.comment_symbol == "" || comment_str[0] == this.comment_symbol) { description += comment_str.substring(1); }
     }
     description += '\n';
     item["comment"] = description;
