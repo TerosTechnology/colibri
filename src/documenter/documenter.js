@@ -22,8 +22,7 @@
 const fs = require('fs');
 const path_lib = require('path');
 const Diagram = require('./diagram');
-const StmVHDL = require('./statemachinevhdl');
-const StmVerilog = require('./statemachineverilog');
+const Stm = require('../parser/stm_parser');
 const ParserLib = require('../parser/factory');
 const General = require('../general/general');
 const showdown = require('showdown');
@@ -105,7 +104,7 @@ class Documenter {
     for (let i = 0; i < wavedrom.length; ++i) {
       let random_id = this._makeid(4);
       let img = `![alt text](wavedrom_${random_id}${i}.svg "title")`;
-      let path_img = path_lib.dirname(path) + path_lib.sep + `wavedrom_${random_id}${i}.svg`;
+      let path_img = path_lib.basename(path) + path_lib.sep + `wavedrom_${random_id}${i}.svg`;
       fs.writeFileSync(path_img, wavedrom[i]);
       wavedrom_description = wavedrom_description.replace("$cholosimeone$" + i, img);
     }
@@ -113,6 +112,21 @@ class Documenter {
 
     //Generics and ports
     markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics']);
+
+    // State machine diagrams
+    let stm_array = await this._get_stm();
+    if (stm_array.length !== 0) {
+      markdown_doc += "## State machines\n";
+      for (let i = 0; i < stm_array.length; ++i) {
+        let entity_name = code_tree['entity']['name'];
+        let random_id = this._makeid(4);
+        let stm_path = `${path_lib.basename(path)}${path_lib.sep}stm_${entity_name}_${random_id}${i}.svg\n`;
+        markdown_doc += stm_array[i].description;
+        fs.writeFileSync(stm_path, stm_array[i].svg);
+        markdown_doc += `![Diagram_state_machine_${i}]( ${stm_path} "Diagram")`;
+      }
+    }
+
     return markdown_doc;
   }
 
@@ -165,6 +179,7 @@ class Documenter {
 <style>
   #teroshdl h1,#teroshdl h2,#teroshdl h3,#teroshdl table, #teroshdl svg {margin-left:2.5%;}
   svg {width:100%;height:100%;}
+  #state_machine {width:70%;height:70%;display: block;margin: auto;}
   code {color:#545253;}
   div.templateTerosHDL { background-color: white;position:absolute; }
   #teroshdl td,#teroshdl th,#teroshdl h1,#teroshdl h2,#teroshdl h3 {color: black;}
@@ -249,7 +264,18 @@ class Documenter {
     html += html_description;
     //Generics and ports
     html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], code_tree['generics']));
-    html += '<br><br><br><br><br><br>'
+    // State machine diagrams
+    let stm_array = await this._get_stm();
+    if (stm_array.length !== 0) {
+      html += converter.makeHtml("## State machines\n");
+      html += '<div>';
+      for (let i = 0; i < stm_array.length; ++i) {
+        html += converter.makeHtml(stm_array[i].description);
+        html += `<div id="state_machine">${stm_array[i].svg}</div>`;
+      }
+      html += '</div>';
+    }
+    html += '<br><br><br><br><br><br>';
 
     return { 'html': html, error: false };
   }
@@ -374,6 +400,11 @@ class Documenter {
     return code_tree;
   }
 
+  async _get_stm() {
+    let stm_array = await Stm.get_svg_sm(this.lang, this.code, this.comment_symbol);
+    return stm_array;
+  }
+
   async _gen_code_tree() {
     this.code_tree = await this._get_code_tree();
   }
@@ -419,55 +450,6 @@ class Documenter {
     }
     let text = md(table) + '\n';
     return text;
-  }
-}
-
-function get_state_machine_hdl_svg(str, lang) {
-  let state_machine_cl;
-  if (lang === General.LANGUAGES.VHDL) {
-    state_machine_cl = new State_machine_vhdl();
-  }
-  else if (lang === General.LANGUAGES.VERILOG) {
-    state_machine_cl = new State_machine_verilog();
-  }
-  else {
-    return null;
-  }
-
-  let state_machine_svg;
-  try {
-    state_machine_svg = state_machine_cl.get_svg(str);
-  }
-  catch (error) {
-    return null;
-  }
-
-  return state_machine_svg;
-}
-
-class State_machine_vhdl extends StmVHDL.State_machine_vhdl {
-  get_svg(str) {
-    const smcat = require("state-machine-cat");
-    let go = this.getStateMachine(str);
-    try {
-      const svg = smcat.render(
-        go, {
-        outputType: "svg"
-      }
-      );
-      return svg;
-    } catch (pError) {
-      // eslint-disable-next-line no-console
-      console.error(pError);
-      return undefined;
-    }
-  }
-}
-
-class State_machine_verilog extends StmVerilog.State_machine_verilog {
-  // eslint-disable-next-line no-unused-vars
-  get_svg(str) {
-    return undefined;
   }
 }
 
@@ -548,6 +530,5 @@ async function get_html_doc_from_array(files, output_dir_doc, symbol_vhdl, symbo
 module.exports = {
   get_html_doc_from_array: get_html_doc_from_array,
   get_md_doc_from_array: get_md_doc_from_array,
-  Documenter: Documenter,
-  get_state_machine_hdl_svg: get_state_machine_hdl_svg
+  Documenter: Documenter
 };
