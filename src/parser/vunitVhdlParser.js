@@ -22,6 +22,7 @@ const path = require('path');
 const temp = require('temp');
 const fs = require('fs');
 const nopy = require('../nopy/api');
+const ts_parser = require('./ts_vhdl_parser');
 
 class VhdlParser {
   constructor(comment_symbol) {
@@ -39,10 +40,13 @@ class VhdlParser {
       let python_exec_path = await nopy.get_python_exec();
       let py_path = __dirname + path.sep + "parser.py";
       let args = code_file + ',' + this.comment_symbol;
-
+      let current_element = this;
       if (python_exec_path === undefined) {
         return undefined;
       }
+
+      let parser = new ts_parser.Parser(this.comment_symbol);
+      await parser.init();
       // eslint-disable-next-line no-unused-vars
       return new Promise(function (resolve, reject) {
         nopy.spawnPython([py_path, args], {
@@ -61,6 +65,11 @@ class VhdlParser {
           catch (e) {
             structure = undefined;
           }
+
+          let elements = parser.get_all(str);
+          structure.body = elements.body;
+          structure.declarations = elements.declarations;
+
           resolve(structure);
         });
       });

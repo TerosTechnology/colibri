@@ -5,7 +5,8 @@ const Parser = require('web-tree-sitter');
 async function get_svg_sm(code, comment_symbol) {
   await Parser.init();
   const parser = new Parser();
-  let Lang = await Parser.Language.load(Path.join(__dirname, Path.sep + "parsers" + Path.sep + "tree-sitter-vhdl.wasm"));
+  let Lang = await
+    Parser.Language.load(Path.join(__dirname, Path.sep + "parsers" + Path.sep + "tree-sitter-vhdl.wasm"));
   parser.setLanguage(Lang);
 
   const tree = parser.parse(code);
@@ -15,16 +16,30 @@ async function get_svg_sm(code, comment_symbol) {
   for (let i = 0; i < process.length; ++i) {
     let state = get_process_info(process[i]);
     if (state !== undefined) {
-      stm.push(state);
-      let svg_tmp = json_to_svg(state);
-      let stm_tmp = {
-        'svg': svg_tmp,
-        'description': state.description
-      };
-      svg.push(stm_tmp);
+      if (check_stm(state) === true) {
+        stm.push(state);
+        let svg_tmp = json_to_svg(state);
+        let stm_tmp = {
+          'svg': svg_tmp,
+          'description': state.description
+        };
+        svg.push(stm_tmp);
+      }
     }
   }
   return svg;
+}
+
+function check_stm(stm) {
+  let check = false;
+  let states = stm.states;
+  for (let i = 0; i < states.length; ++i) {
+    let transitions = states[i].transitions;
+    if (transitions.length > 0) {
+      return true;
+    }
+  }
+  return check;
 }
 
 function get_process(tree, comment_symbol) {
@@ -72,7 +87,7 @@ function get_architecture_body(p) {
       if (counter === 2) {
         cursor.gotoFirstChild();
         do {
-          if (cursor.nodeType ===== 'architecture_body') {
+          if (cursor.nodeType === 'architecture_body') {
             cursor.gotoFirstChild();
             do {
               if (cursor.nodeType === 'concurrent_statement_part') {
@@ -87,7 +102,7 @@ function get_architecture_body(p) {
       }
     }
   }
-  while (cursor.gotoNextSibling() == true && break_p == false);
+  while (cursor.gotoNextSibling() === true && break_p === false);
   return arch_body;
 }
 
@@ -142,7 +157,6 @@ function get_transitions(p, state_variable_name) {
   cursor.gotoFirstChild();
   do {
     if (cursor.nodeType === 'sequence_of_statements') {
-      let state_name = cursor.nodeText;
       cursor.gotoFirstChild();
       do {
         if (cursor.nodeType === 'if_statement') {
@@ -188,11 +202,11 @@ function get_assignament_transitions(p, state_variable_name) {
   if (tmp_destination !== undefined) {
     let s_position = p.startPosition;
     let e_position = p.endPosition;
-    start_position = [s_position.row, e_position.column - 1];
-    end_position = [e_position.row, e_position.column];
+    let start_position = [s_position.row, e_position.column - 1];
+    let end_position = [e_position.row, e_position.column];
 
-    destination = tmp_destination;
-    transition = {
+    let destination = tmp_destination;
+    let transition = {
       'condition': '', 'destination': destination,
       'start_position': start_position,
       'end_position': end_position

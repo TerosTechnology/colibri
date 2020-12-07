@@ -24,7 +24,6 @@ const path_lib = require('path');
 const Diagram = require('./diagram');
 const Stm = require('../parser/stm_parser');
 const ParserLib = require('../parser/factory');
-const General = require('../general/general');
 const showdown = require('showdown');
 const json5 = require('json5');
 const temp = require('temp');
@@ -104,7 +103,7 @@ class Documenter {
     for (let i = 0; i < wavedrom.length; ++i) {
       let random_id = this._makeid(4);
       let img = `![alt text](wavedrom_${random_id}${i}.svg "title")`;
-      let path_img = path_lib.basename(path) + path_lib.sep + `wavedrom_${random_id}${i}.svg`;
+      let path_img = path_lib.dirname(path) + path_lib.sep + `wavedrom_${random_id}${i}.svg`;
       fs.writeFileSync(path_img, wavedrom[i]);
       wavedrom_description = wavedrom_description.replace("$cholosimeone$" + i, img);
     }
@@ -112,18 +111,30 @@ class Documenter {
 
     //Generics and ports
     markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics']);
+    //Signals and constants
+    if (code_tree['declarations'] !== undefined) {
+      markdown_doc += this._get_signals_constants_section(
+        code_tree['declarations']['signals'], code_tree['declarations']['constants']);
+    }
+    if (code_tree['body'] !== undefined) {
+      //Processes
+      markdown_doc += this._get_process_section(code_tree['body']['processes']);
+      //Instantiations
+      markdown_doc += this._get_instantiations_section(code_tree['body']['instantiations']);
+    }
 
     // State machine diagrams
     let stm_array = await this._get_stm();
-    if (stm_array.length !== 0) {
+    if (stm_array !== undefined && stm_array.length !== 0) {
       markdown_doc += "## State machines\n";
       for (let i = 0; i < stm_array.length; ++i) {
         let entity_name = code_tree['entity']['name'];
-        let random_id = this._makeid(4);
-        let stm_path = `${path_lib.basename(path)}${path_lib.sep}stm_${entity_name}_${random_id}${i}.svg\n`;
-        markdown_doc += stm_array[i].description;
+        let stm_path = `${path_lib.dirname(path)}${path_lib.sep}stm_${entity_name}_${i}${i}.svg\n`;
+        if (stm_array[i].description !== '') {
+          markdown_doc += '- ' + stm_array[i].description;
+        }
         fs.writeFileSync(stm_path, stm_array[i].svg);
-        markdown_doc += `![Diagram_state_machine_${i}]( ${stm_path} "Diagram")`;
+        markdown_doc += `![Diagram_state_machine_${i}]( stm_${entity_name}_${i}${i}.svg "Diagram")`;
       }
     }
 
@@ -170,6 +181,32 @@ class Documenter {
 
     //Generics and ports
     markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics']);
+    if (code_tree['declarations'] !== undefined) {
+      //Signals and constants
+      markdown_doc += this._get_signals_constants_section(
+        code_tree['declarations']['signals'], code_tree['declarations']['constants']);
+    }
+    if (code_tree['body'] !== undefined) {
+      //Processes
+      markdown_doc += this._get_process_section(code_tree['body']['processes']);
+      //Instantiations
+      markdown_doc += this._get_instantiations_section(code_tree['body']['instantiations']);
+    }
+
+    // State machine diagrams
+    let stm_array = await this._get_stm();
+    if (stm_array !== undefined && stm_array.length !== 0) {
+      markdown_doc += "## State machines\n";
+      for (let i = 0; i < stm_array.length; ++i) {
+        let path_diagram_tmp = temp.openSync().path + '.svg';
+        if (stm_array[i].description !== '') {
+          markdown_doc += '\n- ' + stm_array[i].description;
+        }
+        fs.writeFileSync(path_diagram_tmp, stm_array[i].svg);
+        markdown_doc += `![Diagram_state_machine_${i}]( ${path_diagram_tmp} "Diagram")`;
+      }
+    }
+
     return markdown_doc;
   }
 
@@ -181,6 +218,7 @@ class Documenter {
   svg {width:100%;height:100%;}
   #state_machine {width:70%;height:70%;display: block;margin: auto;}
   code {color:#545253;}
+  #teroshdl {color:black;}
   div.templateTerosHDL { background-color: white;position:absolute; }
   #teroshdl td,#teroshdl th,#teroshdl h1,#teroshdl h2,#teroshdl h3 {color: black;}
   #teroshdl h1,#teroshdl h2 {font-weight:bold;}
@@ -199,6 +237,7 @@ class Documenter {
   <style>
     #teroshdl h1,#teroshdl h2,#teroshdl h3,#teroshdl table, #teroshdl svg {margin-left:2.5%;width:60%}
     code {color:#545253;}
+    #teroshdl {color:black;}
     div.templateTerosHDL { background-color: white;position:absolute; }
     #teroshdl td,#teroshdl th,#teroshdl h1,#teroshdl h2,#teroshdl h3 {color: black;}
     #teroshdl h1,#teroshdl h2 {font-weight:bold}
@@ -264,13 +303,27 @@ class Documenter {
     html += html_description;
     //Generics and ports
     html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], code_tree['generics']));
+    if (code_tree['declarations'] !== undefined) {
+      //Signals and constants
+      html += converter.makeHtml(this._get_signals_constants_section(
+        code_tree['declarations']['signals'], code_tree['declarations']['constants']));
+    }
+    if (code_tree['body'] !== undefined) {
+      //Processes
+      html += converter.makeHtml(this._get_process_section(code_tree['body']['processes']));
+      //Instantiations
+      html += converter.makeHtml(this._get_instantiations_section(code_tree['body']['instantiations']));
+    }
+
     // State machine diagrams
     let stm_array = await this._get_stm();
-    if (stm_array.length !== 0) {
+    if (stm_array !== undefined && stm_array.length !== 0) {
       html += converter.makeHtml("## State machines\n");
       html += '<div>';
       for (let i = 0; i < stm_array.length; ++i) {
-        html += converter.makeHtml(stm_array[i].description);
+        if (stm_array[i].description !== '') {
+          html += converter.makeHtml('- ' + stm_array[i].description);
+        }
         html += `<div id="state_machine">${stm_array[i].svg}</div>`;
       }
       html += '</div>';
@@ -425,6 +478,51 @@ class Documenter {
     return md;
   }
 
+  _get_signals_constants_section(signals, constants) {
+    let md = "";
+    if (signals.length !== 0 || constants.length !== 0) {
+      //Title
+      md += "## Signals and constants\n";
+      //Tables
+      if (signals.length !== 0) {
+        md += "### Signals\n";
+        md += this._get_doc_signals(signals);
+      }
+      if (constants.length !== 0) {
+        md += "### Constants\n";
+        md += this._get_doc_constants(constants);
+      }
+    }
+    return md;
+  }
+
+  _get_process_section(process) {
+    let md = "";
+    if (process.length !== 0) {
+      //Title
+      md += "## Processes\n";
+      for (let i = 0; i < process.length; ++i) {
+        md += `- **${process[i].name}**: \n`;
+        md += `${process[i].description}\n`;
+      }
+    }
+    return md;
+  }
+
+
+  _get_instantiations_section(instantiations) {
+    let md = "";
+    if (instantiations.length !== 0) {
+      //Title
+      md += "## Instantiations\n";
+      for (let i = 0; i < instantiations.length; ++i) {
+        md += `- **${instantiations[i].name}**: ${instantiations[i].type}\n`;
+        md += `${instantiations[i].description}\n`;
+      }
+    }
+    return md;
+  }
+
   _get_doc_ports(ports) {
     const md = require('./markdownTable');
     let table = [];
@@ -451,6 +549,34 @@ class Documenter {
     let text = md(table) + '\n';
     return text;
   }
+
+  _get_doc_signals(signals) {
+    const md = require('./markdownTable');
+    let table = [];
+    table.push(["Name", "Type", "Description"]);
+    for (let i = 0; i < signals.length; ++i) {
+      table.push([signals[i]['name'],
+      signals[i]['type'],
+      signals[i]['description']]);
+    }
+    let text = md(table) + '\n';
+    return text;
+  }
+
+  _get_doc_constants(constants) {
+    const md = require('./markdownTable');
+    let table = [];
+    table.push(["Name", "Type", "Value", "Description"]);
+    for (let i = 0; i < constants.length; ++i) {
+      table.push([constants[i]['name'],
+      constants[i]['type'],
+      constants[i]['default_value'],
+      constants[i]['description']]);
+    }
+    let text = md(table) + '\n';
+    return text;
+  }
+
 }
 
 async function get_md_doc_from_array(files, output_dir_doc, symbol_vhdl, symbol_verilog,
