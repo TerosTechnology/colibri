@@ -154,6 +154,13 @@ function get_states(p, state_variable_name) {
 function get_transitions(p, state_variable_name) {
   let transitions = [];
   let cursor = p.walk();
+  let last = 0;
+  let last_transitions = [];
+  //if transitions
+  let if_transitions = [];
+  //assign transitions
+  let assign_transitions = [];
+
   cursor.gotoFirstChild();
   do {
     if (cursor.nodeType === 'sequence_of_statements') {
@@ -161,21 +168,32 @@ function get_transitions(p, state_variable_name) {
       do {
         if (cursor.nodeType === 'if_statement') {
           let tmp_transitions = get_if_transitions(cursor.currentNode(), state_variable_name);
-          transitions = transitions.concat(tmp_transitions);
+          if_transitions = if_transitions.concat(tmp_transitions);
+          last = 0;
         }
         else if (cursor.nodeType === 'simple_waveform_assignment') {
           let tmp_transitions = get_assignament_transitions(cursor.currentNode(), state_variable_name);
-          transitions = transitions.concat(tmp_transitions);
+          assign_transitions = tmp_transitions;
+          last_transitions = tmp_transitions;
+          last = 1;
         }
         else if (cursor.nodeType === 'simple_variable_assignment') {
           let tmp_transitions = get_assignament_variable_transitions(cursor.currentNode(), state_variable_name);
-          transitions = transitions.concat(tmp_transitions);
+          assign_transitions = tmp_transitions;
+          last_transitions = tmp_transitions;
+          last = 1;
         }
       }
       while (cursor.gotoNextSibling() !== false);
     }
   }
   while (cursor.gotoNextSibling() !== false);
+  if (last !== 0) {
+    transitions = last_transitions;
+  }
+  else {
+    transitions = if_transitions.concat(assign_transitions);
+  }
   return transitions;
 }
 
@@ -277,6 +295,10 @@ function get_destination(p, state_variable_name) {
             destination = tmp_destination;
           }
         }
+        else if (cursor.nodeType === 'if_statement') {
+          let pepe = get_if_transitions(cursor.currentNode(), state_variable_name);
+          console.log('hola');
+        }
       }
       while (cursor.gotoNextSibling() !== false);
     }
@@ -350,7 +372,7 @@ function get_condition(p) {
   cursor.gotoFirstChild();
   do {
     if (cursor.nodeType === 'relation' || cursor.nodeType === 'logical_expression'
-      || cursor.nodeType == 'parenthesized_expression') {
+      || cursor.nodeType === 'parenthesized_expression') {
       condition = cursor.nodeText;
       let s_position = cursor.startPosition;
       let e_position = cursor.endPosition;
@@ -391,6 +413,9 @@ function get_state_variable_name(p) {
   do {
     if (cursor.nodeType === 'simple_name') {
       state_variable_name = cursor.nodeText;
+    }
+    else if (cursor.nodeType === 'parenthesized_expression') {
+      state_variable_name = cursor.nodeText.replace('(', '').replace(')', '');
     }
   }
   while (cursor.gotoNextSibling() !== false);
