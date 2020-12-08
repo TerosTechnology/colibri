@@ -114,7 +114,8 @@ function get_process_info(proc) {
     'states': []
   };
   let p = proc.code;
-  p_info.name = get_process_label(p);
+  let name = get_process_label(p);
+  p_info.name = name;
   let case_statement = get_case_process(p);
 
   if (case_statement !== undefined) {
@@ -139,12 +140,15 @@ function get_states(p, state_variable_name) {
         'end_position': []
       };
       let result = get_state_name(cursor.currentNode());
-      state.name = result.state_name;
-      state.start_position = result.start_position;
-      state.end_position = result.end_position;
-      state.transitions = get_transitions(cursor.currentNode(), state_variable_name);
+      let name = result.state_name;
+      if (name !== undefined && name.toLocaleLowerCase() !== 'others') {
+        state.name = result.state_name;
+        state.start_position = result.start_position;
+        state.end_position = result.end_position;
+        state.transitions = get_transitions(cursor.currentNode(), state_variable_name);
 
-      case_state.push(state);
+        case_state.push(state);
+      }
     }
   }
   while (cursor.gotoNextSibling() !== false);
@@ -173,22 +177,26 @@ function get_transitions(p, state_variable_name) {
         }
         else if (cursor.nodeType === 'simple_waveform_assignment') {
           let tmp_transitions = get_assignament_transitions(cursor.currentNode(), state_variable_name);
-          assign_transitions = tmp_transitions;
-          last_transitions = tmp_transitions;
-          last = 1;
+          if (tmp_transitions.length !== 0 && tmp_transitions !== undefined) {
+            assign_transitions = tmp_transitions;
+            last_transitions = tmp_transitions;
+            last = 1;
+          }
         }
         else if (cursor.nodeType === 'simple_variable_assignment') {
           let tmp_transitions = get_assignament_variable_transitions(cursor.currentNode(), state_variable_name);
-          assign_transitions = tmp_transitions;
-          last_transitions = tmp_transitions;
-          last = 1;
+          if (tmp_transitions.length !== 0 && tmp_transitions !== undefined) {
+            assign_transitions = tmp_transitions;
+            last_transitions = tmp_transitions;
+            last = 1;
+          }
         }
       }
       while (cursor.gotoNextSibling() !== false);
     }
   }
   while (cursor.gotoNextSibling() !== false);
-  if (last !== 0) {
+  if (last === 1) {
     transitions = last_transitions;
   }
   else {
@@ -197,15 +205,15 @@ function get_transitions(p, state_variable_name) {
   return transitions;
 }
 
-function get_if_transitions(p, state_variable_name) {
+function get_if_transitions(p, state_variable_name, metacondition) {
   let transitions = [];
   let cursor = p.walk();
   cursor.gotoFirstChild();
   do {
     if (cursor.nodeType === 'elsif' || cursor.nodeType === 'else' || cursor.nodeType === 'if') {
-      let transition = get_transition(cursor.currentNode(), state_variable_name);
+      let transition = get_transition(cursor.currentNode(), state_variable_name, metacondition);
       if (transition !== undefined) {
-        transitions.push(transition);
+        transitions = transitions.concat(transition);
       }
     }
   }
@@ -255,27 +263,24 @@ function get_assignament_variable_transitions(p, state_variable_name) {
   return transitions;
 }
 
-function get_transition(p, state_variable_name) {
-  let transition = undefined;
+function get_transition(p, state_variable_name, metacondition) {
   let result = get_condition(p);
   let condition = result.condition;
   let start_position = result.start_position;
   let end_position = result.end_position;
-  let destination = get_destination(p, state_variable_name);
-  if (condition !== undefined && destination !== undefined) {
-    transition = {
-      'condition': '',
-      'destination': '',
-      'start_position': start_position,
-      'end_position': end_position
-    };
-    transition.condition = condition;
-    transition.destination = destination;
-  }
-  return transition;
+  let transitions = get_transitions_in_if(p, state_variable_name,
+    condition, start_position, end_position, metacondition);
+  return transitions;
 }
 
-function get_destination(p, state_variable_name) {
+function get_transitions_in_if(p, state_variable_name, condition, start_position, end_position, metacondition) {
+  let last = 0;
+  let last_transitions = [];
+  //if transitions
+  let if_transitions = [];
+  //assign transitions
+  let assign_transitions = [];
+  let transitions = [];
   let destination = undefined;
   let cursor = p.walk();
   cursor.gotoFirstChild();
@@ -287,24 +292,62 @@ function get_destination(p, state_variable_name) {
           let tmp_destination = check_get_simple_waveform_assignment(cursor.currentNode(), state_variable_name);
           if (tmp_destination !== undefined) {
             destination = tmp_destination;
+            if (condition !== undefined && destination !== undefined) {
+              let transition = {
+                'condition': '',
+                'destination': '',
+                'start_position': start_position,
+                'end_position': end_position
+              };
+              if (metacondition !== undefined && metacondition !== '') {
+                condition += `\n${metacondition}`;
+              }
+              transition.condition = condition;
+              transition.destination = destination;
+              last = 1;
+              assign_transitions = [transition];
+              last_transitions = [transition];
+            }
           }
         }
         else if (cursor.nodeType === 'simple_variable_assignment') {
           let tmp_destination = check_get_simple_variable_assignment(cursor.currentNode(), state_variable_name);
           if (tmp_destination !== undefined) {
             destination = tmp_destination;
+            if (condition !== undefined && destination !== undefined) {
+              let transition = {
+                'condition': '',
+                'destination': '',
+                'start_position': start_position,
+                'end_position': end_position
+              };
+              if (metacondition !== undefined && metacondition !== '') {
+                condition += `\n${metacondition}`;
+              }
+              transition.condition = condition;
+              transition.destination = destination;
+              last = 1;
+              assign_transitions = [transition];
+              last_transitions = [transition];
+            }
           }
         }
         else if (cursor.nodeType === 'if_statement') {
-          let pepe = get_if_transitions(cursor.currentNode(), state_variable_name);
-          console.log('hola');
+          last = 0;
+          if_transitions = get_if_transitions(cursor.currentNode(), state_variable_name, condition);
         }
       }
       while (cursor.gotoNextSibling() !== false);
     }
   }
   while (cursor.gotoNextSibling() !== false);
-  return destination;
+  if (last !== 0) {
+    transitions = last_transitions;
+  }
+  else {
+    transitions = if_transitions.concat(assign_transitions);
+  }
+  return transitions;
 }
 
 function check_get_simple_waveform_assignment(p, state_variable_name) {
@@ -373,7 +416,12 @@ function get_condition(p) {
   do {
     if (cursor.nodeType === 'relation' || cursor.nodeType === 'logical_expression'
       || cursor.nodeType === 'parenthesized_expression') {
-      condition = cursor.nodeText;
+      if (cursor.nodeType === 'parenthesized_expression') {
+        condition = get_relation_of_parenthesized_expression(cursor.currentNode());
+      }
+      else {
+        condition = cursor.nodeText;
+      }
       let s_position = cursor.startPosition;
       let e_position = cursor.endPosition;
       start_position = [s_position.row, s_position.column];
@@ -384,6 +432,21 @@ function get_condition(p) {
   return {
     'condition': condition, 'start_position': start_position, 'end_position': end_position
   };
+}
+
+function get_relation_of_parenthesized_expression(p) {
+  let relation = undefined;
+  let cursor = p.walk();
+  let break_p = false;
+  cursor.gotoFirstChild();
+  do {
+    if (cursor.nodeType === 'relation') {
+      relation = cursor.nodeText;
+      break_p = true;
+    }
+  }
+  while (cursor.gotoNextSibling() !== false && break_p === false);
+  return relation;
 }
 
 function get_state_name(p) {
@@ -443,14 +506,16 @@ function get_case_process(p) {
 
 function get_raw_case_process(p) {
   let case_statement = undefined;
+  let break_p = false;
   let cursor = p.walk();
   cursor.gotoFirstChild();
   do {
     if (cursor.nodeType === 'case_statement') {
       case_statement = cursor.currentNode();
+      break_p = true;
     }
   }
-  while (cursor.gotoNextSibling() !== false);
+  while (cursor.gotoNextSibling() !== false && break_p === false);
   return case_statement;
 }
 
