@@ -19,23 +19,24 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-const general = require('../general/general')
-const tsVerilogParser = require('./tsVerilogParser')
-const vunitVhdlParser = require('./vunitVhdlParser')
+const tsVerilogParser = require('./tsVerilogParser');
+const ts_vhdl_parser = require('./ts_vhdl_parser');
 
 class ParserFactory {
-  constructor() {}
+  constructor() { }
 
-  getParser(lang,comment_symbol) {
-    if (lang == 'vhdl') {
-      return this.getVhdlParser(comment_symbol);
-    } else if (lang == 'verilog') {
+  async getParser(lang, comment_symbol) {
+    if (lang === 'vhdl') {
+      return await this.getVhdlParser(comment_symbol);
+    } else if (lang === 'verilog') {
       return this.getVerilogParser(comment_symbol);
     }
   }
 
-  getVhdlParser(comment_symbol) {
-    return new vunitVhdlParser(comment_symbol);
+  async getVhdlParser(comment_symbol) {
+    let parser = new ts_vhdl_parser.Parser(comment_symbol);
+    await parser.init();
+    return parser;
   }
 
   getVerilogParser(comment_symbol) {
@@ -45,4 +46,4 @@ class ParserFactory {
 
 module.exports = {
   ParserFactory: ParserFactory
-}
+};

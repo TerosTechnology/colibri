@@ -88,33 +88,47 @@ class Documenter {
       return "";
     }
     let markdown_doc = extra_top_space_l;
-    //Title
-    markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
-    //Diagram
-    await this._save_svg_from_code_tree(path, code_tree);
-    markdown_doc += "## Diagram\n";
-    markdown_doc += '![Diagram](' + path_lib.basename(path) + ' "Diagram")';
-    markdown_doc += "\n";
-    //Description
-    markdown_doc += "## Description\n";
 
-    const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['comment']);
-    let wavedrom_description = description;
-    for (let i = 0; i < wavedrom.length; ++i) {
-      let random_id = this._makeid(4);
-      let img = `![alt text](wavedrom_${random_id}${i}.svg "title")`;
-      let path_img = path_lib.dirname(path) + path_lib.sep + `wavedrom_${random_id}${i}.svg`;
-      fs.writeFileSync(path_img, wavedrom[i]);
-      wavedrom_description = wavedrom_description.replace("$cholosimeone$" + i, img);
+    //Entity
+    if (code_tree['entity'] !== undefined) {
+      //Title
+      markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
+      //Diagram
+      await this._save_svg_from_code_tree(path, code_tree);
+      markdown_doc += "## Diagram\n";
+      markdown_doc += '![Diagram](' + path_lib.basename(path) + ' "Diagram")';
+      markdown_doc += "\n";
+      //Description
+      markdown_doc += "## Description\n";
+
+      const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
+      let wavedrom_description = description;
+      for (let i = 0; i < wavedrom.length; ++i) {
+        let random_id = this._makeid(4);
+        let img = `![alt text](wavedrom_${random_id}${i}.svg "title")`;
+        let path_img = path_lib.dirname(path) + path_lib.sep + `wavedrom_${random_id}${i}.svg`;
+        fs.writeFileSync(path_img, wavedrom[i]);
+        wavedrom_description = wavedrom_description.replace("$cholosimeone$" + i, img);
+      }
+      markdown_doc += wavedrom_description;
+      //Generics and ports
+      markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics']);
     }
-    markdown_doc += wavedrom_description;
+    //Package
+    if (code_tree['package'] !== undefined) {
+      //Title
+      markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
+      //Description
+      markdown_doc += "## Description\n";
+      markdown_doc += code_tree['package']['description'] + "\n";
+    }
 
-    //Generics and ports
-    markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics']);
     //Signals and constants
     if (code_tree['declarations'] !== undefined) {
       markdown_doc += this._get_signals_constants_section(
         code_tree['declarations']['signals'], code_tree['declarations']['constants']);
+      //Functions
+      markdown_doc += this._get_functions_section(code_tree['body']['functions']);
     }
     if (code_tree['body'] !== undefined) {
       //Processes
@@ -157,34 +171,47 @@ class Documenter {
       return "";
     }
     let markdown_doc = "";
-    //Title
-    markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
-    //Diagram
-    markdown_doc += "## Diagram\n";
-    let path_diagram = temp.openSync().path;
+    //Entity
+    if (code_tree['entity'] !== undefined) {
+      //Title
+      markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
+      //Diagram
+      markdown_doc += "## Diagram\n";
+      let path_diagram = temp.openSync().path;
 
-    await this._save_svg_from_code_tree(path_diagram + ".svg", code_tree);
-    markdown_doc += '![Diagram](' + path_diagram + '.svg "Diagram")';
-    markdown_doc += "\n";
-    //Description
-    markdown_doc += "## Description\n";
+      await this._save_svg_from_code_tree(path_diagram + ".svg", code_tree);
+      markdown_doc += '![Diagram](' + path_diagram + '.svg "Diagram")';
+      markdown_doc += "\n";
+      //Description
+      markdown_doc += "## Description\n";
 
-    const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['comment']);
-    let wavedrom_description = description;
-    for (let i = 0; i < wavedrom.length; ++i) {
-      let path_img = path_lib.dirname(path_diagram) + path_lib.sep + `wavedrom_${i}.svg`;
-      fs.writeFileSync(path_img, wavedrom[i]);
-      let img = `![alt text](${path_img} "title")`;
-      wavedrom_description = wavedrom_description.replace("$cholosimeone$" + i, img);
+      const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
+      let wavedrom_description = description;
+      for (let i = 0; i < wavedrom.length; ++i) {
+        let path_img = path_lib.dirname(path_diagram) + path_lib.sep + `wavedrom_${i}.svg`;
+        fs.writeFileSync(path_img, wavedrom[i]);
+        let img = `![alt text](${path_img} "title")`;
+        wavedrom_description = wavedrom_description.replace("$cholosimeone$" + i, img);
+      }
+      markdown_doc += wavedrom_description;
+
+      //Generics and ports
+      markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics']);
     }
-    markdown_doc += wavedrom_description;
-
-    //Generics and ports
-    markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics']);
+    //Package
+    if (code_tree['package'] !== undefined) {
+      //Title
+      markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
+      //Description
+      markdown_doc += "## Description\n";
+      markdown_doc += code_tree['package']['description'] + "\n";
+    }
     if (code_tree['declarations'] !== undefined) {
       //Signals and constants
       markdown_doc += this._get_signals_constants_section(
         code_tree['declarations']['signals'], code_tree['declarations']['constants']);
+      //Functions
+      markdown_doc += this._get_functions_section(code_tree['body']['functions']);
     }
     if (code_tree['body'] !== undefined) {
       //Processes
@@ -286,27 +313,39 @@ class Documenter {
     converter.setFlavor('github');
 
     html += converter.makeHtml("&nbsp;&nbsp;\n\n");
-    //Title
-    html += converter.makeHtml("# Entity: " + code_tree['entity']['name'] + "\n");
-    //Description
-    html += converter.makeHtml("## Diagram\n");
-    html += converter.makeHtml((await this._get_diagram_svg_from_code_tree(code_tree) + "\n").replace(/\*/g, "\\*"));
-    //Description
-    html += converter.makeHtml("## Description\n");
-    const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['comment']);
+    //Entity
+    if (code_tree['entity'] !== undefined) {
+      //Title
+      html += converter.makeHtml("# Entity: " + code_tree['entity']['name'] + "\n");
+      //Description
+      html += converter.makeHtml("## Diagram\n");
+      html += converter.makeHtml((await this._get_diagram_svg_from_code_tree(code_tree) + "\n").replace(/\*/g, "\\*"));
+      //Description
+      html += converter.makeHtml("## Description\n");
+      const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
 
-    let html_description = converter.makeHtml(description);
+      let html_description = converter.makeHtml(description);
 
-    for (let i = 0; i < wavedrom.length; ++i) {
-      html_description = html_description.replace("$cholosimeone$" + i, wavedrom[i]);
+      for (let i = 0; i < wavedrom.length; ++i) {
+        html_description = html_description.replace("$cholosimeone$" + i, wavedrom[i]);
+      }
+      html += html_description;
+      //Generics and ports
+      html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], code_tree['generics']));
     }
-    html += html_description;
-    //Generics and ports
-    html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], code_tree['generics']));
+    //Package
+    if (code_tree['package'] !== undefined) {
+      //Title
+      html += converter.makeHtml("# Package: " + code_tree['package']['name'] + "\n");
+      html += converter.makeHtml("## Description\n");
+      html += converter.makeHtml(code_tree['package']['description'] + "\n");
+    }
     if (code_tree['declarations'] !== undefined) {
       //Signals and constants
       html += converter.makeHtml(this._get_signals_constants_section(
         code_tree['declarations']['signals'], code_tree['declarations']['constants']));
+      //Functions
+      html += converter.makeHtml(this._get_functions_section(code_tree['declarations']['functions']));
     }
     if (code_tree['body'] !== undefined) {
       //Processes
@@ -502,13 +541,25 @@ class Documenter {
       //Title
       md += "## Processes\n";
       for (let i = 0; i < process.length; ++i) {
-        md += `- **${process[i].name}**: \n`;
+        md += `- **${process[i].name}**\n`;
         md += `${process[i].description}\n`;
       }
     }
     return md;
   }
 
+  _get_functions_section(functions) {
+    let md = "";
+    if (functions.length !== 0) {
+      //Title
+      md += "## Functions\n";
+      for (let i = 0; i < functions.length; ++i) {
+        md += `- **${functions[i].name}**\n`;
+        md += `${functions[i].description}\n`;
+      }
+    }
+    return md;
+  }
 
   _get_instantiations_section(instantiations) {
     let md = "";
@@ -531,7 +582,7 @@ class Documenter {
       table.push([ports[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       ports[i]['direction'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       ports[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
-      ports[i]['comment'].replace(/ \r/g, ' ').replace(/\n/g, ' ')]);
+      ports[i]['description'].replace(/ \r/g, ' ').replace(/\n/g, ' ')]);
     }
     let text = md(table) + '\n';
     return text;
@@ -544,7 +595,7 @@ class Documenter {
     for (let i = 0; i < generics.length; ++i) {
       table.push([generics[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       generics[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
-      generics[i]['comment'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
+      generics[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
     let text = md(table) + '\n';
     return text;

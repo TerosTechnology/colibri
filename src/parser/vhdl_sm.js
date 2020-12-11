@@ -9,12 +9,24 @@ async function get_svg_sm(code, comment_symbol) {
     Parser.Language.load(Path.join(__dirname, Path.sep + "parsers" + Path.sep + "tree-sitter-vhdl.wasm"));
   parser.setLanguage(Lang);
 
-  const tree = parser.parse(code);
-  let process = get_process(tree, comment_symbol);
+  let process;
+  try {
+    const tree = parser.parse(code);
+    process = get_process(tree, comment_symbol);
+  }
+  catch (e) {
+    return [];
+  }
   let stm = [];
   let svg = [];
   for (let i = 0; i < process.length; ++i) {
-    let state = get_process_info(process[i]);
+    let state;
+    try {
+      state = get_process_info(process[i]);
+    }
+    catch (e) {
+      state = undefined;
+    }
     if (state !== undefined) {
       if (check_stm(state) === true) {
         stm.push(state);
@@ -440,7 +452,7 @@ function get_relation_of_parenthesized_expression(p) {
   let break_p = false;
   cursor.gotoFirstChild();
   do {
-    if (cursor.nodeType === 'relation') {
+    if (cursor.nodeType === 'relation' || cursor.nodeType === 'logical_expression') {
       relation = cursor.nodeText;
       break_p = true;
     }
