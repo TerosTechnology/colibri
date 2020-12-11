@@ -653,59 +653,68 @@ class Parser {
 
   get_signal_declaration(p) {
     let elements = [];
-    let element = {
-      'name': '',
-      'type': '',
-      'line': 0
-    };
     let break_p = false;
     let cursor = p.walk();
-    element.line = cursor.startPosition.row;
+    let line = cursor.startPosition.row;
     cursor.gotoFirstChild();
     do {
       if (cursor.nodeType === 'identifier_list') {
-        element.name = cursor.nodeText;
+        let names = cursor.nodeText.split(',');
+        for (let i = 0; i < names.length; ++i) {
+          let element = {
+            'name': names[i],
+            'type': '',
+            'line': line
+          };
+          elements.push(element);
+        }
       }
       else if (cursor.nodeType === 'subtype_indication') {
-        element.type = cursor.nodeText;
+        for (let i = 0; i < elements.length; ++i) {
+          elements[i].type = cursor.nodeText;
+        }
       }
     }
     while (cursor.gotoNextSibling() === true && break_p === false);
-    elements.push(element);
     return elements;
   }
 
   get_constant_declaration(p) {
     let elements = [];
-    let element = {
-      'name': '',
-      'type': '',
-      'default_value': '',
-      'line': 0
-    };
     let break_p = false;
     let cursor = p.walk();
-    element.line = cursor.startPosition.row;
+    let line = cursor.startPosition.row;
     cursor.gotoFirstChild();
     do {
       if (cursor.nodeType === 'identifier_list') {
-        element.name = cursor.nodeText;
+        let names = cursor.nodeText.split(',');
+        for (let i = 0; i < names.length; ++i) {
+          let element = {
+            'name': names[i],
+            'type': '',
+            'default_value': '',
+            'line': line
+          };
+          elements.push(element);
+        }
       }
       else if (cursor.nodeType === 'subtype_indication') {
-        element.type = cursor.nodeText;
+        for (let i = 0; i < elements.length; ++i) {
+          elements[i].type = cursor.nodeText;
+        }
       }
       else if (cursor.nodeType === 'default_expression') {
         let normalized_value = cursor.nodeText;
         normalized_value = normalized_value.replace(':=', '');
         normalized_value = normalized_value.replace(': =', '');
-        element.default_value = normalized_value.trim();
+        for (let i = 0; i < elements.length; ++i) {
+          elements[i].default_value = normalized_value;
+        }
       }
     }
     while (cursor.gotoNextSibling() === true && break_p === false);
-    elements.push(element);
     return elements;
   }
-
 }
 
 module.exports = {

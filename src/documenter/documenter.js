@@ -591,10 +591,11 @@ class Documenter {
   _get_doc_generics(generics) {
     const md = require('./markdownTable');
     let table = [];
-    table.push(["Generic name", "Type", "Description"]);
+    table.push(["Generic name", "Type", "Value", "Description"]);
     for (let i = 0; i < generics.length; ++i) {
       table.push([generics[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       generics[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      generics[i]['default_value'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       generics[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
     let text = md(table) + '\n';
