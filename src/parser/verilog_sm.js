@@ -179,7 +179,7 @@ function get_states(p, state_variable_name) {
       'end_position': []
     };
     let result = get_item_from_childs(case_items[i], 'case_item_expression');
-    if (result !== undefined && name !== 'default') {
+    if (result !== undefined && result.text !== 'default') {
       state.name = result.text;
       state.start_position = [result.startPosition.row, result.startPosition.column];
       state.end_position = [result.endPosition.row, result.endPosition.column];
@@ -614,7 +614,11 @@ function get_process_label(p) {
 function json_to_svg(stm_json) {
   let stmcat = get_smcat(stm_json);
   const smcat = require("state-machine-cat");
-  let svg = smcat.render(stmcat, { outputType: "svg" });
+  let svg;
+  try {
+    svg = smcat.render(stmcat, { outputType: "svg" });
+  }
+  catch (e) { console.log(e); }
   return svg;
 }
 
@@ -623,10 +627,37 @@ function get_smcat(stm_json) {
   let sm_transitions = '';
   let num_states = stm_json.states.length;
 
+  let states = stm_json.states;
+  let state_names = [];
+  for (let i = 0; i < states.length; ++i) {
+    if (states[i].transitions.length === 0) {
+      state_names.push(states[i].name);
+    }
+  }
+  let emptys = [];
+  for (let i = 0; i < state_names.length; ++i) {
+    let empty = true;
+    for (let j = 0; j < states.length; ++j) {
+      for (let m = 0; m < states[j].transitions.length; ++m) {
+        if (states[j].transitions[m].destination === state_names[i]) {
+          empty = false;
+        }
+      }
+    }
+    if (empty === true) {
+      emptys.push(state_names[i]);
+    }
+  }
+
   stm_json.states.forEach(function (i_state, i) {
     let transitions = i_state.transitions;
     let state_name = i_state.name;
-    sm_states += `${state_name}`;
+    if (emptys.includes(state_name)) {
+      sm_states += `${state_name} [color="red"]`;
+    }
+    else {
+      sm_states += `${state_name}`;
+    }
     if (i !== num_states - 1) {
       sm_states += ',';
     }
@@ -638,6 +669,8 @@ function get_smcat(stm_json) {
     });
   });
   let str_stm = stm_json.state_variable_name + "{\n" + sm_states + sm_transitions + "\n};";
+  console.log("hola")
+  console.log(str_stm)
   return str_stm;
 }
 

@@ -29,10 +29,11 @@ const json5 = require('json5');
 const temp = require('temp');
 
 class Documenter {
-  constructor(code, lang, comment_symbol) {
+  constructor(code, lang, comment_symbol, enable_stm) {
     this.lang = lang;
     this.code = code;
     this.comment_symbol = comment_symbol;
+    this.enable_stm = enable_stm;
   }
 
   set_code(code) {
@@ -139,7 +140,7 @@ class Documenter {
 
     // State machine diagrams
     let stm_array = await this._get_stm();
-    if (stm_array !== undefined && stm_array.length !== 0) {
+    if (this.enable_stm === true && stm_array !== undefined && stm_array.length !== 0) {
       markdown_doc += "## State machines\n";
       for (let i = 0; i < stm_array.length; ++i) {
         let entity_name = code_tree['entity']['name'];
@@ -222,7 +223,7 @@ class Documenter {
 
     // State machine diagrams
     let stm_array = await this._get_stm();
-    if (stm_array !== undefined && stm_array.length !== 0) {
+    if (this.enable_stm === true && stm_array !== undefined && stm_array.length !== 0) {
       markdown_doc += "## State machines\n";
       for (let i = 0; i < stm_array.length; ++i) {
         let path_diagram_tmp = temp.openSync().path + '.svg';
@@ -356,7 +357,7 @@ class Documenter {
 
     // State machine diagrams
     let stm_array = await this._get_stm();
-    if (stm_array !== undefined && stm_array.length !== 0) {
+    if (this.enable_stm === true && stm_array !== undefined && stm_array.length !== 0) {
       html += converter.makeHtml("## State machines\n");
       html += '<div>';
       for (let i = 0; i < stm_array.length; ++i) {
@@ -632,7 +633,7 @@ class Documenter {
 }
 
 async function get_md_doc_from_array(files, output_dir_doc, symbol_vhdl, symbol_verilog,
-  graph, project_name, with_dependency_graph) {
+  graph, project_name, with_dependency_graph, enable_state_machines) {
   //Main doc
   let main_doc = "# Project documentation: " + project_name + "\n";
   let lang = "vhdl";
@@ -655,7 +656,7 @@ async function get_md_doc_from_array(files, output_dir_doc, symbol_vhdl, symbol_
 
     let contents = fs.readFileSync(files[i], 'utf8');
 
-    let doc_inst = new Documenter(contents, lang, symbol);
+    let doc_inst = new Documenter(contents, lang, symbol, enable_state_machines);
     doc_inst.save_markdown(output_dir_doc + path_lib.sep + filename + ".md");
   }
   if (with_dependency_graph === true) {
@@ -667,7 +668,7 @@ async function get_md_doc_from_array(files, output_dir_doc, symbol_vhdl, symbol_
 }
 
 async function get_html_doc_from_array(files, output_dir_doc, symbol_vhdl, symbol_verilog,
-  graph, project_name, with_dependency_graph) {
+  graph, project_name, with_dependency_graph, enable_state_machines) {
   //Main doc
   let main_doc = "<h1>Project documentation</h1>\n";
   if (with_dependency_graph === true) {
@@ -698,7 +699,7 @@ async function get_html_doc_from_array(files, output_dir_doc, symbol_vhdl, symbo
 
     let contents = fs.readFileSync(files[i], 'utf8');
 
-    let doc_inst = new Documenter(contents, lang, symbol);
+    let doc_inst = new Documenter(contents, lang, symbol, enable_state_machines);
     doc_inst.save_html(output_dir_doc + path_lib.sep + filename + ".html");
   }
   main_doc += '</ul>';

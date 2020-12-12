@@ -133,24 +133,26 @@ class Manager extends Simulators.Simulators {
     }
     return names;
   }
-  async save_markdown_doc(output_dir_doc, symbol_vhdl, symbol_verilog, with_dependency_graph = true, python3_path) {
+  async save_markdown_doc(output_dir_doc, symbol_vhdl, symbol_verilog,
+    with_dependency_graph = true, python3_path, enable_state_machines) {
     let project_name = this.configurator.get_name();
     let svg_dependency_graph;
     if (with_dependency_graph === true) {
       svg_dependency_graph = await this.dependency_graph.get_dependency_graph_svg(this.source, python3_path);
     }
     documenter.get_md_doc_from_array(this.get_source_name(), output_dir_doc, symbol_vhdl,
-      symbol_verilog, svg_dependency_graph, project_name, with_dependency_graph);
+      symbol_verilog, svg_dependency_graph, project_name, with_dependency_graph, enable_state_machines);
   }
 
-  async save_html_doc(output_dir_doc, symbol_vhdl, symbol_verilog, with_dependency_graph = true, python3_path) {
+  async save_html_doc(output_dir_doc, symbol_vhdl, symbol_verilog,
+    with_dependency_graph = true, python3_path, enable_state_machines) {
     let project_name = this.configurator.get_name();
     let svg_dependency_graph;
     if (with_dependency_graph === true) {
       svg_dependency_graph = await this.dependency_graph.get_dependency_graph_svg(this.source, python3_path);
     }
     documenter.get_html_doc_from_array(this.get_source_name(), output_dir_doc, symbol_vhdl,
-      symbol_verilog, svg_dependency_graph, project_name, with_dependency_graph);
+      symbol_verilog, svg_dependency_graph, project_name, with_dependency_graph, enable_state_machines);
   }
 
   get_file_type(f) {
