@@ -636,10 +636,37 @@ function get_smcat(stm_json) {
   let sm_transitions = '';
   let num_states = stm_json.states.length;
 
+  let states = stm_json.states;
+  let state_names = [];
+  for (let i = 0; i < states.length; ++i) {
+    if (states[i].transitions.length === 0) {
+      state_names.push(states[i].name);
+    }
+  }
+  let emptys = [];
+  for (let i = 0; i < state_names.length; ++i) {
+    let empty = true;
+    for (let j = 0; j < states.length; ++j) {
+      for (let m = 0; m < states[j].transitions.length; ++m) {
+        if (states[j].transitions[m].destination === state_names[i]) {
+          empty = false;
+        }
+      }
+    }
+    if (empty === true) {
+      emptys.push(state_names[i]);
+    }
+  }
+
   stm_json.states.forEach(function (i_state, i) {
     let transitions = i_state.transitions;
     let state_name = i_state.name;
-    sm_states += `${state_name}`;
+    if (emptys.includes(state_name)) {
+      sm_states += `${state_name} [color="red"]`;
+    }
+    else {
+      sm_states += `${state_name}`;
+    }
     if (i !== num_states - 1) {
       sm_states += ',';
     }

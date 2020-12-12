@@ -618,6 +618,7 @@ function json_to_svg(stm_json) {
   try {
     svg = smcat.render(stmcat, { outputType: "svg" });
   }
+  // eslint-disable-next-line no-console
   catch (e) { console.log(e); }
   return svg;
 }
@@ -669,8 +670,6 @@ function get_smcat(stm_json) {
     });
   });
   let str_stm = stm_json.state_variable_name + "{\n" + sm_states + sm_transitions + "\n};";
-  console.log("hola")
-  console.log(str_stm)
   return str_stm;
 }
 
