@@ -31,7 +31,7 @@ class cocotb {
   // eslint-disable-next-line no-unused-vars
   async generate(src, options) {
     let parser = new ParserLib.ParserFactory;
-    parser = parser.getParser(this.language, '');
+    parser = await parser.getParser(this.language, '');
     let structure = await parser.getAll(src);
     if (structure === undefined) {
       return undefined;

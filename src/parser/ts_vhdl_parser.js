@@ -36,15 +36,27 @@ class Parser {
 
   get_entity_file(code) {
     try {
+      let code_lines = code.split('\n');
+
       let entity_declaration = this.get_entity_declaration(code);
-      let elements = {
-        'entity': entity_declaration.entity,
-        'generics': entity_declaration.generics,
-        'ports': entity_declaration.ports,
-        'body': this.get_architecture_body_elements(code),
-        'declarations': this.get_declaration_elements('arch', code)
-      };
-      return elements;
+      if (code_lines.length > 10000) {
+        let elements = {
+          'entity': entity_declaration.entity,
+          'generics': entity_declaration.generics,
+          'ports': entity_declaration.ports
+        };
+        return elements;
+      }
+      else {
+        let elements = {
+          'entity': entity_declaration.entity,
+          'generics': entity_declaration.generics,
+          'ports': entity_declaration.ports,
+          'body': this.get_architecture_body_elements(code),
+          'declarations': this.get_declaration_elements('arch', code)
+        };
+        return elements;
+      }
     }
     catch (e) { return undefined; }
   }
