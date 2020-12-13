@@ -627,14 +627,17 @@ function get_process_label(p) {
 function json_to_svg(stm_json) {
   let stmcat = get_smcat(stm_json);
   const smcat = require("state-machine-cat");
-  let svg = smcat.render(stmcat, { outputType: "svg" });
+  let svg;
+  try {
+    svg = smcat.render(stmcat, { outputType: "svg" });
+  }
+  catch (e) { console.log(e); }
   return svg;
 }
 
 function get_smcat(stm_json) {
   let sm_states = '';
   let sm_transitions = '';
-  let num_states = stm_json.states.length;
 
   let states = stm_json.states;
   let state_names = [];
@@ -658,10 +661,25 @@ function get_smcat(stm_json) {
     }
   }
 
+  let gosth = [];
+  state_names = [];
+  for (let i = 0; i < states.length; ++i) {
+    state_names.push(states[i].name);
+  }
+  for (let j = 0; j < states.length; ++j) {
+    for (let m = 0; m < states[j].transitions.length; ++m) {
+      if (state_names.includes(states[j].transitions[m].destination) === false) {
+        let element = { 'name': states[j].transitions[m].destination, 'transitions': [] };
+        stm_json.states.push(element);
+        gosth.push(states[j].transitions[m].destination);
+      }
+    }
+  }
+  let num_states = stm_json.states.length;
   stm_json.states.forEach(function (i_state, i) {
     let transitions = i_state.transitions;
     let state_name = i_state.name;
-    if (emptys.includes(state_name)) {
+    if (emptys.includes(state_name) === true || gosth.includes(state_name) === true) {
       sm_states += `${state_name} [color="red"]`;
     }
     else {
@@ -673,9 +691,16 @@ function get_smcat(stm_json) {
     else {
       sm_states += ';\n';
     }
-    transitions.forEach(function (i_transition, j) {
-      sm_transitions += `${state_name} => ${i_transition.destination} : ${i_transition.condition};\n`;
-    });
+    if (gosth.includes(state_name) !== true) {
+      transitions.forEach(function (i_transition, j) {
+        if (gosth.includes(i_transition.destination) === true) {
+          sm_transitions += `${state_name} => ${i_transition.destination} [color="red"] : ${i_transition.condition};\n`;
+        }
+        else {
+          sm_transitions += `${state_name} => ${i_transition.destination} : ${i_transition.condition};\n`;
+        }
+      });
+    }
   });
   let str_stm = stm_json.state_variable_name + "{\n" + sm_states + sm_transitions + "\n};";
   return str_stm;

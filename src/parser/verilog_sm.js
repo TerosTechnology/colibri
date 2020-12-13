@@ -191,7 +191,7 @@ function get_states(p, state_variable_name) {
   return case_state;
 }
 
-function get_transitions(p, state_variable_name) {
+function get_transitions(p, state_variable_name, metacondition) {
   let assign_transitions = [];
   let if_transitions = [];
   let last_transitions = [];
@@ -199,7 +199,13 @@ function get_transitions(p, state_variable_name) {
   let skip = false;
   let last = 0;
 
-  let statement_or_null = get_item_from_childs(p, 'statement_or_null');
+  let statement_or_null;
+  if (p.type !== 'statement_or_null') {
+    statement_or_null = get_item_from_childs(p, 'statement_or_null');
+  }
+  else {
+    statement_or_null = p.walk().currentNode();
+  }
   let statement = get_item_from_childs(statement_or_null, 'statement');
   let statement_item = get_item_from_childs(statement, 'statement_item');
   let seq_block = get_item_from_childs(statement_item, 'seq_block');
@@ -242,12 +248,12 @@ function get_transitions(p, state_variable_name) {
     }
 
     if (type === 'if_statement') {
-      let tmp_transitions = get_if_transitions(block, state_variable_name);
+      let tmp_transitions = get_if_transitions(block, state_variable_name, metacondition);
       if_transitions = if_transitions.concat(tmp_transitions);
       last = 0;
     }
     else if (type === 'simple_waveform_assignment') {
-      let tmp_transitions = get_assignament_transitions(block, state_variable_name);
+      let tmp_transitions = get_assignament_transitions(block, state_variable_name, metacondition);
       if (tmp_transitions.length !== 0 && tmp_transitions !== undefined) {
         assign_transitions = tmp_transitions;
         last_transitions = tmp_transitions;
@@ -288,6 +294,13 @@ function get_if_elsif_else(p) {
         if (cursor.nodeType === 'statement_or_null') {
           let item = get_item_from_childs(cursor.currentNode(), 'statement');
           let statement_item = get_item_from_childs(item, 'statement_item');
+
+          let block_item = get_item_from_childs(statement_item, 'seq_block');
+          if (block_item !== undefined) {
+            item = get_item_from_childs(block_item, 'statement_or_null');
+            item = get_item_from_childs(item, 'statement');
+            statement_item = get_item_from_childs(item, 'statement_item');
+          }
           item = get_item_from_childs(statement_item, 'conditional_statement');
           if (item !== undefined) {
             let tmp_ifs = get_if_elsif_else(item);
@@ -330,6 +343,12 @@ function get_if_elsif_else(p) {
         else if (cursor.nodeType === 'statement_or_null') {
           let item = get_item_from_childs(cursor.currentNode(), 'statement');
           item = get_item_from_childs(item, 'statement_item');
+          if (get_item_from_childs(item, 'seq_block') !== undefined) {
+            item = get_item_from_childs(item, 'seq_block');
+            // item = get_item_from_childs(item, 'statement_or_null');
+            // item = get_item_from_childs(item, 'statement');
+            // item = get_item_from_childs(item, 'statement_item');
+          }
           if_item.code = item;
           break_p = true;
           ifs.push(if_item);
@@ -341,7 +360,7 @@ function get_if_elsif_else(p) {
   return ifs;
 }
 
-function get_assignament_transitions(p, state_variable_name) {
+function get_assignament_transitions(p, state_variable_name, metacondition) {
   let transitions = [];
 
   let tmp_destination = check_get_simple_waveform_assignment(p, state_variable_name);
@@ -351,9 +370,14 @@ function get_assignament_transitions(p, state_variable_name) {
     let start_position = [s_position.row, e_position.column - 1];
     let end_position = [e_position.row, e_position.column];
 
+    let condition = '';
+    if (metacondition !== '' && metacondition !== undefined) {
+      condition = metacondition;
+    }
+
     let destination = tmp_destination;
     let transition = {
-      'condition': '',
+      'condition': metacondition,
       'destination': destination,
       'start_position': start_position,
       'end_position': end_position
@@ -365,11 +389,11 @@ function get_assignament_transitions(p, state_variable_name) {
 
 function get_transition(p, state_variable_name, metacondition) {
   let condition = p.condition;
-  // let start_position = result.start_position;
-  // let end_position = result.end_position;
-  //todo
-  let start_position = [];
-  let end_position = [];
+  let tmp_start_position = p.code.startPosition;
+  let tmp_end_position = p.code.endPosition;
+
+  let start_position = [tmp_start_position.row, tmp_start_position.column];
+  let end_position = [tmp_end_position.row, tmp_end_position.column];
   let transitions = get_transitions_in_if(p.code, state_variable_name,
     condition, start_position, end_position, metacondition);
   return transitions;
@@ -433,7 +457,45 @@ function get_transitions_in_if(p, state_variable_name, condition, start_position
     }
     else if (cursor.nodeType === 'conditional_statement') {
       last = 0;
-      if_transitions = get_if_transitions(cursor.currentNode(), state_variable_name, condition);
+      let if_transitions_tmp = get_if_transitions(cursor.currentNode(), state_variable_name, condition);
+      if_transitions = if_transitions.concat(if_transitions_tmp);
+    }
+    else if (cursor.nodeType === 'statement_or_null') {
+      last = 0;
+
+      //check assignement
+      let item = get_item_from_childs(cursor.currentNode(), 'statement');
+      item = get_item_from_childs(item, 'statement_item');
+      item_0 = get_item_from_childs(item, 'blocking_assignment');
+      item_1 = get_item_from_childs(item, 'nonblocking_assignment');
+      let if_item = true;
+      if (item_0 !== undefined || item_1 !== undefined) {
+        if_item = false;
+      }
+      if (metacondition !== undefined && metacondition !== '') {
+        condition += `\n${metacondition}`;
+      }
+
+      let if_transitions_tmp = [];
+      //check block if
+      let item_block_if = get_item_from_childs(item, 'conditional_statement');
+      if (item_block_if === undefined) {
+        if_transitions_tmp = get_transitions(cursor.currentNode(), state_variable_name, condition);
+      }
+      else {
+        if_transitions_tmp = get_if_transitions(item_block_if, state_variable_name, condition);
+      }
+
+      if (if_item === false) {
+        if (if_transitions_tmp.length !== 0) {
+          assign_transitions = if_transitions_tmp;
+          last_transitions = if_transitions_tmp;
+        }
+      }
+      else {
+        if_transitions = if_transitions.concat(if_transitions_tmp);
+      }
+
     }
   }
   while (cursor.gotoNextSibling() !== false);
@@ -623,10 +685,20 @@ function json_to_svg(stm_json) {
   return svg;
 }
 
+function json_to_svg(stm_json) {
+  let stmcat = get_smcat(stm_json);
+  const smcat = require("state-machine-cat");
+  let svg;
+  try {
+    svg = smcat.render(stmcat, { outputType: "svg" });
+  }
+  catch (e) { console.log(e); }
+  return svg;
+}
+
 function get_smcat(stm_json) {
   let sm_states = '';
   let sm_transitions = '';
-  let num_states = stm_json.states.length;
 
   let states = stm_json.states;
   let state_names = [];
@@ -650,10 +722,25 @@ function get_smcat(stm_json) {
     }
   }
 
+  let gosth = [];
+  state_names = [];
+  for (let i = 0; i < states.length; ++i) {
+    state_names.push(states[i].name);
+  }
+  for (let j = 0; j < states.length; ++j) {
+    for (let m = 0; m < states[j].transitions.length; ++m) {
+      if (state_names.includes(states[j].transitions[m].destination) === false) {
+        let element = { 'name': states[j].transitions[m].destination, 'transitions': [] };
+        stm_json.states.push(element);
+        gosth.push(states[j].transitions[m].destination);
+      }
+    }
+  }
+  let num_states = stm_json.states.length;
   stm_json.states.forEach(function (i_state, i) {
     let transitions = i_state.transitions;
     let state_name = i_state.name;
-    if (emptys.includes(state_name)) {
+    if (emptys.includes(state_name) === true || gosth.includes(state_name) === true) {
       sm_states += `${state_name} [color="red"]`;
     }
     else {
@@ -665,9 +752,16 @@ function get_smcat(stm_json) {
     else {
       sm_states += ';\n';
     }
-    transitions.forEach(function (i_transition, j) {
-      sm_transitions += `${state_name} => ${i_transition.destination} : ${i_transition.condition};\n`;
-    });
+    if (gosth.includes(state_name) !== true) {
+      transitions.forEach(function (i_transition, j) {
+        if (gosth.includes(i_transition.destination) === true) {
+          sm_transitions += `${state_name} => ${i_transition.destination} [color="red"] : ${i_transition.condition};\n`;
+        }
+        else {
+          sm_transitions += `${state_name} => ${i_transition.destination} : ${i_transition.condition};\n`;
+        }
+      });
+    }
   });
   let str_stm = stm_json.state_variable_name + "{\n" + sm_states + sm_transitions + "\n};";
   return str_stm;
