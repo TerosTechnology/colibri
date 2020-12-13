@@ -294,6 +294,7 @@ function get_if_elsif_else(p) {
         if (cursor.nodeType === 'statement_or_null') {
           let item = get_item_from_childs(cursor.currentNode(), 'statement');
           let statement_item = get_item_from_childs(item, 'statement_item');
+          let statement_itemtt = get_item_from_childs(item, 'statement_item');
 
           let block_item = get_item_from_childs(statement_item, 'seq_block');
           if (block_item !== undefined) {
@@ -311,15 +312,26 @@ function get_if_elsif_else(p) {
               'condition': '',
               'code': ''
             };
+
             let blocking_assignment = get_item_from_childs(statement_item, 'blocking_assignment');
             if (blocking_assignment !== undefined) {
-              if_item_else.code = statement_item;
+              if (block_item !== undefined) {
+                if_item_else.code = block_item;
+              }
+              else {
+                if_item_else.code = statement_itemtt;
+              }
               ifs.push(if_item_else);
             }
             else {
               let nonblocking_assignment = get_item_from_childs(statement_item, 'nonblocking_assignment');
               if (nonblocking_assignment !== undefined) {
-                if_item_else.code = statement_item;
+                if (block_item !== undefined) {
+                  if_item_else.code = block_item;
+                }
+                else {
+                  if_item_else.code = statement_itemtt;
+                }
                 ifs.push(if_item_else);
               }
             }
@@ -583,64 +595,13 @@ function get_state_variable_name(p) {
 }
 
 function get_case_process(p) {
-  let case_statement = undefined;
-  let cursor = p.walk();
-  cursor.gotoFirstChild();
-  do {
-    if (cursor.nodeType === 'statement_or_null') {
-      case_statement = get_raw_case_process(cursor.currentNode());
-      if (case_statement === undefined) {
-        case_statement = get_if_case_process(cursor.currentNode());
-      }
-    }
+  case_statement = searchTree(p, 'case_statement');
+  if (case_statement.length === 0) {
+    return undefined;
   }
-  while (cursor.gotoNextSibling() !== false);
-  return case_statement;
-}
-
-function get_raw_case_process(p) {
-  let statement = get_item_from_childs(p, 'statement');
-  let statement_item = get_item_from_childs(statement, 'statement_item');
-  let case_statement = get_item_from_childs(statement_item, 'case_statement');
-  return case_statement;
-}
-
-function get_if_case_process(p) {
-  let statement = get_item_from_childs(p, 'statement');
-  let statement_item = get_item_from_childs(statement, 'statement_item');
-  let conditional_statement = get_item_from_childs(statement_item, 'conditional_statement');
-  let statement_or_null = get_item_multiple_from_childs(conditional_statement, 'statement_or_null');
-  let case_statement = undefined;
-  for (let i = 0; i < statement_or_null.length && case_statement === undefined; ++i) {
-    let statement_2 = get_item_from_childs(statement_or_null[i], 'statement');
-    let statement_item_2 = get_item_from_childs(statement_2, 'statement_item');
-    case_statement = get_item_from_childs(statement_item_2, 'case_statement');
-    if (case_statement === undefined) {
-      let case_if = get_item_from_childs(statement_item_2, 'conditional_statement');
-      if (case_if !== undefined && case_if !== []) {
-        case_statement = get_if_case_deep_process(case_if);
-      }
-    }
+  else {
+    return case_statement[1];
   }
-  return case_statement;
-}
-
-
-function get_if_case_deep_process(p) {
-  let statement_or_null = get_item_multiple_from_childs(p, 'statement_or_null');
-  let case_statement = undefined;
-  for (let i = 0; i < statement_or_null.length && case_statement === undefined; ++i) {
-    let statement_2 = get_item_from_childs(statement_or_null[i], 'statement');
-    let statement_item_2 = get_item_from_childs(statement_2, 'statement_item');
-    case_statement = get_item_from_childs(statement_item_2, 'case_statement');
-    if (case_statement === undefined) {
-      let case_if = get_item_from_childs(statement_item_2, 'conditional_statement');
-      if (case_if !== undefined) {
-        case_statement = get_if_case_deep_process(case_if);
-      }
-    }
-  }
-  return case_statement;
 }
 
 function get_item_multiple_from_childs(p, type) {
@@ -670,6 +631,26 @@ function get_process_label(p) {
   //   label = cursor.nodeText;
   // }
   return label;
+}
+
+function searchTree(element, matchingTitle) {
+  var arr_match = [];
+  function recursive_searchTree(element, matchingTitle) {
+    let type = element.type;
+    if (element.type == matchingTitle) {
+      arr_match.push(element);
+    } else if (element != null) {
+      var i;
+      var result = null;
+      for (i = 0; result == null && i < element.childCount; i++) {
+        result = recursive_searchTree(element.child(i), matchingTitle);
+      }
+      return result;
+    }
+    return null;
+  }
+  recursive_searchTree(element, matchingTitle);
+  return arr_match;
 }
 
 
