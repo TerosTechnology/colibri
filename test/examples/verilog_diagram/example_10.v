@@ -66,10 +66,15 @@ module axis_baser_tx_64 #
     output wire                  error_underflow
   );
 
-  wire a, b, c;
-  wire ddd;
-  reg ee;
-  logic [3:0] fff;
-  my_type_t t1, t2;
+  localparam  my_local_param = 10; //! local param 1
+  localparam  integer my_local_param2 =20; //!local param 2
+  wire a, b, c; //! coment abc
+  wire ddd; //!coment ddd
+  reg ee; //! comment ee
+  logic [3:0] fff; //! comment fff
+  my_type_t t1, t2;   //! my_type vars
+
+  function int foo(string bar, type1 baz); //! function 1
+  endfunction
 
 endmodule
