@@ -1,6 +1,7 @@
 
 const Path = require('path');
 const Parser = require('web-tree-sitter');
+const stm_base = require('./stm_base_parser');
 
 async function get_svg_sm(code, comment_symbol) {
   await Parser.init();
@@ -15,27 +16,33 @@ async function get_svg_sm(code, comment_symbol) {
     process = get_process(tree, comment_symbol);
   }
   catch (e) {
+    // eslint-disable-next-line no-console
+    console.log(e);
     return [];
   }
   let stm = [];
   let svg = [];
   for (let i = 0; i < process.length; ++i) {
-    let state;
+    let states;
     try {
-      state = get_process_info(process[i]);
+      states = get_process_info(process[i]);
     }
     catch (e) {
-      state = undefined;
+      // eslint-disable-next-line no-console
+      console.log(e);
+      states = undefined;
     }
-    if (state !== undefined) {
-      if (check_stm(state) === true) {
-        stm.push(state);
-        let svg_tmp = json_to_svg(state);
-        let stm_tmp = {
-          'svg': svg_tmp,
-          'description': state.description
-        };
-        svg.push(stm_tmp);
+    if (states !== undefined) {
+      for (let j = 0; j < states.length; ++j) {
+        if (check_stm(states[j]) === true) {
+          stm.push(states[j]);
+          let svg_tmp = json_to_svg(states[j]);
+          let stm_tmp = {
+            'svg': svg_tmp,
+            'description': states[j].description
+          };
+          svg.push(stm_tmp);
+        }
       }
     }
   }
@@ -88,56 +95,39 @@ function get_process(tree, comment_symbol) {
 }
 
 function get_architecture_body(p) {
-  let break_p = false;
-  let counter = 0;
-  let arch_body = undefined;
   let cursor = p.walk();
-  cursor.gotoFirstChild();
-  do {
-    if (cursor.nodeType === 'design_unit') {
-      counter += 1;
-      if (counter === 2) {
-        cursor.gotoFirstChild();
-        do {
-          if (cursor.nodeType === 'architecture_body') {
-            cursor.gotoFirstChild();
-            do {
-              if (cursor.nodeType === 'concurrent_statement_part') {
-                arch_body = cursor.currentNode();
-                break_p = true;
-              }
-            }
-            while (cursor.gotoNextSibling() === true && break_p === false);
-          }
-        }
-        while (cursor.gotoNextSibling() === true && break_p === false);
-      }
-    }
-  }
-  while (cursor.gotoNextSibling() === true && break_p === false);
-  return arch_body;
-}
-
-function get_process_info(proc) {
-  let p_info = {
-    'description': proc.comments,
-    'name': '',
-    'state_variable_name': '',
-    'states': []
-  };
-  let p = proc.code;
-  let name = get_process_label(p);
-  p_info.name = name;
-  let case_statement = get_case_process(p);
-
-  if (case_statement !== undefined) {
-    p_info.state_variable_name = get_state_variable_name(case_statement);
-    p_info.states = get_states(case_statement, p_info.state_variable_name);
+  let item = stm_base.get_item_multiple_from_childs(cursor.currentNode(), 'design_unit');
+  if (item.length === 2) {
+    item = stm_base.get_item_from_childs(item[1], 'architecture_body');
+    item = stm_base.get_item_from_childs(item, 'concurrent_statement_part');
+    return item;
   }
   else {
     return undefined;
   }
-  return p_info;
+}
+
+function get_process_info(proc) {
+  let stms = [];
+
+  let p = proc.code;
+  let name = get_process_label(p);
+  let case_statements = get_case_process(p);
+  for (let i = 0; i < case_statements.length; ++i) {
+    let p_info = {
+      'description': proc.comments,
+      'name': '',
+      'state_variable_name': '',
+      'states': []
+    };
+    p_info.name = name;
+    if (case_statements !== undefined && case_statements.length !== 0) {
+      p_info.state_variable_name = get_state_variable_name(case_statements[i]);
+      p_info.states = get_states(case_statements[i], p_info.state_variable_name);
+      stms.push(p_info);
+    }
+  }
+  return stms;
 }
 
 function get_states(p, state_variable_name) {
@@ -498,118 +488,10 @@ function get_state_variable_name(p) {
 }
 
 function get_case_process(p) {
-  let case_statement = undefined;
-  let cursor = p.walk();
-  cursor.gotoFirstChild();
-  do {
-    if (cursor.nodeType === 'sequence_of_statements') {
-      case_statement = get_raw_case_process(cursor.currentNode());
-      if (case_statement === undefined) {
-        case_statement = get_if_case_process(cursor.currentNode());
-        if (case_statement === undefined) {
-          case_statement = get_if_case_process_2(cursor.currentNode());
-        }
-      }
-    }
-  }
-  while (cursor.gotoNextSibling() !== false);
+  let case_statement = stm_base.search_multiple_in_tree(p, 'case_statement');
   return case_statement;
 }
 
-function get_raw_case_process(p) {
-  let case_statement = undefined;
-  let break_p = false;
-  let cursor = p.walk();
-  cursor.gotoFirstChild();
-  do {
-    if (cursor.nodeType === 'case_statement') {
-      case_statement = cursor.currentNode();
-      break_p = true;
-    }
-  }
-  while (cursor.gotoNextSibling() !== false && break_p === false);
-  return case_statement;
-}
-
-function get_if_case_process(p) {
-  let case_statement = undefined;
-  let cursor = p.walk();
-  cursor.gotoFirstChild();
-  do {
-    if (cursor.nodeType === 'if_statement') {
-      cursor.gotoFirstChild();
-      do {
-        if (cursor.nodeType === 'elsif' || cursor.nodeType === 'else' || cursor.nodeType === 'if') {
-          let tmp_case_statement = search_case_in_if(cursor.currentNode());
-          if (tmp_case_statement !== undefined) {
-            case_statement = tmp_case_statement;
-          }
-        }
-      }
-      while (cursor.gotoNextSibling() !== false);
-    }
-  }
-  while (cursor.gotoNextSibling() !== false);
-  return case_statement;
-}
-
-function get_if_case_process_2(p) {
-  let case_statement = undefined;
-  let cursor = p.walk();
-  cursor.gotoFirstChild();
-  do {
-    if (cursor.nodeType === 'if_statement') {
-      cursor.gotoFirstChild();
-      do {
-        if (cursor.nodeType === 'elsif' || cursor.nodeType === 'else' || cursor.nodeType === 'if') {
-          let sequence_of_statements = get_sequence_of_statements(cursor.currentNode());
-          if (sequence_of_statements !== undefined) {
-            let tmp_case_statement = get_if_case_process(sequence_of_statements);
-            if (tmp_case_statement !== undefined) {
-              case_statement = tmp_case_statement;
-            }
-          }
-        }
-      }
-      while (cursor.gotoNextSibling() !== false);
-    }
-  }
-  while (cursor.gotoNextSibling() !== false);
-  return case_statement;
-}
-
-function get_sequence_of_statements(p) {
-  let sequence_of_statements = undefined;
-  let cursor = p.walk();
-  cursor.gotoFirstChild();
-  do {
-    if (cursor.nodeType === 'sequence_of_statements') {
-      sequence_of_statements = cursor.currentNode();
-    }
-  }
-  while (cursor.gotoNextSibling() !== false);
-  return sequence_of_statements;
-}
-
-
-function search_case_in_if(p) {
-  let case_statement = undefined;
-  let cursor = p.walk();
-  cursor.gotoFirstChild();
-  do {
-    if (cursor.nodeType === 'sequence_of_statements') {
-      cursor.gotoFirstChild();
-      do {
-        if (cursor.nodeType === 'case_statement') {
-          case_statement = cursor.currentNode();
-        }
-      }
-      while (cursor.gotoNextSibling() !== false);
-    }
-  }
-  while (cursor.gotoNextSibling() !== false);
-  return case_statement;
-}
 
 function get_process_label(p) {
   let label = '';
