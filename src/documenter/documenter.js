@@ -495,7 +495,7 @@ class Documenter {
 
   async _get_stm() {
     let stm_array = await Stm.get_svg_sm(this.lang, this.code, this.comment_symbol);
-    return stm_array;
+    return stm_array.svg;
   }
 
   async _gen_code_tree() {

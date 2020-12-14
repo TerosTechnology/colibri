@@ -55,7 +55,7 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
         }
       }
     }
-    return svg;
+    return { 'svg': svg, 'stm': stm };
   }
 
   check_stm(stm) {
@@ -219,16 +219,27 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
   get_if_transitions(p, state_variable_name, metacondition) {
     let transitions = [];
     let cursor = p.walk();
+    let else_conditions = '';
     cursor.gotoFirstChild();
     do {
-      if (cursor.nodeType === 'elsif' || cursor.nodeType === 'else' || cursor.nodeType === 'if') {
+      if (cursor.nodeType === 'elsif' || cursor.nodeType === 'if') {
+        let if_condition = this.get_condition(cursor.currentNode());
+        if (if_condition !== undefined) {
+          else_conditions += `not (${if_condition.condition})\n`;
+        }
         let transition = this.get_transition(cursor.currentNode(), state_variable_name, metacondition);
         if (transition !== undefined) {
           transitions = transitions.concat(transition);
         }
       }
       else if (cursor.nodeType === 'else') {
-
+        if (metacondition !== undefined) {
+          else_conditions = metacondition + '\n' + else_conditions;
+        }
+        let transition = this.get_transition(cursor.currentNode(), state_variable_name, else_conditions);
+        if (transition !== undefined) {
+          transitions = transitions.concat(transition);
+        }
       }
     }
     while (cursor.gotoNextSibling() !== false);
@@ -315,6 +326,14 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
                 };
                 if (metacondition !== undefined && metacondition !== '') {
                   condition += `\n${metacondition}`;
+                  let current_conditions = condition.split('\n');
+                  let unique = current_conditions.filter(this.only_unique);
+                  let condition_tmp = '';
+                  for (let i = 0; i < unique.length - 1; ++i) {
+                    condition_tmp += unique[i] + '\n';
+                  }
+                  condition_tmp += unique[unique.length - 1] + '\n';
+                  condition = condition_tmp;
                 }
                 transition.condition = condition;
                 transition.destination = destination;
@@ -337,6 +356,14 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
                 };
                 if (metacondition !== undefined && metacondition !== '') {
                   condition += `\n${metacondition}`;
+                  let current_conditions = condition.split('\n');
+                  let unique = current_conditions.filter(this.only_unique);
+                  let condition_tmp = '';
+                  for (let i = 0; i < unique.length - 1; ++i) {
+                    condition_tmp += unique[i] + '\n';
+                  }
+                  condition_tmp += unique[unique.length - 1] + '\n';
+                  condition = condition_tmp;
                 }
                 transition.condition = condition;
                 transition.destination = destination;
@@ -347,6 +374,9 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
             }
           }
           else if (cursor.nodeType === 'if_statement') {
+            if (metacondition !== undefined && metacondition !== '') {
+              condition += condition + '\n' + metacondition;
+            }
             last = 0;
             if_transitions = this.get_if_transitions(cursor.currentNode(), state_variable_name, condition);
           }
@@ -366,6 +396,9 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
 
   check_get_simple_waveform_assignment(p, state_variable_name) {
     let destination = undefined;
+    if (state_variable_name === undefined) {
+      return destination;
+    }
     if (this.get_left_simple_waveform_assignment(p).toLowerCase() === state_variable_name.toLowerCase()) {
       destination = this.get_rigth_simple_waveform_assignment(p);
     }
@@ -374,6 +407,9 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
 
   check_get_simple_variable_assignment(p, state_variable_name) {
     let destination = undefined;
+    if (state_variable_name === undefined) {
+      return destination;
+    }
     if (this.get_left_simple_waveform_assignment(p).toLowerCase() === state_variable_name.toLowerCase()) {
       destination = this.get_rigth_simple_variable_assignment(p);
     }

@@ -277,6 +277,9 @@ class Parser {
     }
     while (cursor.gotoNextSibling() === true && break_p === false);
 
+    if (direction === undefined) {
+      direction = '';
+    }
     for (let i = 0; i < identifiers.length; ++i) {
       let element = {
         'name': identifiers[i],

@@ -19,6 +19,29 @@ class Parser_stm_base {
     return arr_match;
   }
 
+  search_in_tree(element, matchingTitle) {
+    var match = undefined;
+    function recursive_searchTree(element, matchingTitle) {
+      let type = element.type;
+      if (type === matchingTitle) {
+        match = element;
+      } else if (element !== null) {
+        var i;
+        var result = null;
+        for (i = 0; result === null && i < element.childCount; i++) {
+          result = recursive_searchTree(element.child(i), matchingTitle);
+          if (result !== null) {
+            break;
+          }
+        }
+        return result;
+      }
+      return null;
+    }
+    recursive_searchTree(element, matchingTitle);
+    return match;
+  }
+
   get_item_multiple_from_childs(p, type) {
     if (p === undefined) {
       return [];
@@ -137,6 +160,10 @@ class Parser_stm_base {
     });
     let str_stm = stm_json.state_variable_name + "{\n" + sm_states + sm_transitions + "\n};";
     return str_stm;
+  }
+
+  only_unique(value, index, self) {
+    return self.indexOf(value) === index;
   }
 
 }

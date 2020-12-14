@@ -1,6 +1,7 @@
 const stm_base = require('./stm_base_parser');
 const Path = require('path');
 const Parser = require('web-tree-sitter');
+const { lab } = require('d3');
 
 class Paser_stm_verilog extends stm_base.Parser_stm_base {
   constructor(comment_symbol) {
@@ -55,7 +56,7 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
         }
       }
     }
-    return svg;
+    return { 'svg': svg, 'stm': stm };
   }
 
   check_stm(stm) {
@@ -146,7 +147,6 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
     let stms = [];
 
     let p = proc.code;
-    let name = this.get_process_label(p);
     let case_statements = this.get_case_process(p);
     for (let i = 0; i < case_statements.length; ++i) {
       let p_info = {
@@ -155,10 +155,10 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
         'state_variable_name': '',
         'states': []
       };
-      p_info.name = name;
       if (case_statements !== undefined && case_statements.length !== 0) {
         p_info.state_variable_name = this.get_state_variable_name(case_statements[i]);
         p_info.states = this.get_states(case_statements[i], p_info.state_variable_name);
+        p_info.name = this.get_process_label(p);
         stms.push(p_info);
       }
     }
@@ -302,10 +302,6 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
       }
     }
     return transitions;
-  }
-
-  only_unique(value, index, self) {
-    return self.indexOf(value) === index;
   }
 
   get_if_elsif_else(p) {
@@ -650,15 +646,15 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
   }
 
   get_process_label(p) {
-    let label = '';
-    // let cursor = p.walk();
-    // //Process label
-    // cursor.gotoFirstChild();
-    // if (cursor.nodeType === 'label') {
-    //   cursor.gotoFirstChild();
-    //   label = cursor.nodeText;
-    // }
-    return label;
+    let label_txt = '';
+    let label = this.get_item_from_childs(p, "block_identifier");
+    if (label === undefined) {
+      label_txt = ''
+    }
+    else {
+      label_txt = label.text;
+    }
+    return label_txt;
   }
 }
 
