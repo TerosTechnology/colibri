@@ -14,3 +14,4 @@ module module_top #(
            output [2*width_byte+words-1:0] o_b,
            output o_cloks
        );
+endmodule
