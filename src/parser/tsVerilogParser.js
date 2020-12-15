@@ -70,6 +70,7 @@ class tsVerilogParser {
       // console.log(structure.ports);
       // console.log(structure.body);
       // console.log(structure.declarations);
+      console.log(structure);
       return structure;
     }
     catch (error) {
@@ -99,16 +100,23 @@ class tsVerilogParser {
   }
 
   getPortName(port, lines) {
-    var arr = this.searchTree(port, 'list_of_variable_identifiers');
+    var arr = this.searchTree(port, 'list_of_port_identifiers'); // list_of_port_identifiers //simple_identifier
+    var port_name;
     if (arr.length == 0) {
-      arr = this.searchTree(port, 'simple_identifier');
-      var port_name = this.extractData(arr[0], lines);
-      return port_name;
-    } else {
-      var port_name = this.extractData(arr[0], lines);
-      var split_port_name = port_name.split(',');
-      for (var x = 0; x < split_port_name.length; ++x) { return port_name; }
+      arr = this.searchTree(port, 'list_of_variable_identifiers');
     }
+    if (arr.length == 0) {
+      arr = this.searchTree(port, 'port_identifier');
+    }
+    for (var x = 0; x < arr.length; ++x) {
+      if (x === 0) {
+        port_name = this.extractData(arr[x], lines);
+      } else {
+        port_name = port_name + ',' + this.extractData(arr[x], lines);
+      }
+    }
+    console.log(port_name);
+    return port_name;
   }
 
   getPortNameAnsi(port, lines) {
