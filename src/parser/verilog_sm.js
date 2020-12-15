@@ -309,6 +309,8 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
     let cursor = p.walk();
     cursor.gotoFirstChild();
     do {
+      let start_position = cursor.startPosition;
+      let end_position = cursor.endPosition;
       if (cursor.nodeType === 'else') {
         let break_p = false;
         while (break_p === false && cursor.gotoNextSibling() !== false) {
@@ -330,16 +332,22 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
             else {
               let if_item_else = {
                 'condition': '',
-                'code': ''
+                'code': '',
+                'start_position': '',
+                'end_position': ''
               };
 
               let blocking_assignment = this.get_item_from_childs(statement_item, 'blocking_assignment');
               if (blocking_assignment !== undefined) {
                 if (block_item !== undefined) {
                   if_item_else.code = block_item;
+                  // if_item_else.start_position = start_position;
+                  // if_item_else.end_position = end_position;
                 }
                 else {
                   if_item_else.code = statement_item;
+                  // if_item_else.start_position = start_position;
+                  // if_item_else.end_position = end_position;
                 }
                 ifs.push(if_item_else);
               }
@@ -348,9 +356,13 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
                 if (nonblocking_assignment !== undefined) {
                   if (block_item !== undefined) {
                     if_item_else.code = block_item;
+                    // if_item_else.start_position = start_position;
+                    // if_item_else.end_position = end_position;
                   }
                   else {
                     if_item_else.code = statement_item;
+                    // if_item_else.start_position = start_position;
+                    // if_item_else.end_position = end_position;
                   }
                   ifs.push(if_item_else);
                 }
@@ -370,6 +382,8 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
             let item = this.get_item_from_childs(cursor.currentNode(), 'expression_or_cond_pattern');
             if (item !== undefined) {
               if_item.condition = item.text;
+              if_item.start_position = item.startPosition;
+              if_item.end_position = item.endPosition;
             }
           }
           else if (cursor.nodeType === 'statement_or_null') {
@@ -377,6 +391,8 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
             item = this.get_item_from_childs(item, 'statement_item');
             if (this.get_item_from_childs(item, 'seq_block') !== undefined) {
               item = this.get_item_from_childs(item, 'seq_block');
+              if_item.start_position = item.startPosition;
+              if_item.end_position = item.endPosition;
               // item = this.get_item_from_childs(item, 'statement_or_null');
               // item = this.get_item_from_childs(item, 'statement');
               // item = this.get_item_from_childs(item, 'statement_item');
@@ -421,8 +437,8 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
 
   get_transition(p, state_variable_name, metacondition) {
     let condition = p.condition;
-    let tmp_start_position = p.code.startPosition;
-    let tmp_end_position = p.code.endPosition;
+    let tmp_start_position = p.start_position;
+    let tmp_end_position = p.end_position;
 
     let start_position = [tmp_start_position.row, tmp_start_position.column];
     let end_position = [tmp_end_position.row, tmp_end_position.column];

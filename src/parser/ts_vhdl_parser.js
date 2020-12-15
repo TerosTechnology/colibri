@@ -391,7 +391,8 @@ class Parser {
     let elements = [];
     let name = '';
     let element = {
-      'name': ''
+      'name': '',
+      'sens_list': ''
     };
     let break_p = false;
     let cursor = p.walk();
@@ -399,6 +400,9 @@ class Parser {
     do {
       if (cursor.nodeType === 'label') {
         name = cursor.nodeText.replace(':', '').trim();
+      }
+      else if (cursor.nodeType === 'sensitivity_list') {
+        element.sens_list = cursor.nodeText.trim();
       }
     }
     while (cursor.gotoNextSibling() === true && break_p === false);

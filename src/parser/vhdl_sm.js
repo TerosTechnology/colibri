@@ -462,6 +462,11 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
     let cursor = p.walk();
     let start_position = [];
     let end_position = [];
+    let s_position = cursor.startPosition;
+    let e_position = cursor.endPosition;
+    start_position = [s_position.row, s_position.column];
+    end_position = [e_position.row, e_position.column];
+
     cursor.gotoFirstChild();
     do {
       if (cursor.nodeType === 'relation' || cursor.nodeType === 'logical_expression'
@@ -472,8 +477,14 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
         else {
           condition = cursor.nodeText;
         }
-        let s_position = cursor.startPosition;
-        let e_position = cursor.endPosition;
+        s_position = cursor.startPosition;
+        e_position = cursor.endPosition;
+        start_position = [s_position.row, s_position.column];
+        end_position = [e_position.row, e_position.column];
+      }
+      if (cursor.nodeType === 'else') {
+        s_position = cursor.startPosition;
+        e_position = cursor.endPosition;
         start_position = [s_position.row, s_position.column];
         end_position = [e_position.row, e_position.column];
       }

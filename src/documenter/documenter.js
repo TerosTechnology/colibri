@@ -542,7 +542,7 @@ class Documenter {
       //Title
       md += "## Processes\n";
       for (let i = 0; i < process.length; ++i) {
-        md += `- **${process[i].name}**\n`;
+        md += `- **${process[i].name}**: ***( ${process[i].sens_list} )***\n`;
         md += `${process[i].description}\n`;
       }
     }
