@@ -368,7 +368,7 @@ class Parser {
       else if (cursor.nodeType === 'process_statement') {
         let elements = this.get_process(cursor.currentNode());
         for (let i = 0; i < elements.length; ++i) {
-          elements[i].description = comments;
+          elements[i].description = comments.replace('fsm_extract', '');
           process_array.push(elements[i]);
         }
         comments = '';

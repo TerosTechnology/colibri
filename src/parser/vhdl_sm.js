@@ -20,8 +20,9 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
     parser.setLanguage(Lang);
 
     let process;
+    let tree;
     try {
-      const tree = parser.parse(code);
+      tree = parser.parse(code);
       process = this.get_process(tree);
     }
     catch (e) {
@@ -123,8 +124,9 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
     let name = this.get_process_label(p);
     let case_statements = this.get_case_process(p);
     for (let i = 0; i < case_statements.length; ++i) {
+      let description = proc.comments;
       let p_info = {
-        'description': proc.comments,
+        'description': description.replace('fsm_extract', ''),
         'name': '',
         'state_variable_name': '',
         'states': []
@@ -133,11 +135,100 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
       if (case_statements !== undefined && case_statements.length !== 0) {
         p_info.state_variable_name = this.get_state_variable_name(case_statements[i]);
         p_info.states = this.get_states(case_statements[i], p_info.state_variable_name);
+        let check = this.check_empty_states_transitions(p_info.states);
+        if (check === true && description.includes('fsm_extract') === true) {
+          let result = this.force_case_stm(case_statements[i]);
+          p_info.state_variable_name = result.variable_name;
+          p_info.states = result.states;
+        }
         stms.push(p_info);
       }
     }
     return stms;
   }
+
+  force_case_stm(p) {
+    let state_names = this.get_state_names_from_case(p).map(v => v.toLowerCase());
+    let state_name_candidate = this.search_state_variable_candidates(p, state_names);
+    let states = this.get_states(p, state_name_candidate);
+    return { 'variable_name': state_name_candidate, 'states': states };
+  }
+
+  search_state_variable_candidates(p, state_names) {
+    let candidates = [];
+    let signals = this.search_multiple_in_tree(p, 'simple_waveform_assignment');
+    for (let i = 0; i < signals.length; ++i) {
+      let rigth = this.get_item_from_childs(signals[i], 'waveforms');
+      if (rigth !== undefined) {
+        let rigth_text = rigth.text.toLowerCase();
+        let left = this.get_left_simple_waveform_assignment(signals[i]);
+        if (state_names.includes(rigth_text) === true) {
+          candidates.push(left);
+        }
+      }
+    }
+
+    let variables = this.search_multiple_in_tree(p, 'simple_variable_assignment');
+    for (let i = 0; i < variables.length; ++i) {
+      let rigth = this.get_item_from_childs(variables[i], 'waveforms');
+      if (rigth !== undefined) {
+        let rigth_text = rigth.text.toLowerCase();
+        let left = this.get_left_simple_waveform_assignment(signals[i]);
+        if (state_names.includes(rigth_text) === true) {
+          candidates.push(left);
+        }
+      }
+    }
+    let unique = this.mode(candidates);
+    return unique;
+  }
+
+  mode(array) {
+    if (array.length == 0)
+      return null;
+    var mode_map = {};
+    var max_el = array[0], max_count = 1;
+    for (var i = 0; i < array.length; i++) {
+      var el = array[i];
+      if (mode_map[el] == null)
+        mode_map[el] = 1;
+      else
+        mode_map[el]++;
+      if (mode_map[el] > max_count) {
+        max_el = el;
+        max_count = mode_map[el];
+      }
+    }
+    return max_el;
+  }
+
+  check_empty_states_transitions(states) {
+    let check = true;
+    for (let i = 0; i < states.length; ++i) {
+      if (states[i].transitions.length !== 0) {
+        check = false;
+      }
+    }
+    return check;
+  }
+
+
+  get_state_names_from_case(p) {
+    let state_names = [];
+    let cursor = p.walk();
+    cursor.gotoFirstChild();
+    do {
+      if (cursor.nodeType === 'case_statement_alternative') {
+        let result = this.get_state_name(cursor.currentNode());
+        let name = result.state_name;
+        state_names.push(name);
+      }
+    }
+    while (cursor.gotoNextSibling() !== false);
+    return state_names;
+  }
+
+
 
   get_states(p, state_variable_name) {
     let case_state = [];
