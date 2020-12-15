@@ -74,7 +74,7 @@ class Base_linter {
       exec(command, (error, stdout, stderr) => {
         let result = { 'stdout': stdout, 'stderr': stderr };
         if (stderr !== '') {
-          console.log(`[colibri][error] ${stderr}`);
+          // console.log(`[colibri][error] ${stderr}`);
         }
         resolve(result);
       });

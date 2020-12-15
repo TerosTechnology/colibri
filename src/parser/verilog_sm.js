@@ -431,6 +431,20 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
     return transitions;
   }
 
+  get_start_position_array(p) {
+    let tmp_position = p.code.startPosition;
+
+    let position = [tmp_position.row, tmp_position.column];
+    return tmp_position;
+  }
+
+  get_end_position_array(p) {
+    let tmp_position = p.code.endPosition;
+
+    let position = [tmp_position.row, tmp_position.column];
+    return tmp_position;
+  }
+
   get_transitions_in_if(p, state_variable_name, condition, start_position, end_position, metacondition) {
     let last = 0;
     let last_transitions = [];
