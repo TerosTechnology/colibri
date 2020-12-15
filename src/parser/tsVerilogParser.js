@@ -48,11 +48,11 @@ class tsVerilogParser {
       var lines = this.fileLines(sourceCode);
       const tree = await this.parser.parse(sourceCode);
       //comments
-      let comments = this.getComments(tree, lines);
+      let comments = this.getComments(tree.rootNode, lines);
 
       var structure = {
         'libraries': this.get_libraries(tree.rootNode, lines, comments),  // includes
-        "entity": this.getEntityName(tree.rootNode, lines, comments), // module
+        "entity": this.getEntityName(tree.rootNode, lines), // module
         "generics": this.getGenerics(tree.rootNode, lines, comments), // parameters
         "ports": this.getPorts(tree.rootNode, lines, comments),
         "body": {
@@ -68,7 +68,7 @@ class tsVerilogParser {
       };
       // console.log(structure.generics);
       // console.log(structure.ports);
-      // console.log(structure.body);
+      console.log(structure.body);
       // console.log(structure.declarations);
       console.log(structure);
       return structure;
@@ -97,6 +97,36 @@ class tsVerilogParser {
     }
     recursive_searchTree(element, matchingTitle);
     return arr_match;
+  }
+
+  get_item_from_childs(p, type) {
+    if (p === undefined) {
+      return undefined;
+    }
+    let item = undefined;
+    let cursor = p.walk();
+    let break_p = false;
+    cursor.gotoFirstChild();
+    do {
+      if (cursor.nodeType === type) {
+        item = cursor.currentNode();
+        break_p = true;
+      }
+    }
+    while (cursor.gotoNextSibling() === true && break_p === false);
+    return item;
+  }
+
+  get_process_label(p) {
+    let label_txt = '';
+    let label = this.get_item_from_childs(p, "always_keyword");
+    if (label === undefined) {
+      label_txt = '';
+    }
+    else {
+      label_txt = label.text;
+    }
+    return label_txt;
   }
 
   getPortName(port, lines) {
@@ -500,7 +530,7 @@ class tsVerilogParser {
         }
       }
       item = {
-        "name": this.get_always_name(inputs[x], lines),  // "always_block",
+        "name": this.get_process_label(inputs[x]),  // "always_block",
         "sens_list": this.get_always_sens_list(inputs[x], lines),
         "description": comment
       };
