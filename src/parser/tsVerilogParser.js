@@ -70,7 +70,7 @@ class tsVerilogParser {
       // console.log(structure.ports);
       console.log(structure.body);
       // console.log(structure.declarations);
-      console.log(structure);
+      // console.log(structure);
       return structure;
     }
     catch (error) {
@@ -119,7 +119,7 @@ class tsVerilogParser {
 
   get_process_label(p) {
     let label_txt = '';
-    let label = this.get_item_from_childs(p, "always_keyword");
+    let label = this.get_item_from_childs(p, "block_identifier");
     if (label === undefined) {
       label_txt = '';
     }
@@ -518,6 +518,7 @@ class tsVerilogParser {
     var element = tree;
     //Inputs
     var arr = this.searchTree(element, 'always_construct');
+    // var arr1 = this.searchTree(element, 'module_or_generate_item'); 
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";
