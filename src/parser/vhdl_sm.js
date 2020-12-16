@@ -293,6 +293,11 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
               last = 1;
             }
           }
+          else if (cursor.nodeType === 'case_statement') {
+            let tmp_transitions = this.get_case_transitions(cursor.currentNode(), state_variable_name);
+            if_transitions = if_transitions.concat(tmp_transitions);
+            last = 0;
+          }
         }
         while (cursor.gotoNextSibling() !== false);
       }
@@ -328,6 +333,33 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
           else_conditions = metacondition + '\n' + else_conditions;
         }
         let transition = this.get_transition(cursor.currentNode(), state_variable_name, else_conditions);
+        if (transition !== undefined) {
+          transitions = transitions.concat(transition);
+        }
+      }
+    }
+    while (cursor.gotoNextSibling() !== false);
+    return transitions;
+  }
+
+  get_case_transitions(p, state_variable_name, metacondition) {
+    let transitions = [];
+    let cursor = p.walk();
+    let else_conditions = '';
+    let case_switch = this.get_item_from_childs(cursor.currentNode(), 'simple_name').text;
+    cursor.gotoFirstChild();
+    do {
+      if (cursor.nodeType === 'case_statement_alternative') {
+        let choice = this.get_item_from_childs(cursor.currentNode(), 'choices');
+        let choice_txt = choice.text;
+        let if_condition = `${case_switch} = ${choice_txt}`;
+        if (choice_txt.toLocaleLowerCase() === 'others') {
+          if_condition = else_conditions;
+        }
+        else if (if_condition !== undefined) {
+          else_conditions += `not (${if_condition})\n`;
+        }
+        let transition = this.get_transition(cursor.currentNode(), state_variable_name, metacondition, if_condition);
         if (transition !== undefined) {
           transitions = transitions.concat(transition);
         }
@@ -379,8 +411,8 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
     return transitions;
   }
 
-  get_transition(p, state_variable_name, metacondition) {
-    let result = this.get_condition(p);
+  get_transition(p, state_variable_name, metacondition, choice) {
+    let result = this.get_condition(p, choice);
     let condition = result.condition;
     let start_position = result.start_position;
     let end_position = result.end_position;
@@ -471,6 +503,13 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
             last = 0;
             if_transitions = this.get_if_transitions(cursor.currentNode(), state_variable_name, condition);
           }
+          else if (cursor.nodeType === 'case_statement') {
+            if (metacondition !== undefined && metacondition !== '') {
+              condition += condition + '\n' + metacondition;
+            }
+            last = 0;
+            if_transitions = this.get_case_transitions(cursor.currentNode(), state_variable_name, condition);
+          }
         }
         while (cursor.gotoNextSibling() !== false);
       }
@@ -548,7 +587,7 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
     return rigth;
   }
 
-  get_condition(p) {
+  get_condition(p, choice) {
     let condition = '';
     let cursor = p.walk();
     let start_position = [];
@@ -568,6 +607,13 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
         else {
           condition = cursor.nodeText;
         }
+        s_position = cursor.startPosition;
+        e_position = cursor.endPosition;
+        start_position = [s_position.row, s_position.column];
+        end_position = [e_position.row, e_position.column];
+      }
+      else if (cursor.nodeType === 'choices') {
+        condition = choice;
         s_position = cursor.startPosition;
         e_position = cursor.endPosition;
         start_position = [s_position.row, s_position.column];
