@@ -29,11 +29,21 @@ const json5 = require('json5');
 const temp = require('temp');
 
 class Documenter {
-  constructor(code, lang, comment_symbol, enable_stm) {
+  constructor(code, lang, comment_symbol, config) {
     this.lang = lang;
     this.code = code;
     this.comment_symbol = comment_symbol;
-    this.enable_stm = enable_stm;
+    if (config === undefined) {
+      this.config = {
+        'fsm': true,
+        'signals': 'all',
+        'constants': 'all',
+        'process': 'all'
+      };
+    }
+    else {
+      this.config = config;
+    }
   }
 
   set_code(code) {
@@ -140,7 +150,7 @@ class Documenter {
 
     // State machine diagrams
     let stm_array = await this._get_stm();
-    if (this.enable_stm === true && stm_array !== undefined && stm_array.length !== 0) {
+    if (this.config.fsm === true && stm_array !== undefined && stm_array.length !== 0) {
       markdown_doc += "## State machines\n";
       for (let i = 0; i < stm_array.length; ++i) {
         let entity_name = code_tree['entity']['name'];
@@ -223,7 +233,7 @@ class Documenter {
 
     // State machine diagrams
     let stm_array = await this._get_stm();
-    if (this.enable_stm === true && stm_array !== undefined && stm_array.length !== 0) {
+    if (this.config.fsm === true && stm_array !== undefined && stm_array.length !== 0) {
       markdown_doc += "## State machines\n";
       for (let i = 0; i < stm_array.length; ++i) {
         let path_diagram_tmp = temp.openSync().path + '.svg';
@@ -357,7 +367,7 @@ class Documenter {
 
     // State machine diagrams
     let stm_array = await this._get_stm();
-    if (this.enable_stm === true && stm_array !== undefined && stm_array.length !== 0) {
+    if (this.config.fsm === true && stm_array !== undefined && stm_array.length !== 0) {
       html += converter.makeHtml("## State machines\n");
       html += '<div>';
       for (let i = 0; i < stm_array.length; ++i) {
@@ -518,17 +528,36 @@ class Documenter {
     return md;
   }
 
+  _get_elements_with_description(elements) {
+    let elements_i = [];
+    for (let i = 0; i < elements.length; ++i) {
+      let description = elements[i].description.replace(/ /g, '').replace(/\n/g, '');
+      if (description !== '') {
+        elements_i.push(elements[i]);
+      }
+    }
+    return elements_i;
+  }
+
   _get_signals_constants_section(signals, constants) {
     let md = "";
-    if (signals.length !== 0 || constants.length !== 0) {
+
+    if (this.config.signals === 'commented') {
+      signals = this._get_elements_with_description(signals);
+    }
+    if (this.config.constants === 'commented') {
+      constants = this._get_elements_with_description(constants);
+    }
+
+    if ((signals.length !== 0 && this.config.signals !== 'none') || (constants.length !== 0 && this.config.constants !== 'none')) {
       //Title
       md += "## Signals and constants\n";
       //Tables
-      if (signals.length !== 0) {
+      if (signals.length !== 0 && this.config.signals !== 'none') {
         md += "### Signals\n";
         md += this._get_doc_signals(signals);
       }
-      if (constants.length !== 0) {
+      if (constants.length !== 0 && this.config.constants !== 'none') {
         md += "### Constants\n";
         md += this._get_doc_constants(constants);
       }
@@ -537,6 +566,12 @@ class Documenter {
   }
 
   _get_process_section(process) {
+    if (this.config.process === 'none') {
+      return '';
+    }
+    if (this.config.process === 'commented') {
+      process = this._get_elements_with_description(process);
+    }
     let md = "";
     if (process.length !== 0) {
       //Title
@@ -551,6 +586,9 @@ class Documenter {
 
   _get_functions_section(functions) {
     let md = "";
+    if (this.config.process === 'none') {
+      return '';
+    }
     if (functions.length !== 0) {
       //Title
       md += "## Functions\n";
@@ -633,7 +671,7 @@ class Documenter {
 }
 
 async function get_md_doc_from_array(files, output_dir_doc, symbol_vhdl, symbol_verilog,
-  graph, project_name, with_dependency_graph, enable_state_machines) {
+  graph, project_name, with_dependency_graph, config) {
   //Main doc
   let main_doc = "# Project documentation: " + project_name + "\n";
   let lang = "vhdl";
@@ -656,7 +694,7 @@ async function get_md_doc_from_array(files, output_dir_doc, symbol_vhdl, symbol_
 
     let contents = fs.readFileSync(files[i], 'utf8');
 
-    let doc_inst = new Documenter(contents, lang, symbol, enable_state_machines);
+    let doc_inst = new Documenter(contents, lang, symbol, config);
     doc_inst.save_markdown(output_dir_doc + path_lib.sep + filename + ".md");
   }
   if (with_dependency_graph === true) {
@@ -668,7 +706,7 @@ async function get_md_doc_from_array(files, output_dir_doc, symbol_vhdl, symbol_
 }
 
 async function get_html_doc_from_array(files, output_dir_doc, symbol_vhdl, symbol_verilog,
-  graph, project_name, with_dependency_graph, enable_state_machines) {
+  graph, project_name, with_dependency_graph, config) {
   //Main doc
   let main_doc = "<h1>Project documentation</h1>\n";
   if (with_dependency_graph === true) {
@@ -699,7 +737,7 @@ async function get_html_doc_from_array(files, output_dir_doc, symbol_vhdl, symbo
 
     let contents = fs.readFileSync(files[i], 'utf8');
 
-    let doc_inst = new Documenter(contents, lang, symbol, enable_state_machines);
+    let doc_inst = new Documenter(contents, lang, symbol, config);
     doc_inst.save_html(output_dir_doc + path_lib.sep + filename + ".html");
   }
   main_doc += '</ul>';
