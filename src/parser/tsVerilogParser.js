@@ -66,11 +66,6 @@ class tsVerilogParser {
           'functions': this.get_functions(tree.rootNode, lines, comments)
         }
       };
-      // console.log(structure.generics);
-      // console.log(structure.ports);
-      console.log(structure.body);
-      // console.log(structure.declarations);
-      // console.log(structure);
       return structure;
     }
     catch (error) {
@@ -129,6 +124,18 @@ class tsVerilogParser {
     return label_txt;
   }
 
+  get_deep_process(p) {
+    let statement = this.get_item_from_childs(p, 'statement');
+    let statement_item = this.get_item_from_childs(statement, 'statement_item');
+    let procedural_timing_control_statement =
+      this.get_item_from_childs(statement_item, 'procedural_timing_control_statement');
+    let statement_or_null = this.get_item_from_childs(procedural_timing_control_statement, 'statement_or_null');
+    let statement_2 = this.get_item_from_childs(statement_or_null, 'statement');
+    let statement_item_2 = this.get_item_from_childs(statement_2, 'statement_item');
+    let seq_block = this.get_item_from_childs(statement_item_2, 'seq_block');
+    return seq_block;
+  }
+
   getPortName(port, lines) {
     var arr = this.searchTree(port, 'list_of_port_identifiers'); // list_of_port_identifiers //simple_identifier
     var port_name;
@@ -145,7 +152,6 @@ class tsVerilogParser {
         port_name = port_name + ',' + this.extractData(arr[x], lines);
       }
     }
-    console.log(port_name);
     return port_name;
   }
 
@@ -347,7 +353,7 @@ class tsVerilogParser {
   }
 
   get_always_name(always, lines) {
-    var arr = this.searchTree(always, 'always_identifier');
+    var arr = this.searchTree(always, 'block_identifier');
     if (arr.length == 0) {
       var name = "unnamed";
       return name;
@@ -518,7 +524,6 @@ class tsVerilogParser {
     var element = tree;
     //Inputs
     var arr = this.searchTree(element, 'always_construct');
-    // var arr1 = this.searchTree(element, 'module_or_generate_item'); 
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";
@@ -530,8 +535,9 @@ class tsVerilogParser {
           comment = "";
         }
       }
+      var arr1 = this.get_deep_process(inputs[x]);
       item = {
-        "name": this.get_process_label(inputs[x]),  // "always_block",
+        "name":  this.get_process_label(arr1),
         "sens_list": this.get_always_sens_list(inputs[x], lines),
         "description": comment
       };

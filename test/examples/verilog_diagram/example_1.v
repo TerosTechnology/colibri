@@ -20,13 +20,15 @@ module add2_and_clip_reg
   add2_and_clip #(.WIDTH(WIDTH)) add2_and_clip_inst (.in1(in1),.in2(in2),.sum(sum_int)); //! description add2_and_clip
 
   always @(posedge clk) //! always 1
-  begin : always_doc_1
+  begin 
     if(rst)
+    begin : if_block
       sum <= 0;
+    end
     else if(strobe_in)
       sum <= sum_int;
   end
 
-  always @(posedge clk) strobe_out <= rst ? 1'b0 : strobe_in; //! always 2
+  always @(posedge clk)  begin : always_doc_2 strobe_out <= rst ? 1'b0 : strobe_in; end //! always 2
 
 endmodule // add2_and_clip_reg
