@@ -25,15 +25,15 @@ THE SOFTWARE.
  * AXI4-Stream 10GBASE-R frame transmitter (AXI in, 10GBASE-R out)
  */
 module axis_baser_tx_64 #
-(
+  (
     parameter DATA_WIDTH = 64,
     parameter KEEP_WIDTH = (DATA_WIDTH/8), //!**Data width parameter**
     parameter HDR_WIDTH = 2,
     parameter ENABLE_PADDING = 1,
     parameter ENABLE_DIC = 1,     //!enable
     parameter MIN_FRAME_LENGTH = 64
-)
-(
+  )
+  (
     input  wire                  clk,
     input  wire                  rst,
 
@@ -64,4 +64,17 @@ module axis_baser_tx_64 #
     output wire                  start_packet_0,
     output wire                  start_packet_4,
     output wire                  error_underflow
-);
+  );
+
+  localparam  my_local_param = 10; //! local param 1
+  localparam  integer my_local_param2 =20; //!local param 2
+  wire a, b, c; //! coment abc
+  wire ddd; //!coment ddd
+  reg ee; //! comment ee
+  logic [3:0] fff; //! comment fff
+  my_type_t t1, t2;   //! my_type vars
+
+  function int foo(string bar, type1 baz); //! function 1
+  endfunction
+
+endmodule
