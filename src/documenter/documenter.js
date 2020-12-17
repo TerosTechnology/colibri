@@ -126,7 +126,7 @@ class Documenter {
       markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics']);
     }
     //Package
-    if (code_tree['package'] !== undefined) {
+    if (code_tree.package !== undefined) {
       //Title
       markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
       //Description
@@ -210,7 +210,7 @@ class Documenter {
       markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics']);
     }
     //Package
-    if (code_tree['package'] !== undefined) {
+    if (code_tree.package !== undefined) {
       //Title
       markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
       //Description
@@ -345,7 +345,7 @@ class Documenter {
       html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], code_tree['generics']));
     }
     //Package
-    if (code_tree['package'] !== undefined) {
+    if (code_tree.package !== undefined) {
       //Title
       html += converter.makeHtml("# Package: " + code_tree['package']['name'] + "\n");
       html += converter.makeHtml("## Description\n");

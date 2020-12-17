@@ -21,12 +21,6 @@
 
 const os = require("os");
 const path = require('path');
-// var Parser = []
-// var VerilogParser = []
-// if (process.platform !== "win32") {
-//   Parser = require('web-tree-sitter');
-//   VerilogParser = Parser.Language.load('/home/carlos/repo/colibri/src/parser/parsers/tree-sitter-verilog.wasm');
-// }
 const Parser = require('web-tree-sitter');
 const initParser = Parser.init();
 
@@ -61,7 +55,7 @@ class tsVerilogParser {
         },
         "declarations": {
           'types': this.get_types(tree.rootNode, lines, comments),
-          'signal': this.get_signals(tree.rootNode, lines, comments),
+          'signals': this.get_signals(tree.rootNode, lines, comments),
           'constants': this.get_constants(tree.rootNode, lines, comments),
           'functions': this.get_functions(tree.rootNode, lines, comments)
         }
@@ -580,7 +574,7 @@ class tsVerilogParser {
     var item = {};
     var element = tree;
     //Inputs
-    var arr = this.searchTree(element, 'port_declaration'); //port_declaration
+    var arr = this.searchTree(element, 'interface_port_declaration'); //port_declaration
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";
@@ -610,16 +604,18 @@ class tsVerilogParser {
   get_signals(tree, lines, comments) {
     var items = [];
     var inputs = [];
+    var inputs2 = [];
     var item = {};
     var element = tree;
     //Inputs
     var arr = this.searchTree(element, 'net_declaration'); //port_declaration // list_of_net_decl_assignments // net_declaration // module_or_generate_item // data_declaration
     var arr2 = this.searchTree(element, 'data_declaration');
     inputs = arr;
+    inputs2 = arr2;
 
     this.get_signal_array(inputs, comments, items, lines, 'list_of_net_decl_assignments', 'net_type');
 
-    this.get_signal_array(arr2, comments, items, lines, 'list_of_variable_decl_assignments', 'data_type_or_implicit1');
+    this.get_signal_array(inputs2, comments, items, lines, 'list_of_variable_decl_assignments', 'data_type_or_implicit1');
     return items;
   }
 
