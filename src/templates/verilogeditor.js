@@ -33,7 +33,7 @@ class Verilog_editor {
 
   async generate(src, options) {
     let parser = new ParserLib.ParserFactory;
-    parser = parser.getParser(General.LANGUAGES.VERILOG, '');
+    parser = await parser.getParser(General.LANGUAGES.VERILOG, '');
     let structure = await parser.getAll(src);
     if (structure === undefined) {
       return undefined;
@@ -253,7 +253,7 @@ class Verilog_editor {
 class Verilog_component extends Verilog_editor {
   async generate(src, options) {
     let parser = new ParserLib.ParserFactory;
-    parser = parser.getParser(General.LANGUAGES.VERILOG, '');
+    parser = await parser.getParser(General.LANGUAGES.VERILOG, '');
     let structure = await parser.getAll(src);
     if (structure === undefined) {
       return undefined;

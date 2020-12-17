@@ -133,24 +133,26 @@ class Manager extends Simulators.Simulators {
     }
     return names;
   }
-  async save_markdown_doc(output_dir_doc, symbol_vhdl, symbol_verilog, with_dependency_graph = true) {
+  async save_markdown_doc(output_dir_doc, symbol_vhdl, symbol_verilog,
+    with_dependency_graph = true, python3_path, config) {
     let project_name = this.configurator.get_name();
     let svg_dependency_graph;
     if (with_dependency_graph === true) {
-      svg_dependency_graph = await this.dependency_graph.get_dependency_graph_svg(this.source);
+      svg_dependency_graph = await this.dependency_graph.get_dependency_graph_svg(this.source, python3_path);
     }
     documenter.get_md_doc_from_array(this.get_source_name(), output_dir_doc, symbol_vhdl,
-      symbol_verilog, svg_dependency_graph, project_name, with_dependency_graph);
+      symbol_verilog, svg_dependency_graph, project_name, with_dependency_graph, config);
   }
 
-  async save_html_doc(output_dir_doc, symbol_vhdl, symbol_verilog, with_dependency_graph = true) {
+  async save_html_doc(output_dir_doc, symbol_vhdl, symbol_verilog,
+    with_dependency_graph = true, python3_path, config) {
     let project_name = this.configurator.get_name();
     let svg_dependency_graph;
     if (with_dependency_graph === true) {
-      svg_dependency_graph = await this.dependency_graph.get_dependency_graph_svg(this.source);
+      svg_dependency_graph = await this.dependency_graph.get_dependency_graph_svg(this.source, python3_path);
     }
     documenter.get_html_doc_from_array(this.get_source_name(), output_dir_doc, symbol_vhdl,
-      symbol_verilog, svg_dependency_graph, project_name, with_dependency_graph);
+      symbol_verilog, svg_dependency_graph, project_name, with_dependency_graph, config);
   }
 
   get_file_type(f) {
@@ -199,8 +201,8 @@ class Manager extends Simulators.Simulators {
   generate_svg(sources, function_open, top_level) {
     this.dependency_graph.generate_svg(sources, function_open, top_level);
   }
-  async get_dependency_graph_dot() {
-    return await this.dependency_graph.create_dependency_graph(this.source);
+  async get_dependency_graph_dot(python3_path) {
+    return await this.dependency_graph.create_dependency_graph(this.source, python3_path);
   }
   set_top_dependency_graph(file) {
     this.dependency_graph.set_top_dependency_graph(file);

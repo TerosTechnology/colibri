@@ -21,7 +21,7 @@
     "svg.js": "2.7.1",
     "svgdom": "0.0.21",
     "shelljs": "0.8.3",
-    "state-machine-cat": "4.1.0",
+    "state-machine-cat": "7.0.13",
     "sequelize": "x",
     "axios": "x",
     "d3": "5.12.0",

@@ -22,19 +22,28 @@
 const fs = require('fs');
 const path_lib = require('path');
 const Diagram = require('./diagram');
-const StmVHDL = require('./statemachinevhdl');
-const StmVerilog = require('./statemachineverilog');
+const Stm = require('../parser/stm_parser');
 const ParserLib = require('../parser/factory');
-const General = require('../general/general');
 const showdown = require('showdown');
 const json5 = require('json5');
 const temp = require('temp');
 
 class Documenter {
-  constructor(code, lang, comment_symbol) {
+  constructor(code, lang, comment_symbol, config) {
     this.lang = lang;
     this.code = code;
     this.comment_symbol = comment_symbol;
+    if (config === undefined) {
+      this.config = {
+        'fsm': true,
+        'signals': 'all',
+        'constants': 'all',
+        'process': 'all'
+      };
+    }
+    else {
+      this.config = config;
+    }
   }
 
   set_code(code) {
@@ -90,29 +99,70 @@ class Documenter {
       return "";
     }
     let markdown_doc = extra_top_space_l;
-    //Title
-    markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
-    //Diagram
-    await this._save_svg_from_code_tree(path, code_tree);
-    markdown_doc += "## Diagram\n";
-    markdown_doc += '![Diagram](' + path_lib.basename(path) + ' "Diagram")';
-    markdown_doc += "\n";
-    //Description
-    markdown_doc += "## Description\n";
 
-    const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['comment']);
-    let wavedrom_description = description;
-    for (let i = 0; i < wavedrom.length; ++i) {
-      let random_id = this._makeid(4);
-      let img = `![alt text](wavedrom_${random_id}${i}.svg "title")`;
-      let path_img = path_lib.dirname(path) + path_lib.sep + `wavedrom_${random_id}${i}.svg`;
-      fs.writeFileSync(path_img, wavedrom[i]);
-      wavedrom_description = wavedrom_description.replace("$cholosimeone$" + i, img);
+    //Entity
+    if (code_tree['entity'] !== undefined) {
+      //Title
+      markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
+      //Diagram
+      await this._save_svg_from_code_tree(path, code_tree);
+      markdown_doc += "## Diagram\n";
+      markdown_doc += '![Diagram](' + path_lib.basename(path) + ' "Diagram")';
+      markdown_doc += "\n";
+      //Description
+      markdown_doc += "## Description\n";
+
+      const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
+      let wavedrom_description = description;
+      for (let i = 0; i < wavedrom.length; ++i) {
+        let random_id = this._makeid(4);
+        let img = `![alt text](wavedrom_${random_id}${i}.svg "title")`;
+        let path_img = path_lib.dirname(path) + path_lib.sep + `wavedrom_${random_id}${i}.svg`;
+        fs.writeFileSync(path_img, wavedrom[i]);
+        wavedrom_description = wavedrom_description.replace("$cholosimeone$" + i, img);
+      }
+      markdown_doc += wavedrom_description;
+      //Generics and ports
+      markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics']);
     }
-    markdown_doc += wavedrom_description;
+    //Package
+    if (code_tree['package'] !== undefined) {
+      //Title
+      markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
+      //Description
+      markdown_doc += "## Description\n";
+      markdown_doc += code_tree['package']['description'] + "\n";
+    }
 
-    //Generics and ports
-    markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics']);
+    //Signals and constants
+    if (code_tree['declarations'] !== undefined) {
+      markdown_doc += this._get_signals_constants_section(
+        code_tree['declarations']['signals'], code_tree['declarations']['constants']);
+      //Functions
+      markdown_doc += this._get_functions_section(code_tree['body']['functions']);
+    }
+    if (code_tree['body'] !== undefined) {
+      //Processes
+      markdown_doc += this._get_process_section(code_tree['body']['processes']);
+      //Instantiations
+      markdown_doc += this._get_instantiations_section(code_tree['body']['instantiations']);
+    }
+
+    // State machine diagrams
+    let stm_array = await this._get_stm();
+    if (this.config.fsm === true && stm_array !== undefined && stm_array.length !== 0) {
+      markdown_doc += "## State machines\n";
+      for (let i = 0; i < stm_array.length; ++i) {
+        let entity_name = code_tree['entity']['name'];
+        let stm_path = `${path_lib.dirname(path)}${path_lib.sep}stm_${entity_name}_${i}${i}.svg\n`;
+        if (stm_array[i].description !== '') {
+          markdown_doc += '- ' + stm_array[i].description;
+        }
+        fs.writeFileSync(stm_path, stm_array[i].svg);
+        markdown_doc += `![Diagram_state_machine_${i}]( stm_${entity_name}_${i}${i}.svg "Diagram")`;
+      }
+    }
+
     return markdown_doc;
   }
 
@@ -132,30 +182,69 @@ class Documenter {
       return "";
     }
     let markdown_doc = "";
-    //Title
-    markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
-    //Diagram
-    markdown_doc += "## Diagram\n";
-    let path_diagram = temp.openSync().path;
+    //Entity
+    if (code_tree['entity'] !== undefined) {
+      //Title
+      markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
+      //Diagram
+      markdown_doc += "## Diagram\n";
+      let path_diagram = temp.openSync().path;
 
-    await this._save_svg_from_code_tree(path_diagram + ".svg", code_tree);
-    markdown_doc += '![Diagram](' + path_diagram + '.svg "Diagram")';
-    markdown_doc += "\n";
-    //Description
-    markdown_doc += "## Description\n";
+      await this._save_svg_from_code_tree(path_diagram + ".svg", code_tree);
+      markdown_doc += '![Diagram](' + path_diagram + '.svg "Diagram")';
+      markdown_doc += "\n";
+      //Description
+      markdown_doc += "## Description\n";
 
-    const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['comment']);
-    let wavedrom_description = description;
-    for (let i = 0; i < wavedrom.length; ++i) {
-      let path_img = path_lib.dirname(path_diagram) + path_lib.sep + `wavedrom_${i}.svg`;
-      fs.writeFileSync(path_img, wavedrom[i]);
-      let img = `![alt text](${path_img} "title")`;
-      wavedrom_description = wavedrom_description.replace("$cholosimeone$" + i, img);
+      const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
+      let wavedrom_description = description;
+      for (let i = 0; i < wavedrom.length; ++i) {
+        let path_img = path_lib.dirname(path_diagram) + path_lib.sep + `wavedrom_${i}.svg`;
+        fs.writeFileSync(path_img, wavedrom[i]);
+        let img = `![alt text](${path_img} "title")`;
+        wavedrom_description = wavedrom_description.replace("$cholosimeone$" + i, img);
+      }
+      markdown_doc += wavedrom_description;
+
+      //Generics and ports
+      markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics']);
     }
-    markdown_doc += wavedrom_description;
+    //Package
+    if (code_tree['package'] !== undefined) {
+      //Title
+      markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
+      //Description
+      markdown_doc += "## Description\n";
+      markdown_doc += code_tree['package']['description'] + "\n";
+    }
+    if (code_tree['declarations'] !== undefined) {
+      //Signals and constants
+      markdown_doc += this._get_signals_constants_section(
+        code_tree['declarations']['signals'], code_tree['declarations']['constants']);
+      //Functions
+      markdown_doc += this._get_functions_section(code_tree['body']['functions']);
+    }
+    if (code_tree['body'] !== undefined) {
+      //Processes
+      markdown_doc += this._get_process_section(code_tree['body']['processes']);
+      //Instantiations
+      markdown_doc += this._get_instantiations_section(code_tree['body']['instantiations']);
+    }
 
-    //Generics and ports
-    markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics']);
+    // State machine diagrams
+    let stm_array = await this._get_stm();
+    if (this.config.fsm === true && stm_array !== undefined && stm_array.length !== 0) {
+      markdown_doc += "## State machines\n";
+      for (let i = 0; i < stm_array.length; ++i) {
+        let path_diagram_tmp = temp.openSync().path + '.svg';
+        if (stm_array[i].description !== '') {
+          markdown_doc += '\n- ' + stm_array[i].description;
+        }
+        fs.writeFileSync(path_diagram_tmp, stm_array[i].svg);
+        markdown_doc += `![Diagram_state_machine_${i}]( ${path_diagram_tmp} "Diagram")`;
+      }
+    }
+
     return markdown_doc;
   }
 
@@ -165,7 +254,9 @@ class Documenter {
 <style>
   #teroshdl h1,#teroshdl h2,#teroshdl h3,#teroshdl table, #teroshdl svg {margin-left:2.5%;}
   svg {width:100%;height:100%;}
+  #state_machine {width:70%;height:70%;display: block;margin: auto;}
   code {color:#545253;}
+  #teroshdl {color:black;}
   div.templateTerosHDL { background-color: white;position:absolute; }
   #teroshdl td,#teroshdl th,#teroshdl h1,#teroshdl h2,#teroshdl h3 {color: black;}
   #teroshdl h1,#teroshdl h2 {font-weight:bold;}
@@ -184,6 +275,7 @@ class Documenter {
   <style>
     #teroshdl h1,#teroshdl h2,#teroshdl h3,#teroshdl table, #teroshdl svg {margin-left:2.5%;width:60%}
     code {color:#545253;}
+    #teroshdl {color:black;}
     div.templateTerosHDL { background-color: white;position:absolute; }
     #teroshdl td,#teroshdl th,#teroshdl h1,#teroshdl h2,#teroshdl h3 {color: black;}
     #teroshdl h1,#teroshdl h2 {font-weight:bold}
@@ -232,24 +324,61 @@ class Documenter {
     converter.setFlavor('github');
 
     html += converter.makeHtml("&nbsp;&nbsp;\n\n");
-    //Title
-    html += converter.makeHtml("# Entity: " + code_tree['entity']['name'] + "\n");
-    //Description
-    html += converter.makeHtml("## Diagram\n");
-    html += converter.makeHtml((await this._get_diagram_svg_from_code_tree(code_tree) + "\n").replace(/\*/g, "\\*"));
-    //Description
-    html += converter.makeHtml("## Description\n");
-    const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['comment']);
+    //Entity
+    if (code_tree['entity'] !== undefined) {
+      //Title
+      html += converter.makeHtml("# Entity: " + code_tree['entity']['name'] + "\n");
+      //Description
+      html += converter.makeHtml("## Diagram\n");
+      html += converter.makeHtml((await this._get_diagram_svg_from_code_tree(code_tree) + "\n").replace(/\*/g, "\\*"));
+      //Description
+      html += converter.makeHtml("## Description\n");
+      const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
 
-    let html_description = converter.makeHtml(description);
+      let html_description = converter.makeHtml(description);
 
-    for (let i = 0; i < wavedrom.length; ++i) {
-      html_description = html_description.replace("$cholosimeone$" + i, wavedrom[i]);
+      for (let i = 0; i < wavedrom.length; ++i) {
+        html_description = html_description.replace("$cholosimeone$" + i, wavedrom[i]);
+      }
+      html += html_description;
+      //Generics and ports
+      html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], code_tree['generics']));
     }
-    html += html_description;
-    //Generics and ports
-    html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], code_tree['generics']));
-    html += '<br><br><br><br><br><br>'
+    //Package
+    if (code_tree['package'] !== undefined) {
+      //Title
+      html += converter.makeHtml("# Package: " + code_tree['package']['name'] + "\n");
+      html += converter.makeHtml("## Description\n");
+      html += converter.makeHtml(code_tree['package']['description'] + "\n");
+    }
+    if (code_tree['declarations'] !== undefined) {
+      //Signals and constants
+      html += converter.makeHtml(this._get_signals_constants_section(
+        code_tree['declarations']['signals'], code_tree['declarations']['constants']));
+      //Functions
+      html += converter.makeHtml(this._get_functions_section(code_tree['declarations']['functions']));
+    }
+    if (code_tree['body'] !== undefined) {
+      //Processes
+      html += converter.makeHtml(this._get_process_section(code_tree['body']['processes']));
+      //Instantiations
+      html += converter.makeHtml(this._get_instantiations_section(code_tree['body']['instantiations']));
+    }
+
+    // State machine diagrams
+    let stm_array = await this._get_stm();
+    if (this.config.fsm === true && stm_array !== undefined && stm_array.length !== 0) {
+      html += converter.makeHtml("## State machines\n");
+      html += '<div>';
+      for (let i = 0; i < stm_array.length; ++i) {
+        if (stm_array[i].description !== '') {
+          html += converter.makeHtml('- ' + stm_array[i].description);
+        }
+        html += `<div id="state_machine">${stm_array[i].svg}</div>`;
+      }
+      html += '</div>';
+    }
+    html += '<br><br><br><br><br><br>';
 
     return { 'html': html, error: false };
   }
@@ -374,6 +503,11 @@ class Documenter {
     return code_tree;
   }
 
+  async _get_stm() {
+    let stm_array = await Stm.get_svg_sm(this.lang, this.code, this.comment_symbol);
+    return stm_array.svg;
+  }
+
   async _gen_code_tree() {
     this.code_tree = await this._get_code_tree();
   }
@@ -394,6 +528,91 @@ class Documenter {
     return md;
   }
 
+  _get_elements_with_description(elements) {
+    let elements_i = [];
+    for (let i = 0; i < elements.length; ++i) {
+      let description = elements[i].description.replace(/ /g, '').replace(/\n/g, '');
+      if (description !== '') {
+        elements_i.push(elements[i]);
+      }
+    }
+    return elements_i;
+  }
+
+  _get_signals_constants_section(signals, constants) {
+    let md = "";
+
+    if (this.config.signals === 'commented') {
+      signals = this._get_elements_with_description(signals);
+    }
+    if (this.config.constants === 'commented') {
+      constants = this._get_elements_with_description(constants);
+    }
+
+    if ((signals.length !== 0 && this.config.signals !== 'none') || (constants.length !== 0 && this.config.constants !== 'none')) {
+      //Title
+      md += "## Signals and constants\n";
+      //Tables
+      if (signals.length !== 0 && this.config.signals !== 'none') {
+        md += "### Signals\n";
+        md += this._get_doc_signals(signals);
+      }
+      if (constants.length !== 0 && this.config.constants !== 'none') {
+        md += "### Constants\n";
+        md += this._get_doc_constants(constants);
+      }
+    }
+    return md;
+  }
+
+  _get_process_section(process) {
+    if (this.config.process === 'none') {
+      return '';
+    }
+    if (this.config.process === 'commented') {
+      process = this._get_elements_with_description(process);
+    }
+    let md = "";
+    if (process.length !== 0) {
+      //Title
+      md += "## Processes\n";
+      for (let i = 0; i < process.length; ++i) {
+        md += `- **${process[i].name}**: ***( ${process[i].sens_list} )***\n`;
+        md += `${process[i].description}\n`;
+      }
+    }
+    return md;
+  }
+
+  _get_functions_section(functions) {
+    let md = "";
+    if (this.config.process === 'none') {
+      return '';
+    }
+    if (functions.length !== 0) {
+      //Title
+      md += "## Functions\n";
+      for (let i = 0; i < functions.length; ++i) {
+        md += `- **${functions[i].name}**\n`;
+        md += `${functions[i].description}\n`;
+      }
+    }
+    return md;
+  }
+
+  _get_instantiations_section(instantiations) {
+    let md = "";
+    if (instantiations.length !== 0) {
+      //Title
+      md += "## Instantiations\n";
+      for (let i = 0; i < instantiations.length; ++i) {
+        md += `- **${instantiations[i].name}**: ${instantiations[i].type}\n`;
+        md += `${instantiations[i].description}\n`;
+      }
+    }
+    return md;
+  }
+
   _get_doc_ports(ports) {
     const md = require('./markdownTable');
     let table = [];
@@ -402,7 +621,7 @@ class Documenter {
       table.push([ports[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       ports[i]['direction'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       ports[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
-      ports[i]['comment'].replace(/ \r/g, ' ').replace(/\n/g, ' ')]);
+      ports[i]['description'].replace(/ \r/g, ' ').replace(/\n/g, ' ')]);
     }
     let text = md(table) + '\n';
     return text;
@@ -411,68 +630,48 @@ class Documenter {
   _get_doc_generics(generics) {
     const md = require('./markdownTable');
     let table = [];
-    table.push(["Generic name", "Type", "Description"]);
+    table.push(["Generic name", "Type", "Value", "Description"]);
     for (let i = 0; i < generics.length; ++i) {
       table.push([generics[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       generics[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
-      generics[i]['comment'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
+      generics[i]['default_value'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      generics[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
     let text = md(table) + '\n';
     return text;
   }
-}
 
-function get_state_machine_hdl_svg(str, lang) {
-  let state_machine_cl;
-  if (lang === General.LANGUAGES.VHDL) {
-    state_machine_cl = new State_machine_vhdl();
-  }
-  else if (lang === General.LANGUAGES.VERILOG) {
-    state_machine_cl = new State_machine_verilog();
-  }
-  else {
-    return null;
-  }
-
-  let state_machine_svg;
-  try {
-    state_machine_svg = state_machine_cl.get_svg(str);
-  }
-  catch (error) {
-    return null;
-  }
-
-  return state_machine_svg;
-}
-
-class State_machine_vhdl extends StmVHDL.State_machine_vhdl {
-  get_svg(str) {
-    const smcat = require("state-machine-cat");
-    let go = this.getStateMachine(str);
-    try {
-      const svg = smcat.render(
-        go, {
-        outputType: "svg"
-      }
-      );
-      return svg;
-    } catch (pError) {
-      // eslint-disable-next-line no-console
-      console.error(pError);
-      return undefined;
+  _get_doc_signals(signals) {
+    const md = require('./markdownTable');
+    let table = [];
+    table.push(["Name", "Type", "Description"]);
+    for (let i = 0; i < signals.length; ++i) {
+      table.push([signals[i]['name'],
+      signals[i]['type'],
+      signals[i]['description']]);
     }
+    let text = md(table) + '\n';
+    return text;
   }
-}
 
-class State_machine_verilog extends StmVerilog.State_machine_verilog {
-  // eslint-disable-next-line no-unused-vars
-  get_svg(str) {
-    return undefined;
+  _get_doc_constants(constants) {
+    const md = require('./markdownTable');
+    let table = [];
+    table.push(["Name", "Type", "Value", "Description"]);
+    for (let i = 0; i < constants.length; ++i) {
+      table.push([constants[i]['name'],
+      constants[i]['type'],
+      constants[i]['default_value'],
+      constants[i]['description']]);
+    }
+    let text = md(table) + '\n';
+    return text;
   }
+
 }
 
 async function get_md_doc_from_array(files, output_dir_doc, symbol_vhdl, symbol_verilog,
-  graph, project_name, with_dependency_graph) {
+  graph, project_name, with_dependency_graph, config) {
   //Main doc
   let main_doc = "# Project documentation: " + project_name + "\n";
   let lang = "vhdl";
@@ -495,7 +694,7 @@ async function get_md_doc_from_array(files, output_dir_doc, symbol_vhdl, symbol_
 
     let contents = fs.readFileSync(files[i], 'utf8');
 
-    let doc_inst = new Documenter(contents, lang, symbol);
+    let doc_inst = new Documenter(contents, lang, symbol, config);
     doc_inst.save_markdown(output_dir_doc + path_lib.sep + filename + ".md");
   }
   if (with_dependency_graph === true) {
@@ -507,7 +706,7 @@ async function get_md_doc_from_array(files, output_dir_doc, symbol_vhdl, symbol_
 }
 
 async function get_html_doc_from_array(files, output_dir_doc, symbol_vhdl, symbol_verilog,
-  graph, project_name, with_dependency_graph) {
+  graph, project_name, with_dependency_graph, config) {
   //Main doc
   let main_doc = "<h1>Project documentation</h1>\n";
   if (with_dependency_graph === true) {
@@ -538,7 +737,7 @@ async function get_html_doc_from_array(files, output_dir_doc, symbol_vhdl, symbo
 
     let contents = fs.readFileSync(files[i], 'utf8');
 
-    let doc_inst = new Documenter(contents, lang, symbol);
+    let doc_inst = new Documenter(contents, lang, symbol, config);
     doc_inst.save_html(output_dir_doc + path_lib.sep + filename + ".html");
   }
   main_doc += '</ul>';
@@ -548,6 +747,5 @@ async function get_html_doc_from_array(files, output_dir_doc, symbol_vhdl, symbo
 module.exports = {
   get_html_doc_from_array: get_html_doc_from_array,
   get_md_doc_from_array: get_md_doc_from_array,
-  Documenter: Documenter,
-  get_state_machine_hdl_svg: get_state_machine_hdl_svg
+  Documenter: Documenter
 };

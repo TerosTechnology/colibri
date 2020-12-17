@@ -26,18 +26,19 @@ const Codes = require('./codes');
 const ParserLib = require('../parser/factory');
 const General = require('../general/general');
 
-class Vhdl_editor{
-  constructor(){}
+class Vhdl_editor {
+  constructor() { }
 
   async generate(src, options) {
     let parser = new ParserLib.ParserFactory;
-    parser = parser.getParser(General.LANGUAGES.VHDL,'');
-    let structure =  await parser.getAll(src);
-    if (structure === undefined){
+    parser = await parser.getParser(General.LANGUAGES.VHDL, '');
+    parser.init();
+    let structure = await parser.getAll(src);
+    if (structure === undefined) {
       return undefined;
     }
     let vunit = false;
-    if (options !== null){
+    if (options !== null) {
       vunit = options['type'] === Codes.TYPESTESTBENCH.VUNIT;
     }
     let space = '  ';
@@ -142,20 +143,20 @@ class Vhdl_editor{
     str += space + '-- Generics\n';
     for (let x = 0; x < m.length; ++x) {
       var normalized_type = m[x]['type'].replace(/\s/g, '').toLowerCase();
-      if (normalized_type === "integer"){
+      if (normalized_type === "integer") {
         str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ' := 0;\n';
       }
-      else if(normalized_type === "signed" || normalized_type === "unsigned"){
+      else if (normalized_type === "signed" || normalized_type === "unsigned") {
         str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + " := (others => '0');\n";
 
       }
-      else if(normalized_type === "string"){
+      else if (normalized_type === "string") {
         str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ' := "";\n';
       }
-      else if(normalized_type === "boolean"){
+      else if (normalized_type === "boolean") {
         str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ' := false;\n';
       }
-      else{
+      else {
         str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ';\n';
       }
     }
@@ -205,11 +206,11 @@ class Vhdl_editor{
   set_Instance(space, name, generics, ports, vunit, vhdl2008) {
     var str = '';
     //Instance name
-    if (vunit!==undefined && vunit === true) {
+    if (vunit !== undefined && vunit === true) {
       str += space + name + '_inst : entity src_lib.' + name + '\n';
-    } else if(vhdl2008!==undefined && vhdl2008 === true){
+    } else if (vhdl2008 !== undefined && vhdl2008 === true) {
       str += space + name + '_inst : entity work.' + name + '\n';
-    }else{
+    } else {
       str += space + name + '_inst : ' + name + '\n';
     }
     //Generics
@@ -218,8 +219,8 @@ class Vhdl_editor{
       for (let x = 0; x < generics.length - 1; ++x) {
         str += space + '    ' + generics[x]['name'] + ' => ' + generics[x]['name'] + ',\n';
       }
-      str += space + '    ' + generics[generics.length - 1]['name'] + ' => ' 
-            + generics[generics.length - 1]['name'] + '\n';
+      str += space + '    ' + generics[generics.length - 1]['name'] + ' => '
+        + generics[generics.length - 1]['name'] + '\n';
       str += space + '  )\n';
     }
     //Ports
@@ -268,30 +269,30 @@ class Vhdl_editor{
   }
 }
 
-class Vhdl_component extends Vhdl_editor{
+class Vhdl_component extends Vhdl_editor {
   async generate(src, options) {
     let parser = new ParserLib.ParserFactory;
-    parser = parser.getParser(General.LANGUAGES.VHDL,'');
-    let structure =  await parser.getAll(src);
-    if (structure === undefined){
+    parser = await parser.getParser(General.LANGUAGES.VHDL, '');
+    parser.init();
+    let structure = await parser.getAll(src);
+    if (structure === undefined) {
       return undefined;
     }
-    if (options === null)
-      {return "";}
+    if (options === null) { return ""; }
     var component = "";
     if (options['type'] === Codes.TYPESCOMPONENTS.COMPONENT) {
       component = this.set_Component('  ', structure['entity']['name'],
         structure['generics'], structure['ports'], false);
     } else if (options['type'] === Codes.TYPESCOMPONENTS.INSTANCE) {
       component = this.set_Instance('  ', structure['entity']['name'],
-        structure['generics'], structure['ports'], false,false);
+        structure['generics'], structure['ports'], false, false);
     } else if (options['type'] === Codes.TYPESCOMPONENTS.INSTANCE_VHDL2008) {
       component = this.set_Instance('  ', structure['entity']['name'],
-        structure['generics'], structure['ports'], false,true);
+        structure['generics'], structure['ports'], false, true);
     } else if (options['type'] === Codes.TYPESCOMPONENTS.SIGNALS) {
       component = this.set_Signals('  ', structure['ports']);
     }
-    else{
+    else {
       // eslint-disable-next-line no-console
       console.log("error");
     }
@@ -306,5 +307,5 @@ class Vhdl_component extends Vhdl_editor{
 //*****************************************************************************/
 module.exports = {
   Vhdl_editor: Vhdl_editor,
-  Vhdl_component : Vhdl_component
+  Vhdl_component: Vhdl_component
 };
