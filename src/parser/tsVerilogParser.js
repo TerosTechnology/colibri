@@ -110,7 +110,7 @@ class tsVerilogParser {
     let label_txt = '';
     let label = this.get_item_from_childs(p, "block_identifier");
     if (label === undefined) {
-      label_txt = '';
+      label_txt = 'unnamed';
     }
     else {
       label_txt = label.text;
@@ -359,7 +359,7 @@ class tsVerilogParser {
   get_always_sens_list(always, lines) {
     var arr = this.searchTree(always, 'event_control');
     if (arr.length == 0) {
-      var name = "undefined";
+      var name = '';
       return name;
     }
     var always_name = this.extractData(arr[0], lines);
