@@ -22,7 +22,6 @@
 const os = require("os");
 const path = require('path');
 const Parser = require('web-tree-sitter');
-const initParser = Parser.init();
 
 class tsVerilogParser {
   constructor(comment_symbol) {
@@ -30,15 +29,19 @@ class tsVerilogParser {
     this.loaded_wasm = false;
   }
 
-  async getAll(sourceCode) {
+  async init() {
+    await Parser.init();
+    this.parser = new Parser();
+    let Lang = await Parser.Language.load(path.join(__dirname, path.sep + "parsers" + path.sep + "tree-sitter-verilog.wasm"));
+    this.parser.setLanguage(Lang);
+    this.loaded_wasm = true;
+  }
+
+  async getAll(sourceCode, comment_symbol) {
+    if (comment_symbol !== undefined) {
+      this.comment_symbol = comment_symbol;
+    }
     try {
-      await initParser;
-      this.parser = new Parser();
-      if (this.loaded_wasm === false) {
-        let Lang = await Parser.Language.load(path.join(__dirname, path.sep + "parsers" + path.sep + "tree-sitter-verilog.wasm"));
-        this.parser.setLanguage(Lang);
-        this.loaded_wasm = true;
-      }
       var lines = this.fileLines(sourceCode);
       const tree = await this.parser.parse(sourceCode);
       //comments
@@ -531,7 +534,7 @@ class tsVerilogParser {
       }
       var arr1 = this.get_deep_process(inputs[x]);
       item = {
-        "name":  this.get_process_label(arr1),
+        "name": this.get_process_label(arr1),
         "sens_list": this.get_always_sens_list(inputs[x], lines),
         "description": comment
       };

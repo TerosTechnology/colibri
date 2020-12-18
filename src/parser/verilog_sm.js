@@ -13,16 +13,18 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
     this.comment_symbol = comment_symbol;
   }
 
-  async get_svg_sm(code) {
+  async init() {
     await Parser.init();
-    const parser = new Parser();
-    let Lang = await
-      Parser.Language.load(Path.join(__dirname, Path.sep + "parsers" + Path.sep + "tree-sitter-verilog.wasm"));
-    parser.setLanguage(Lang);
+    this.parser = new Parser();
+    let Lang = await Parser.Language.load(Path.join(__dirname, Path.sep + "parsers" + Path.sep + "tree-sitter-verilog.wasm"));
+    this.parser.setLanguage(Lang);
+    this.loaded_wasm = true;
+  }
 
+  async get_svg_sm(code) {
     let process;
     try {
-      const tree = parser.parse(code);
+      const tree = this.parser.parse(code);
       process = this.get_process(tree);
     }
     catch (e) {
