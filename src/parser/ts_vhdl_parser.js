@@ -23,7 +23,10 @@ class Parser {
     return this.tree;
   }
 
-  getAll(code) {
+  getAll(code, comment_symbol) {
+    if (comment_symbol !== undefined) {
+      this.comment_symbol = comment_symbol;
+    }
     let entity_file = this.get_entity_file(code);
     if (entity_file === undefined) {
       let package_file = this.get_package_file(code);

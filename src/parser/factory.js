@@ -19,7 +19,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-const tsVerilogParser = require('./tsVerilogParser');
+const ts_verilog_parser = require('./tsVerilogParser');
 const ts_vhdl_parser = require('./ts_vhdl_parser');
 
 class ParserFactory {
@@ -29,7 +29,7 @@ class ParserFactory {
     if (lang === 'vhdl') {
       return await this.getVhdlParser(comment_symbol);
     } else if (lang === 'verilog') {
-      return this.getVerilogParser(comment_symbol);
+      return await this.getVerilogParser(comment_symbol);
     }
   }
 
@@ -39,8 +39,10 @@ class ParserFactory {
     return parser;
   }
 
-  getVerilogParser(comment_symbol) {
-    return new tsVerilogParser(comment_symbol);
+  async getVerilogParser(comment_symbol) {
+    let parser = new ts_verilog_parser(comment_symbol);
+    await parser.init();
+    return parser;
   }
 }
 

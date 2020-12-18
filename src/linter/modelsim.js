@@ -28,19 +28,19 @@ class Modelsim extends Base_linter {
   constructor(language) {
     super(language);
     // VHDL
-    if (language !== undefined && language === General.LANGUAGES.VHDL){
+    if (language !== undefined && language === General.LANGUAGES.VHDL) {
       this.PARAMETERS = {
         'SYNT': "vcom -quiet -nologo -2008"
       };
     }
     // SystemVerilog
-    else if(language !== undefined && language === General.LANGUAGES.SYSTEMVERILOG){
+    else if (language !== undefined && language === General.LANGUAGES.SYSTEMVERILOG) {
       this.PARAMETERS = {
         'SYNT': "vlog -quiet -nologo -sv"
       };
     }
     // Verilog
-    else{
+    else {
       this.PARAMETERS = {
         'SYNT': "vlog -quiet -nologo"
       };
@@ -48,21 +48,21 @@ class Modelsim extends Base_linter {
   }
 
   // options = {custom_bin:"", custom_arguments:""}
-  async lint_from_file(file,options){
+  async lint_from_file(file, options) {
     let errors = await this._lint(file, options);
     return errors;
   }
 
-  async lint_from_code(file,code,options){
+  async lint_from_code(file, code, options) {
     let temp_file = await this._create_temp_file_of_code(code);
-    let errors = await this._lint(temp_file,options);
+    let errors = await this._lint(temp_file, options);
     return errors;
   }
 
-  async _lint(file,options){
-    let result = await this._exec_linter(file,this.PARAMETERS.SYNT,
-                          this.PARAMETERS.SYNT_WINDOWS,options);
-    file = file.replace('\\ ',' ');
+  async _lint(file, options) {
+    let result = await this._exec_linter(file, this.PARAMETERS.SYNT,
+      this.PARAMETERS.SYNT_WINDOWS, options);
+    file = file.replace('\\ ', ' ');
     let errors_str = result.stdout;
     let errors_str_lines = errors_str.split(/\r?\n/g);
     let errors = [];
@@ -77,26 +77,26 @@ class Modelsim extends Base_linter {
         try {
           //Severity
           let sev = "warning";
-          if (m[1] === "Error"){
+          if (m[1] === "Error") {
             sev = "error";
           }
-          else if (m[1] === "Warning"){
+          else if (m[1] === "Warning") {
             sev = "warning";
           }
-          else{
+          else {
             sev = "note";
           }
 
-          if (sev !== "note"){
+          if (sev !== "note") {
             let message = m[5];
             let code = m[4];
             let line = parseInt(m[2]) - 1;
-  
+
             let error = {
-              'severity' : sev,
-              'description' : message,
-              'code' : code,
-              'location' : {
+              'severity': sev,
+              'description': message,
+              'code': code,
+              'location': {
                 'file': file,
                 'position': [line, 0]
               }
@@ -106,7 +106,7 @@ class Modelsim extends Base_linter {
         }
         catch (e) {
           // eslint-disable-next-line no-console
-          console.log(e);
+          // console.log(e);
         }
       }
     });

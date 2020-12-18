@@ -33,6 +33,10 @@ class Documenter {
     this.lang = lang;
     this.code = code;
     this.comment_symbol = comment_symbol;
+    this.set_config(config);
+  }
+
+  set_config(config) {
     if (config === undefined) {
       this.config = {
         'fsm': true,
@@ -44,6 +48,10 @@ class Documenter {
     else {
       this.config = config;
     }
+  }
+
+  set_symbol(comment_symbol) {
+    this.comment_symbol = comment_symbol;
   }
 
   set_code(code) {
@@ -78,6 +86,8 @@ class Documenter {
   async save_svg(path) {
     let svg_diagram_str = await this._get_diagram_svg();
     await fs.writeFileSync(path, svg_diagram_str);
+    await this._save_fsms(path);
+    await this._save_wavedrom(path);
   }
   async save_markdown(path) {
     let file = path_lib.dirname(path) + path_lib.sep + path_lib.basename(path, path_lib.extname(path)) + ".svg";
@@ -139,7 +149,7 @@ class Documenter {
       markdown_doc += this._get_signals_constants_section(
         code_tree['declarations']['signals'], code_tree['declarations']['constants']);
       //Functions
-      markdown_doc += this._get_functions_section(code_tree['body']['functions']);
+      markdown_doc += this._get_functions_section(code_tree['declarations']['functions']);
     }
     if (code_tree['body'] !== undefined) {
       //Processes
@@ -222,7 +232,7 @@ class Documenter {
       markdown_doc += this._get_signals_constants_section(
         code_tree['declarations']['signals'], code_tree['declarations']['constants']);
       //Functions
-      markdown_doc += this._get_functions_section(code_tree['body']['functions']);
+      markdown_doc += this._get_functions_section(code_tree['declarations']['functions']);
     }
     if (code_tree['body'] !== undefined) {
       //Processes
@@ -384,13 +394,13 @@ class Documenter {
   }
 
   async _get_pdf(path, options) {
+    let markdownpdf = require("markdown-pdf");
     let code_tree = await this._get_code_tree();
     if (code_tree === undefined) {
       return;
     }
 
     let markdown_doc = await this._get_markdown_for_pdf();
-    let markdownpdf = require("markdown-pdf");
 
     let options_md_pdf = {
       cssPath: __dirname + path_lib.sep + 'custom.css'
@@ -399,7 +409,7 @@ class Documenter {
       options_md_pdf.cssPath = options.custom_css_path;
     }
 
-    markdownpdf(options_md_pdf).from.string(markdown_doc).to(path);
+    await markdownpdf(options_md_pdf).from.string(markdown_doc).to(path);
   }
 
   _get_wavedrom_svg(text) {
@@ -496,11 +506,75 @@ class Documenter {
     fs.writeFileSync(path, svg_diagram_str);
   }
 
+  async _save_fsms(path) {
+    let code_tree = await this._get_code_tree(this.code);
+    if (code_tree === undefined) {
+      return;
+    }
+    let stm_array = await this._get_stm();
+    for (let i = 0; i < stm_array.length; ++i) {
+      let entity_name = code_tree['entity']['name'];
+      let stm_path = `${path_lib.dirname(path)}${path_lib.sep}stm_${entity_name}_${i}${i}.svg\n`;
+      if (stm_array[i].description !== '') {
+        markdown_doc += '- ' + stm_array[i].description;
+      }
+      fs.writeFileSync(stm_path, stm_array[i].svg);
+    }
+  }
+
+  async _save_wavedrom(path) {
+    let code_tree = await this._get_code_tree(this.code);
+    if (code_tree === undefined) {
+      return;
+    }
+    const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
+    let wavedrom_description = description;
+    for (let i = 0; i < wavedrom.length; ++i) {
+      let random_id = this._makeid(4);
+      let img = `![alt text](wavedrom_${random_id}${i}.svg "title")`;
+      let path_img = path_lib.dirname(path) + path_lib.sep + `wavedrom_${random_id}${i}.svg`;
+      fs.writeFileSync(path_img, wavedrom[i]);
+      wavedrom_description = wavedrom_description.replace("$cholosimeone$" + i, img);
+    }
+  }
+
   async _get_code_tree() {
-    let parser = new ParserLib.ParserFactory;
-    parser = await parser.getParser(this.lang, this.comment_symbol);
-    let code_tree = await parser.getAll(this.code);
+    let parser = await this.get_parser(this.lang);
+    let code_tree = await parser.getAll(this.code, this.symbol);
     return code_tree;
+  }
+
+  async init() {
+    await this.create_parser('vhdl');
+    await this.create_parser('verilog');
+  }
+
+  async get_parser(lang) {
+    if (this.vhdl_parser === undefined || this.verilog_parser === undefined) {
+      await this.init();
+    }
+
+    if (lang === 'vhdl') {
+      return this.vhdl_parser;
+    }
+    else if (lang === 'verilog') {
+      return this.verilog_parser;
+    }
+    else {
+      return undefined;
+    }
+  }
+
+  async create_parser(lang) {
+    let parser = new ParserLib.ParserFactory;
+    if (lang === 'vhdl') {
+      //VHDL parser
+      this.vhdl_parser = await parser.getParser(this.lang, this.comment_symbol);
+    }
+    else if (lang === 'verilog') {
+      //Verilog parser
+      this.verilog_parser = await parser.getParser(this.lang, this.comment_symbol);
+    }
   }
 
   async _get_stm() {
