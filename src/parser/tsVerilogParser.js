@@ -134,7 +134,7 @@ class tsVerilogParser {
   }
 
   getPortName(port, lines) {
-    var arr = this.searchTree(port, 'list_of_port_identifiers'); // list_of_port_identifiers //simple_identifier
+    var arr = this.searchTree(port, 'list_of_port_identifiers'); 
     var port_name;
     if (arr.length == 0) {
       arr = this.searchTree(port, 'list_of_variable_identifiers');
@@ -288,10 +288,7 @@ class tsVerilogParser {
     var item = {};
     var element = tree;
     //Inputs
-    var arr = this.searchTree(element, 'parameter_port_declaration');
-    if (arr.length === 0) {
-      arr = this.searchTree(element, 'parameter_declaration');
-    }
+    var arr = this.searchTree(element, 'parameter_declaration');
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";
@@ -340,7 +337,7 @@ class tsVerilogParser {
   }
 
   get_generic_default(input, lines) {
-    var arr = this.searchTree(input, 'constant_param_expression'); //param_assignment //constant_primary
+    var arr = this.searchTree(input, 'constant_param_expression');
     if (arr.length == 0) {
       var name = "undefined";
       return name;
@@ -430,7 +427,7 @@ class tsVerilogParser {
   }
 
   get_constant_name(input, lines) {
-    var arr = this.searchTree(input, 'simple_identifier');
+    var arr = this.searchTree(input, 'parameter_identifier');
     if (arr.length == 0) {
       var name = "undefined";
       return name;
@@ -442,7 +439,7 @@ class tsVerilogParser {
   get_constant_type(input, lines) {
     var arr = this.searchTree(input, 'integer_atom_type');
     if (arr.length == 0) {
-      var name = "undefined";
+      var name = '';
       return name;
     }
     var input_name = this.extractData(arr[0], lines);
@@ -480,7 +477,7 @@ class tsVerilogParser {
   }
 
   getGenericKind(port, lines) {
-    var arr = this.searchTree(port, 'data_type_or_implicit1'); // parameter_identifier, data_type_or_implicit1
+    var arr = this.searchTree(port, 'data_type_or_implicit1'); 
     if (arr.length == 0) {
       return "";
     } else {
@@ -608,21 +605,20 @@ class tsVerilogParser {
     var items = [];
     var inputs = [];
     var inputs2 = [];
-    var item = {};
     var element = tree;
     //Inputs
-    var arr = this.searchTree(element, 'net_declaration'); //port_declaration // list_of_net_decl_assignments // net_declaration // module_or_generate_item // data_declaration
+    var arr = this.searchTree(element, 'net_declaration');
     var arr2 = this.searchTree(element, 'data_declaration');
     inputs = arr;
     inputs2 = arr2;
 
-    this.get_signal_array(inputs, comments, items, lines, 'list_of_net_decl_assignments', 'net_type');
+    this.get_signal_array(inputs, comments, items, lines, 'list_of_net_decl_assignments', 'net_type', 'packed_dimension');
 
-    this.get_signal_array(inputs2, comments, items, lines, 'list_of_variable_decl_assignments', 'data_type_or_implicit1');
+    this.get_signal_array(inputs2, comments, items, lines, 'list_of_variable_decl_assignments', 'data_type_or_implicit1', 0);
     return items;
   }
 
-  get_signal_array(inputs, comments, items, lines, name_command, type_command) {
+  get_signal_array(inputs, comments, items, lines, name_command, type_command, type_dim) {
     var item = {};
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";
@@ -636,11 +632,16 @@ class tsVerilogParser {
       }
       var arr_signals = this.get_signal_name(inputs[x], lines, name_command);
       var split_name_signal = arr_signals.split(',');
+      let signal_type = this.get_signal_type(inputs[x], lines, type_command);
+      let signal_type_dim = this.get_signal_type(inputs[x], lines, type_dim);
+      if (signal_type_dim != 'undefined') {
+        signal_type = signal_type + ' ' + signal_type_dim;
+      }
       for (var s = 0; s < split_name_signal.length; ++s) {
         var name_signal = split_name_signal[s];
         item = {
           "name": name_signal.trim(),
-          "type": this.get_signal_type(inputs[x], lines, type_command),
+          "type": signal_type,
           "description": comment
         };
         items.push(item);
@@ -655,7 +656,7 @@ class tsVerilogParser {
     var item = {};
     var element = tree;
     //Inputs
-    var arr = this.searchTree(element, 'local_parameter_declaration'); //port_declaration
+    var arr = this.searchTree(element, 'local_parameter_declaration');
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";
@@ -667,14 +668,12 @@ class tsVerilogParser {
           comment = "";
         }
       }
-      var arr_signals = this.get_constant_name(inputs[x], lines);
-      var split_name_signal = arr_signals.split(',');
-      for (var s = 0; s < split_name_signal.length; ++s) {
-        var name_signal = split_name_signal[s];
+      var arr2 = this.searchTree(inputs[x], 'param_assignment');
+      for (var x2 = 0; x2 < arr2.length; ++x2) {
         item = {
-          "name": name_signal,
-          "type": this.get_constant_type(inputs[x], lines),
-          "default_value": this.get_constant_default(inputs[x], lines),  // constant_param_expression
+          "name": this.get_constant_name(arr2[x2], lines),
+          "type": this.get_constant_type(arr2[x2], lines),
+          "default_value": this.get_constant_default(arr2[x2], lines),  // constant_param_expression
           "description": comment
         };
         items.push(item);
@@ -689,7 +688,7 @@ class tsVerilogParser {
     var item = {};
     var element = tree;
     //Inputs
-    var arr = this.searchTree(element, 'function_identifier'); //port_declaration
+    var arr = this.searchTree(element, 'function_identifier');
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";
