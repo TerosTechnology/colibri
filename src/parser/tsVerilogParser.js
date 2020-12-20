@@ -46,23 +46,45 @@ class tsVerilogParser {
       const tree = await this.parser.parse(sourceCode);
       //comments
       let comments = this.getComments(tree.rootNode, lines);
-
-      var structure = {
-        'libraries': this.get_libraries(tree.rootNode, lines, comments),  // includes
-        "entity": this.getEntityName(tree.rootNode, lines), // module
-        "generics": this.getGenerics(tree.rootNode, lines, comments), // parameters
-        "ports": this.getPorts(tree.rootNode, lines, comments),
-        "body": {
-          'processes': this.get_processes(tree.rootNode, lines, comments),
-          'instantiations': this.get_instantiations(tree.rootNode, lines, comments)
-        },
-        "declarations": {
-          'types': this.get_types(tree.rootNode, lines, comments),
-          'signals': this.get_signals(tree.rootNode, lines, comments),
-          'constants': this.get_constants(tree.rootNode, lines, comments),
-          'functions': this.get_functions(tree.rootNode, lines, comments)
+      
+      var arr = this.searchTree(tree.rootNode, 'module_header');
+      if (arr[0] === undefined) {
+        console.log("package");
+        let consts = this.get_constants(tree.rootNode, lines, comments);
+        let consts1 = this.getGenerics(tree.rootNode, lines, comments);
+        console.log(consts1);
+        for (let x = 0; x < consts1.length; x++) {
+          consts.push(consts1[x]);
         }
-      };
+        var structure = {
+          "package": this.get_package_declaration(tree.rootNode, lines), // package_identifier 
+          "declarations": {
+            'types': this.get_types(tree.rootNode, lines, comments),
+            'signals': this.get_signals(tree.rootNode, lines, comments),
+            'constants': consts,
+            'functions': this.get_functions(tree.rootNode, lines, comments)
+          }
+        };
+      }else{
+        var structure = {
+          'libraries': this.get_libraries(tree.rootNode, lines, comments),  // includes
+          "entity": this.getEntityName(tree.rootNode, lines), // module
+          "generics": this.getGenerics(tree.rootNode, lines, comments), // parameters
+          "ports": this.getPorts(tree.rootNode, lines, comments),
+          "body": {
+            'processes': this.get_processes(tree.rootNode, lines, comments),
+            'instantiations': this.get_instantiations(tree.rootNode, lines, comments)
+          },
+          "declarations": {
+            'types': this.get_types(tree.rootNode, lines, comments),
+            'signals': this.get_signals(tree.rootNode, lines, comments),
+            'constants': this.get_constants(tree.rootNode, lines, comments),
+            'functions': this.get_functions(tree.rootNode, lines, comments)
+          }
+        };
+     }
+     console.log(structure.package);
+     console.log(structure.declarations);
       return structure;
     }
     catch (error) {
@@ -300,13 +322,13 @@ class tsVerilogParser {
           comment = "";
         }
       }
-      item = {
-        "name": this.getGenericName(inputs[x], lines),
-        "type": this.getGenericKind(inputs[x], lines),
-        "default_value": this.get_generic_default(inputs[x], lines),
-        "description": comment
-      };
-      items.push(item);
+        item = {
+          "name": this.getGenericName(inputs[x], lines),
+          "type": this.getGenericKind(inputs[x], lines),
+          "default_value": this.get_generic_default(inputs[x], lines),
+          "description": comment
+        };
+        items.push(item);
     }
     return items;
   }
@@ -492,6 +514,30 @@ class tsVerilogParser {
     var arr = this.searchTree(element, 'module_header');
     element = arr;
     var arr = this.searchTree(element[0], 'simple_identifier');
+    var module_index = this.index(arr[0]);
+    let item = {
+      "name": this.extractData(arr[0], lines),
+      "description": ""
+    };
+
+    var description = "";
+    var comments = this.searchTree(tree, 'comment');
+    for (var x = 0; x < comments.length; ++x) {
+      if (comments[x].startPosition.row >= module_index[0]) { break; }
+      var comment_str = this.extractData(comments[x], lines).substr(2) + '\n ';
+      if (this.comment_symbol == "" || comment_str[0] == this.comment_symbol) { description += comment_str.substring(1); }
+    }
+    description += '\n';
+    item["description"] = description;
+
+    return item;
+  }
+
+  get_package_declaration(tree, lines) {
+    var element = tree;
+    var arr = this.searchTree(element, 'package_identifier');
+    element = arr;
+    arr = this.searchTree(element[0], 'simple_identifier');
     var module_index = this.index(arr[0]);
     let item = {
       "name": this.extractData(arr[0], lines),
