@@ -57,8 +57,8 @@ class tsVerilogParser {
         var structure = {
           "package": this.get_package_declaration(tree.rootNode, lines), // package_identifier 
           "declarations": {
-            'types': this.get_types(tree.rootNode, lines, comments),
-            'signals': this.get_signals(tree.rootNode, lines, comments),
+            'types': this.get_types_pkg(tree.rootNode, lines, comments),
+            'signals': [],
             'constants': consts,
             'functions': this.get_functions(tree.rootNode, lines, comments)
           }
@@ -81,6 +81,7 @@ class tsVerilogParser {
           }
         };
      }
+     console.log(structure.declarations);
       return structure;
     }
     catch (error) {
@@ -404,6 +405,15 @@ class tsVerilogParser {
     return always_name;
   }
 
+  get_type_type_pkg(input, lines) {
+    var arr = this.searchTree(input, 'data_type');
+    if (arr.length == 0) {
+      var name = "undefined";
+      return name;
+    }
+    var always_name = this.extractData(arr[0], lines);
+    return always_name;
+  }
   get_signal_type(input, lines, command) {
     var arr = this.searchTree(input, command);
     if (arr.length == 0) {
@@ -416,6 +426,16 @@ class tsVerilogParser {
 
   get_type_name(input, lines) {
     var arr = this.searchTree(input, 'list_of_interface_identifiers');
+    if (arr.length == 0) {
+      var name = "undefined";
+      return name;
+    }
+    var input_name = this.extractData(arr[0], lines);
+    return input_name;
+  }
+
+  get_type_name_pkg(input, lines) {
+    var arr = this.searchTree(input, 'type_identifier');
     if (arr.length == 0) {
       var name = "undefined";
       return name;
@@ -639,6 +659,34 @@ class tsVerilogParser {
         };
         items.push(item);
       }
+    }
+    return items;
+  }
+
+  get_types_pkg(tree, lines, comments) {
+    var items = [];
+    var inputs = [];
+    var item = {};
+    var element = tree;
+    //Inputs
+    var arr = this.searchTree(element, 'type_declaration'); //port_declaration
+    inputs = arr;
+    for (var x = 0; x < inputs.length; ++x) {
+      let comment = "";
+      let pre_comment = comments[inputs[x].startPosition.row];
+      if (pre_comment != undefined) {
+        if (this.comment_symbol == "" || pre_comment[0] == this.comment_symbol) {
+          comment = pre_comment.substring(1);
+        } else {
+          comment = "";
+        }
+      }
+      item = {
+        "name": this.get_type_name_pkg(inputs[x], lines),
+        "type": this.get_type_type_pkg(inputs[x], lines),
+        "description": comment
+      };
+      items.push(item);
     }
     return items;
   }
