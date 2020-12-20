@@ -58,7 +58,7 @@ class tsVerilogParser {
           "package": this.get_package_declaration(tree.rootNode, lines), // package_identifier 
           "declarations": {
             'types': this.get_types_pkg(tree.rootNode, lines, comments),
-            'signals': [],
+            'signals': this.get_signals(tree.rootNode, lines, comments),
             'constants': consts,
             'functions': this.get_functions(tree.rootNode, lines, comments)
           }
@@ -81,7 +81,7 @@ class tsVerilogParser {
           }
         };
      }
-     console.log(structure.declarations);
+     console.log(structure.generics);
       return structure;
     }
     catch (error) {
@@ -734,7 +734,9 @@ class tsVerilogParser {
           "type": signal_type,
           "description": comment
         };
-        items.push(item);
+        if (signal_type !== 'undefined') {
+          items.push(item);
+        }
       }
     }
     return items;
@@ -762,7 +764,7 @@ class tsVerilogParser {
       for (var x2 = 0; x2 < arr2.length; ++x2) {
         item = {
           "name": this.get_constant_name(arr2[x2], lines),
-          "type": this.get_constant_type(inputs[x2], lines),
+          "type": this.get_constant_type(inputs[x], lines),
           "default_value": this.get_constant_default(arr2[x2], lines),  // constant_param_expression
           "description": comment
         };
