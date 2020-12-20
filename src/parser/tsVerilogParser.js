@@ -49,10 +49,8 @@ class tsVerilogParser {
       
       var arr = this.searchTree(tree.rootNode, 'module_header');
       if (arr[0] === undefined) {
-        console.log("package");
         let consts = this.get_constants(tree.rootNode, lines, comments);
         let consts1 = this.getGenerics(tree.rootNode, lines, comments);
-        console.log(consts1);
         for (let x = 0; x < consts1.length; x++) {
           consts.push(consts1[x]);
         }
@@ -83,8 +81,6 @@ class tsVerilogParser {
           }
         };
      }
-     console.log(structure.package);
-     console.log(structure.declarations);
       return structure;
     }
     catch (error) {
@@ -718,7 +714,7 @@ class tsVerilogParser {
       for (var x2 = 0; x2 < arr2.length; ++x2) {
         item = {
           "name": this.get_constant_name(arr2[x2], lines),
-          "type": this.get_constant_type(arr2[x2], lines),
+          "type": this.get_constant_type(inputs[x2], lines),
           "default_value": this.get_constant_default(arr2[x2], lines),  // constant_param_expression
           "description": comment
         };
