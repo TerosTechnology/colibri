@@ -81,7 +81,6 @@ class tsVerilogParser {
           }
         };
      }
-     console.log(structure.generics);
       return structure;
     }
     catch (error) {
