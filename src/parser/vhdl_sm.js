@@ -59,18 +59,6 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
     return { 'svg': svg, 'stm': stm };
   }
 
-  check_stm(stm) {
-    let check = false;
-    let states = stm.states;
-    for (let i = 0; i < states.length; ++i) {
-      let transitions = states[i].transitions;
-      if (transitions.length > 0) {
-        return true;
-      }
-    }
-    return check;
-  }
-
   get_process(tree) {
     if (this.comment_symbol === '') {
       this.comment_symbol = ' ';
@@ -201,17 +189,6 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
     }
     return max_el;
   }
-
-  check_empty_states_transitions(states) {
-    let check = true;
-    for (let i = 0; i < states.length; ++i) {
-      if (states[i].transitions.length !== 0) {
-        check = false;
-      }
-    }
-    return check;
-  }
-
 
   get_state_names_from_case(p) {
     let state_names = [];

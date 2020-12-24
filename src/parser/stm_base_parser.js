@@ -1,4 +1,27 @@
 class Parser_stm_base {
+
+  check_empty_states_transitions(states) {
+    let check = true;
+    for (let i = 0; i < states.length; ++i) {
+      if (states[i].transitions.length !== 0) {
+        check = false;
+      }
+    }
+    return check;
+  }
+
+  check_stm(stm) {
+    let check = false;
+    let states = stm.states;
+    for (let i = 0; i < states.length; ++i) {
+      let transitions = states[i].transitions;
+      if (transitions.length > 0) {
+        return true;
+      }
+    }
+    return check;
+  }
+
   search_multiple_in_tree(element, matchingTitle) {
     var arr_match = [];
     function recursive_searchTree(element, matchingTitle) {

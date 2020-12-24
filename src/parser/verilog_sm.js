@@ -61,18 +61,6 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
     return { 'svg': svg, 'stm': stm };
   }
 
-  check_stm(stm) {
-    let check = false;
-    let states = stm.states;
-    for (let i = 0; i < states.length; ++i) {
-      let transitions = states[i].transitions;
-      if (transitions.length > 0) {
-        return true;
-      }
-    }
-    return check;
-  }
-
   get_process(tree) {
     if (this.comment_symbol === '') {
       this.comment_symbol = ' ';
@@ -149,23 +137,102 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
     let stms = [];
 
     let p = proc.code;
+    let name = this.get_process_label(p);
     let case_statements = this.get_case_process(p);
     for (let i = 0; i < case_statements.length; ++i) {
+      let description = proc.comments;
       let p_info = {
-        'description': proc.comments,
+        'description': description.replace('fsm_extract', ''),
         'name': '',
         'state_variable_name': '',
         'states': []
       };
+      p_info.name = name;
       if (case_statements !== undefined && case_statements.length !== 0) {
         p_info.state_variable_name = this.get_state_variable_name(case_statements[i]);
         p_info.states = this.get_states(case_statements[i], p_info.state_variable_name);
-        p_info.name = this.get_process_label(p);
+        let check = this.check_empty_states_transitions(p_info.states);
+        if (check === true && description.includes('fsm_extract') === true) {
+          let result = this.force_case_stm(case_statements[i]);
+          p_info.state_variable_name = result.variable_name;
+          p_info.states = result.states;
+        }
         stms.push(p_info);
       }
     }
     return stms;
   }
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Force
+  //////////////////////////////////////////////////////////////////////////////
+  force_case_stm(p) {
+    let state_names = this.get_state_names_from_case(p);
+    let state_name_candidate = this.search_state_variable_candidates(p, state_names);
+    let states = this.get_states(p, state_name_candidate);
+    return { 'variable_name': state_name_candidate, 'states': states };
+  }
+
+  get_state_names_from_case(p) {
+    let state_names = [];
+    let state_names_case = this.search_multiple_in_tree(p, 'case_item_expression');
+    for (let i = 0; i < state_names_case.length; ++i) {
+      state_names.push(state_names_case[i].text);
+    }
+    return state_names;
+  }
+
+  search_state_variable_candidates(p, state_names) {
+    let candidates = [];
+    let signals = this.search_multiple_in_tree(p, 'blocking_assignment');
+    for (let i = 0; i < signals.length; ++i) {
+      let rigth = this.get_rigth_simple_waveform_assignment(signals[i]);
+      if (rigth !== undefined) {
+        let left = this.get_left_simple_waveform_assignment(signals[i]);
+        if (state_names.includes(rigth) === true) {
+          candidates.push(left);
+        }
+      }
+    }
+
+    let variables = this.search_multiple_in_tree(p, 'nonblocking_assignment');
+    for (let i = 0; i < variables.length; ++i) {
+      let rigth = this.get_rigth_simple_variable_assignment(variables[i]);
+      if (rigth !== undefined) {
+        let left = this.get_rigth_simple_variable_assignment(variables[i]);
+        if (state_names.includes(rigth) === true) {
+          candidates.push(left);
+        }
+      }
+    }
+    let unique = this.mode(candidates);
+    return unique;
+  }
+
+  mode(array) {
+    if (array.length == 0)
+      return null;
+    var mode_map = {};
+    var max_el = array[0], max_count = 1;
+    for (var i = 0; i < array.length; i++) {
+      var el = array[i];
+      if (mode_map[el] == null)
+        mode_map[el] = 1;
+      else
+        mode_map[el]++;
+      if (mode_map[el] > max_count) {
+        max_el = el;
+        max_count = mode_map[el];
+      }
+    }
+    return max_el;
+  }
+  //////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 
   get_states(p, state_variable_name) {
     let case_items = this.get_item_multiple_from_childs(p, 'case_item');
