@@ -22,9 +22,11 @@
 const os = require("os");
 const path = require('path');
 const Parser = require('web-tree-sitter');
+const ts_base_parser = require('./ts_base_parser');
 
-class tsVerilogParser {
+class tsVerilogParser extends ts_base_parser.Ts_base_parser {
   constructor(comment_symbol) {
+    super();
     this.comment_symbol = comment_symbol;
     this.loaded_wasm = false;
   }
@@ -38,6 +40,7 @@ class tsVerilogParser {
   }
 
   async getAll(sourceCode, comment_symbol) {
+    let structure;
     if (comment_symbol !== undefined) {
       this.comment_symbol = comment_symbol;
     }
@@ -46,41 +49,42 @@ class tsVerilogParser {
       const tree = await this.parser.parse(sourceCode);
       //comments
       let comments = this.getComments(tree.rootNode, lines);
-      
-      var arr = this.searchTree(tree.rootNode, 'module_header');
-      if (arr[0] === undefined) {
-        let consts = this.get_constants(tree.rootNode, lines, comments);
-        let consts1 = this.getGenerics(tree.rootNode, lines, comments);
-        for (let x = 0; x < consts1.length; x++) {
-          consts.push(consts1[x]);
-        }
-        var structure = {
+      var module_header = this.search_multiple_in_tree(tree.rootNode, 'module_header');
+
+      if (module_header.length === 0) {
+        let arch_body = tree;
+        let body_elements = this.get_body_elements_and_declarations(arch_body, lines, comments, true);
+
+        structure = {
           "package": this.get_package_declaration(tree.rootNode, lines), // package_identifier 
           "declarations": {
-            'types': this.get_types_pkg(tree.rootNode, lines, comments),
-            'signals': this.get_signals(tree.rootNode, lines, comments),
-            'constants': consts,
-            'functions': this.get_functions(tree.rootNode, lines, comments)
+            'types': body_elements.types,
+            'signals': body_elements.signals,
+            'constants': body_elements.constants,
+            'functions': body_elements.functions
           }
         };
-      }else{
-        var structure = {
+      } else {
+        let arch_body = this.get_architecture_body(tree);
+        let body_elements = this.get_body_elements_and_declarations(arch_body, lines, comments);
+
+        structure = {
           'libraries': this.get_libraries(tree.rootNode, lines, comments),  // includes
           "entity": this.getEntityName(tree.rootNode, lines), // module
           "generics": this.getGenerics(tree.rootNode, lines, comments), // parameters
           "ports": this.getPorts(tree.rootNode, lines, comments),
           "body": {
-            'processes': this.get_processes(tree.rootNode, lines, comments),
-            'instantiations': this.get_instantiations(tree.rootNode, lines, comments)
+            'processes': body_elements.processes,
+            'instantiations': body_elements.instantiations,
           },
           "declarations": {
-            'types': this.get_types(tree.rootNode, lines, comments),
-            'signals': this.get_signals(tree.rootNode, lines, comments),
-            'constants': this.get_constants(tree.rootNode, lines, comments),
-            'functions': this.get_functions(tree.rootNode, lines, comments)
+            'types': body_elements.types,
+            'signals': body_elements.signals,
+            'constants': body_elements.constants,
+            'functions': body_elements.functions
           }
         };
-     }
+      }
       return structure;
     }
     catch (error) {
@@ -90,43 +94,134 @@ class tsVerilogParser {
     }
   }
 
-  searchTree(element, matchingTitle) {
-    var arr_match = [];
-    function recursive_searchTree(element, matchingTitle) {
-      if (element.type == matchingTitle) {
-        arr_match.push(element);
-      } else if (element != null) {
-        var i;
-        var result = null;
-        for (i = 0; result == null && i < element.childCount; i++) {
-          result = recursive_searchTree(element.child(i), matchingTitle);
-        }
-        return result;
-      }
-      return null;
+  //////////////////////////////////////////////////////////////////////////////
+  get_body_elements_and_declarations(arch_body, lines, general_comments, enable_package) {
+    if (this.comment_symbol === '') {
+      this.comment_symbol = ' ';
     }
-    recursive_searchTree(element, matchingTitle);
-    return arr_match;
-  }
+    //Elements array
+    let process_array = [];
+    let signals_array = [];
+    let constants_array = [];
+    let functions_array = [];
+    let types_array = [];
+    let instantiations_array = [];
 
-  get_item_from_childs(p, type) {
-    if (p === undefined) {
-      return undefined;
-    }
-    let item = undefined;
-    let cursor = p.walk();
-    let break_p = false;
+    let cursor = arch_body.walk();
+    let comments = '';
+    // Process
     cursor.gotoFirstChild();
     do {
-      if (cursor.nodeType === type) {
-        item = cursor.currentNode();
+      if (cursor.nodeType === 'module_or_generate_item' || cursor.nodeType === 'package_item') {
+        cursor.gotoFirstChild();
+        do {
+          if (cursor.nodeType === 'always_construct') {
+            let new_processes = this.get_processes(cursor.currentNode(), lines, general_comments);
+            new_processes = this.set_description_to_array(new_processes, comments);
+            process_array = process_array.concat(new_processes);
+            comments = '';
+          }
+          else if (cursor.nodeType === 'local_parameter_declaration') {
+            let new_constants = this.get_constants(cursor.currentNode(), lines, general_comments);
+            new_constants = this.set_description_to_array(new_constants, comments);
+            constants_array = constants_array.concat(new_constants);
+            comments = '';
+          }
+          else if (cursor.nodeType === 'net_declaration' || cursor.nodeType === 'data_declaration') {
+            let new_signals = this.get_signals(cursor.currentNode(), lines, general_comments);
+            new_signals = this.set_description_to_array(new_signals, comments);
+            signals_array = signals_array.concat(new_signals);
+            comments = '';
+          }
+          else if (cursor.nodeType === 'function_identifier') {
+            let new_functions = this.get_functions(cursor.currentNode(), lines, general_comments);
+            new_functions = this.set_description_to_array(new_functions, comments);
+            functions_array = functions_array.concat(new_functions);
+            comments = '';
+          }
+          else if (cursor.nodeType === 'type_declaration') {
+            let new_types = this.get_types_pkg(cursor.currentNode(), lines, general_comments);
+            new_types = this.set_description_to_array(new_types, comments);
+            types_array = types_array.concat(new_types);
+            comments = '';
+          }
+          else if (cursor.nodeType === 'module_instantiation') {
+            let new_instantiations = this.get_instantiations(cursor.currentNode(), lines, general_comments);
+            new_instantiations = this.set_description_to_array(new_instantiations, comments);
+            instantiations_array = types_array.concat(new_instantiations);
+            comments = '';
+          }
+          else {
+            comments = '';
+          }
+        }
+        while (cursor.gotoNextSibling() !== false);
+        cursor.gotoParent();
+      }
+      else if (cursor.nodeType === 'comment') {
+        let txt_comment = cursor.nodeText.slice(2);
+        if (txt_comment[0] === this.comment_symbol) {
+          comments += txt_comment.slice(1).trim() + '\n';
+        }
+        else {
+          comments = '';
+        }
+      }
+      else {
+        comments = '';
+      }
+    }
+    while (cursor.gotoNextSibling() !== false);
+
+    if (enable_package === true) {
+      constants_array = constants_array.concant(constants_array);
+    }
+
+    return {
+      processes: process_array, signals: signals_array, instantiations: instantiations_array,
+      constants: constants_array, functions: functions_array, types: types_array
+    };
+  }
+
+  get_architecture_body(p) {
+    let break_p = false;
+    let arch_body = undefined;
+    let cursor = p.walk();
+    cursor.gotoFirstChild();
+    do {
+      if (cursor.nodeType === 'module_declaration') {
+        arch_body = cursor.currentNode();
         break_p = true;
       }
     }
     while (cursor.gotoNextSibling() === true && break_p === false);
-    return item;
+    return arch_body;
   }
 
+  set_description_to_array(arr, txt) {
+    for (let i = 0; i < arr.length; ++i) {
+      if (arr[i].description === '') {
+        arr[i].description = txt;
+      }
+    }
+    return arr;
+  }
+
+  // get_architecture_body(p) {
+  //   let break_p = false;
+  //   let arch_body = undefined;
+  //   let cursor = p.walk();
+  //   cursor.gotoFirstChild();
+  //   do {
+  //     if (cursor.nodeType === 'module_declaration') {
+  //       arch_body = cursor.currentNode();
+  //       break_p = true;
+  //     }
+  //   }
+  //   while (cursor.gotoNextSibling() === true && break_p === false);
+  //   return arch_body;
+  // }
+  //////////////////////////////////////////////////////////////////////////////
   get_process_label(p) {
     let label_txt = '';
     let label = this.get_item_from_childs(p, "block_identifier");
@@ -152,13 +247,13 @@ class tsVerilogParser {
   }
 
   getPortName(port, lines) {
-    var arr = this.searchTree(port, 'list_of_port_identifiers'); 
+    var arr = this.search_multiple_in_tree(port, 'list_of_port_identifiers');
     var port_name;
     if (arr.length == 0) {
-      arr = this.searchTree(port, 'list_of_variable_identifiers');
+      arr = this.search_multiple_in_tree(port, 'list_of_variable_identifiers');
     }
     if (arr.length == 0) {
-      arr = this.searchTree(port, 'port_identifier');
+      arr = this.search_multiple_in_tree(port, 'port_identifier');
     }
     for (var x = 0; x < arr.length; ++x) {
       if (x === 0) {
@@ -171,9 +266,9 @@ class tsVerilogParser {
   }
 
   getPortNameAnsi(port, lines) {
-    var arr = this.searchTree(port, 'port_identifier');
+    var arr = this.search_multiple_in_tree(port, 'port_identifier');
     if (arr.length == 0) {
-      arr = this.searchTree(port, 'simple_identifier');
+      arr = this.search_multiple_in_tree(port, 'simple_identifier');
       var port_name = this.extractData(arr[0], lines);
       return port_name;
     } else {
@@ -184,9 +279,9 @@ class tsVerilogParser {
   }
 
   getPortType(port, lines) {
-    var arr = this.searchTree(port, 'net_port_type1');
+    var arr = this.search_multiple_in_tree(port, 'net_port_type1');
     if (arr[0] == null) {
-      arr = this.searchTree(port, 'packed_dimension');
+      arr = this.search_multiple_in_tree(port, 'packed_dimension');
     }
     if (arr[0] == null) {
       return "";
@@ -196,7 +291,7 @@ class tsVerilogParser {
   }
 
   getPortKind(port, lines) {
-    var arr = this.searchTree(port, 'port_direction');
+    var arr = this.search_multiple_in_tree(port, 'port_direction');
     if (arr[0] == null) {
       return;
     }
@@ -205,9 +300,10 @@ class tsVerilogParser {
   }
 
   addPort(element, key, name, direction, type, ansi, items, comments, lines) {
+    let last_direction = undefined;
     var item = {};
     var inputs = [];
-    var arr = this.searchTree(element, key);
+    var arr = this.search_multiple_in_tree(element, key);
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       var port_name;
@@ -223,6 +319,9 @@ class tsVerilogParser {
       }
       port_name = port_name.split(',');
       var directionVar = this.getPortKind(inputs[x], lines);
+      if (directionVar !== undefined) {
+        last_direction = directionVar;
+      }
       var typeVar;
       switch (type) {
         case 'getPortType':
@@ -231,7 +330,7 @@ class tsVerilogParser {
         default:
           typeVar = this.getPortType(inputs[x], lines);
       }
-      var port_ref = this.searchTree(element, 'port_reference');
+      var port_ref = this.search_multiple_in_tree(element, 'port_reference');
       var comment = "";
       var comment_str = comments[inputs[x].startPosition.row];
       for (var i = 0; i < port_name.length; i++) {
@@ -251,6 +350,10 @@ class tsVerilogParser {
           }
         }
         else if (this.comment_symbol == "" || comment_str[0] == this.comment_symbol) { comment = comment_str.substring(1); }
+
+        if (directionVar === undefined) {
+          directionVar = last_direction;
+        }
 
         item = {
           'name': port_name[i],
@@ -282,7 +385,7 @@ class tsVerilogParser {
   getComments(tree, lines) {
     var item = {};
     var inputs = [];
-    var arr = this.searchTree(tree, 'comment');
+    var arr = this.search_multiple_in_tree(tree, 'comment');
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       item[inputs[x].startPosition.row] = this.extractData(inputs[x], lines).substr(2);
@@ -306,7 +409,7 @@ class tsVerilogParser {
     var item = {};
     var element = tree;
     //Inputs
-    var arr = this.searchTree(element, 'parameter_declaration');
+    var arr = this.search_multiple_in_tree(element, 'parameter_declaration');
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";
@@ -318,19 +421,19 @@ class tsVerilogParser {
           comment = "";
         }
       }
-        item = {
-          "name": this.getGenericName(inputs[x], lines),
-          "type": this.getGenericKind(inputs[x], lines),
-          "default_value": this.get_generic_default(inputs[x], lines),
-          "description": comment
-        };
-        items.push(item);
+      item = {
+        "name": this.getGenericName(inputs[x], lines),
+        "type": this.getGenericKind(inputs[x], lines),
+        "default_value": this.get_generic_default(inputs[x], lines),
+        "description": comment
+      };
+      items.push(item);
     }
     return items;
   }
 
   get_library_name(port, lines) {
-    var arr = this.searchTree(port, 'double_quoted_string');
+    var arr = this.search_multiple_in_tree(port, 'double_quoted_string');
     if (arr.length == 0) {
       var lib = this.extractData(arr[0], lines);
       return lib;
@@ -342,9 +445,9 @@ class tsVerilogParser {
   }
 
   getGenericName(port, lines) {
-    var arr = this.searchTree(port, 'list_of_variable_identifiers');
+    var arr = this.search_multiple_in_tree(port, 'list_of_variable_identifiers');
     if (arr.length == 0) {
-      arr = this.searchTree(port, 'simple_identifier');
+      arr = this.search_multiple_in_tree(port, 'simple_identifier');
       var port_name = this.extractData(arr[0], lines);
       return port_name;
     } else {
@@ -355,7 +458,7 @@ class tsVerilogParser {
   }
 
   get_generic_default(input, lines) {
-    var arr = this.searchTree(input, 'constant_param_expression');
+    var arr = this.search_multiple_in_tree(input, 'constant_param_expression');
     if (arr.length == 0) {
       var name = "undefined";
       return name;
@@ -365,7 +468,7 @@ class tsVerilogParser {
   }
 
   get_always_name(always, lines) {
-    var arr = this.searchTree(always, 'block_identifier');
+    var arr = this.search_multiple_in_tree(always, 'block_identifier');
     if (arr.length == 0) {
       var name = "unnamed";
       return name;
@@ -375,7 +478,7 @@ class tsVerilogParser {
   }
 
   get_always_sens_list(always, lines) {
-    var arr = this.searchTree(always, 'event_control');
+    var arr = this.search_multiple_in_tree(always, 'event_control');
     if (arr.length == 0) {
       var name = '';
       return name;
@@ -385,7 +488,7 @@ class tsVerilogParser {
   }
 
   get_instantiation_name(always, lines) {
-    var arr = this.searchTree(always, 'name_of_instance');
+    var arr = this.search_multiple_in_tree(always, 'name_of_instance');
     if (arr.length == 0) {
       var name = "undefined";
       return name;
@@ -395,7 +498,7 @@ class tsVerilogParser {
   }
 
   get_type_type(input, lines) {
-    var arr = this.searchTree(input, 'interface_identifier');
+    var arr = this.search_multiple_in_tree(input, 'interface_identifier');
     if (arr.length == 0) {
       var name = "undefined";
       return name;
@@ -405,7 +508,7 @@ class tsVerilogParser {
   }
 
   get_type_type_pkg(input, lines) {
-    var arr = this.searchTree(input, 'data_type');
+    var arr = this.search_multiple_in_tree(input, 'data_type');
     if (arr.length == 0) {
       var name = "undefined";
       return name;
@@ -414,7 +517,7 @@ class tsVerilogParser {
     return always_name;
   }
   get_signal_type(input, lines, command) {
-    var arr = this.searchTree(input, command);
+    var arr = this.search_multiple_in_tree(input, command);
     if (arr.length == 0) {
       var name = "undefined";
       return name;
@@ -424,7 +527,7 @@ class tsVerilogParser {
   }
 
   get_type_name(input, lines) {
-    var arr = this.searchTree(input, 'list_of_interface_identifiers');
+    var arr = this.search_multiple_in_tree(input, 'list_of_interface_identifiers');
     if (arr.length == 0) {
       var name = "undefined";
       return name;
@@ -434,7 +537,7 @@ class tsVerilogParser {
   }
 
   get_type_name_pkg(input, lines) {
-    var arr = this.searchTree(input, 'type_identifier');
+    var arr = this.search_multiple_in_tree(input, 'type_identifier');
     if (arr.length == 0) {
       var name = "undefined";
       return name;
@@ -444,7 +547,7 @@ class tsVerilogParser {
   }
 
   get_port_default(input, lines) {
-    var arr = this.searchTree(input, 'list_of_interface_identifiers');
+    var arr = this.search_multiple_in_tree(input, 'list_of_interface_identifiers');
     if (arr.length == 0) {
       var name = "undefined";
       return name;
@@ -454,7 +557,7 @@ class tsVerilogParser {
   }
 
   get_signal_name(input, lines, command) {
-    var arr = this.searchTree(input, command);
+    var arr = this.search_multiple_in_tree(input, command);
     if (arr.length == 0) {
       var name = "undefined";
       return name;
@@ -464,7 +567,7 @@ class tsVerilogParser {
   }
 
   get_constant_name(input, lines) {
-    var arr = this.searchTree(input, 'parameter_identifier');
+    var arr = this.search_multiple_in_tree(input, 'parameter_identifier');
     if (arr.length == 0) {
       var name = "undefined";
       return name;
@@ -474,7 +577,7 @@ class tsVerilogParser {
   }
 
   get_constant_type(input, lines) {
-    var arr = this.searchTree(input, 'integer_atom_type');
+    var arr = this.search_multiple_in_tree(input, 'integer_atom_type');
     if (arr.length == 0) {
       var name = '';
       return name;
@@ -484,7 +587,7 @@ class tsVerilogParser {
   }
 
   get_constant_default(input, lines) {
-    var arr = this.searchTree(input, 'constant_param_expression');
+    var arr = this.search_multiple_in_tree(input, 'constant_param_expression');
     if (arr.length == 0) {
       var name = "undefined";
       return name;
@@ -494,7 +597,7 @@ class tsVerilogParser {
   }
 
   get_function_name(input, lines) {
-    var arr = this.searchTree(input, 'simple_identifier');
+    var arr = this.search_multiple_in_tree(input, 'simple_identifier');
     if (arr.length == 0) {
       var name = "undefined";
       return name;
@@ -504,7 +607,7 @@ class tsVerilogParser {
   }
 
   get_instantiation_type(always, lines) {
-    var arr = this.searchTree(always, 'simple_identifier');
+    var arr = this.search_multiple_in_tree(always, 'simple_identifier');
     if (arr.length == 0) {
       var name = "undefined";
       return name;
@@ -514,7 +617,7 @@ class tsVerilogParser {
   }
 
   getGenericKind(port, lines) {
-    var arr = this.searchTree(port, 'data_type_or_implicit1'); 
+    var arr = this.search_multiple_in_tree(port, 'data_type_or_implicit1');
     if (arr.length == 0) {
       return "";
     } else {
@@ -526,9 +629,9 @@ class tsVerilogParser {
 
   getEntityName(tree, lines) {
     var element = tree;
-    var arr = this.searchTree(element, 'module_header');
+    var arr = this.search_multiple_in_tree(element, 'module_header');
     element = arr;
-    var arr = this.searchTree(element[0], 'simple_identifier');
+    var arr = this.search_multiple_in_tree(element[0], 'simple_identifier');
     var module_index = this.index(arr[0]);
     let item = {
       "name": this.extractData(arr[0], lines),
@@ -536,7 +639,7 @@ class tsVerilogParser {
     };
 
     var description = "";
-    var comments = this.searchTree(tree, 'comment');
+    var comments = this.search_multiple_in_tree(tree, 'comment');
     for (var x = 0; x < comments.length; ++x) {
       if (comments[x].startPosition.row >= module_index[0]) { break; }
       var comment_str = this.extractData(comments[x], lines).substr(2) + '\n ';
@@ -550,9 +653,9 @@ class tsVerilogParser {
 
   get_package_declaration(tree, lines) {
     var element = tree;
-    var arr = this.searchTree(element, 'package_identifier');
+    var arr = this.search_multiple_in_tree(element, 'package_identifier');
     element = arr;
-    arr = this.searchTree(element[0], 'simple_identifier');
+    arr = this.search_multiple_in_tree(element[0], 'simple_identifier');
     var module_index = this.index(arr[0]);
     let item = {
       "name": this.extractData(arr[0], lines),
@@ -560,7 +663,7 @@ class tsVerilogParser {
     };
 
     var description = "";
-    var comments = this.searchTree(tree, 'comment');
+    var comments = this.search_multiple_in_tree(tree, 'comment');
     for (var x = 0; x < comments.length; ++x) {
       if (comments[x].startPosition.row >= module_index[0]) { break; }
       var comment_str = this.extractData(comments[x], lines).substr(2) + '\n ';
@@ -578,7 +681,7 @@ class tsVerilogParser {
     var item = {};
     var element = tree;
     //Inputs
-    var arr = this.searchTree(element, 'always_construct');
+    var arr = this.search_multiple_in_tree(element, 'always_construct');
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";
@@ -607,7 +710,7 @@ class tsVerilogParser {
     var item = {};
     var element = tree;
     //Inputs
-    var arr = this.searchTree(element, 'module_instantiation');
+    var arr = this.search_multiple_in_tree(element, 'module_instantiation');
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";
@@ -635,7 +738,7 @@ class tsVerilogParser {
     var item = {};
     var element = tree;
     //Inputs
-    var arr = this.searchTree(element, 'interface_port_declaration'); //port_declaration
+    var arr = this.search_multiple_in_tree(element, 'interface_port_declaration'); //port_declaration
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";
@@ -668,7 +771,7 @@ class tsVerilogParser {
     var item = {};
     var element = tree;
     //Inputs
-    var arr = this.searchTree(element, 'type_declaration'); //port_declaration
+    var arr = this.search_multiple_in_tree(element, 'type_declaration'); //port_declaration
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";
@@ -696,8 +799,8 @@ class tsVerilogParser {
     var inputs2 = [];
     var element = tree;
     //Inputs
-    var arr = this.searchTree(element, 'net_declaration');
-    var arr2 = this.searchTree(element, 'data_declaration');
+    var arr = this.search_multiple_in_tree(element, 'net_declaration');
+    var arr2 = this.search_multiple_in_tree(element, 'data_declaration');
     inputs = arr;
     inputs2 = arr2;
 
@@ -747,7 +850,7 @@ class tsVerilogParser {
     var item = {};
     var element = tree;
     //Inputs
-    var arr = this.searchTree(element, 'local_parameter_declaration');
+    var arr = this.search_multiple_in_tree(element, 'local_parameter_declaration');
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";
@@ -759,7 +862,7 @@ class tsVerilogParser {
           comment = "";
         }
       }
-      var arr2 = this.searchTree(inputs[x], 'param_assignment');
+      var arr2 = this.search_multiple_in_tree(inputs[x], 'param_assignment');
       for (var x2 = 0; x2 < arr2.length; ++x2) {
         item = {
           "name": this.get_constant_name(arr2[x2], lines),
@@ -779,7 +882,7 @@ class tsVerilogParser {
     var item = {};
     var element = tree;
     //Inputs
-    var arr = this.searchTree(element, 'function_identifier');
+    var arr = this.search_multiple_in_tree(element, 'function_identifier');
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";

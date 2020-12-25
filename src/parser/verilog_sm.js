@@ -29,7 +29,7 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
     }
     catch (e) {
       // eslint-disable-next-line no-console
-      console.log(e);
+      // console.log(e);
       return [];
     }
     let stm = [];
@@ -41,7 +41,7 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
       }
       catch (e) {
         // eslint-disable-next-line no-console
-        console.log(e);
+        // console.log(e);
         states = undefined;
       }
       if (states !== undefined) {
