@@ -695,7 +695,7 @@ class Documenter {
       table.push([ports[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       ports[i]['direction'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       ports[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
-      ports[i]['description'].replace(/ \r/g, ' ').replace(/\n/g, ' ')]);
+      ports[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
     let text = md(table) + '\n';
     return text;
