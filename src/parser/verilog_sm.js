@@ -250,12 +250,13 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
   }
   //////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-
   get_states(p, state_variable_name) {
+    //Check if other case 
+    let cases_others = this.search_multiple_in_tree(p, 'case_statement');
+    if (cases_others.length !== 0) {
+      return [];
+    }
+
     let case_items = this.get_item_multiple_from_childs(p, 'case_item');
     let case_state = [];
     for (let i = 0; i < case_items.length; ++i) {
