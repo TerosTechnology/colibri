@@ -1,4 +1,29 @@
-class Parser_stm_base {
+// Copyright 2020 Teros Technology
+//
+// Ismael Perez Rojo
+// Carlos Alberto Ruiz Naranjo
+// Alfredo Saez
+//
+// This file is part of Colibri.
+//
+// Colibri is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Colibri is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
+const ts_base_parser = require('./ts_base_parser');
+
+class Parser_stm_base extends ts_base_parser.Ts_base_parser {
+  constructor() {
+    super();
+  }
 
   check_empty_states_transitions(states) {
     let check = true;
@@ -22,84 +47,6 @@ class Parser_stm_base {
     return check;
   }
 
-  search_multiple_in_tree(element, matchingTitle) {
-    var arr_match = [];
-    function recursive_searchTree(element, matchingTitle) {
-      let type = element.type;
-      if (type === matchingTitle) {
-        arr_match.push(element);
-      } else if (element !== null) {
-        var i;
-        var result = null;
-        for (i = 0; result === null && i < element.childCount; i++) {
-          result = recursive_searchTree(element.child(i), matchingTitle);
-        }
-        return result;
-      }
-      return null;
-    }
-    recursive_searchTree(element, matchingTitle);
-    return arr_match;
-  }
-
-  search_in_tree(element, matchingTitle) {
-    var match = undefined;
-    function recursive_searchTree(element, matchingTitle) {
-      let type = element.type;
-      if (type === matchingTitle) {
-        match = element;
-      } else if (element !== null) {
-        var i;
-        var result = null;
-        for (i = 0; result === null && i < element.childCount; i++) {
-          result = recursive_searchTree(element.child(i), matchingTitle);
-          if (result !== null) {
-            break;
-          }
-        }
-        return result;
-      }
-      return null;
-    }
-    recursive_searchTree(element, matchingTitle);
-    return match;
-  }
-
-  get_item_multiple_from_childs(p, type) {
-    if (p === undefined) {
-      return [];
-    }
-    let items = [];
-    let cursor = p.walk();
-    cursor.gotoFirstChild();
-    do {
-      if (cursor.nodeType === type) {
-        let item = cursor.currentNode();
-        items.push(item);
-      }
-    }
-    while (cursor.gotoNextSibling() === true);
-    return items;
-  }
-
-  get_item_from_childs(p, type) {
-    if (p === undefined) {
-      return undefined;
-    }
-    let item = undefined;
-    let cursor = p.walk();
-    let break_p = false;
-    cursor.gotoFirstChild();
-    do {
-      if (cursor.nodeType === type) {
-        item = cursor.currentNode();
-        break_p = true;
-      }
-    }
-    while (cursor.gotoNextSibling() === true && break_p === false);
-    return item;
-  }
-
   json_to_svg(stm_json) {
     let stmcat = this.get_smcat(stm_json);
     const smcat = require("state-machine-cat");
@@ -111,7 +58,6 @@ class Parser_stm_base {
     catch (e) { console.log(e); }
     return svg;
   }
-
 
   get_smcat(stm_json) {
     let sm_states = '';

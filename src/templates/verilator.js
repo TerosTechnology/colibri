@@ -31,8 +31,8 @@ class verilator {
   }
   async generate(src) {
     let parser = new ParserLib.ParserFactory;
-    parser = parser.getParser(this.language, '');
-    let structure = await parser.getAll(src);
+    parser = await parser.getParser(this.language, '');
+    let structure = await parser.get_all(src);
     if (structure === undefined) {
       return undefined;
     }

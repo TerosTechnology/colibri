@@ -144,10 +144,10 @@ class Documenter {
       markdown_doc += code_tree['package']['description'] + "\n";
     }
 
-    //Signals and constants
+    //Signals, constants and types
     if (code_tree['declarations'] !== undefined) {
       markdown_doc += this._get_signals_constants_section(
-        code_tree['declarations']['signals'], code_tree['declarations']['constants']);
+        code_tree['declarations']['signals'], code_tree['declarations']['constants'], code_tree['declarations']['types']);
       //Functions
       markdown_doc += this._get_functions_section(code_tree['declarations']['functions']);
     }
@@ -230,7 +230,7 @@ class Documenter {
     if (code_tree['declarations'] !== undefined) {
       //Signals and constants
       markdown_doc += this._get_signals_constants_section(
-        code_tree['declarations']['signals'], code_tree['declarations']['constants']);
+        code_tree['declarations']['signals'], code_tree['declarations']['constants'], code_tree['declarations']['types']);
       //Functions
       markdown_doc += this._get_functions_section(code_tree['declarations']['functions']);
     }
@@ -364,7 +364,7 @@ class Documenter {
     if (code_tree['declarations'] !== undefined) {
       //Signals and constants
       html += converter.makeHtml(this._get_signals_constants_section(
-        code_tree['declarations']['signals'], code_tree['declarations']['constants']));
+        code_tree['declarations']['signals'], code_tree['declarations']['constants'], code_tree['declarations']['types']));
       //Functions
       html += converter.makeHtml(this._get_functions_section(code_tree['declarations']['functions']));
     }
@@ -540,7 +540,7 @@ class Documenter {
 
   async _get_code_tree() {
     let parser = await this.get_parser(this.lang);
-    let code_tree = await parser.getAll(this.code, this.symbol);
+    let code_tree = await parser.get_all(this.code, this.symbol);
     return code_tree;
   }
 
@@ -613,7 +613,7 @@ class Documenter {
     return elements_i;
   }
 
-  _get_signals_constants_section(signals, constants) {
+  _get_signals_constants_section(signals, constants, types) {
     let md = "";
 
     if (this.config.signals === 'commented') {
@@ -623,9 +623,10 @@ class Documenter {
       constants = this._get_elements_with_description(constants);
     }
 
-    if ((signals.length !== 0 && this.config.signals !== 'none') || (constants.length !== 0 && this.config.constants !== 'none')) {
+    if ((signals.length !== 0 && this.config.signals !== 'none') ||
+      (constants.length !== 0 && this.config.constants !== 'none') || types.length !== 0) {
       //Title
-      md += "## Signals and constants\n";
+      md += "## Signals, constants and types\n";
       //Tables
       if (signals.length !== 0 && this.config.signals !== 'none') {
         md += "### Signals\n";
@@ -634,6 +635,10 @@ class Documenter {
       if (constants.length !== 0 && this.config.constants !== 'none') {
         md += "### Constants\n";
         md += this._get_doc_constants(constants);
+      }
+      if (types.length !== 0) {
+        md += "### Types\n";
+        md += this._get_doc_types(types);
       }
     }
     return md;
@@ -721,8 +726,8 @@ class Documenter {
     table.push(["Name", "Type", "Description"]);
     for (let i = 0; i < signals.length; ++i) {
       table.push([signals[i]['name'],
-      signals[i]['type'],
-      signals[i]['description']]);
+      signals[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      signals[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
     let text = md(table) + '\n';
     return text;
@@ -734,9 +739,22 @@ class Documenter {
     table.push(["Name", "Type", "Value", "Description"]);
     for (let i = 0; i < constants.length; ++i) {
       table.push([constants[i]['name'],
-      constants[i]['type'],
-      constants[i]['default_value'],
-      constants[i]['description']]);
+      constants[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      constants[i]['default_value'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      constants[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
+    }
+    let text = md(table) + '\n';
+    return text;
+  }
+
+  _get_doc_types(tpyes) {
+    const md = require('./markdownTable');
+    let table = [];
+    table.push(["Name", "Type", "Description"]);
+    for (let i = 0; i < tpyes.length; ++i) {
+      table.push([tpyes[i]['name'],
+      tpyes[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      tpyes[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
     let text = md(table) + '\n';
     return text;
