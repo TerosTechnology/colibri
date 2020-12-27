@@ -19,7 +19,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-const ts_verilog_parser = require('./tsVerilogParser');
+const ts_verilog_parser = require('./ts_verilog_parser');
 const ts_vhdl_parser = require('./ts_vhdl_parser');
 
 class ParserFactory {

@@ -1,3 +1,24 @@
+// Copyright 2020 Teros Technology
+//
+// Ismael Perez Rojo
+// Carlos Alberto Ruiz Naranjo
+// Alfredo Saez
+//
+// This file is part of Colibri.
+//
+// Colibri is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Colibri is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
+
 const stm_base = require('./stm_base_parser');
 const Path = require('path');
 const Parser = require('web-tree-sitter');
@@ -29,7 +50,7 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
     }
     catch (e) {
       // eslint-disable-next-line no-console
-      console.log(e);
+      // console.log(e);
       return [];
     }
     let stm = [];
@@ -41,7 +62,7 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
       }
       catch (e) {
         // eslint-disable-next-line no-console
-        console.log(e);
+        // console.log(e);
         states = undefined;
       }
       if (states !== undefined) {
@@ -229,12 +250,13 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
   }
   //////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-
   get_states(p, state_variable_name) {
+    //Check if other case 
+    let cases_others = this.search_multiple_in_tree(p, 'case_statement');
+    if (cases_others.length !== 0) {
+      return [];
+    }
+
     let case_items = this.get_item_multiple_from_childs(p, 'case_item');
     let case_state = [];
     for (let i = 0; i < case_items.length; ++i) {
