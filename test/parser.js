@@ -23,8 +23,8 @@ const colors = require('colors');
 const fs = require('fs');
 const Colibri = require('../src/main');
 const general = require('../src/general/general');
+const ParserLib = require('../src/parser/factory');
 const General = Colibri.General;
-const Parser = Colibri.Parser;
 
 for (let x=0;x<9;++x){
   var ParserLang = [General.LANGUAGES.VERILOG];
@@ -147,9 +147,10 @@ function check(m,n,cmp,type,file){
 }
 
 async function get_structure(ParserLang,symbol,src){
-  let parser = new Parser.ParserFactory;
-  parser = parser.getParser(ParserLang,symbol);
-  let structure = await parser.getAll(src);
+  let parser = new ParserLib.ParserFactory;
+  let lang_parser = await parser.getParser(ParserLang,symbol);
+  let structure = await lang_parser.get_all(src);
   return structure;
 }
+
 
