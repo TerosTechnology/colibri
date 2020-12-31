@@ -700,14 +700,24 @@ class Parser extends ts_base_parser.Ts_base_parser {
   }
 
   get_signal_name(input, lines, command) {
-    let arr = this.search_multiple_in_tree(input, 'variable_identifier');
+    let arr = this.search_multiple_in_tree(input, 'net_decl_assignment');
     let names = [];
+    let name;
     if (arr.length == 0) {
-      let name = "undefined";
-      return name;
+      name = "undefined";
+    } else{
+      for (let i = 0; i < arr.length; ++i) {
+        let input_name = this.extract_data(arr[i], lines);
+        names.push(input_name);
+      }
     }
-    for (let i = 0; i < arr.length; ++i) {
-      let input_name = this.extract_data(arr[i], lines);
+    let arr2 = this.search_multiple_in_tree(input, 'variable_decl_assignment');
+    if (arr2.length == 0 && name === "undefined") {
+      name = "undefined";
+      return name;
+    } 
+    for (let i = 0; i < arr2.length; ++i) {
+      let input_name = this.extract_data(arr2[i], lines);
       names.push(input_name);
     }
     return names;
@@ -942,21 +952,23 @@ class Parser extends ts_base_parser.Ts_base_parser {
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";
       var arr_signals = this.get_signal_name(inputs[x], lines, name_command);
-      let signal_type = this.get_signal_type(inputs[x], lines, type_command);
-      let signal_type_dim = this.get_signal_type(inputs[x], lines, type_dim);
-      if (signal_type_dim != 'undefined') {
-        signal_type = signal_type + ' ' + signal_type_dim;
-      }
-      for (var s = 0; s < arr_signals.length; ++s) {
-        var name_signal = arr_signals[s];
-        item = {
-          "name": name_signal.trim(),
-          "type": signal_type,
-          "description": comment,
-          "start_line": start_line
-        };
-        if (signal_type !== 'undefined') {
-          items.push(item);
+      if (arr_signals !== 'undefined') {
+        let signal_type = this.get_signal_type(inputs[x], lines, type_command);
+        let signal_type_dim = this.get_signal_type(inputs[x], lines, type_dim);
+        if (signal_type_dim != 'undefined') {
+          signal_type = signal_type + ' ' + signal_type_dim;
+        }
+        for (var s = 0; s < arr_signals.length; ++s) {
+          var name_signal = arr_signals[s];
+          item = {
+            "name": name_signal.trim(),
+            "type": signal_type,
+            "description": comment,
+            "start_line": start_line
+          };
+          if (signal_type !== 'undefined') {
+            items.push(item);
+          }
         }
       }
     }

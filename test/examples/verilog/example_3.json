@@ -87,7 +87,7 @@
             "start_line":24
          },
          {
-            "name":"cycles",
+            "name":"cycles = 0",
             "type":"logic [$bits(cycles_per_bit)-1:0]",
             "description":"",
             "start_line":25

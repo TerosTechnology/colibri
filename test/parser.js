@@ -26,7 +26,7 @@ const ParserLib = require('../src/parser/factory');
 const General = Colibri.General;
 
 if (process.argv[2] === 'verilog') {
-  for (let x = 0; x < 9; ++x) {
+  for (let x = 0; x < 4; ++x) {
     var ParserLang = General.LANGUAGES.VERILOG;
     let example_exp_result = fs.readFileSync(__dirname + '/examples/verilog/example_' + x + '.json', 'utf8');
     example_exp_result = JSON.parse(example_exp_result);
@@ -48,7 +48,7 @@ if (process.argv[2] === 'verilog') {
 
 //////////////////////////////////////////////////////////////////////////////
 if (process.argv[2] === 'vhdl') {
-  for (let x = 7; x < 8; ++x) {
+  for (let x = 0; x < 8; ++x) {
     var ParserLang = General.LANGUAGES.VHDL;
     let example_exp_result = fs.readFileSync(__dirname + '/examples/vhdl/example_' + x + '.json', 'utf8');
     example_exp_result = JSON.parse(example_exp_result);
@@ -73,11 +73,11 @@ function compareVhdl(m, n, file) {
   //var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
   if (m['entity']['name'] !== n['entity']['name']) { return false; }
   // if(m['architecture']['name'] != n['architecture']['name']) { return false; }
-  var ch1 = check(m['generics'], n['generics'], ['name', 'type', 'default_value','description'], "generics", file);
+  var ch1 = check(m['generics'], n['generics'], ['name', 'type', 'default_value', 'description'], "generics", file);
   var ch2 = check(m['ports'], n['ports'], ['name', 'direction', 'type', 'default_value', 'description'], "ports", file);
-  var ch3 = check(m['declarations']['signals'],n['declarations']['signals'],['name','type','description'],"signals",file);
-  var ch4 = check(m['body']['processes'],n['body']['processes'],['name','sens_list','description'],"signals",file);
-  var ch5 = check(m['body']['instantiations'],n['body']['instantiations'],['name','type','description'],"signals",file);
+  var ch3 = check(m['declarations']['signals'], n['declarations']['signals'], ['name', 'type', 'description'], "signals", file);
+  var ch4 = check(m['body']['processes'], n['body']['processes'], ['name', 'sens_list', 'description'], "signals", file);
+  var ch5 = check(m['body']['instantiations'], n['body']['instantiations'], ['name', 'type', 'description'], "signals", file);
   // var ch6 = check(m['process'],n['process'],['name'],"process",file);
 
   return ch1 && ch2 && ch3 && ch4 && ch5;
@@ -96,11 +96,11 @@ function compareVerilog(m, n, file) {
 function compareVerilogTs(m, n, file) {
   //var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
   if (m['entity']['name'] !== n['entity']['name']) { return false; }
-  var ch1 = check(m['generics'], n['generics'], ['name', 'type', 'default_value','description'], "generics", file);
+  var ch1 = check(m['generics'], n['generics'], ['name', 'type', 'default_value', 'description'], "generics", file);
   var ch2 = check(m['ports'], n['ports'], ['name', 'direction', 'type', 'default_value', 'description'], "ports", file);
-  var ch3 = check(m['declarations']['signals'],n['declarations']['signals'],['name','type','description'],"signals",file);
-  var ch4 = check(m['body']['processes'],n['body']['processes'],['name','sens_list','description'],"signals",file);
-  var ch5 = check(m['body']['instantiations'],n['body']['instantiations'],['name','type','description'],"signals",file);
+  var ch3 = check(m['declarations']['signals'], n['declarations']['signals'], ['name', 'type', 'description'], "signals", file);
+  var ch4 = check(m['body']['processes'], n['body']['processes'], ['name', 'sens_list', 'description'], "signals", file);
+  var ch5 = check(m['body']['instantiations'], n['body']['instantiations'], ['name', 'type', 'description'], "signals", file);
   // var ch5 = check(m['constants'],n['constants'],['name','kind'],"constants",file);
 
   return ch1 && ch2 && ch3 && ch4 && ch5;
@@ -156,7 +156,7 @@ async function get_structure(ParserLang, symbol, src) {
   let lang_parser = await parser.getParser(ParserLang, symbol);
   let structure = await lang_parser.get_all(src);
   // console.log(structure);
-  fs.writeFileSync("/home/ismael/Desktop/test.json",JSON.stringify(structure), 'utf8');
+  fs.writeFileSync("/home/ismael/Desktop/test.json", JSON.stringify(structure), 'utf8');
 
   return structure;
 }
