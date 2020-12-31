@@ -25,7 +25,7 @@ const Colibri = require('../src/main');
 const ParserLib = require('../src/parser/factory');
 const General = Colibri.General;
 
-for (let x = 4; x < 5; ++x) {
+for (let x = 8; x < 9; ++x) {
   var ParserLang = General.LANGUAGES.VERILOG;
   let example_exp_result = fs.readFileSync(__dirname + '/examples/verilog/example_' + x + '.json', 'utf8');
   example_exp_result = JSON.parse(example_exp_result);

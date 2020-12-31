@@ -1,123 +1,460 @@
 {
-  "libraries":[],
+  "libraries": [],
   "entity": {
-    "name": "axis_baser_tx_64"
+    "name": "axis_baser_tx_64",
+    "description": "\n"
   },
-  "generics": [{
+  "generics": [
+    {
       "name": "DATA_WIDTH",
       "type": "",
-      "comment": ""
+      "default_value": "64",
+      "description": ""
     },
-
     {
       "name": "KEEP_WIDTH",
       "type": "",
-      "comment": "**Data width parameter**"
+      "default_value": "64",
+      "description": "**Data width parameter**"
     },
     {
       "name": "HDR_WIDTH",
       "type": "",
-      "comment": ""
+      "default_value": "",
+      "description": ""
     },
     {
       "name": "ENABLE_PADDING",
       "type": "",
-      "comment": ""
+      "default_value": "",
+      "description": ""
     },
     {
       "name": "ENABLE_DIC",
       "type": "",
-      "comment": "enable"
+      "default_value": "",
+      "description": "enable"
     },
     {
       "name": "MIN_FRAME_LENGTH",
       "type": "",
-      "comment": ""
+      "default_value": "",
+      "description": "enable"
     }
   ],
-  "ports": [{
+  "ports": [
+    {
       "name": "clk",
       "direction": "input",
       "type": "wire",
-      "comment": ""
+      "default_value": "",
+      "description": "",
+      "start_line": 37
     },
     {
       "name": "rst",
       "direction": "input",
       "type": "wire",
-      "comment": ""
+      "default_value": "",
+      "description": "",
+      "start_line": 38
     },
     {
       "name": "s_axis_tdata",
       "direction": "input",
       "type": "wire [DATA_WIDTH-1:0]",
-      "comment": ""
+      "default_value": "",
+      "description": "",
+      "start_line": 43
     },
     {
       "name": "s_axis_tkeep",
       "direction": "input",
       "type": "wire [KEEP_WIDTH-1:0]",
-      "comment": ""
+      "default_value": "",
+      "description": "",
+      "start_line": 44
     },
     {
       "name": "s_axis_tvalid",
       "direction": "input",
       "type": "wire",
-      "comment": ""
+      "default_value": "",
+      "description": "",
+      "start_line": 45
     },
     {
       "name": "s_axis_tready",
       "direction": "output",
       "type": "wire",
-      "comment": ""
+      "default_value": "",
+      "description": "",
+      "start_line": 46
     },
     {
       "name": "s_axis_tlast",
       "direction": "input",
       "type": "wire",
-      "comment": ""
+      "default_value": "",
+      "description": "",
+      "start_line": 47
     },
     {
       "name": "s_axis_tuser",
       "direction": "input",
       "type": "wire",
-      "comment": ""
+      "default_value": "",
+      "description": "",
+      "start_line": 48
     },
     {
       "name": "encoded_tx_data",
       "direction": "output",
       "type": "wire [DATA_WIDTH-1:0]",
-      "comment": ""
+      "default_value": "",
+      "description": "",
+      "start_line": 53
     },
     {
       "name": "encoded_tx_hdr",
       "direction": "output",
       "type": "wire [HDR_WIDTH-1:0]",
-      "comment": ""
+      "default_value": "",
+      "description": "",
+      "start_line": 54
     },
     {
       "name": "ifg_delay",
       "direction": "input",
       "type": "wire [7:0]",
-      "comment": ""
+      "default_value": "",
+      "description": "",
+      "start_line": 59
     },
     {
       "name": "start_packet_0",
       "direction": "output",
       "type": "wire",
-      "comment": ""
+      "default_value": "",
+      "description": "",
+      "start_line": 64
     },
     {
       "name": "start_packet_4",
       "direction": "output",
       "type": "wire",
-      "comment": ""
+      "default_value": "",
+      "description": "",
+      "start_line": 65
     },
     {
       "name": "error_underflow",
       "direction": "output",
       "type": "wire",
-      "comment": ""
+      "default_value": "",
+      "description": "",
+      "start_line": 66
     }
-  ]
+  ],
+  "body": {
+    "processes": [
+      {
+        "name": "unnamed",
+        "sens_list": "@*",
+        "description": "",
+        "start_line": 367
+      },
+      {
+        "name": "unnamed",
+        "sens_list": "@*",
+        "description": "",
+        "start_line": 374
+      },
+      {
+        "name": "unnamed",
+        "sens_list": "@*",
+        "description": "",
+        "start_line": 451
+      },
+      {
+        "name": "unnamed",
+        "sens_list": "@(posedge clk)",
+        "description": "",
+        "start_line": 712
+      }
+    ],
+    "instantiations": [
+      {
+        "name": "eth_crc_64",
+        "type": "lfsr",
+        "description": "",
+        "start_line": 333
+      }
+    ]
+  },
+  "declarations": {
+    "types": [],
+    "signals": [
+      {
+        "name": "state_reg",
+        "type": "reg [2:0]",
+        "description": "",
+        "start_line": 155
+      },
+      {
+        "name": "state_next",
+        "type": "reg [2:0]",
+        "description": "",
+        "start_line": 155
+      },
+      {
+        "name": "reset_crc",
+        "type": "reg",
+        "description": "",
+        "start_line": 158
+      },
+      {
+        "name": "update_crc",
+        "type": "reg",
+        "description": "",
+        "start_line": 159
+      },
+      {
+        "name": "swap_lanes",
+        "type": "reg",
+        "description": "",
+        "start_line": 161
+      },
+      {
+        "name": "unswap_lanes",
+        "type": "reg",
+        "description": "",
+        "start_line": 162
+      },
+      {
+        "name": "lanes_swapped",
+        "type": "reg",
+        "description": "",
+        "start_line": 164
+      },
+      {
+        "name": "swap_data",
+        "type": "reg [31:0]",
+        "description": "",
+        "start_line": 165
+      },
+      {
+        "name": "delay_type_valid",
+        "type": "reg",
+        "description": "",
+        "start_line": 167
+      },
+      {
+        "name": "delay_type",
+        "type": "reg [3:0]",
+        "description": "",
+        "start_line": 168
+      },
+      {
+        "name": "s_axis_tdata_masked",
+        "type": "reg [DATA_WIDTH-1:0]",
+        "description": "",
+        "start_line": 170
+      },
+      {
+        "name": "s_tdata_reg",
+        "type": "reg [DATA_WIDTH-1:0]",
+        "description": "",
+        "start_line": 172
+      },
+      {
+        "name": "s_tdata_next",
+        "type": "reg [DATA_WIDTH-1:0]",
+        "description": "",
+        "start_line": 172
+      },
+      {
+        "name": "s_tkeep_reg",
+        "type": "reg [7:0]",
+        "description": "",
+        "start_line": 173
+      },
+      {
+        "name": "s_tkeep_next",
+        "type": "reg [7:0]",
+        "description": "",
+        "start_line": 173
+      },
+      {
+        "name": "fcs_output_data_0",
+        "type": "reg [DATA_WIDTH-1:0]",
+        "description": "",
+        "start_line": 175
+      },
+      {
+        "name": "fcs_output_data_1",
+        "type": "reg [DATA_WIDTH-1:0]",
+        "description": "",
+        "start_line": 176
+      },
+      {
+        "name": "fcs_output_type_0",
+        "type": "reg [3:0]",
+        "description": "",
+        "start_line": 177
+      },
+      {
+        "name": "fcs_output_type_1",
+        "type": "reg [3:0]",
+        "description": "",
+        "start_line": 178
+      },
+      {
+        "name": "ifg_offset",
+        "type": "reg [7:0]",
+        "description": "",
+        "start_line": 180
+      },
+      {
+        "name": "extra_cycle",
+        "type": "reg",
+        "description": "",
+        "start_line": 182
+      },
+      {
+        "name": "frame_ptr_reg",
+        "type": "reg [15:0]",
+        "description": "",
+        "start_line": 184
+      },
+      {
+        "name": "frame_ptr_next",
+        "type": "reg [15:0]",
+        "description": "",
+        "start_line": 184
+      },
+      {
+        "name": "ifg_count_reg",
+        "type": "reg [7:0]",
+        "description": "",
+        "start_line": 186
+      },
+      {
+        "name": "ifg_count_next",
+        "type": "reg [7:0]",
+        "description": "",
+        "start_line": 186
+      },
+      {
+        "name": "deficit_idle_count_reg",
+        "type": "reg [1:0]",
+        "description": "",
+        "start_line": 187
+      },
+      {
+        "name": "deficit_idle_count_next",
+        "type": "reg [1:0]",
+        "description": "",
+        "start_line": 187
+      },
+      {
+        "name": "s_axis_tready_reg",
+        "type": "reg",
+        "description": "",
+        "start_line": 189
+      },
+      {
+        "name": "s_axis_tready_next",
+        "type": "reg",
+        "description": "",
+        "start_line": 189
+      },
+      {
+        "name": "crc_state",
+        "type": "reg [31:0]",
+        "description": "",
+        "start_line": 191
+      },
+      {
+        "name": "encoded_tx_data_reg",
+        "type": "reg [DATA_WIDTH-1:0]",
+        "description": "",
+        "start_line": 202
+      },
+      {
+        "name": "encoded_tx_hdr_reg",
+        "type": "reg [HDR_WIDTH-1:0]",
+        "description": "",
+        "start_line": 203
+      },
+      {
+        "name": "output_data_reg",
+        "type": "reg [DATA_WIDTH-1:0]",
+        "description": "",
+        "start_line": 205
+      },
+      {
+        "name": "output_data_next",
+        "type": "reg [DATA_WIDTH-1:0]",
+        "description": "",
+        "start_line": 205
+      },
+      {
+        "name": "output_type_reg",
+        "type": "reg [3:0]",
+        "description": "",
+        "start_line": 206
+      },
+      {
+        "name": "output_type_next",
+        "type": "reg [3:0]",
+        "description": "",
+        "start_line": 206
+      },
+      {
+        "name": "start_packet_0_reg",
+        "type": "reg",
+        "description": "",
+        "start_line": 208
+      },
+      {
+        "name": "start_packet_0_next",
+        "type": "reg",
+        "description": "",
+        "start_line": 208
+      },
+      {
+        "name": "start_packet_4_reg",
+        "type": "reg",
+        "description": "",
+        "start_line": 209
+      },
+      {
+        "name": "start_packet_4_next",
+        "type": "reg",
+        "description": "",
+        "start_line": 209
+      },
+      {
+        "name": "error_underflow_reg",
+        "type": "reg",
+        "description": "",
+        "start_line": 210
+      },
+      {
+        "name": "error_underflow_next",
+        "type": "reg",
+        "description": "",
+        "start_line": 210
+      },
+      {
+        "name": "j",
+        "type": "integer",
+        "description": "",
+        "start_line": 365
+      }
+    ],
+    "constants": [],
+    "functions": []
+  }
 }
