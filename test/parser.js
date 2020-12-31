@@ -25,43 +25,48 @@ const Colibri = require('../src/main');
 const ParserLib = require('../src/parser/factory');
 const General = Colibri.General;
 
-for (let x = 0; x < 9; ++x) {
-  var ParserLang = General.LANGUAGES.VERILOG;
-  let example_exp_result = fs.readFileSync(__dirname + '/examples/verilog/example_' + x + '.json', 'utf8');
-  example_exp_result = JSON.parse(example_exp_result);
-  let example_verilog = fs.readFileSync(__dirname + '/examples/verilog/example_' + x + '.v', 'utf8');
-  get_structure(ParserLang, "!", example_verilog).then(example_result => {
-    // console.log(example_result);
-    let rs = compareVerilogTs(example_result, example_exp_result, "example_" + x + ".v");
-    console.log("Test " + rs + " [" + "example_" + x + ".v" + "]");
-    if (rs === true) {
-      console.log("Test...  OK!".green);
-    }
-    else {
-      console.log("Test...  fail!".red);
-      throw new Error('Test errors'.red);
-    }
-  });
+if (process.argv[2] === 'verilog') {
+  for (let x = 0; x < 9; ++x) {
+    var ParserLang = General.LANGUAGES.VERILOG;
+    let example_exp_result = fs.readFileSync(__dirname + '/examples/verilog/example_' + x + '.json', 'utf8');
+    example_exp_result = JSON.parse(example_exp_result);
+    let example_verilog = fs.readFileSync(__dirname + '/examples/verilog/example_' + x + '.v', 'utf8');
+    get_structure(ParserLang, "!", example_verilog).then(example_result => {
+      // console.log(example_result);
+      let rs = compareVerilogTs(example_result, example_exp_result, "example_" + x + ".v");
+      console.log("Test " + rs + " [" + "example_" + x + ".v" + "]");
+      if (rs === true) {
+        console.log("Test...  OK!".green);
+      }
+      else {
+        console.log("Test...  fail!".red);
+        throw new Error('Test errors'.red);
+      }
+    });
+  }
 }
-//////////////////////////////////////////////////////////////////////////////
-for (let x = 0; x < 7; ++x) {
-  var ParserLang = General.LANGUAGES.VHDL;
-  let example_exp_result = fs.readFileSync(__dirname + '/examples/vhdl/example_' + x + '.json', 'utf8');
-  example_exp_result = JSON.parse(example_exp_result);
-  let example_vhd = fs.readFileSync(__dirname + '/examples/vhdl/example_' + x + '.vhd', 'utf8');
-  get_structure(ParserLang, "!", example_vhd).then(example_result => {
-    // console.log(example_result);
-    let rs = compareVhdl(example_result, example_exp_result, "example_" + x + ".vhd");
-    console.log("Test " + rs + " [" + "example_" + x + ".vhd" + "]");
-    if (rs === true) {
-      console.log("Test...  OK!".green);
-    }
-    else {
-      console.log("Test...  fail!".red);
-      throw new Error('Test errors'.red);
 
-    }
-  });
+//////////////////////////////////////////////////////////////////////////////
+if (process.argv[2] === 'vhdl') {
+  for (let x = 7; x < 8; ++x) {
+    var ParserLang = General.LANGUAGES.VHDL;
+    let example_exp_result = fs.readFileSync(__dirname + '/examples/vhdl/example_' + x + '.json', 'utf8');
+    example_exp_result = JSON.parse(example_exp_result);
+    let example_vhd = fs.readFileSync(__dirname + '/examples/vhdl/example_' + x + '.vhd', 'utf8');
+    get_structure(ParserLang, "!", example_vhd).then(example_result => {
+      // console.log(example_result);
+      let rs = compareVhdl(example_result, example_exp_result, "example_" + x + ".vhd");
+      console.log("Test " + rs + " [" + "example_" + x + ".vhd" + "]");
+      if (rs === true) {
+        console.log("Test...  OK!".green);
+      }
+      else {
+        console.log("Test...  fail!".red);
+        throw new Error('Test errors'.red);
+
+      }
+    });
+  }
 }
 //////////////////////////////////////////////////////////////////////////////
 function compareVhdl(m, n, file) {
@@ -151,7 +156,7 @@ async function get_structure(ParserLang, symbol, src) {
   let lang_parser = await parser.getParser(ParserLang, symbol);
   let structure = await lang_parser.get_all(src);
   // console.log(structure);
-  // fs.writeFileSync("/home/ismael/Desktop/test.json",JSON.stringify(structure), 'utf8');
+  fs.writeFileSync("/home/ismael/Desktop/test.json",JSON.stringify(structure), 'utf8');
 
   return structure;
 }

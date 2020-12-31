@@ -1,76 +1,73 @@
 {
-  "entity": {
-      "name": "gcd",
-      "description": ""
-  },
-  "generics": [],
-  "ports": [
-      {
-          "name": "clk",
-          "type": "std_logic",
-          "line": 21,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "rst",
-          "type": "std_logic",
-          "line": 22,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "go_i",
-          "type": "std_logic",
-          "line": 23,
-          "direction": "out",
-          "default_value": "axil_s2m_init",
-          "description": ""
-      },
-      {
-          "name": "x_i",
-          "type": "unsigned(3 downto 0)",
-          "line": 24,
-          "direction": "out",
-          "default_value": "'0'",
-          "description": ""
-      },
-      {
-          "name": "y_i",
-          "type": "unsigned(3 downto 0)",
-          "line": 25,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "d_o",
-          "type": "unsigned(3 downto 0)",
-          "line": 26,
-          "direction": "out",
-          "default_value": "",
-          "description": ""
-      }
-  ],
-  "body": {
-      "processes": [
-          {
-              "name": "fsdmp",
-              "sens_list": "rst, clk",
-              "description": ""
-          }
-      ],
-      "instantiations": []
-  },
-  "declarations": {
-      "types": [
-      ],
-      "signals": [
-      ],
-      "constants": [],
-      "functions": [
-      ]
-  }
+    "entity": {
+        "name": "gcd",
+        "description": ""
+    },
+    "generics": [],
+    "ports": [
+        {
+            "name": "clk",
+            "type": "std_logic",
+            "line": 21,
+            "direction": "in",
+            "default_value": "",
+            "description": ""
+        },
+        {
+            "name": "rst",
+            "type": "std_logic",
+            "line": 22,
+            "direction": "in",
+            "default_value": "",
+            "description": ""
+        },
+        {
+            "name": "go_i",
+            "type": "std_logic",
+            "line": 23,
+            "direction": "in",
+            "default_value": "",
+            "description": ""
+        },
+        {
+            "name": "x_i",
+            "type": "unsigned(3 downto 0)",
+            "line": 24,
+            "direction": "in",
+            "default_value": "",
+            "description": ""
+        },
+        {
+            "name": "y_i",
+            "type": "unsigned(3 downto 0)",
+            "line": 25,
+            "direction": "in",
+            "default_value": "",
+            "description": ""
+        },
+        {
+            "name": "d_o",
+            "type": "unsigned(3 downto 0)",
+            "line": 26,
+            "direction": "out",
+            "default_value": "",
+            "description": ""
+        }
+    ],
+    "body": {
+        "processes": [
+            {
+                "name": "fsdmp",
+                "sens_list": "rst, clk",
+                "description": ""
+            }
+        ],
+        "instantiations": []
+    },
+    "declarations": {
+        "types": [],
+        "signals": [],
+        "constants": [],
+        "functions": []
+    }
 }
