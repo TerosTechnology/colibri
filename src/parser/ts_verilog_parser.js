@@ -191,7 +191,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       }
       else if (cursor.nodeType === 'parameter_declaration') {
         last_element_position = cursor.startPosition.row;
-        let new_generics = this.get_generics(cursor.currentNode(), lines, general_comments);
+        let new_generics = this.get_generics(cursor.currentNode(), lines, general_comments,0);
         new_generics = this.set_description_to_array(new_generics, comments, general_comments);
         generics_array = generics_array.concat(new_generics);
         comments = '';
@@ -297,7 +297,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
         }
         last_element_position = cursor.startPosition.row;
 
-        let new_generics = this.get_generics(cursor.currentNode(), lines, general_comments);
+        let new_generics = this.get_generics(cursor.currentNode(), lines, general_comments,1);
         new_generics = this.set_description_to_array(new_generics, comments, general_comments);
         generics = generics.concat(new_generics);
         comments = '';
@@ -546,13 +546,17 @@ class Parser extends ts_base_parser.Ts_base_parser {
 
   }
 
-  get_generics(tree, lines, comments) {
+  get_generics(tree, lines, comments,ansi) {
     var items = [];
     var inputs = [];
     var item = {};
     var element = tree;
     //Inputs
-    var arr = this.search_multiple_in_tree(element, 'parameter_declaration');
+    if (ansi===0) {
+      var arr = this.search_multiple_in_tree(element, 'parameter_declaration');
+    }else{
+      var arr = this.search_multiple_in_tree(element, 'parameter_declaration');
+    }
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";
@@ -588,7 +592,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
   }
 
   get_generic_name(port, lines) {
-    var arr = this.search_multiple_in_tree(port, 'list_of_variable_identifiers');
+    var arr = this.search_multiple_in_tree(port, 'parameter_identifier');
     if (arr.length == 0) {
       arr = this.search_multiple_in_tree(port, 'simple_identifier');
       var port_name = this.extract_data(arr[0], lines);
