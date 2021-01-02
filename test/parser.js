@@ -26,7 +26,7 @@ const ParserLib = require('../src/parser/factory');
 const General = Colibri.General;
 
 if (process.argv[2] === 'verilog') {
-  for (let x = 0; x < 9; ++x) {
+  for (let x = 5; x < 6; ++x) {
     var ParserLang = General.LANGUAGES.VERILOG;
     let example_exp_result = fs.readFileSync(__dirname + '/examples/verilog/example_' + x + '.json', 'utf8');
     example_exp_result = JSON.parse(example_exp_result);
@@ -76,34 +76,28 @@ function compareVhdl(m, n, file) {
   var ch1 = check(m['generics'], n['generics'], ['name', 'type', 'default_value', 'description'], "generics", file);
   var ch2 = check(m['ports'], n['ports'], ['name', 'direction', 'type', 'default_value', 'description'], "ports", file);
   var ch3 = check(m['declarations']['signals'], n['declarations']['signals'], ['name', 'type', 'description'], "signals", file);
-  var ch4 = check(m['body']['processes'], n['body']['processes'], ['name', 'sens_list', 'description'], "signals", file);
-  var ch5 = check(m['body']['instantiations'], n['body']['instantiations'], ['name', 'type', 'description'], "signals", file);
-  // var ch6 = check(m['process'],n['process'],['name'],"process",file);
+  var ch4 = check(m['body']['processes'], n['body']['processes'], ['name', 'sens_list', 'description'], "processes", file);
+  var ch5 = check(m['body']['instantiations'], n['body']['instantiations'], ['name', 'type', 'description'], "instantiations", file);
+  var ch6 = check(m['declarations']['types'], n['declarations']['types'], ['name', 'type', 'description'], "types", file);
+  var ch7 = check(m['declarations']['constants'], n['declarations']['constants'], ['name', 'type', 'default_value', 'description'], "constants", file);
+  var ch8 = check(m['declarations']['functions'], n['declarations']['functions'], ['name', 'description'], "functions", file);
 
-  return ch1 && ch2 && ch3 && ch4 && ch5;
+  return ch1 && ch2 && ch3 && ch4 && ch5 && ch6 && ch7 && ch8;
 }
-function compareVerilog(m, n, file) {
-  //var ch0 = check(m['libraries'], n['libraries'], ['name'], "libraries", file);
-  if (m['entity']['name'] !== n['entity']['name']) { return false; }
-  var ch1 = check(m['generics'], n['generics'], ['name', 'type'], "generics", file);
-  var ch2 = check(m['ports'], n['ports'], ['name', 'kind', 'type'], "ports", file);
-  var ch3 = check(m['regs'], n['regs'], ['name', 'kind', 'type'], "regs", file);
-  var ch4 = check(m['nets'], n['nets'], ['name', 'kind', 'type'], "nets", file);
-  var ch5 = check(m['constants'], n['constants'], ['name', 'kind'], "constants", file);
 
-  return ch0 && ch1 && ch2 && ch3 && ch4 && ch5;
-}
 function compareVerilogTs(m, n, file) {
   //var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
   if (m['entity']['name'] !== n['entity']['name']) { return false; }
   var ch1 = check(m['generics'], n['generics'], ['name', 'type', 'default_value', 'description'], "generics", file);
   var ch2 = check(m['ports'], n['ports'], ['name', 'direction', 'type', 'default_value', 'description'], "ports", file);
   var ch3 = check(m['declarations']['signals'], n['declarations']['signals'], ['name', 'type', 'description'], "signals", file);
-  var ch4 = check(m['body']['processes'], n['body']['processes'], ['name', 'sens_list', 'description'], "signals", file);
-  var ch5 = check(m['body']['instantiations'], n['body']['instantiations'], ['name', 'type', 'description'], "signals", file);
-  // var ch5 = check(m['constants'],n['constants'],['name','kind'],"constants",file);
+  var ch4 = check(m['body']['processes'], n['body']['processes'], ['name', 'sens_list', 'description'], "processes", file);
+  var ch5 = check(m['body']['instantiations'], n['body']['instantiations'], ['name', 'type', 'description'], "instantiations", file);
+  var ch6 = check(m['declarations']['types'], n['declarations']['types'], ['name', 'type', 'description'], "types", file);
+  var ch7 = check(m['declarations']['constants'], n['declarations']['constants'], ['name', 'type', 'default_value', 'description'], "constants", file);
+  var ch8 = check(m['declarations']['functions'], n['declarations']['functions'], ['name', 'description'], "functions", file);
 
-  return ch1 && ch2 && ch3 && ch4 && ch5;
+  return ch1 && ch2 && ch3 && ch4 && ch5 && ch6 && ch7 && ch8;
 }
 
 function check(m, n, cmp, type, file) {

@@ -77,7 +77,11 @@
    },
    "declarations":{
       "types":[
-         
+         {
+            "name": "state = idle",
+            "type": "state_t",
+            "description": ""
+          }
       ],
       "signals":[
          {
