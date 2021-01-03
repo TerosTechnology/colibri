@@ -25,23 +25,32 @@ const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 const Colibri = require('../../src/main');
-const Codes = require('../../src/templates/codes')
+const Codes = require('../../src/templates/codes');
 
-let path_example = __dirname + path.sep + 'examples'+path.sep+'verilog'+path.sep
-let structure_v = fs.readFileSync(path_example+'example_0.v','utf8');
+let path_example = __dirname + path.sep + 'examples'+path.sep+'vhdl'+path.sep+'runpy'+path.sep;
+let lang= Colibri.General.LANGUAGES.VHDL;
+let runpy = new Colibri.Templates.Templates_factory();
+for (let x=0;x<5;++x){
+  let structure = fs.readFileSync(path_example+'runpyConf_'+x+'.json','utf8');
+  structure     = JSON.parse(structure);
+  let runpy_expected = fs.readFileSync(path_example+'run_'+x+'.py','utf8');
+  let runpy_c = runpy.get_template(Codes.TYPES.VUNIT,lang);
+  let out = runpy_c.generate(structure);
+  check_runpy(runpy_expected,out,x);
+}
 
-let options = Colibri.General.LANGUAGES.VERILOG;
-let veritest = new Colibri.Templates.Templates_factory();
-let verilator_expected = fs.readFileSync(path_example+'veritest.cpp','utf8');
-let veritest_gen = veritest.get_template(Codes.TYPES.VERILATOR,options);
-veritest_gen.generate(structure_v).then(verilator_template => {
+function check_runpy(runpy_expected,runpy_template,x){
   console.log('****************************************************************');
-  if(verilator_expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') 
-    === verilator_template.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
-    console.log("---> Tested: verilator --> ok!".green);
+  if(runpy_expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') 
+        === runpy_template.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
+    console.log("---> Tested: runpy_"+x+"  ok!".green);
   }
   else{
-    console.log("---> Tested: verilator --> fail!".red);
+    console.log("---> Tested: runpy_"+x+"  fail!".red);
+    if (process.argv[2] === 'out') {
+      fs.writeFileSync("/home/ismael/Desktop/test.txt", runpy_template, 'utf8');
+      console.log(runpy_template);
+    }      
     throw new Error('Test error.');
   }
-});
+}

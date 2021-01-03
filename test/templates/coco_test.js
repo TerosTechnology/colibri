@@ -44,6 +44,10 @@ template.generate(structure_vhdl).then(cocotb_vhdl => {
   }
   else{
     console.log("---> Tested: cocotb vhdl --> fail!".red);
+    if (process.argv[2] === 'out') {
+      fs.writeFileSync("/home/ismael/Desktop/test.txt", cocotb_vhdl, 'utf8');
+      console.log(cocotb_vhdl);
+    }
     throw new Error('Test error.');
   }
 });
@@ -60,6 +64,10 @@ templateV.generate(structure_v).then(cocotb_verilog => {
   }
   else{
     console.log("---> Tested: cocotb verilog --> fail!".red);
+    if (process.argv[2] === 'out') {
+      fs.writeFileSync("/home/ismael/Desktop/test.txt", cocotb_verilog, 'utf8');
+      console.log(cocotb_verilog);
+    }
     throw new Error('Test error.');
   }
 });
