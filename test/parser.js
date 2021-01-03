@@ -22,87 +22,86 @@
 const colors = require('colors');
 const fs = require('fs');
 const Colibri = require('../src/main');
-const general = require('../src/general/general');
+const ParserLib = require('../src/parser/factory');
 const General = Colibri.General;
-const Parser = Colibri.Parser;
 
-for (let x=0;x<9;++x){
-  var ParserLang = [General.LANGUAGES.VERILOG];
-  let example_exp_result = fs.readFileSync(__dirname+'/examples/verilog/example_'+x+'.json','utf8');
-  example_exp_result     = JSON.parse(example_exp_result);
-  let example_verilog = fs.readFileSync(__dirname+'/examples/verilog/example_'+x+'.v' ,'utf8');
-  get_structure(ParserLang,"!",example_verilog).then(example_result => {
-  // console.log(example_result);
-    let rs = compareVerilogTs(example_result,example_exp_result,"example_"+x+".v");
-    console.log("Test " + rs + " ["+"example_"+x+".v"+"]");
-    if (rs === true){
-      console.log("Test...  OK!".green);
+if (process.argv[2] === 'verilog') {
+  for (let x = 0; x < 9; ++x) {
+    var ParserLang = General.LANGUAGES.VERILOG;
+    let example_exp_result = fs.readFileSync(__dirname + '/examples/verilog/example_' + x + '.json', 'utf8');
+    example_exp_result = JSON.parse(example_exp_result);
+    let example_verilog = fs.readFileSync(__dirname + '/examples/verilog/example_' + x + '.v', 'utf8');
+    get_structure(ParserLang, "!", example_verilog).then(example_result => {
+      // console.log(example_result);
+      let rs = compareVerilogTs(example_result, example_exp_result, "example_" + x + ".v");
+      console.log("Test " + rs + " [" + "example_" + x + ".v" + "]");
+      if (rs === true) {
+        console.log("Test...  OK!".green);
       }
-      else{
+      else {
         console.log("Test...  fail!".red);
         throw new Error('Test errors'.red);
       }
     });
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+if (process.argv[2] === 'vhdl') {
+  for (let x = 0; x < 8; ++x) {
+    var ParserLang = General.LANGUAGES.VHDL;
+    let example_exp_result = fs.readFileSync(__dirname + '/examples/vhdl/example_' + x + '.json', 'utf8');
+    example_exp_result = JSON.parse(example_exp_result);
+    let example_vhd = fs.readFileSync(__dirname + '/examples/vhdl/example_' + x + '.vhd', 'utf8');
+    get_structure(ParserLang, "!", example_vhd).then(example_result => {
+      // console.log(example_result);
+      let rs = compareVhdl(example_result, example_exp_result, "example_" + x + ".vhd");
+      console.log("Test " + rs + " [" + "example_" + x + ".vhd" + "]");
+      if (rs === true) {
+        console.log("Test...  OK!".green);
+      }
+      else {
+        console.log("Test...  fail!".red);
+        throw new Error('Test errors'.red);
+
+      }
+    });
+  }
 }
 //////////////////////////////////////////////////////////////////////////////
-for (let x=0;x<7;++x){
-  var ParserLang = [General.LANGUAGES.VHDL];
-  let example_exp_result = fs.readFileSync(__dirname+'/examples/vhdl/example_'+x+'.json','utf8');
-  example_exp_result     = JSON.parse(example_exp_result);
-  let example_vhd = fs.readFileSync(__dirname+'/examples/vhdl/example_'+x+'.vhd' ,'utf8');
-  get_structure(ParserLang,"!",example_vhd).then(example_result => {
-    //console.log(example_result);
-    let rs = compareVhdl(example_result,example_exp_result,"example_"+x+".vhd");
-    console.log("Test " + rs + " ["+"example_"+x+".vhd"+"]");
-    if (rs === true){
-    console.log("Test...  OK!".green);
-    }
-    else{
-      console.log("Test...  fail!".red);
-      throw new Error('Test errors'.red);
-      
-    }
-  });
-}
-//////////////////////////////////////////////////////////////////////////////
-function compareVhdl(m,n,file){
+function compareVhdl(m, n, file) {
   //var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
-  if(m['entity']['name'] !== n['entity']['name']) { return false; }
+  if (m['entity']['name'] !== n['entity']['name']) { return false; }
   // if(m['architecture']['name'] != n['architecture']['name']) { return false; }
-  var ch1 = check(m['generics'],n['generics'],['name','type','comment'],"generics",file);
-  var ch2 = check(m['ports'],n['ports'],['name','direction','type','comment'],"ports",file);
-  // var ch3 = check(m['signals'],n['signals'],['name','type'],"signals",file);
-  // var ch4 = check(m['constants'],n['constants'],['name','type'],"constants",file);
-  // var ch5 = check(m['types'],n['types'],['name','type'],"types",file);
-  // var ch6 = check(m['process'],n['process'],['name'],"process",file);
+  var ch1 = check(m['generics'], n['generics'], ['name', 'type', 'default_value', 'description'], "generics", file);
+  var ch2 = check(m['ports'], n['ports'], ['name', 'direction', 'type', 'default_value', 'description'], "ports", file);
+  var ch3 = check(m['declarations']['signals'], n['declarations']['signals'], ['name', 'type', 'description'], "signals", file);
+  var ch4 = check(m['body']['processes'], n['body']['processes'], ['name', 'sens_list', 'description'], "processes", file);
+  var ch5 = check(m['body']['instantiations'], n['body']['instantiations'], ['name', 'type', 'description'], "instantiations", file);
+  var ch6 = check(m['declarations']['types'], n['declarations']['types'], ['name', 'type', 'description'], "types", file);
+  var ch7 = check(m['declarations']['constants'], n['declarations']['constants'], ['name', 'type', 'default_value', 'description'], "constants", file);
+  var ch8 = check(m['declarations']['functions'], n['declarations']['functions'], ['name', 'description'], "functions", file);
 
-  return ch1 && ch2;
+  return ch1 && ch2 && ch3 && ch4 && ch5 && ch6 && ch7 && ch8;
 }
-function compareVerilog(m,n,file){
-  var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
-  if(m['entity']['name'] !== n['entity']['name']) { return false; }
-  var ch1 = check(m['generics'],n['generics'],['name','type'],"generics",file);
-  var ch2 = check(m['ports'],n['ports'],['name','kind','type'],"ports",file);
-  var ch3 = check(m['regs'],n['regs'],['name','kind','type'],"regs",file);
-  var ch4 = check(m['nets'],n['nets'],['name','kind','type'],"nets",file);
-  var ch5 = check(m['constants'],n['constants'],['name','kind'],"constants",file);
 
-  return ch0 && ch1 && ch2 && ch3 && ch4 && ch5;
-}
-function compareVerilogTs(m,n,file){
+function compareVerilogTs(m, n, file) {
   //var ch0 = check(m['libraries'],n['libraries'],['name'],"libraries",file);
-  if(m['entity']['name'] !== n['entity']['name']) { return false; }
-  var ch1 = check(m['generics'],n['generics'],['name','type','comment'],"generics",file);
-  var ch2 = check(m['ports'],n['ports'],['name','direction','type','comment'],"ports",file);
-  // var ch3 = check(m['regs'],n['regs'],['name','kind','type'],"regs",file);
-  // var ch4 = check(m['nets'],n['nets'],['name','kind','type'],"nets",file);
-  // var ch5 = check(m['constants'],n['constants'],['name','kind'],"constants",file);
+  if (m['entity']['name'] !== n['entity']['name']) { return false; }
+  var ch1 = check(m['generics'], n['generics'], ['name', 'type', 'default_value', 'description'], "generics", file);
+  var ch2 = check(m['ports'], n['ports'], ['name', 'direction', 'type', 'default_value', 'description'], "ports", file);
+  var ch3 = check(m['declarations']['signals'], n['declarations']['signals'], ['name', 'type', 'description'], "signals", file);
+  var ch4 = check(m['body']['processes'], n['body']['processes'], ['name', 'sens_list', 'description'], "processes", file);
+  var ch5 = check(m['body']['instantiations'], n['body']['instantiations'], ['name', 'type', 'description'], "instantiations", file);
+  var ch6 = check(m['declarations']['types'], n['declarations']['types'], ['name', 'type', 'description'], "types", file);
+  var ch7 = check(m['declarations']['constants'], n['declarations']['constants'], ['name', 'type', 'default_value', 'description'], "constants", file);
+  var ch8 = check(m['declarations']['functions'], n['declarations']['functions'], ['name', 'description'], "functions", file);
 
-  return ch1 && ch2;
+  return ch1 && ch2 && ch3 && ch4 && ch5 && ch6 && ch7 && ch8;
 }
 
-function check(m,n,cmp,type,file){
-  if(m.length !== n.length) {
+function check(m, n, cmp, type, file) {
+  if (m.length !== n.length) {
     console.log("*************************************************************");
     console.log("Fail: " + type.yellow + " in file: " + file.red);
     console.log("Real ----->".yellow);
@@ -112,8 +111,8 @@ function check(m,n,cmp,type,file){
     console.log("*************************************************************");
     return false;
   }
-  for (let i=0;i<m.length;++i) {
-    for (let z=0;z<cmp.length;++z){
+  for (let i = 0; i < m.length; ++i) {
+    for (let z = 0; z < cmp.length; ++z) {
       // console.log(m[i]['name'])
       // console.log(file)
       // console.log(type)
@@ -121,15 +120,15 @@ function check(m,n,cmp,type,file){
 
       let name_m;
       let name_n;
-      if(m[i][cmp[z]] === undefined){
+      if (m[i][cmp[z]] === undefined) {
         name_m = "";
       }
-      else{
-        name_m = m[i][cmp[z]].toLowerCase().replace(/\s/g,'').replace(/\t/g,'');
+      else {
+        name_m = m[i][cmp[z]].toLowerCase().replace(/\s/g, '').replace(/\t/g, '');
       }
-      name_n = n[i][cmp[z]].toLowerCase().replace(/\s/g,'').replace(/\t/g,'');
+      name_n = n[i][cmp[z]].toLowerCase().replace(/\s/g, '').replace(/\t/g, '');
 
-      if(name_m !== name_n) {
+      if (name_m !== name_n) {
         console.log("*********************************************************");
         console.log(JSON.stringify(name_m));
         console.log(JSON.stringify(name_n));
@@ -146,10 +145,15 @@ function check(m,n,cmp,type,file){
   return true;
 }
 
-async function get_structure(ParserLang,symbol,src){
-  let parser = new Parser.ParserFactory;
-  parser = parser.getParser(ParserLang,symbol);
-  let structure = await parser.getAll(src);
+async function get_structure(ParserLang, symbol, src) {
+  let parser = new ParserLib.ParserFactory;
+  let lang_parser = await parser.getParser(ParserLang, symbol);
+  let structure = await lang_parser.get_all(src);
+  // console.log(structure);
+  if (process.argv[3] === 'out') {
+    fs.writeFileSync("/home/ismael/Desktop/test.json", JSON.stringify(structure), 'utf8');
+  }
   return structure;
 }
+
 

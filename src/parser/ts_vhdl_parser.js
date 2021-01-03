@@ -551,6 +551,13 @@ class Parser extends ts_base_parser.Ts_base_parser {
     let signals_array = [];
     let constants_array = [];
     let functions_array = [];
+    
+    if (top_declaration === undefined) {
+      return {
+        'types': types_array, 'signals': signals_array,
+        'constants': constants_array, 'functions': functions_array
+      };
+    }
 
     let cursor = top_declaration.walk();
     let comments = '';

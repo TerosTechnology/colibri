@@ -40,7 +40,7 @@
       },
       {
           "name": "val",
-          "type": "T_BCD_VECTOR(DIGITS-1 downto 0)",
+          "type": "T_BCD_VECTOR(DIGITS+DIGITS-1 downto 0)",
           "line": 58,
           "direction": "out",
           "default_value": "",
@@ -53,20 +53,7 @@
   },
   "declarations": {
       "types": [],
-      "signals": [
-          {
-              "name": "p",
-              "type": "unsigned(DIGITS-1 downto 0)",
-              "line": 65,
-              "description": " Stage Overflows=Propagates"
-          },
-          {
-              "name": "c",
-              "type": "unsigned(DIGITS   downto 0)",
-              "line": 66,
-              "description": ""
-          }
-      ],
+      "signals": [],
       "constants": [],
       "functions": []
   }

@@ -5,11 +5,11 @@
   "main": "src/main.js",
   "scripts": {
     "testLinter": "cd test && cd linter && node linter",
-    "testTemplates": "cd test && cd templates && node cocoTest && node verilatorTest && node vunitRunpy && node tbVhdl && node tbVerilog && node component",
+    "testTemplates": "cd test && cd templates && node coco_test && node verilator_test && node vunit_runpy && node tb_vhdl && node tb_verilog && node component",
     "testDocumenter": "cd test && cd documenter && node documenter",
     "test-stm": "cd test && cd documenter && node stateMachine",
     "testProjectManager": "cd test && cd project_manager && node project_manager",
-    "testParser": "cd test && node parser",
+    "testParser": "cd test && node parser verilog && node parser vhdl",
     "testSuites": "cd test && cd templates && sh runAllSuites.sh",
     "nopy": "nopy",
     "install": "npip install"

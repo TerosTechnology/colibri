@@ -1,70 +1,73 @@
 {
-  "libraries":
-    [
-      { "name": "ieee.std_logic_1164.all", "index": 291 },
-      { "name": "ieee.std_logic_arith.all", "index": 291 },
-      { "name": "work.all", "index": 291 }
+    "entity": {
+        "name": "gcd",
+        "description": ""
+    },
+    "generics": [],
+    "ports": [
+        {
+            "name": "clk",
+            "type": "std_logic",
+            "line": 21,
+            "direction": "in",
+            "default_value": "",
+            "description": ""
+        },
+        {
+            "name": "rst",
+            "type": "std_logic",
+            "line": 22,
+            "direction": "in",
+            "default_value": "",
+            "description": ""
+        },
+        {
+            "name": "go_i",
+            "type": "std_logic",
+            "line": 23,
+            "direction": "in",
+            "default_value": "",
+            "description": ""
+        },
+        {
+            "name": "x_i",
+            "type": "unsigned(3 downto 0)",
+            "line": 24,
+            "direction": "in",
+            "default_value": "",
+            "description": ""
+        },
+        {
+            "name": "y_i",
+            "type": "unsigned(3 downto 0)",
+            "line": 25,
+            "direction": "in",
+            "default_value": "",
+            "description": ""
+        },
+        {
+            "name": "d_o",
+            "type": "unsigned(3 downto 0)",
+            "line": 26,
+            "direction": "out",
+            "default_value": "",
+            "description": ""
+        }
     ],
-
-  "entity": { "name": "gcd", "index": 348 },
-  "architecture": { "name": "FSMD", "index": 348 },
-
-  "generics":
-  [
-  ],
-  "ports":
-  [
-    { "name": "clk",
-      "direction": "in",
-      "type": "std_logic",
-      "comment": ""
+    "body": {
+        "processes": [
+            {
+                "name": "fsdmp",
+                "sens_list": "rst, clk",
+                "description": ""
+            }
+        ],
+        "instantiations": []
     },
-    { "name": "rst",
-      "direction": "in",
-      "type": "std_logic",
-      "comment": ""
-    },
-    { "name": "go_i",
-      "direction": "in",
-      "type": "std_logic",
-      "comment": ""
-    },
-    { "name": "x_i",
-      "direction": "in",
-      "type": "unsigned(3 downto 0)",
-      "comment": ""
-    },
-    { "name": "y_i",
-      "direction": "in",
-      "type": "unsigned(3 downto 0)",
-      "comment": ""
-    },
-    { "name": "d_o",
-      "direction": "out",
-      "type": "unsigned(3 downto 0)",
-      "comment": ""
+    "declarations": {
+        "types": [],
+        "signals": [],
+        "constants": [],
+        "functions": []
     }
-  ],
-  "signals":
-  [
-  ],
-  "constants":
-  [
-  ],
-  "types":
-  [
-    { "name": "S_Type",
-      "kind": "(ST0, ST1, ST2)",
-      "type": "",
-      "index": 546
-    }
-  ],
-  "process":
-  [
-    { "name": "fsdmp",
-      "kind": "",
-      "type": "",
-      "index": 546
-    }
-  ]
 }

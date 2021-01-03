@@ -1,47 +1,82 @@
 {
-  "libraries": [
-    {"name": "my_incl.vh"},
-    {"name": "my_inclsv.svh"}
-  ],
+  "libraries": [],
   "entity": {
-    "name": "behav_counter"
+      "name": "behav_counter",
+      "description": "\n"
   },
   "generics": [],
-  "ports": [{
-      "name": "d",
-      "direction": "input",
-      "type": "[7:0]",
-      "comment": " input 1 comment"
-    },
-    {
-      "name": "clk",
-      "direction": "input",
-      "type": "",
-      "comment": "input 2 comment"
-    },
-    {
-      "name": "clear",
-      "direction": "input",
-      "type": "",
-      "comment": " input 3 comment"
-    },
-    {
-      "name": "load",
-      "direction": "input",
-      "type": "",
-      "comment": ""
-    },
-    {
-      "name": "up_down",
-      "direction": "input",
-      "type": "",
-      "comment": ""
-    },
-    {
-      "name": "qd",
-      "direction": "output",
-      "type": "[7:0]",
-      "comment": ""
-    }
-  ]
+  "ports": [
+      {
+          "name": "d",
+          "direction": "input",
+          "type": "[7:0]",
+          "default_value": "",
+          "description": "input 1 comment",
+          "start_line": 7
+      },
+      {
+          "name": "clk",
+          "direction": "input",
+          "type": "",
+          "default_value": "",
+          "description": "input 2 comment",
+          "start_line": 8
+      },
+      {
+          "name": "clear",
+          "direction": "input",
+          "type": "",
+          "default_value": "",
+          "description": "input 3 comment",
+          "start_line": 9
+      },
+      {
+          "name": "load",
+          "direction": "input",
+          "type": "",
+          "default_value": "",
+          "description": "",
+          "start_line": 10
+      },
+      {
+          "name": "up_down",
+          "direction": "input",
+          "type": "",
+          "default_value": "",
+          "description": "",
+          "start_line": 11
+      },
+      {
+          "name": "qd",
+          "direction": "output",
+          "type": "[7:0]",
+          "default_value": "",
+          "description": "",
+          "start_line": 12
+      }
+  ],
+  "body": {
+      "processes": [
+          {
+              "name": "unnamed",
+              "sens_list": "@ (posedge clk)",
+              "description": "",
+              "start_line": 16
+          }
+      ],
+      "instantiations": []
+  },
+  "declarations": {
+      "types": [],
+      "signals": [
+          {
+              "name": "cnt",
+              "type": "reg     [7:0]",
+              "description": "",
+              "start_line": 14
+          }
+      ],
+      "constants": [],
+      "functions": []
+  }
 }

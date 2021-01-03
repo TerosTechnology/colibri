@@ -1,154 +1,187 @@
 {
-  "libraries":
-    [
-      { "name": "IEEE.std_logic_1164.all", "index": 291 },
-      { "name": "IEEE.std_logic_arith.all", "index": 291 }
-    ],
-
-  "entity": { "name": "FIR_filter", "index": 348 },
-  "architecture": { "name": "BEH", "index": 348 },
-
-  "generics":
-  [
+  "entity": {
+      "name": "FIR_filter",
+      "description": ""
+  },
+  "generics": [],
+  "ports": [
+      {
+          "name": "rst",
+          "type": "std_logic",
+          "line": 17,
+          "direction": "in",
+          "default_value": "",
+          "description": ""
+      },
+      {
+          "name": "clk",
+          "type": "std_logic",
+          "line": 18,
+          "direction": "in",
+          "default_value": "",
+          "description": ""
+      },
+      {
+          "name": "coef_ld",
+          "type": "std_logic",
+          "line": 19,
+          "direction": "in",
+          "default_value": "",
+          "description": ""
+      },
+      {
+          "name": "start",
+          "type": "std_logic",
+          "line": 19,
+          "direction": "in",
+          "default_value": "",
+          "description": ""
+      },
+      {
+          "name": "o_enable",
+          "type": "std_logic",
+          "line": 20,
+          "direction": "in",
+          "default_value": "",
+          "description": ""
+      },
+      {
+          "name": "bypass",
+          "type": "std_logic",
+          "line": 21,
+          "direction": "in",
+          "default_value": "",
+          "description": ""
+      },
+      {
+          "name": "Yn_in",
+          "type": "std_logic_vector(15 downto 0)",
+          "line": 22,
+          "direction": "in",
+          "default_value": "",
+          "description": ""
+      },
+      {
+          "name": "Xn_in",
+          "type": "std_logic_vector(15 downto 0)",
+          "line": 22,
+          "direction": "in",
+          "default_value": "",
+          "description": ""
+      },
+      {
+          "name": "Xn_out",
+          "type": "std_logic_vector(3 downto 0)",
+          "line": 23,
+          "direction": "out",
+          "default_value": "",
+          "description": ""
+      },
+      {
+          "name": "Yn_out",
+          "type": "std_logic_vector(15 downto 0)",
+          "line": 24,
+          "direction": "out",
+          "default_value": "",
+          "description": ""
+      }
   ],
-  "ports":
-  [
-    { "name": "rst",
-      "direction": "in",
-      "type": "std_logic",
-      "comment": ""
-    },
-    { "name": "clk",
-      "direction": "in",
-      "type": "std_logic",
-      "comment": ""
-    },
-    { "name": "coef_ld",
-      "direction": "in",
-      "type": "std_logic",
-      "comment": ""
-    },
-    { "name": "start",
-      "direction": "in",
-      "type": "std_logic",
-      "comment": ""
-    },
-    { "name": "o_enable",
-      "direction": "in",
-      "type": "std_logic",
-      "comment": ""
-    },
-    { "name": "bypass",
-      "direction": "in",
-      "type": "std_logic",
-      "comment": ""
-    },
-    { "name": "Yn_in",
-      "direction": "in",
-      "type": "std_logic_vector(15 downto 0)",
-      "comment": ""
-    },
-    { "name": "Xn_in",
-      "direction": "in",
-      "type": "std_logic_vector(15 downto 0)",
-      "comment": ""
-    },
-    { "name": "Xn_out",
-      "direction": "out",
-      "type": "std_logic_vector(3 downto 0)",
-      "comment": ""
-    },
-    { "name": "Yn_out",
-      "direction": "out",
-      "type": "std_logic_vector(15 downto 0)",
-      "comment": ""
-    }
-  ],
-  "signals":
-  [
-    { "name": "REG1",
-      "kind": "klx4",
-      "type": "",
-      "index": 546
-    },
-    { "name": "REG2",
-      "kind": "klx4",
-      "type": "",
-      "index": 546
-    },
-    { "name": "COEF",
-      "kind": "klx4",
-      "type": "",
-      "index": 546
-    },
-    { "name": "MULT8",
-      "kind": "kx8",
-      "type": "",
-      "index": 546
-    },
-    { "name": "MULT16",
-      "kind": "kx16",
-      "type": "",
-      "index": 546
-    },
-    { "name": "SUM",
-      "kind": "klx16",
-      "type": "",
-      "index": 546
-    },
-    { "name": "Xn_tmp",
-      "kind": "bit4",
-      "type": "",
-      "index": 546
-    },
-    { "name": "Yn_tmp",
-      "kind": "bit16",
-      "type": "",
-      "index": 546
-    }
-  ],
-  "constants":
-  [
-    { "name": "k",
-      "kind": "integer",
-      "type": "",
-      "index": 546
-    }
-  ],
-  "types":
-  [
-    { "name": "klx4",
-      "kind": "array (K downto 0) of bit4",
-      "type": "",
-      "index": 546
-    },
-    { "name": "kx8",
-      "kind": "array (K-1 downto 0) of bit8",
-      "type": "",
-      "index": 546
-    },
-    { "name": "klx8",
-      "kind": "is array (K downto 0) of bit8",
-      "type": "",
-      "index": 546
-    },
-    { "name": "kx16",
-      "kind": "array (K-1 downto 0) of bit16",
-      "type": "",
-      "index": 546
-    },
-    { "name": "klx16",
-      "kind": "is array (K downto 0) of bit16",
-      "type": "",
-      "index": 546
-    }
-  ],
-  "process":
-  [
-    { "name": "stages",
-      "kind": "",
-      "type": "",
-      "index": 546
-    }
-  ]
+  "body": {
+      "processes": [],
+      "instantiations": []
+  },
+  "declarations": {
+      "types": [
+          {
+              "name": "klx4",
+              "type": "",
+              "line": 38,
+              "description": ""
+          },
+          {
+              "name": "kx8",
+              "type": "",
+              "line": 39,
+              "description": ""
+          },
+          {
+              "name": "klx8",
+              "type": "",
+              "line": 40,
+              "description": ""
+          },
+          {
+              "name": "kx16",
+              "type": "",
+              "line": 41,
+              "description": ""
+          },
+          {
+              "name": "klx16",
+              "type": "",
+              "line": 42,
+              "description": ""
+          }
+      ],
+      "signals": [
+          {
+              "name": "REG1",
+              "type": "klx4",
+              "line": 45,
+              "description": ""
+          },
+          {
+              "name": " REG2",
+              "type": "klx4",
+              "line": 45,
+              "description": ""
+          },
+          {
+              "name": " COEF",
+              "type": "klx4",
+              "line": 45,
+              "description": ""
+          },
+          {
+              "name": "MULT8",
+              "type": "kx8",
+              "line": 46,
+              "description": ""
+          },
+          {
+              "name": "MULT16",
+              "type": "kx16",
+              "line": 47,
+              "description": ""
+          },
+          {
+              "name": "SUM",
+              "type": "klx16",
+              "line": 48,
+              "description": ""
+          },
+          {
+              "name": "Xn_tmp",
+              "type": "bit4",
+              "line": 49,
+              "description": ""
+          },
+          {
+              "name": "Yn_tmp",
+              "type": "bit16",
+              "line": 50,
+              "description": ""
+          }
+      ],
+      "constants": [
+          {
+              "name": "K",
+              "type": "integer",
+              "default_value": " 4",
+              "line": 30,
+              "description": ""
+          }
+      ],
+      "functions": []
+  }
 }
