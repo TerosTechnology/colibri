@@ -414,7 +414,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       return { 'processes': process_array, 'instantiations': instanciation_array };
     }
     catch (e) {
-      return undefined;
+      return { 'processes': [], 'instantiations': [] };
     }
   }
 
