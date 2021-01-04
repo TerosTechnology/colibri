@@ -132,7 +132,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
             new_signals = this.set_description_to_array(new_signals, comments, general_comments);
             signals_array = signals_array.concat(new_signals);
 
-            if (new_signals.length === 0 && enable_package === true) {
+            if (new_signals.length === 0 && enable_package === true || enable_package === undefined) {
               let new_types = this.get_types_pkg(cursor.currentNode(), lines, general_comments);
               new_types = this.set_description_to_array(new_types, comments, general_comments);
               types_array = types_array.concat(new_types);
@@ -144,6 +144,20 @@ class Parser extends ts_base_parser.Ts_base_parser {
             let new_functions = this.get_functions(cursor.currentNode(), lines, general_comments);
             new_functions = this.set_description_to_array(new_functions, comments, general_comments);
             functions_array = functions_array.concat(new_functions);
+            comments = '';
+          }
+          else if (cursor.nodeType === 'any_parameter_declaration') {
+            last_element_position = cursor.startPosition.row;
+            let new_constants = this.get_constants(cursor.currentNode(), lines, general_comments);
+            new_constants = this.set_description_to_array(new_constants, comments, general_comments);
+            constants_array = constants_array.concat(new_constants);
+
+            if (new_constants.length === 0) {
+              let new_generics = this.get_generics(cursor.currentNode(), lines, general_comments, 0);
+              new_generics = this.set_description_to_array(new_generics, comments, general_comments);
+              generics_array = generics_array.concat(new_generics);
+            }
+
             comments = '';
           }
           else if (cursor.nodeType === 'type_declaration') {
@@ -187,7 +201,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       }
       else if (cursor.nodeType === 'parameter_declaration') {
         last_element_position = cursor.startPosition.row;
-        let new_generics = this.get_generics(cursor.currentNode(), lines, general_comments,0);
+        let new_generics = this.get_generics(cursor.currentNode(), lines, general_comments, 0);
         new_generics = this.set_description_to_array(new_generics, comments, general_comments);
         generics_array = generics_array.concat(new_generics);
         comments = '';
@@ -293,7 +307,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
         }
         last_element_position = cursor.startPosition.row;
 
-        let new_generics = this.get_generics(cursor.currentNode(), lines, general_comments,1);
+        let new_generics = this.get_generics(cursor.currentNode(), lines, general_comments, 1);
         new_generics = this.set_description_to_array(new_generics, comments, general_comments);
         generics = generics.concat(new_generics);
         comments = '';
@@ -341,7 +355,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
         }
         last_element_position = cursor.startPosition.row;
 
-        let new_constants = this.get_constants(cursor.currentNode(), lines, general_comments,1);
+        let new_constants = this.get_constants(cursor.currentNode(), lines, general_comments, 1);
         new_constants = this.set_description_to_array(new_constants, comments, general_comments);
         constants = constants.concat(new_constants);
         comments = '';
@@ -590,17 +604,51 @@ class Parser extends ts_base_parser.Ts_base_parser {
 
   }
 
-  get_generics(tree, lines, comments,ansi) {
+  // get_generics(tree, lines, comments, ansi) {
+  //   let items = [];
+  //   let item = {};
+  //   let element = tree;
+  //   //Inputs
+  //   let arr = [];
+  //   if (ansi === 0) {
+  //     arr = this.search_multiple_in_tree(element, 'parameter_declaration');
+  //   } else {
+  //     arr = this.search_multiple_in_tree(element, 'parameter_declaration');
+  //   }
+
+  //   if (arr.length === 0) {
+  //     arr = this.search_multiple_in_tree(element, 'parameter_port_declaration');
+  //   }
+
+  //   for (let x = 0; x < arr.length; ++x) {
+  //     item = {
+  //       "name": this.get_generic_name(arr[x], lines),
+  //       "type": this.get_generic_kind(arr[x], lines),
+  //       "default_value": this.get_generic_default(arr[x], lines),
+  //       "description": ''
+  //     };
+  //     items.push(item);
+  //   }
+  //   return items;
+  // }
+
+
+  get_generics(tree, lines, comments, ansi) {
     var items = [];
     var inputs = [];
     var item = {};
     var element = tree;
     //Inputs
-    if (ansi===0) {
+    if (ansi === 0) {
       var arr = this.search_multiple_in_tree(element, 'parameter_declaration');
-    }else{
+    } else {
       var arr = this.search_multiple_in_tree(element, 'parameter_declaration');
     }
+
+    if (arr.length === 0) {
+      arr = this.search_multiple_in_tree(element, 'parameter_port_declaration');
+    }
+
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";
@@ -623,6 +671,8 @@ class Parser extends ts_base_parser.Ts_base_parser {
     return items;
   }
 
+
+
   get_library_name(port, lines) {
     var arr = this.search_multiple_in_tree(port, 'double_quoted_string');
     if (arr.length == 0) {
@@ -636,15 +686,15 @@ class Parser extends ts_base_parser.Ts_base_parser {
   }
 
   get_generic_name(port, lines) {
-    var arr = this.search_multiple_in_tree(port, 'parameter_identifier');
-    if (arr.length == 0) {
+    let arr = this.search_multiple_in_tree(port, 'parameter_identifier');
+    if (arr.length === 1) {
       arr = this.search_multiple_in_tree(port, 'simple_identifier');
-      var port_name = this.extract_data(arr[0], lines);
+      let port_name = this.extract_data(arr[0], lines);
       return port_name;
     } else {
-      var port_name = this.extract_data(arr[0], lines);
-      var split_port_name = port_name.split(',');
-      for (var x = 0; x < split_port_name.length; ++x) { return port_name; }
+      let port_name = this.extract_data(arr[0], lines);
+      let split_port_name = port_name.split(',');
+      for (let x = 0; x < split_port_name.length; ++x) { return port_name; }
     }
   }
 
@@ -753,7 +803,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
     let name;
     if (arr.length == 0) {
       name = "undefined";
-    } else{
+    } else {
       for (let i = 0; i < arr.length; ++i) {
         let input_name = this.extract_data(arr[i], lines);
         names.push(input_name);
@@ -763,7 +813,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
     if (arr2.length == 0 && name === "undefined") {
       name = "undefined";
       return name;
-    } 
+    }
     for (let i = 0; i < arr2.length; ++i) {
       let input_name = this.extract_data(arr2[i], lines);
       names.push(input_name);

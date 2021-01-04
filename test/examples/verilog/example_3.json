@@ -78,8 +78,8 @@
    "declarations":{
       "types":[
          {
-            "name": "state = idle",
-            "type": "state_t",
+            "name": "state_t",
+            "type": "enum       {idle, receiving, done}",
             "description": ""
           }
       ],
