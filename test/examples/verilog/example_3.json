@@ -83,7 +83,7 @@
       ],
       "signals": [
          {
-            "name": "state = idle",
+            "name": "state",
             "type": "state_t",
             "description": ""
          },
@@ -94,7 +94,7 @@
             "start_line": 24
          },
          {
-            "name": "cycles = 0",
+            "name": "cycles",
             "type": "logic [$bits(cycles_per_bit)-1:0]",
             "description": "",
             "start_line": 25
