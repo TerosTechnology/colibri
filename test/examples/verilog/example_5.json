@@ -196,7 +196,7 @@
       "types": [],
       "signals": [
          {
-            "name": "state_reg = STATE_IDLE",
+            "name": "state_reg",
             "type": "reg [2:0]",
             "description": "",
             "start_line": 154
@@ -232,25 +232,25 @@
             "start_line": 161
          },
          {
-            "name": "lanes_swapped = 1'b0",
+            "name": "lanes_swapped",
             "type": "reg",
             "description": "",
             "start_line": 163
          },
          {
-            "name": "swap_data = 32'd0",
+            "name": "swap_data",
             "type": "reg [31:0]",
             "description": "",
             "start_line": 164
          },
          {
-            "name": "delay_type_valid = 1'b0",
+            "name": "delay_type_valid",
             "type": "reg",
             "description": "",
             "start_line": 166
          },
          {
-            "name": "delay_type = OUTPUT_TYPE_IDLE",
+            "name": "delay_type",
             "type": "reg [3:0]",
             "description": "",
             "start_line": 167
@@ -262,7 +262,7 @@
             "start_line": 169
          },
          {
-            "name": "s_tdata_reg = {DATA_WIDTH{1'b0}}",
+            "name": "s_tdata_reg",
             "type": "reg [DATA_WIDTH-1:0]",
             "description": "",
             "start_line": 171
@@ -274,7 +274,7 @@
             "start_line": 171
          },
          {
-            "name": "s_tkeep_reg = 8'd0",
+            "name": "s_tkeep_reg",
             "type": "reg [7:0]",
             "description": "",
             "start_line": 172
@@ -322,7 +322,7 @@
             "start_line": 181
          },
          {
-            "name": "frame_ptr_reg = 16'd0",
+            "name": "frame_ptr_reg",
             "type": "reg [15:0]",
             "description": "",
             "start_line": 183
@@ -334,7 +334,7 @@
             "start_line": 183
          },
          {
-            "name": "ifg_count_reg = 8'd0",
+            "name": "ifg_count_reg",
             "type": "reg [7:0]",
             "description": "",
             "start_line": 185
@@ -346,7 +346,7 @@
             "start_line": 185
          },
          {
-            "name": "deficit_idle_count_reg = 2'd0",
+            "name": "deficit_idle_count_reg",
             "type": "reg [1:0]",
             "description": "",
             "start_line": 186
@@ -358,7 +358,7 @@
             "start_line": 186
          },
          {
-            "name": "s_axis_tready_reg = 1'b0",
+            "name": "s_axis_tready_reg",
             "type": "reg",
             "description": "",
             "start_line": 188
@@ -370,7 +370,7 @@
             "start_line": 188
          },
          {
-            "name": "crc_state = 32'hFFFFFFFF",
+            "name": "crc_state",
             "type": "reg [31:0]",
             "description": "",
             "start_line": 190
@@ -424,19 +424,19 @@
             "start_line": 199
          },
          {
-            "name": "encoded_tx_data_reg = {{8{CTRL_IDLE}}, BLOCK_TYPE_CTRL}",
+            "name": "encoded_tx_data_reg",
             "type": "reg [DATA_WIDTH-1:0]",
             "description": "",
             "start_line": 201
          },
          {
-            "name": "encoded_tx_hdr_reg = SYNC_CTRL",
+            "name": "encoded_tx_hdr_reg",
             "type": "reg [HDR_WIDTH-1:0]",
             "description": "",
             "start_line": 202
          },
          {
-            "name": "output_data_reg = {DATA_WIDTH{1'b0}}",
+            "name": "output_data_reg",
             "type": "reg [DATA_WIDTH-1:0]",
             "description": "",
             "start_line": 204
@@ -448,7 +448,7 @@
             "start_line": 204
          },
          {
-            "name": "output_type_reg = OUTPUT_TYPE_IDLE",
+            "name": "output_type_reg",
             "type": "reg [3:0]",
             "description": "",
             "start_line": 205
@@ -460,7 +460,7 @@
             "start_line": 205
          },
          {
-            "name": "start_packet_0_reg = 1'b0",
+            "name": "start_packet_0_reg",
             "type": "reg",
             "description": "",
             "start_line": 207
@@ -472,7 +472,7 @@
             "start_line": 207
          },
          {
-            "name": "start_packet_4_reg = 1'b0",
+            "name": "start_packet_4_reg",
             "type": "reg",
             "description": "",
             "start_line": 208
@@ -484,7 +484,7 @@
             "start_line": 208
          },
          {
-            "name": "error_underflow_reg = 1'b0",
+            "name": "error_underflow_reg",
             "type": "reg",
             "description": "",
             "start_line": 209

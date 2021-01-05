@@ -195,312 +195,312 @@
   "declarations": {
      "types": [],
      "signals": [
-        {
-           "name": "state_reg = STATE_IDLE",
-           "type": "reg [2:0]",
-           "description": "",
-           "start_line": 154
-        },
-        {
-           "name": "state_next",
-           "type": "reg [2:0]",
-           "description": "",
-           "start_line": 154
-        },
-        {
-           "name": "reset_crc",
-           "type": "reg",
-           "description": "",
-           "start_line": 157
-        },
-        {
-           "name": "update_crc",
-           "type": "reg",
-           "description": "",
-           "start_line": 158
-        },
-        {
-           "name": "swap_lanes",
-           "type": "reg",
-           "description": "",
-           "start_line": 160
-        },
-        {
-           "name": "unswap_lanes",
-           "type": "reg",
-           "description": "",
-           "start_line": 161
-        },
-        {
-           "name": "lanes_swapped = 1'b0",
-           "type": "reg",
-           "description": "",
-           "start_line": 163
-        },
-        {
-           "name": "swap_data = 32'd0",
-           "type": "reg [31:0]",
-           "description": "",
-           "start_line": 164
-        },
-        {
-           "name": "delay_type_valid = 1'b0",
-           "type": "reg",
-           "description": "",
-           "start_line": 166
-        },
-        {
-           "name": "delay_type = OUTPUT_TYPE_IDLE",
-           "type": "reg [3:0]",
-           "description": "",
-           "start_line": 167
-        },
-        {
-           "name": "s_axis_tdata_masked",
-           "type": "reg [DATA_WIDTH-1:0]",
-           "description": "",
-           "start_line": 169
-        },
-        {
-           "name": "s_tdata_reg = {DATA_WIDTH{1'b0}}",
-           "type": "reg [DATA_WIDTH-1:0]",
-           "description": "",
-           "start_line": 171
-        },
-        {
-           "name": "s_tdata_next",
-           "type": "reg [DATA_WIDTH-1:0]",
-           "description": "",
-           "start_line": 171
-        },
-        {
-           "name": "s_tkeep_reg = 8'd0",
-           "type": "reg [7:0]",
-           "description": "",
-           "start_line": 172
-        },
-        {
-           "name": "s_tkeep_next",
-           "type": "reg [7:0]",
-           "description": "",
-           "start_line": 172
-        },
-        {
-           "name": "fcs_output_data_0",
-           "type": "reg [DATA_WIDTH-1:0]",
-           "description": "",
-           "start_line": 174
-        },
-        {
-           "name": "fcs_output_data_1",
-           "type": "reg [DATA_WIDTH-1:0]",
-           "description": "",
-           "start_line": 175
-        },
-        {
-           "name": "fcs_output_type_0",
-           "type": "reg [3:0]",
-           "description": "",
-           "start_line": 176
-        },
-        {
-           "name": "fcs_output_type_1",
-           "type": "reg [3:0]",
-           "description": "",
-           "start_line": 177
-        },
-        {
-           "name": "ifg_offset",
-           "type": "reg [7:0]",
-           "description": "",
-           "start_line": 179
-        },
-        {
-           "name": "extra_cycle",
-           "type": "reg",
-           "description": "",
-           "start_line": 181
-        },
-        {
-           "name": "frame_ptr_reg = 16'd0",
-           "type": "reg [15:0]",
-           "description": "",
-           "start_line": 183
-        },
-        {
-           "name": "frame_ptr_next",
-           "type": "reg [15:0]",
-           "description": "",
-           "start_line": 183
-        },
-        {
-           "name": "ifg_count_reg = 8'd0",
-           "type": "reg [7:0]",
-           "description": "",
-           "start_line": 185
-        },
-        {
-           "name": "ifg_count_next",
-           "type": "reg [7:0]",
-           "description": "",
-           "start_line": 185
-        },
-        {
-           "name": "deficit_idle_count_reg = 2'd0",
-           "type": "reg [1:0]",
-           "description": "",
-           "start_line": 186
-        },
-        {
-           "name": "deficit_idle_count_next",
-           "type": "reg [1:0]",
-           "description": "",
-           "start_line": 186
-        },
-        {
-           "name": "s_axis_tready_reg = 1'b0",
-           "type": "reg",
-           "description": "",
-           "start_line": 188
-        },
-        {
-           "name": "s_axis_tready_next",
-           "type": "reg",
-           "description": "",
-           "start_line": 188
-        },
-        {
-           "name": "crc_state = 32'hFFFFFFFF",
-           "type": "reg [31:0]",
-           "description": "",
-           "start_line": 190
-        },
-        {
-           "name": "crc_next0",
-           "type": "wire [31:0]",
-           "description": "",
-           "start_line": 192
-        },
-        {
-           "name": "crc_next1",
-           "type": "wire [31:0]",
-           "description": "",
-           "start_line": 193
-        },
-        {
-           "name": "crc_next2",
-           "type": "wire [31:0]",
-           "description": "",
-           "start_line": 194
-        },
-        {
-           "name": "crc_next3",
-           "type": "wire [31:0]",
-           "description": "",
-           "start_line": 195
-        },
-        {
-           "name": "crc_next4",
-           "type": "wire [31:0]",
-           "description": "",
-           "start_line": 196
-        },
-        {
-           "name": "crc_next5",
-           "type": "wire [31:0]",
-           "description": "",
-           "start_line": 197
-        },
-        {
-           "name": "crc_next6",
-           "type": "wire [31:0]",
-           "description": "",
-           "start_line": 198
-        },
-        {
-           "name": "crc_next7",
-           "type": "wire [31:0]",
-           "description": "",
-           "start_line": 199
-        },
-        {
-           "name": "encoded_tx_data_reg = {{8{CTRL_IDLE}}, BLOCK_TYPE_CTRL}",
-           "type": "reg [DATA_WIDTH-1:0]",
-           "description": "",
-           "start_line": 201
-        },
-        {
-           "name": "encoded_tx_hdr_reg = SYNC_CTRL",
-           "type": "reg [HDR_WIDTH-1:0]",
-           "description": "",
-           "start_line": 202
-        },
-        {
-           "name": "output_data_reg = {DATA_WIDTH{1'b0}}",
-           "type": "reg [DATA_WIDTH-1:0]",
-           "description": "",
-           "start_line": 204
-        },
-        {
-           "name": "output_data_next",
-           "type": "reg [DATA_WIDTH-1:0]",
-           "description": "",
-           "start_line": 204
-        },
-        {
-           "name": "output_type_reg = OUTPUT_TYPE_IDLE",
-           "type": "reg [3:0]",
-           "description": "",
-           "start_line": 205
-        },
-        {
-           "name": "output_type_next",
-           "type": "reg [3:0]",
-           "description": "",
-           "start_line": 205
-        },
-        {
-           "name": "start_packet_0_reg = 1'b0",
-           "type": "reg",
-           "description": "",
-           "start_line": 207
-        },
-        {
-           "name": "start_packet_0_next",
-           "type": "reg",
-           "description": "",
-           "start_line": 207
-        },
-        {
-           "name": "start_packet_4_reg = 1'b0",
-           "type": "reg",
-           "description": "",
-           "start_line": 208
-        },
-        {
-           "name": "start_packet_4_next",
-           "type": "reg",
-           "description": "",
-           "start_line": 208
-        },
-        {
-           "name": "error_underflow_reg = 1'b0",
-           "type": "reg",
-           "description": "",
-           "start_line": 209
-        },
-        {
-           "name": "error_underflow_next",
-           "type": "reg",
-           "description": "",
-           "start_line": 209
-        },
-        {
-           "name": "j",
-           "type": "integer",
-           "description": "",
-           "start_line": 364
-        }
+      {
+         "name": "state_reg",
+         "type": "reg [2:0]",
+         "description": "",
+         "start_line": 154
+      },
+      {
+         "name": "state_next",
+         "type": "reg [2:0]",
+         "description": "",
+         "start_line": 154
+      },
+      {
+         "name": "reset_crc",
+         "type": "reg",
+         "description": "",
+         "start_line": 157
+      },
+      {
+         "name": "update_crc",
+         "type": "reg",
+         "description": "",
+         "start_line": 158
+      },
+      {
+         "name": "swap_lanes",
+         "type": "reg",
+         "description": "",
+         "start_line": 160
+      },
+      {
+         "name": "unswap_lanes",
+         "type": "reg",
+         "description": "",
+         "start_line": 161
+      },
+      {
+         "name": "lanes_swapped",
+         "type": "reg",
+         "description": "",
+         "start_line": 163
+      },
+      {
+         "name": "swap_data",
+         "type": "reg [31:0]",
+         "description": "",
+         "start_line": 164
+      },
+      {
+         "name": "delay_type_valid",
+         "type": "reg",
+         "description": "",
+         "start_line": 166
+      },
+      {
+         "name": "delay_type",
+         "type": "reg [3:0]",
+         "description": "",
+         "start_line": 167
+      },
+      {
+         "name": "s_axis_tdata_masked",
+         "type": "reg [DATA_WIDTH-1:0]",
+         "description": "",
+         "start_line": 169
+      },
+      {
+         "name": "s_tdata_reg",
+         "type": "reg [DATA_WIDTH-1:0]",
+         "description": "",
+         "start_line": 171
+      },
+      {
+         "name": "s_tdata_next",
+         "type": "reg [DATA_WIDTH-1:0]",
+         "description": "",
+         "start_line": 171
+      },
+      {
+         "name": "s_tkeep_reg",
+         "type": "reg [7:0]",
+         "description": "",
+         "start_line": 172
+      },
+      {
+         "name": "s_tkeep_next",
+         "type": "reg [7:0]",
+         "description": "",
+         "start_line": 172
+      },
+      {
+         "name": "fcs_output_data_0",
+         "type": "reg [DATA_WIDTH-1:0]",
+         "description": "",
+         "start_line": 174
+      },
+      {
+         "name": "fcs_output_data_1",
+         "type": "reg [DATA_WIDTH-1:0]",
+         "description": "",
+         "start_line": 175
+      },
+      {
+         "name": "fcs_output_type_0",
+         "type": "reg [3:0]",
+         "description": "",
+         "start_line": 176
+      },
+      {
+         "name": "fcs_output_type_1",
+         "type": "reg [3:0]",
+         "description": "",
+         "start_line": 177
+      },
+      {
+         "name": "ifg_offset",
+         "type": "reg [7:0]",
+         "description": "",
+         "start_line": 179
+      },
+      {
+         "name": "extra_cycle",
+         "type": "reg",
+         "description": "",
+         "start_line": 181
+      },
+      {
+         "name": "frame_ptr_reg",
+         "type": "reg [15:0]",
+         "description": "",
+         "start_line": 183
+      },
+      {
+         "name": "frame_ptr_next",
+         "type": "reg [15:0]",
+         "description": "",
+         "start_line": 183
+      },
+      {
+         "name": "ifg_count_reg",
+         "type": "reg [7:0]",
+         "description": "",
+         "start_line": 185
+      },
+      {
+         "name": "ifg_count_next",
+         "type": "reg [7:0]",
+         "description": "",
+         "start_line": 185
+      },
+      {
+         "name": "deficit_idle_count_reg",
+         "type": "reg [1:0]",
+         "description": "",
+         "start_line": 186
+      },
+      {
+         "name": "deficit_idle_count_next",
+         "type": "reg [1:0]",
+         "description": "",
+         "start_line": 186
+      },
+      {
+         "name": "s_axis_tready_reg",
+         "type": "reg",
+         "description": "",
+         "start_line": 188
+      },
+      {
+         "name": "s_axis_tready_next",
+         "type": "reg",
+         "description": "",
+         "start_line": 188
+      },
+      {
+         "name": "crc_state",
+         "type": "reg [31:0]",
+         "description": "",
+         "start_line": 190
+      },
+      {
+         "name": "crc_next0",
+         "type": "wire [31:0]",
+         "description": "",
+         "start_line": 192
+      },
+      {
+         "name": "crc_next1",
+         "type": "wire [31:0]",
+         "description": "",
+         "start_line": 193
+      },
+      {
+         "name": "crc_next2",
+         "type": "wire [31:0]",
+         "description": "",
+         "start_line": 194
+      },
+      {
+         "name": "crc_next3",
+         "type": "wire [31:0]",
+         "description": "",
+         "start_line": 195
+      },
+      {
+         "name": "crc_next4",
+         "type": "wire [31:0]",
+         "description": "",
+         "start_line": 196
+      },
+      {
+         "name": "crc_next5",
+         "type": "wire [31:0]",
+         "description": "",
+         "start_line": 197
+      },
+      {
+         "name": "crc_next6",
+         "type": "wire [31:0]",
+         "description": "",
+         "start_line": 198
+      },
+      {
+         "name": "crc_next7",
+         "type": "wire [31:0]",
+         "description": "",
+         "start_line": 199
+      },
+      {
+         "name": "encoded_tx_data_reg",
+         "type": "reg [DATA_WIDTH-1:0]",
+         "description": "",
+         "start_line": 201
+      },
+      {
+         "name": "encoded_tx_hdr_reg",
+         "type": "reg [HDR_WIDTH-1:0]",
+         "description": "",
+         "start_line": 202
+      },
+      {
+         "name": "output_data_reg",
+         "type": "reg [DATA_WIDTH-1:0]",
+         "description": "",
+         "start_line": 204
+      },
+      {
+         "name": "output_data_next",
+         "type": "reg [DATA_WIDTH-1:0]",
+         "description": "",
+         "start_line": 204
+      },
+      {
+         "name": "output_type_reg",
+         "type": "reg [3:0]",
+         "description": "",
+         "start_line": 205
+      },
+      {
+         "name": "output_type_next",
+         "type": "reg [3:0]",
+         "description": "",
+         "start_line": 205
+      },
+      {
+         "name": "start_packet_0_reg",
+         "type": "reg",
+         "description": "",
+         "start_line": 207
+      },
+      {
+         "name": "start_packet_0_next",
+         "type": "reg",
+         "description": "",
+         "start_line": 207
+      },
+      {
+         "name": "start_packet_4_reg",
+         "type": "reg",
+         "description": "",
+         "start_line": 208
+      },
+      {
+         "name": "start_packet_4_next",
+         "type": "reg",
+         "description": "",
+         "start_line": 208
+      },
+      {
+         "name": "error_underflow_reg",
+         "type": "reg",
+         "description": "",
+         "start_line": 209
+      },
+      {
+         "name": "error_underflow_next",
+         "type": "reg",
+         "description": "",
+         "start_line": 209
+      },
+      {
+         "name": "j",
+         "type": "integer",
+         "description": "",
+         "start_line": 364
+      }
      ],
      "constants": [
       {

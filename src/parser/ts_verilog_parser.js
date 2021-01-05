@@ -809,7 +809,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
   }
 
   get_constant_type(input, lines) {
-    let arr = this.search_multiple_in_tree(input, 'integer_atom_type');
+    let arr = this.search_multiple_in_tree(input, 'data_type_or_implicit1');
     if (arr.length === 0) {
       let name = '';
       return name;
