@@ -147,7 +147,8 @@ class Documenter {
     //Signals, constants and types
     if (code_tree['declarations'] !== undefined) {
       markdown_doc += this._get_signals_constants_section(
-        code_tree['declarations']['signals'], code_tree['declarations']['constants'], code_tree['declarations']['types']);
+        code_tree['declarations']['signals'], code_tree['declarations']['constants'],
+        code_tree['declarations']['types']);
       //Functions
       markdown_doc += this._get_functions_section(code_tree['declarations']['functions']);
     }
@@ -230,7 +231,8 @@ class Documenter {
     if (code_tree['declarations'] !== undefined) {
       //Signals and constants
       markdown_doc += this._get_signals_constants_section(
-        code_tree['declarations']['signals'], code_tree['declarations']['constants'], code_tree['declarations']['types']);
+        code_tree['declarations']['signals'], code_tree['declarations']['constants'],
+        code_tree['declarations']['types']);
       //Functions
       markdown_doc += this._get_functions_section(code_tree['declarations']['functions']);
     }
@@ -364,7 +366,8 @@ class Documenter {
     if (code_tree['declarations'] !== undefined) {
       //Signals and constants
       html += converter.makeHtml(this._get_signals_constants_section(
-        code_tree['declarations']['signals'], code_tree['declarations']['constants'], code_tree['declarations']['types']));
+        code_tree['declarations']['signals'], code_tree['declarations']['constants'],
+        code_tree['declarations']['types']));
       //Functions
       html += converter.makeHtml(this._get_functions_section(code_tree['declarations']['functions']));
     }
@@ -507,6 +510,7 @@ class Documenter {
   }
 
   async _save_fsms(path) {
+    let markdown_doc = '';
     let code_tree = await this._get_code_tree(this.code);
     if (code_tree === undefined) {
       return;
@@ -621,6 +625,7 @@ class Documenter {
     }
     if (this.config.constants === 'commented') {
       constants = this._get_elements_with_description(constants);
+      types = this._get_elements_with_description(types);
     }
 
     if ((signals.length !== 0 && this.config.signals !== 'none') ||
@@ -636,7 +641,7 @@ class Documenter {
         md += "### Constants\n";
         md += this._get_doc_constants(constants);
       }
-      if (types.length !== 0) {
+      if (types.length !== 0 && this.config.constants !== 'none') {
         md += "### Types\n";
         md += this._get_doc_types(types);
       }
