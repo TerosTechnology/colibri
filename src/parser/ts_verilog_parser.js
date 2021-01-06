@@ -157,6 +157,11 @@ class Parser extends ts_base_parser.Ts_base_parser {
               new_generics = this.set_description_to_array(new_generics, comments, general_comments);
               generics_array = generics_array.concat(new_generics);
             }
+            if (new_constants.length === 0 && enable_package === true) {
+              new_constants = this.get_generics(cursor.currentNode(), lines, general_comments, 0);
+              new_constants = this.set_description_to_array(new_constants, comments, general_comments);
+              constants_array = constants_array.concat(new_constants);
+            }
 
             comments = '';
           }
@@ -221,10 +226,6 @@ class Parser extends ts_base_parser.Ts_base_parser {
       }
     }
     while (cursor.gotoNextSibling() !== false);
-
-    if (enable_package === true) {
-      constants_array = constants_array.concat(constants_array);
-    }
 
     return {
       processes: process_array, signals: signals_array, instantiations: instantiations_array,
