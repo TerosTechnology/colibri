@@ -369,48 +369,53 @@ class Parser extends ts_base_parser.Ts_base_parser {
 
 
   get_architecture_body_elements(code) {
-    let arch_body = this.get_architecture_body(code);
+    try {
+      let arch_body = this.get_architecture_body(code);
 
-    let comment_symbol = this.comment_symbol;
-    if (comment_symbol === '') {
-      comment_symbol = ' ';
+      let comment_symbol = this.comment_symbol;
+      if (comment_symbol === '') {
+        comment_symbol = ' ';
+      }
+      let process_array = [];
+      let instanciation_array = [];
+
+      let cursor = arch_body.walk();
+      let comments = '';
+
+      cursor.gotoFirstChild();
+      do {
+        if (cursor.nodeType === 'component_instantiation_statement') {
+          let elements = this.get_instantiation(cursor.currentNode());
+          for (let i = 0; i < elements.length; ++i) {
+            elements[i].description = comments;
+            instanciation_array.push(elements[i]);
+          }
+          comments = '';
+        }
+        else if (cursor.nodeType === 'process_statement') {
+          let elements = this.get_process(cursor.currentNode());
+          for (let i = 0; i < elements.length; ++i) {
+            elements[i].description = comments.replace('fsm_extract', '');
+            process_array.push(elements[i]);
+          }
+          comments = '';
+        }
+        else if (cursor.nodeType === 'comment') {
+          let txt_comment = cursor.nodeText.slice(2);
+          if (txt_comment[0] === comment_symbol) {
+            comments += txt_comment.slice(1);
+          }
+        }
+        else {
+          comments = '';
+        }
+      }
+      while (cursor.gotoNextSibling() !== false);
+      return { 'processes': process_array, 'instantiations': instanciation_array };
     }
-    let process_array = [];
-    let instanciation_array = [];
-
-    let cursor = arch_body.walk();
-    let comments = '';
-
-    cursor.gotoFirstChild();
-    do {
-      if (cursor.nodeType === 'component_instantiation_statement') {
-        let elements = this.get_instantiation(cursor.currentNode());
-        for (let i = 0; i < elements.length; ++i) {
-          elements[i].description = comments;
-          instanciation_array.push(elements[i]);
-        }
-        comments = '';
-      }
-      else if (cursor.nodeType === 'process_statement') {
-        let elements = this.get_process(cursor.currentNode());
-        for (let i = 0; i < elements.length; ++i) {
-          elements[i].description = comments.replace('fsm_extract', '');
-          process_array.push(elements[i]);
-        }
-        comments = '';
-      }
-      else if (cursor.nodeType === 'comment') {
-        let txt_comment = cursor.nodeText.slice(2);
-        if (txt_comment[0] === comment_symbol) {
-          comments += txt_comment.slice(1);
-        }
-      }
-      else {
-        comments = '';
-      }
+    catch (e) {
+      return { 'processes': [], 'instantiations': [] };
     }
-    while (cursor.gotoNextSibling() !== false);
-    return { 'processes': process_array, 'instantiations': instanciation_array };
   }
 
   get_process(p) {
@@ -551,7 +556,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
     let signals_array = [];
     let constants_array = [];
     let functions_array = [];
-    
+
     if (top_declaration === undefined) {
       return {
         'types': types_array, 'signals': signals_array,
