@@ -203,6 +203,11 @@ class Parser extends ts_base_parser.Ts_base_parser {
         new_ports = this.set_description_to_array(new_ports, comments, general_comments);
         ports_array = ports_array.concat(new_ports);
         comments = '';
+        last_element_position = cursor.startPosition.row;
+        let new_signals = this.get_types(cursor.currentNode(), lines, general_comments);
+        new_signals = this.set_description_to_array(new_signals, comments, general_comments);
+        signals_array = signals_array.concat(new_signals);
+        comments = '';
       }
       else if (cursor.nodeType === 'parameter_declaration') {
         last_element_position = cursor.startPosition.row;
@@ -998,14 +1003,19 @@ class Parser extends ts_base_parser.Ts_base_parser {
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";
       let type = this.get_type_type_pkg(inputs[x], lines);
-      item = {
-        "name": this.get_type_name_pkg(inputs[x], lines),
-        "type": type,
-        "description": comment,
-        'start_line': start_line
-      };
-      if (type !== '') {
-        items.push(item);
+      var arr_types = this.get_type_name_pkg(inputs[x], lines);
+      var split_arr_types = arr_types.split(',');
+      for (var s = 0; s < split_arr_types.length; ++s) {
+        var name_type = split_arr_types[s];
+        item = {
+          "name": name_type.trim(),
+          "type": type,
+          "description": comment,
+          'start_line': start_line
+        };
+        if (type !== '') {
+          items.push(item);
+        }
       }
     }
     return items;
