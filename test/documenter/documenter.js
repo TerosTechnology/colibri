@@ -21,75 +21,86 @@
 
 /* eslint-disable no-console */
 /* eslint-disable no-console */
+const colors = require('colors');
+const os = require('os');
 const fs = require('fs');
 const path_lib = require('path');
 const Colibri = require('../../src/main');
 const Documenter = Colibri.Documenter;
 const General = Colibri.General;
 
-let file_vhdl = __dirname + path_lib.sep + "resources" + path_lib.sep + "vhdl" 
-                        + path_lib.sep + "test_0.vhd";
+let file_vhdl = __dirname + path_lib.sep + "resources" + path_lib.sep + "vhdl"
+  + path_lib.sep + "test_0.vhd";
 
-let code_vhdl = fs.readFileSync(file_vhdl, {encoding:'utf8'});
+let code_vhdl = fs.readFileSync(file_vhdl, { encoding: 'utf8' });
 let lang_vhdl = General.LANGUAGES.VHDL;
 let comment_symbol_vhdl = "!";
 
-let custom_css = [false,true];
-for (let i=0;i<custom_css.length;++i){
+let custom_css = [false, true];
+for (let i = 0; i < custom_css.length; ++i) {
   let options = undefined;
-  let base_name_resources = __dirname + path_lib.sep + "resources" + path_lib.sep 
-  +  "vhdl" + path_lib.sep + "output" + path_lib.sep;  
+  let base_name_resources = __dirname + path_lib.sep + "resources" + path_lib.sep
+    + "vhdl" + path_lib.sep + "output" + path_lib.sep;
   let type = "";
   //Use custom css configuration
-  if (custom_css[i] === true){
-    let custom_css_vhdl = __dirname + path_lib.sep + "resources" + path_lib.sep + "vhdl" 
-                                                  + path_lib.sep + "custom.css";
-    options = {'custom_css_path':custom_css_vhdl};
-    base_name_resources = __dirname + path_lib.sep + "resources" + path_lib.sep 
-                      +  "vhdl" + path_lib.sep + "output_custom_css" + path_lib.sep;
+  if (custom_css[i] === true) {
+    let custom_css_vhdl = __dirname + path_lib.sep + "resources" + path_lib.sep + "vhdl"
+      + path_lib.sep + "custom.css";
+    options = { 'custom_css_path': custom_css_vhdl };
+    base_name_resources = __dirname + path_lib.sep + "resources" + path_lib.sep
+      + "vhdl" + path_lib.sep + "output_custom_css" + path_lib.sep;
     type = "custom_css_";
   }
 
-  let documenter_vhdl = new Documenter.Documenter(code_vhdl,lang_vhdl,comment_symbol_vhdl);
+  let documenter_vhdl = new Documenter.Documenter(code_vhdl, lang_vhdl, comment_symbol_vhdl);
   //Test HTML
-  documenter_vhdl.save_html(__dirname + path_lib.sep + type + "output_test_0_html.html",options).then(function() {
+  documenter_vhdl.save_html(__dirname + path_lib.sep + type + "output_test_0_html.html", options).then(function () {
     let filename_expected = base_name_resources + "output_test_0_html.html";
     let expected_file_buffer = fs.readFileSync(filename_expected);
     let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_html.html");
-
-    if (file_buffer.equals(expected_file_buffer) !== true){
-      throw new Error("Error HTML.");
+    if (file_buffer.equals(expected_file_buffer) !== true) {
+      fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_html.html")
+      throw new Error(`Error ${type}HTML.`.red);
     }
-    console.log("Test HTML -> OK!");
+    console.log(`Test  ${type}HTML -> OK!`.green);
+    fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_html.html")
   });
   //Test Markdown
-  documenter_vhdl.save_markdown(__dirname + path_lib.sep + type + "output_test_0_md.md").then(function() {
+  documenter_vhdl.save_markdown(__dirname + path_lib.sep + type + "output_test_0_md.md").then(function () {
     let filename_expected = base_name_resources + "output_test_0_md.md";
     let expected_file_buffer = fs.readFileSync(filename_expected);
     let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_md.md");
-    if (file_buffer.equals(expected_file_buffer) !== true){
-      throw new Error("Error Markdown.");
+    if (file_buffer.equals(expected_file_buffer) !== true) {
+      fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_md.md")
+      throw new Error(`Error  ${type}Markdown.`.red);
     }
-    console.log("Test Markdown -> OK!");
+    console.log(`Test  ${type}Markdown -> OK!`.green);
+    fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_md.md")
   });
   //Test PDF
-  documenter_vhdl.save_pdf(__dirname + path_lib.sep + type + "output_test_0_pdf.pdf",options).then(function() {
-    let filename_expected = base_name_resources + "output_test_0_pdf.pdf";
-    let expected_file_buffer = fs.readFileSync(filename_expected);
-    let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_pdf.pdf");
-    if (file_buffer.equals(expected_file_buffer) !== true){
-      throw new Error("Error pdf.");
-    }
-    console.log("Test pdf -> OK!");
-  });
+  if (os.platform !== "win32") {
+    documenter_vhdl.save_pdf(__dirname + path_lib.sep + type + "output_test_0_pdf.pdf", options).then(function () {
+      let filename_expected = base_name_resources + "output_test_0_pdf.svg";
+      let expected_file_buffer = fs.readFileSync(filename_expected);
+      let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_md.svg");
+      if (file_buffer.equals(expected_file_buffer) !== true) {
+        fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_md.svg")
+        throw new Error(`Error  ${type}pdf.`.red);
+      }
+      console.log(`Test  ${type}pdf -> OK!`.green);
+      fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_md.svg")
+    });
+  }
   //Test SVG
-  documenter_vhdl.save_svg(__dirname + path_lib.sep + type + "output_test_0_svg.svg").then(function() {
-    let filename_expected = base_name_resources + "output_test_0_svg.svg";
-    let expected_file_buffer = fs.readFileSync(filename_expected);
-    let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_svg.svg");
-    if (file_buffer.equals(expected_file_buffer) !== true){
-      throw new Error("Error svg.");
-    }
-    console.log("Test svg -> OK!");
-  });
+    documenter_vhdl.save_svg(__dirname + path_lib.sep + type + "output_test_0_svg.svg").then(function() {
+      let filename_expected = base_name_resources + "output_test_0_svg.svg";
+      let expected_file_buffer = fs.readFileSync(filename_expected);
+      let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_svg.svg");
+      if (file_buffer.equals(expected_file_buffer) !== true){
+        fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_svg.svg")
+        throw new Error(`Error  ${type}svg.`.red);
+      }
+      console.log(`Test  ${type}svg -> OK!`.green);
+      fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_svg.svg")
+    });
 }

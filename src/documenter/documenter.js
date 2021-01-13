@@ -516,6 +516,9 @@ class Documenter {
       return;
     }
     let stm_array = await this._get_stm();
+    if (stm_array === undefined ) {
+      return;
+    }
     for (let i = 0; i < stm_array.length; ++i) {
       let entity_name = code_tree['entity']['name'];
       let stm_path = `${path_lib.dirname(path)}${path_lib.sep}stm_${entity_name}_${i}${i}.svg\n`;
