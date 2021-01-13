@@ -60,41 +60,6 @@ class Parser extends ts_base_parser.Ts_base_parser {
     }
   }
 
-  parse_doxy(dic,file_type) {
-    // remove any spaces between linefeed and trim the string
-    let dic_copy = dic;
-    let desc_root = dic_copy[file_type];
-    desc_root.description = desc_root.description.trim().replace(/\n\s/gm, "\n")
-    // look for single line commands
-    const single_line_regex = /^[@\\](file|author|version|date)\s.+$/gm;
-    // get all matches for single line attributes
-    let matches_array = Array.from(desc_root.description.matchAll(single_line_regex));
-    // add a new property for the newly found matches
-    if (matches_array.length > 0) {
-      dic.info = {};
-      // append found matches
-      for (let index = 0; index < matches_array.length; index++) {
-        dic.info[matches_array[index][1]] = matches_array[index][0].replace(/^[@\\](file|author|version|date)/,"").trim();
-      }
-      // clean up the description field
-      desc_root.description = desc_root.description.replace(single_line_regex, "");
-    }
-    // look for copyrights regex
-    const copyright_regex = /^[@\\]copyright\s(?:(?![@$]).)*/gms;
-    let copyright = desc_root.description.match(copyright_regex);
-    if (copyright !== null) {
-      let stripped_copyright = copyright[0].split(/(\r\n[\s]*\r\n)|(\n[\s]*\n)/gm);
-      dic.info.copyright = stripped_copyright[0].replace(/^[@\\]copyright\s/,"");
-      desc_root.description = desc_root.description.replace(stripped_copyright[0],"");
-    }
-    // clean @details and @brief and create the new description
-    const description_regex = /^[@\\](brief|details)\s/gm;
-    desc_root.description = desc_root.description.replace(description_regex,"");
-    desc_root.description = desc_root.description.replace(/(\r\n[\s]*\r\n)|(\n[\s]*\n)/gm,"");
-    dic_copy[file_type] = desc_root;
-    return dic_copy
-  }
-
   get_entity_file(code) {
     try {
       let code_lines = code.split('\n');
