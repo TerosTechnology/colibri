@@ -26,7 +26,7 @@ const ParserLib = require('../src/parser/factory');
 const General = Colibri.General;
 
 if (process.argv[2] === 'verilog') {
-  for (let x = 0; x < 10; ++x) {
+  for (let x = 0; x < 11; ++x) {
     var ParserLang = General.LANGUAGES.VERILOG;
     let example_exp_result = fs.readFileSync(__dirname + '/examples/verilog/example_' + x + '.json', 'utf8');
     example_exp_result = JSON.parse(example_exp_result);
@@ -48,7 +48,7 @@ if (process.argv[2] === 'verilog') {
 
 //////////////////////////////////////////////////////////////////////////////
 if (process.argv[2] === 'vhdl') {
-  for (let x = 0; x < 8; ++x) {
+  for (let x = 0; x < 11; ++x) {
     var ParserLang = General.LANGUAGES.VHDL;
     let example_exp_result = fs.readFileSync(__dirname + '/examples/vhdl/example_' + x + '.json', 'utf8');
     example_exp_result = JSON.parse(example_exp_result);

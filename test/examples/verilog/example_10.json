@@ -1,0 +1,117 @@
+{
+    "libraries": [],
+    "entity": {
+      "name": "add2_and_clip_reg",
+      "description": "Some description can be added here\r\n also in multi-lines\rAnother description can be added here\r\r And more core description can be added here"
+    },
+    "generics": [
+      {
+        "name": "WIDTH",
+        "type": "",
+        "default_value": "16",
+        "description": " pepe\r"
+      }
+    ],
+    "ports": [
+      {
+        "name": "clk",
+        "direction": "input",
+        "type": "",
+        "default_value": "",
+        "description": "",
+        "start_line": 24
+      },
+      {
+        "name": "rst",
+        "direction": "input",
+        "type": "",
+        "default_value": "",
+        "description": "",
+        "start_line": 25
+      },
+      {
+        "name": "in1",
+        "direction": "input",
+        "type": "[WIDTH-1:0]",
+        "default_value": "",
+        "description": "**descrition**",
+        "start_line": 26
+      },
+      {
+        "name": "in2",
+        "direction": "input",
+        "type": "[WIDTH-1:0]",
+        "default_value": "",
+        "description": "",
+        "start_line": 27
+      },
+      {
+        "name": "strobe_in",
+        "direction": "input",
+        "type": "",
+        "default_value": "",
+        "description": "",
+        "start_line": 28
+      },
+      {
+        "name": "sum",
+        "direction": "output",
+        "type": "[WIDTH-1:0]",
+        "default_value": "",
+        "description": "",
+        "start_line": 29
+      },
+      {
+        "name": "strobe_out",
+        "direction": "output",
+        "type": "",
+        "default_value": "",
+        "description": "",
+        "start_line": 30
+      }
+    ],
+    "body": {
+      "processes": [
+        {
+          "name": "unnamed",
+          "sens_list": "@(posedge clk)",
+          "description": "",
+          "start_line": 36
+        },
+        {
+          "name": "unnamed",
+          "sens_list": "@(posedge clk)",
+          "description": "",
+          "start_line": 42
+        }
+      ],
+      "instantiations": [
+        {
+          "name": "add2_and_clip",
+          "type": "add2_and_clip",
+          "description": "",
+          "start_line": 34
+        }
+      ]
+    },
+    "declarations": {
+      "types": [],
+      "signals": [
+        {
+          "name": "sum_int",
+          "type": "wire [WIDTH-1:0]",
+          "description": "",
+          "start_line": 32
+        }
+      ],
+      "constants": [],
+      "functions": []
+    },
+    "info": {
+      "file": "example_8.vhd",
+      "author": "el3ctrician (elbadriahmad@gmail.com)",
+      "version": "0.1",
+      "date": "2020-07-10",
+      "copyright": " Copyright (c) 2021 by TerosHDL\r\n              GNU Public License\r\n  This program is free software: you can redistribute it and/or modify\r\n  it under the terms of the GNU General Public License as published by\r\n  the Free Software Foundation, either version 3 of the License, or\r\n  (at your option) any later version.\r\n  This program is distributed in the hope that it will be useful,\r\n  but WITHOUT ANY WARRANTY; without even the implied warranty of\r\n  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\r\n  GNU General Public License for more details.\r\n  You should have received a copy of the GNU General Public License\r\n  along with this program.  If not, see <https://www.gnu.org/licenses/>"
+    }
+  }
