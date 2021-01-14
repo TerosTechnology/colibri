@@ -114,6 +114,8 @@ class Documenter {
     if (code_tree['entity'] !== undefined) {
       //Title
       markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
+      //Optional info section
+      markdown_doc += this._get_info_section(code_tree);
       //Diagram
       await this._save_svg_from_code_tree(path, code_tree);
       markdown_doc += "## Diagram\n";
@@ -139,6 +141,8 @@ class Documenter {
     if (code_tree.package !== undefined) {
       //Title
       markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
+      //Optional info section
+      markdown_doc += this._get_info_section(code_tree);
       //Description
       markdown_doc += "## Description\n";
       markdown_doc += code_tree['package']['description'] + "\n";
@@ -197,6 +201,8 @@ class Documenter {
     if (code_tree['entity'] !== undefined) {
       //Title
       markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
+      //Optional info section
+      markdown_doc += this._get_info_section(code_tree);
       //Diagram
       markdown_doc += "## Diagram\n";
       let path_diagram = temp.openSync().path;
@@ -224,6 +230,8 @@ class Documenter {
     if (code_tree.package !== undefined) {
       //Title
       markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
+      //Optional info section
+      markdown_doc += this._get_info_section(code_tree);
       //Description
       markdown_doc += "## Description\n";
       markdown_doc += code_tree['package']['description'] + "\n";
@@ -340,6 +348,7 @@ class Documenter {
     if (code_tree['entity'] !== undefined) {
       //Title
       html += converter.makeHtml("# Entity: " + code_tree['entity']['name'] + "\n");
+      html += converter.makeHtml(this._get_info_section(code_tree));
       //Description
       html += converter.makeHtml("## Diagram\n");
       html += converter.makeHtml((await this._get_diagram_svg_from_code_tree(code_tree) + "\n").replace(/\*/g, "\\*"));
@@ -360,6 +369,7 @@ class Documenter {
     if (code_tree.package !== undefined) {
       //Title
       html += converter.makeHtml("# Package: " + code_tree['package']['name'] + "\n");
+      html += converter.makeHtml(this._get_info_section(code_tree));
       html += converter.makeHtml("## Description\n");
       html += converter.makeHtml(code_tree['package']['description'] + "\n");
     }
@@ -590,6 +600,26 @@ class Documenter {
     this.code_tree = await this._get_code_tree();
   }
 
+  _get_info_section(code_tree){
+    let markdown_doc = "";
+    //Doxygen parsed commands insertion (only if available)
+    if (code_tree['info']['file'] !== undefined){
+      markdown_doc += "- **File:** " + code_tree['info']['file'] + "\n";
+    }
+    if (code_tree['info']['author'] !== undefined){
+      markdown_doc += "- **Author:** " + code_tree['info']['author'] + "\n";
+    }
+    if (code_tree['info']['version'] !== undefined){
+      markdown_doc += "- **Version:** " + code_tree['info']['version'] + "\n";
+    }
+    if (code_tree['info']['date'] !== undefined){
+      markdown_doc += "- **Date:** " + code_tree['info']['date'] + "\n";
+    }
+    if (code_tree['info']['copyright'] !== undefined){
+      markdown_doc += "- **Copyright:** " + code_tree['info']['copyright'] + "\n";
+    }
+    return markdown_doc;
+  }
   _get_in_out_section(ports, generics) {
     let md = "";
     //Title
