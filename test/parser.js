@@ -31,7 +31,7 @@ if (process.argv[2] === 'verilog') {
     let example_exp_result = fs.readFileSync(__dirname + '/examples/verilog/example_' + x + '.json', 'utf8');
     example_exp_result = JSON.parse(example_exp_result);
     let example_verilog = fs.readFileSync(__dirname + '/examples/verilog/example_' + x + '.v', 'utf8');
-    get_structure(ParserLang, "!", example_verilog).then(example_result => {
+    get_structure(ParserLang, "!", example_verilog,x).then(example_result => {
       // console.log(example_result);
       let rs = compareVerilogTs(example_result, example_exp_result, "example_" + x + ".v");
       console.log("Test " + rs + " [" + "example_" + x + ".v" + "]");
@@ -53,7 +53,7 @@ if (process.argv[2] === 'vhdl') {
     let example_exp_result = fs.readFileSync(__dirname + '/examples/vhdl/example_' + x + '.json', 'utf8');
     example_exp_result = JSON.parse(example_exp_result);
     let example_vhd = fs.readFileSync(__dirname + '/examples/vhdl/example_' + x + '.vhd', 'utf8');
-    get_structure(ParserLang, "!", example_vhd).then(example_result => {
+    get_structure(ParserLang, "!", example_vhd,x).then(example_result => {
       // console.log(example_result);
       let rs = compareVhdl(example_result, example_exp_result, "example_" + x + ".vhd");
       console.log("Test " + rs + " [" + "example_" + x + ".vhd" + "]");
@@ -145,13 +145,13 @@ function check(m, n, cmp, type, file) {
   return true;
 }
 
-async function get_structure(ParserLang, symbol, src) {
+async function get_structure(ParserLang, symbol, src,num) {
   let parser = new ParserLib.ParserFactory;
   let lang_parser = await parser.getParser(ParserLang, symbol);
   let structure = await lang_parser.get_all(src);
   // console.log(structure);
   if (process.argv[3] === 'out') {
-    fs.writeFileSync("/home/ismael/Desktop/test.json", JSON.stringify(structure), 'utf8');
+    fs.writeFileSync(__dirname + '/examples/'+process.argv[2]+'/test_json/test_'+num+'.json', JSON.stringify(structure), 'utf8');
   }
   return structure;
 }
