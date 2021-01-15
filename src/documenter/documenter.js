@@ -135,7 +135,7 @@ class Documenter {
       }
       markdown_doc += wavedrom_description;
       //Generics and ports
-      markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics']);
+      markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics'],code_tree['virtual_buses']);
     }
     //Package
     if (code_tree.package !== undefined) {
@@ -224,7 +224,7 @@ class Documenter {
       markdown_doc += wavedrom_description;
 
       //Generics and ports
-      markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics']);
+      markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics'],code_tree['virtual_buses']);
     }
     //Package
     if (code_tree.package !== undefined) {
@@ -363,7 +363,7 @@ class Documenter {
       }
       html += html_description;
       //Generics and ports
-      html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], code_tree['generics']));
+      html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], code_tree['generics'],code_tree['virtual_buses']));
     }
     //Package
     if (code_tree.package !== undefined) {
@@ -620,7 +620,7 @@ class Documenter {
     }
     return markdown_doc;
   }
-  _get_in_out_section(ports, generics) {
+  _get_in_out_section(ports, generics,virtual_buses) {
     let md = "";
     //Title
     md += "## Generics and ports\n";
@@ -632,6 +632,14 @@ class Documenter {
     md += "### Table 1.2 Ports\n";
     if (ports.length !== 0) {
       md += this._get_doc_ports(ports);
+    }
+    if (virtual_buses !== undefined) {
+      md += "### 1.3 Virtual Buses\n";
+      for (let i = 0; i < virtual_buses.length; i++) {
+        const element = virtual_buses[i];
+        md += "### Table 1.3."+(i+1).toString()+" "+ element.name+"\n";
+        md += this._get_doc_ports(element.ports);
+      }
     }
     return md;
   }
@@ -732,8 +740,12 @@ class Documenter {
     let table = [];
     table.push(["Port name", "Direction", "Type", "Description"]);
     for (let i = 0; i < ports.length; ++i) {
+      let direction = ports[i]['direction'].replace(/\r/g, ' ').replace(/\n/g, ' ')
+      if (ports[i]['type'] === "virtual_bus"){
+        direction = "-";
+      }
       table.push([ports[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
-      ports[i]['direction'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      direction,
       ports[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       ports[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
