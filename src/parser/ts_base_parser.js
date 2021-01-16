@@ -100,7 +100,7 @@ class Ts_base_parser {
     return item;
   }
 
-  parse_doxy(dic,file_type) {
+  parse_doxy(dic, file_type) {
     // remove any spaces between linefeed and trim the string
     let desc_root = dic[file_type];
     desc_root.description = desc_root.description.trim().replace(/\n\s/gm, "\n")
@@ -113,7 +113,7 @@ class Ts_base_parser {
       dic.info = {};
       // append found matches
       for (let index = 0; index < matches_array.length; index++) {
-        dic.info[matches_array[index][1]] = matches_array[index][0].replace(/^\s*[@\\](file|author|version|date|title)/,"").trim();
+        dic.info[matches_array[index][1]] = matches_array[index][0].replace(/^\s*[@\\](file|author|version|date|title)/, "").trim();
       }
       // clean up the description field
       desc_root.description = desc_root.description.replace(single_line_regex, "");
@@ -124,42 +124,67 @@ class Ts_base_parser {
     if (copyright !== null) {
       let stripped_copyright = copyright[0].split(/(\r\n[\s]*\r\n)|(\n[\s]*\n)/gm);
       for (let index = 0; index < stripped_copyright.length; index++) {
-        if (stripped_copyright[index] !== undefined && stripped_copyright[index].match(copyright_regex) !== null){
-          dic.info.copyright = stripped_copyright[index].replace(/^\s*[@\\]copyright\s/,"");
-          desc_root.description = desc_root.description.replace(stripped_copyright[index],"");
+        if (stripped_copyright[index] !== undefined && stripped_copyright[index].match(copyright_regex) !== null) {
+          dic.info.copyright = stripped_copyright[index].replace(/^\s*[@\\]copyright\s/, "");
+          desc_root.description = desc_root.description.replace(stripped_copyright[index], "");
         }
-        
       }
     }
     // clean @details and @brief and create the new description
     const description_regex = /^\s*[@\\](brief|details)\s/gm;
-    desc_root.description = desc_root.description.replace(description_regex,"");
-    desc_root.description = desc_root.description.replace(/(\r\n[\s]*\r\n)|(\n[\s]*\n)/gm,"");
+    desc_root.description = desc_root.description.replace(description_regex, "");
+    desc_root.description = desc_root.description.replace(/(\r\n[\s]*\r\n)|(\n[\s]*\n)/gm, "");
     dic[file_type] = desc_root;
-    if (file_type === "entity"){
+    if (file_type === "entity") {
       let processes_list = dic['body']['processes']
-      if (processes_list.length > 0){
+      if (processes_list.length > 0) {
         for (let i = 0; i < processes_list.length; i++) {
-          dic.body.processes[i].description = dic.body.processes[i].description.replace(description_regex,"");
+          dic.body.processes[i].description = dic.body.processes[i].description.replace(description_regex, "");
         }
       }
     }
     return dic
   }
 
-
+  parse_ports_group(dic) {
+    const group_regex = /^\s*[@\\]portgroup\s.*$/gm;
+    const group_end_regex = /^\s*[@\\]endportgroup\s*/gm;
+  
+    let ports = dic.ports;
+    // hold the current group name
+    let group_name = "";
+    // loop along all ports
+    for (let i = 0; i < ports.length; i++) {
+      let end_group = ports[i].description.match(group_end_regex);
+      if (end_group !== null && end_group.length > 0) {
+        ports[i].description = ports[i].description.replace(end_group[0], "");
+        group_name = "";
+      }
+      let group = ports[i].description.match(group_regex);
+      // look for a new group name
+      if (group !== null && group.length > 0) {
+        ports[i].description = ports[i].description.replace(/^\s*[@\\]portgroup\s/gm, "");
+        group_name = ports[i].description.match(/^\s*\w+/);
+        ports[i].description = ports[i].description.replace(group_name[0], "");
+      }
+  
+      ports[i].group = group_name;
+    }
+    dic.ports = ports;
+    return dic;
+  }
   parse_virtual_bus(dic) {
     const virtual_bus_regex = /(^\s*[@\\]virtualbus\s)(?:(?![$]).)*/gm;
     const virtual_bus_end_regex = /^\s*[@\\]endvirtualbus\s*/gm;
     const virtual_bus_dir_regex = /^\s*[@\\]dir\s/gm;
-    const virtual_bus_keep_regex = /^\s*[@\\]keepports\s/gm 
+    const virtual_bus_keep_regex = /^\s*[@\\]keepports\s/gm
     // the base struct is used to reset the virtual_bus_struct when needed
     const virtual_bus_base_struct = {
-      "name" : "",
-      "description" : "",
-      "direction" : "in",
-      "keep_ports" : false,
-      "ports" : []
+      "name": "",
+      "description": "",
+      "direction": "in",
+      "keep_ports": false,
+      "ports": []
     }
     let ports = dic.ports;
     // hold the indexes that gets removed from the ports list
@@ -172,38 +197,38 @@ class Ts_base_parser {
     let virtual_bus_open = false;
     // loop along all ports
     for (let i = 0; i < ports.length; i++) {
-      let virtual_bus =  Array.from(ports[i].description.matchAll(virtual_bus_regex));
-  
-      if (virtual_bus.length > 0){
-        if (virtual_bus_open){
+      let virtual_bus = Array.from(ports[i].description.matchAll(virtual_bus_regex));
+
+      if (virtual_bus.length > 0) {
+        if (virtual_bus_open) {
           // new virtual bus is found and another one was still open, add the old one to the array and clean it 
           virtual_bus_array.push(clone(virtual_bus_struct));
           virtual_bus_struct = clone(virtual_bus_base_struct);
         }
         let virtual_bus_description = virtual_bus[0][0];
         // clean the port description from the found virtual bus command
-        dic.ports[i].description = ports[i].description.replace(virtual_bus[0][0],"");
-        dic.ports[i].description = ports[i].description.replace(virtual_bus_end_regex,"");
+        dic.ports[i].description = ports[i].description.replace(virtual_bus[0][0], "");
+        dic.ports[i].description = ports[i].description.replace(virtual_bus_end_regex, "");
         // strip virtual bus description from the command part
-        virtual_bus_description = virtual_bus_description.replace(virtual_bus[0][1],"");
+        virtual_bus_description = virtual_bus_description.replace(virtual_bus[0][1], "");
         // construct the name and description of virtual bus
         let virtual_bus_name = virtual_bus_description.match(/^\s*\w+/)[0]
-        virtual_bus_description = virtual_bus_description.replace(virtual_bus_name,"");
+        virtual_bus_description = virtual_bus_description.replace(virtual_bus_name, "");
         let virtual_bus_dir = virtual_bus_description.match(virtual_bus_dir_regex);
         // look for optional direction
-        if (virtual_bus_dir !== null && virtual_bus_dir.length > 0){
-          virtual_bus_description = virtual_bus_description.replace(virtual_bus_dir[0],"");
+        if (virtual_bus_dir !== null && virtual_bus_dir.length > 0) {
+          virtual_bus_description = virtual_bus_description.replace(virtual_bus_dir[0], "");
           virtual_bus_dir = virtual_bus_description.match(/^\s*(out|in)/gm);
-          if (virtual_bus_dir.length > 0){
-            virtual_bus_description = virtual_bus_description.replace(virtual_bus_dir[0],"");
+          if (virtual_bus_dir.length > 0) {
+            virtual_bus_description = virtual_bus_description.replace(virtual_bus_dir[0], "");
           }
           virtual_bus_struct.direction = virtual_bus_dir[0].trim();
         }
         // look for optional flag to keep in signals in table
         let keep_ports = virtual_bus_description.match(virtual_bus_keep_regex);
         // look for optional direction
-        if (keep_ports !== null && keep_ports.length > 0){
-          virtual_bus_description = virtual_bus_description.replace(keep_ports[0],"");
+        if (keep_ports !== null && keep_ports.length > 0) {
+          virtual_bus_description = virtual_bus_description.replace(keep_ports[0], "");
           virtual_bus_struct.keep_ports = true;
         }
         // update the virtual bus struct with the newly found fields
@@ -211,16 +236,16 @@ class Ts_base_parser {
         virtual_bus_struct.description = virtual_bus_description;
         // keep the virtual bus opened to add incoming ports
         virtual_bus_open = true;
-      } else if (virtual_bus.length == 0 && virtual_bus_open){
+      } else if (virtual_bus.length == 0 && virtual_bus_open) {
         // check for closing command
         if (ports[i].description.match(virtual_bus_end_regex) !== null) {
-          dic.ports[i].description = ports[i].description.replace(virtual_bus_end_regex,"");
+          dic.ports[i].description = ports[i].description.replace(virtual_bus_end_regex, "");
           virtual_bus_open = false;
           virtual_bus_array.push(clone(virtual_bus_struct));
           virtual_bus_struct = clone(virtual_bus_base_struct);
         }
       }
-      if (virtual_bus_open){
+      if (virtual_bus_open) {
         // copy the port to the newly created virtualbus
         virtual_bus_struct.ports.push(clone(ports[i]));
         // append current index to be removed
@@ -233,7 +258,7 @@ class Ts_base_parser {
       // remove ports from the list
       for (let index = 0; index < ports_to_remove.length; index++) {
         const element = ports_to_remove[index];
-        dic.ports.splice(element-index,1)
+        dic.ports.splice(element - index, 1)
       }
       for (let index = 0; index < virtual_bus_array.length; index++) {
         const element = virtual_bus_array[index];
@@ -244,8 +269,9 @@ class Ts_base_parser {
           "direction": element.direction,
           "default_value": "",
           "description": element.description,
+          "group" : ""
         });
-      } 
+      }
     }
     return dic;
   }

@@ -58,7 +58,8 @@ class Parser extends ts_base_parser.Ts_base_parser {
     }
     else {
       struct =  this.parse_doxy(entity_file,"entity");
-      struct =  this.parse_virtual_bus(entity_file);
+      struct =  this.parse_ports_group(struct);
+      struct =  this.parse_virtual_bus(struct);
     }
     return struct;
   }
