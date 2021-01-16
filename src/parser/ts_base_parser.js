@@ -164,8 +164,8 @@ class Ts_base_parser {
       // look for a new group name
       if (group !== null && group.length > 0) {
         ports[i].description = ports[i].description.replace(/^\s*[@\\]portgroup\s/gm, "");
-        group_name = ports[i].description.match(/^\s*\w+/);
-        ports[i].description = ports[i].description.replace(group_name[0], "");
+        group_name = ports[i].description.match(/^\s*\w+/)[0];
+        ports[i].description = ports[i].description.replace(group_name, "");
       }
   
       ports[i].group = group_name;
