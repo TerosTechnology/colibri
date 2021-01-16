@@ -113,7 +113,11 @@ class Documenter {
     //Entity
     if (code_tree['entity'] !== undefined) {
       //Title
-      markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
+      if (code_tree['info']['title'] !== undefined){
+        markdown_doc += "# " + code_tree['info']['title'] + "\n";
+      }else{
+        markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
+      }
       //Optional info section
       markdown_doc += this._get_info_section(code_tree);
       //Diagram
@@ -140,7 +144,11 @@ class Documenter {
     //Package
     if (code_tree.package !== undefined) {
       //Title
-      markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
+      if (code_tree['info']['title'] !== undefined){
+        markdown_doc += "# " + code_tree['info']['title'] + "\n";
+      }else{
+        markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
+      }
       //Optional info section
       markdown_doc += this._get_info_section(code_tree);
       //Description
@@ -200,7 +208,11 @@ class Documenter {
     //Entity
     if (code_tree['entity'] !== undefined) {
       //Title
-      markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
+      if (code_tree['info']['title'] !== undefined){
+        markdown_doc += "# " + code_tree['info']['title'] + "\n";
+      }else{
+        markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
+      }
       //Optional info section
       markdown_doc += this._get_info_section(code_tree);
       //Diagram
@@ -229,7 +241,11 @@ class Documenter {
     //Package
     if (code_tree.package !== undefined) {
       //Title
-      markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
+      if (code_tree['info']['title'] !== undefined){
+        markdown_doc += "# " + code_tree['info']['title'] + "\n";
+      }else{
+        markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
+      }
       //Optional info section
       markdown_doc += this._get_info_section(code_tree);
       //Description
@@ -347,7 +363,13 @@ class Documenter {
     //Entity
     if (code_tree['entity'] !== undefined) {
       //Title
-      html += converter.makeHtml("# Entity: " + code_tree['entity']['name'] + "\n");
+      let doc_title;
+      if (code_tree['info']['title'] !== undefined){
+        doc_title = "# " + code_tree['info']['title'] + "\n";
+      }else{
+        doc_title = "# Entity: " + code_tree['entity']['name'] + "\n";
+      }
+      html += converter.makeHtml(doc_title);
       html += converter.makeHtml(this._get_info_section(code_tree));
       //Description
       html += converter.makeHtml("## Diagram\n");
@@ -368,7 +390,13 @@ class Documenter {
     //Package
     if (code_tree.package !== undefined) {
       //Title
-      html += converter.makeHtml("# Package: " + code_tree['package']['name'] + "\n");
+      let doc_title;
+      if (code_tree['info']['title'] !== undefined){
+        doc_title = "# " + code_tree['info']['title'] + "\n";
+      }else{
+        doc_title = "# Package: " + code_tree['package']['name'] + "\n";
+      }
+      html += converter.makeHtml(doc_title);
       html += converter.makeHtml(this._get_info_section(code_tree));
       html += converter.makeHtml("## Description\n");
       html += converter.makeHtml(code_tree['package']['description'] + "\n");

@@ -105,7 +105,7 @@ class Ts_base_parser {
     let desc_root = dic[file_type];
     desc_root.description = desc_root.description.trim().replace(/\n\s/gm, "\n")
     // look for single line commands
-    const single_line_regex = /^\s*[@\\](file|author|version|date)\s.+$/gm;
+    const single_line_regex = /^\s*[@\\](file|author|version|date|title)\s.+$/gm;
     // get all matches for single line attributes
     let matches_array = Array.from(desc_root.description.matchAll(single_line_regex));
     // add a new property for the newly found matches
@@ -113,7 +113,7 @@ class Ts_base_parser {
       dic.info = {};
       // append found matches
       for (let index = 0; index < matches_array.length; index++) {
-        dic.info[matches_array[index][1]] = matches_array[index][0].replace(/^\s*[@\\](file|author|version|date)/,"").trim();
+        dic.info[matches_array[index][1]] = matches_array[index][0].replace(/^\s*[@\\](file|author|version|date|title)/,"").trim();
       }
       // clean up the description field
       desc_root.description = desc_root.description.replace(single_line_regex, "");
