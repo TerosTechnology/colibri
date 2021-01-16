@@ -631,14 +631,29 @@ class Documenter {
     }
     md += "### Table 1.2 Ports\n";
     if (ports.length !== 0) {
+      if (virtual_buses !== undefined) {
+        let virtual_buses_to_add = virtual_buses.filter(obj => obj.keep_ports === true);
+        if (virtual_buses_to_add.length > 0) {
+          for (let i = 0; i < virtual_buses_to_add.length; i++) {
+            const element = virtual_buses_to_add[i];
+            ports = ports.filter(function(value, index, arr){ 
+              return value.name !== element.name;
+          });
+          ports = ports.concat(element.ports)
+          }
+        }
+      }
       md += this._get_doc_ports(ports);
     }
     if (virtual_buses !== undefined) {
-      md += "### 1.3 Virtual Buses\n";
-      for (let i = 0; i < virtual_buses.length; i++) {
-        const element = virtual_buses[i];
-        md += "### Table 1.3."+(i+1).toString()+" "+ element.name+"\n";
-        md += this._get_doc_ports(element.ports);
+      let virtual_buses_to_show = virtual_buses.filter(obj => obj.keep_ports === false);
+      if (virtual_buses_to_show.length > 0) {
+        md += "### 1.3 Virtual Buses\n";
+        for (let i = 0; i < virtual_buses_to_show.length; i++) {
+          const element = virtual_buses_to_show[i];
+          md += "### Table 1.3."+(i+1).toString()+" "+ element.name+"\n";
+          md += this._get_doc_ports(element.ports);
+        }
       }
     }
     return md;

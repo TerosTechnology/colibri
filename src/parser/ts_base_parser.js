@@ -152,11 +152,13 @@ class Ts_base_parser {
     const virtual_bus_regex = /(^\s*[@\\]virtualbus\s)(?:(?![$]).)*/gm;
     const virtual_bus_end_regex = /^\s*[@\\]endvirtualbus\s*/gm;
     const virtual_bus_dir_regex = /^\s*[@\\]dir\s/gm;
+    const virtual_bus_keep_regex = /^\s*[@\\]keepports\s/gm 
     // the base struct is used to reset the virtual_bus_struct when needed
     const virtual_bus_base_struct = {
       "name" : "",
       "description" : "",
       "direction" : "in",
+      "keep_ports" : false,
       "ports" : []
     }
     let ports = dic.ports;
@@ -197,6 +199,13 @@ class Ts_base_parser {
           }
           virtual_bus_struct.direction = virtual_bus_dir[0].trim();
         }
+        // look for optional flag to keep in signals in table
+        let keep_ports = virtual_bus_description.match(virtual_bus_keep_regex);
+        // look for optional direction
+        if (keep_ports !== null && keep_ports.length > 0){
+          virtual_bus_description = virtual_bus_description.replace(keep_ports[0],"");
+          virtual_bus_struct.keep_ports = true;
+        }
         // update the virtual bus struct with the newly found fields
         virtual_bus_struct.name = virtual_bus_name;
         virtual_bus_struct.description = virtual_bus_description;
@@ -219,7 +228,7 @@ class Ts_base_parser {
       }
     }
     if (virtual_bus_array.length > 0) {
-      // append the vbus to the json 
+      // append the vbus to the json
       dic.virtual_buses = virtual_bus_array;
       // remove ports from the list
       for (let index = 0; index < ports_to_remove.length; index++) {
