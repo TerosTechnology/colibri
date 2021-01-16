@@ -11,7 +11,8 @@
       "line": 27,
       "direction": "in",
       "default_value": "",
-      "description": " core clock, 100 Mhz\r"
+      "description": " core clock, 100 Mhz\r",
+      "group": ""
     },
     {
       "name": "reset_n",
@@ -19,7 +20,8 @@
       "line": 29,
       "direction": "in",
       "default_value": "",
-      "description": " asynchronous active low reset\r"
+      "description": " asynchronous active low reset\r",
+      "group": ""
     },
     {
       "name": "mem_dout",
@@ -27,7 +29,8 @@
       "line": 78,
       "direction": "in",
       "default_value": "",
-      "description": "data out signal, read data from memory\r"
+      "description": "data out signal, read data from memory\r",
+      "group": ""
     },
     {
       "name": "mem_addr",
@@ -35,7 +38,8 @@
       "line": 80,
       "direction": "out",
       "default_value": "",
-      "description": " memory address to enable read \r"
+      "description": " memory address to enable read \r",
+      "group": ""
     },
     {
       "name": "axi_lite_config",
@@ -43,7 +47,8 @@
       "line": -1,
       "direction": "in",
       "default_value": "",
-      "description": " an AXI4-Lite interface to write core registers"
+      "description": " an AXI4-Lite interface to write core registers",
+      "group": ""
     },
     {
       "name": "video_in_axi_stream",
@@ -51,7 +56,8 @@
       "line": -1,
       "direction": "in",
       "default_value": "",
-      "description": " a slave axi stream interface for video in "
+      "description": " a slave axi stream interface for video in ",
+      "group": ""
     },
     {
       "name": "video_out_axi_stream",
@@ -59,7 +65,8 @@
       "line": -1,
       "direction": "out",
       "default_value": "",
-      "description": "a master axi stream interface for video out "
+      "description": "a master axi stream interface for video out ",
+      "group": ""
     }
   ],
   "body": {
@@ -93,7 +100,8 @@
           "line": 31,
           "direction": "in",
           "default_value": "",
-          "description": "\r"
+          "description": "\r",
+          "group": ""
         },
         {
           "name": "s_axi_awprot",
@@ -101,7 +109,8 @@
           "line": 32,
           "direction": "in",
           "default_value": "",
-          "description": ""
+          "description": "",
+          "group": ""
         },
         {
           "name": "s_axi_awvalid",
@@ -109,7 +118,8 @@
           "line": 33,
           "direction": "in",
           "default_value": "",
-          "description": ""
+          "description": "",
+          "group": ""
         },
         {
           "name": "s_axi_awready",
@@ -117,7 +127,8 @@
           "line": 34,
           "direction": "out",
           "default_value": "",
-          "description": ""
+          "description": "",
+          "group": ""
         },
         {
           "name": "s_axi_wdata",
@@ -125,7 +136,8 @@
           "line": 35,
           "direction": "in",
           "default_value": "",
-          "description": ""
+          "description": "",
+          "group": ""
         },
         {
           "name": "s_axi_wstrb",
@@ -133,7 +145,8 @@
           "line": 36,
           "direction": "in",
           "default_value": "",
-          "description": ""
+          "description": "",
+          "group": ""
         },
         {
           "name": "s_axi_wvalid",
@@ -141,7 +154,8 @@
           "line": 37,
           "direction": "in",
           "default_value": "",
-          "description": ""
+          "description": "",
+          "group": ""
         },
         {
           "name": "s_axi_wready",
@@ -149,7 +163,8 @@
           "line": 38,
           "direction": "out",
           "default_value": "",
-          "description": ""
+          "description": "",
+          "group": ""
         },
         {
           "name": "s_axi_bresp",
@@ -157,7 +172,8 @@
           "line": 39,
           "direction": "out",
           "default_value": "",
-          "description": ""
+          "description": "",
+          "group": ""
         },
         {
           "name": "s_axi_bvalid",
@@ -165,7 +181,8 @@
           "line": 40,
           "direction": "out",
           "default_value": "",
-          "description": ""
+          "description": "",
+          "group": ""
         },
         {
           "name": "s_axi_bready",
@@ -173,7 +190,8 @@
           "line": 41,
           "direction": "in",
           "default_value": "",
-          "description": ""
+          "description": "",
+          "group": ""
         },
         {
           "name": "s_axi_araddr",
@@ -181,7 +199,8 @@
           "line": 42,
           "direction": "in",
           "default_value": "",
-          "description": ""
+          "description": "",
+          "group": ""
         },
         {
           "name": "s_axi_arprot",
@@ -189,7 +208,8 @@
           "line": 43,
           "direction": "in",
           "default_value": "",
-          "description": ""
+          "description": "",
+          "group": ""
         },
         {
           "name": "s_axi_arvalid",
@@ -197,7 +217,8 @@
           "line": 44,
           "direction": "in",
           "default_value": "",
-          "description": ""
+          "description": "",
+          "group": ""
         },
         {
           "name": "s_axi_arready",
@@ -205,7 +226,8 @@
           "line": 45,
           "direction": "out",
           "default_value": "",
-          "description": ""
+          "description": "",
+          "group": ""
         },
         {
           "name": "s_axi_rdata",
@@ -213,7 +235,8 @@
           "line": 46,
           "direction": "out",
           "default_value": "",
-          "description": ""
+          "description": "",
+          "group": ""
         },
         {
           "name": "s_axi_rresp",
@@ -221,7 +244,8 @@
           "line": 47,
           "direction": "out",
           "default_value": "",
-          "description": ""
+          "description": "",
+          "group": ""
         },
         {
           "name": "s_axi_rvalid",
@@ -229,7 +253,8 @@
           "line": 48,
           "direction": "out",
           "default_value": "",
-          "description": ""
+          "description": "",
+          "group": ""
         },
         {
           "name": "s_axi_rready",
@@ -237,7 +262,8 @@
           "line": 49,
           "direction": "in",
           "default_value": "",
-          "description": ""
+          "description": "",
+          "group": ""
         }
       ]
     },
@@ -253,7 +279,8 @@
           "line": 54,
           "direction": "in",
           "default_value": "",
-          "description": "axis data bus, transfers two pixels per clock with pixel width of 12 bits in mono color\r"
+          "description": "axis data bus, transfers two pixels per clock with pixel width of 12 bits in mono color\r",
+          "group": ""
         },
         {
           "name": "video_in_tlast",
@@ -261,7 +288,8 @@
           "line": 56,
           "direction": "in",
           "default_value": "",
-          "description": " axis last, used to indicate the end of packet which in video context refer to line\r"
+          "description": " axis last, used to indicate the end of packet which in video context refer to line\r",
+          "group": ""
         },
         {
           "name": "video_in_tuser",
@@ -269,7 +297,8 @@
           "line": 58,
           "direction": "in",
           "default_value": "",
-          "description": " axis user, usually is user defined but in video context it marks the start of a frame\r"
+          "description": " axis user, usually is user defined but in video context it marks the start of a frame\r",
+          "group": ""
         },
         {
           "name": "video_in_tvalid",
@@ -277,7 +306,8 @@
           "line": 60,
           "direction": "in",
           "default_value": "",
-          "description": " axis valid handshake signal\r"
+          "description": " axis valid handshake signal\r",
+          "group": ""
         },
         {
           "name": "video_in_tready",
@@ -285,7 +315,8 @@
           "line": 62,
           "direction": "out",
           "default_value": "",
-          "description": " axis ready handshake signal\r"
+          "description": " axis ready handshake signal\r",
+          "group": ""
         }
       ]
     },
@@ -301,7 +332,8 @@
           "line": 66,
           "direction": "out",
           "default_value": "",
-          "description": "\r axis data bus, transfers two pixels per clock with pixel width of 10 bits in mono color\r"
+          "description": "\r axis data bus, transfers two pixels per clock with pixel width of 10 bits in mono color\r",
+          "group": ""
         },
         {
           "name": "video_out_tlast",
@@ -309,7 +341,8 @@
           "line": 68,
           "direction": "out",
           "default_value": "",
-          "description": " axis last, used to indicate the end of packet which in video context refer to line\r"
+          "description": " axis last, used to indicate the end of packet which in video context refer to line\r",
+          "group": ""
         },
         {
           "name": "video_out_tuser",
@@ -317,7 +350,8 @@
           "line": 70,
           "direction": "out",
           "default_value": "",
-          "description": " axis user, usually is user defined but in video context it marks the start of a frame\r"
+          "description": " axis user, usually is user defined but in video context it marks the start of a frame\r",
+          "group": ""
         },
         {
           "name": "video_out_tvalid",
@@ -325,7 +359,8 @@
           "line": 72,
           "direction": "out",
           "default_value": "",
-          "description": " axis valid handshake signal\r"
+          "description": " axis valid handshake signal\r",
+          "group": ""
         },
         {
           "name": "video_out_tready",
@@ -333,7 +368,8 @@
           "line": 74,
           "direction": "in",
           "default_value": "",
-          "description": " axis ready handshake signal\r"
+          "description": " axis ready handshake signal\r",
+          "group": ""
         }
       ]
     }

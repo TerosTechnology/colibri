@@ -49,7 +49,7 @@ if (process.argv[2] === 'verilog') {
 
 //////////////////////////////////////////////////////////////////////////////
 if (process.argv[2] === 'vhdl') {
-  for (let x = 0; x < 12; ++x) {
+  for (let x = 0; x < 13; ++x) {
     var ParserLang = General.LANGUAGES.VHDL;
     let example_exp_result = fs.readFileSync(__dirname + '/examples/vhdl/example_' + x + '.json', 'utf8');
     example_exp_result = JSON.parse(example_exp_result);
@@ -77,7 +77,7 @@ async function get_structure(ParserLang, symbol, src,num) {
   let structure = await lang_parser.get_all(src);
   // console.log(structure);
   if (process.argv[3] === 'out') {
-    fs.writeFileSync(__dirname + '/examples/'+process.argv[2]+'/test_json/test_'+num+'.json', JSON.stringify(structure), 'utf8');
+    fs.writeFileSync(__dirname + '/examples/'+process.argv[2]+'/test_json/example_'+num+'.json', JSON.stringify(structure), 'utf8');
   }
   return structure;
 }

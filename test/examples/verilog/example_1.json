@@ -1,118 +1,117 @@
 {
-  "libraries":[
-     
-  ],
-  "entity":{
-     "name":"add2_and_clip_reg",
-     "description":"\n"
+  "libraries": [],
+  "entity": {
+    "name": "add2_and_clip_reg",
+    "description": ""
   },
-  "generics":[
-     {
-        "name":"WIDTH",
-        "type":"",
-        "default_value":"16",
-        "description":" pepe"
-     }
+  "generics": [
+    {
+      "name": "WIDTH",
+      "type": "",
+      "default_value": "16",
+      "description": " pepe\r"
+    }
   ],
-  "ports":[
-     {
-        "name":"clk",
-        "direction":"input",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":9
-     },
-     {
-        "name":"rst",
-        "direction":"input",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":10
-     },
-     {
-        "name":"in1",
-        "direction":"input",
-        "type":"[WIDTH-1:0]",
-        "default_value":"",
-        "description":"**descrition**",
-        "start_line":11
-     },
-     {
-        "name":"in2",
-        "direction":"input",
-        "type":"[WIDTH-1:0]",
-        "default_value":"",
-        "description":"",
-        "start_line":12
-     },
-     {
-        "name":"strobe_in",
-        "direction":"input",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":13
-     },
-     {
-        "name":"sum",
-        "direction":"output",
-        "type":"[WIDTH-1:0]",
-        "default_value":"",
-        "description":"",
-        "start_line":14
-     },
-     {
-        "name":"strobe_out",
-        "direction":"output",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":15
-     }
+  "ports": [
+    {
+      "name": "clk",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 9,
+      "group": ""
+    },
+    {
+      "name": "rst",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 10,
+      "group": ""
+    },
+    {
+      "name": "in1",
+      "direction": "input",
+      "type": "[WIDTH-1:0]",
+      "default_value": "",
+      "description": "**descrition**",
+      "start_line": 11,
+      "group": ""
+    },
+    {
+      "name": "in2",
+      "direction": "input",
+      "type": "[WIDTH-1:0]",
+      "default_value": "",
+      "description": "",
+      "start_line": 12,
+      "group": ""
+    },
+    {
+      "name": "strobe_in",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 13,
+      "group": ""
+    },
+    {
+      "name": "sum",
+      "direction": "output",
+      "type": "[WIDTH-1:0]",
+      "default_value": "",
+      "description": "",
+      "start_line": 14,
+      "group": ""
+    },
+    {
+      "name": "strobe_out",
+      "direction": "output",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 15,
+      "group": ""
+    }
   ],
-  "body":{
-     "processes":[
-        {
-           "name":"unnamed",
-           "sens_list":"@(posedge clk)",
-           "description":"",
-           "start_line":21
-        },
-        {
-           "name":"unnamed",
-           "sens_list":"@(posedge clk)",
-           "description":"",
-           "start_line":27
-        }
-     ],
-     "instantiations":[
-        {
-           "name":"add2_and_clip",
-           "type":"add2_and_clip",
-           "description":"",
-           "start_line":19
-        }
-     ]
+  "body": {
+    "processes": [
+      {
+        "name": "unnamed",
+        "sens_list": "@(posedge clk)",
+        "description": "",
+        "start_line": 21
+      },
+      {
+        "name": "unnamed",
+        "sens_list": "@(posedge clk)",
+        "description": "",
+        "start_line": 27
+      }
+    ],
+    "instantiations": [
+      {
+        "name": "add2_and_clip",
+        "type": "add2_and_clip",
+        "description": "",
+        "start_line": 19
+      }
+    ]
   },
-  "declarations":{
-     "types":[
-        
-     ],
-     "signals":[
-        {
-           "name":"sum_int",
-           "type":"wire [WIDTH-1:0]",
-           "description":"",
-           "start_line":17
-        }
-     ],
-     "constants":[
-        
-     ],
-     "functions":[
-        
-     ]
+  "declarations": {
+    "types": [],
+    "signals": [
+      {
+        "name": "sum_int",
+        "type": "wire [WIDTH-1:0]",
+        "description": "",
+        "start_line": 17
+      }
+    ],
+    "constants": [],
+    "functions": []
   }
 }

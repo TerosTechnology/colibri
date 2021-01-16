@@ -1,156 +1,165 @@
 {
   "entity": {
-      "name": "axi_burst_gen",
-      "description": ""
+    "name": "axi_burst_gen",
+    "description": ""
   },
   "generics": [
-      {
-          "name": "max_burst_length",
-          "type": "natural range 1 to 256",
-          "line": 13,
-          "direction": "",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "z_5",
-          "type": "natural range 1 to 256",
-          "line": 13,
-          "direction": "",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "bytes_per_beat",
-          "type": "natural",
-          "line": 14,
-          "direction": "",
-          "default_value": "",
-          "description": ""
-      }
+    {
+      "name": "max_burst_length",
+      "type": "natural range 1 to 256",
+      "line": 11,
+      "direction": "",
+      "default_value": "",
+      "description": ""
+    },
+    {
+      "name": "z_5",
+      "type": "natural range 1 to 256",
+      "line": 11,
+      "direction": "",
+      "default_value": "",
+      "description": ""
+    },
+    {
+      "name": "bytes_per_beat",
+      "type": "natural",
+      "line": 12,
+      "direction": "",
+      "default_value": "",
+      "description": ""
+    }
   ],
   "ports": [
-      {
-          "name": "clk",
-          "type": "std_logic",
-          "line": 17,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "start",
-          "type": "std_logic",
-          "line": 20,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "start_addr",
-          "type": "std_logic_vector(31 downto 0)",
-          "line": 21,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "num_bytes",
-          "type": "std_logic_vector(31 downto 0)",
-          "line": 22,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "burst_valid",
-          "type": "std_logic",
-          "line": 25,
-          "direction": "out",
-          "default_value": "'0'",
-          "description": ""
-      },
-      {
-          "name": "burst_ready",
-          "type": "std_logic",
-          "line": 26,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "burst_addr",
-          "type": "std_logic_vector(31 downto 0)",
-          "line": 27,
-          "direction": "out",
-          "default_value": "(others => '0')",
-          "description": ""
-      },
-      {
-          "name": "burst_length",
-          "type": "natural range 1 to max_burst_length",
-          "line": 28,
-          "direction": "out",
-          "default_value": "1",
-          "description": ""
-      },
-      {
-          "name": "burst_last",
-          "type": "std_logic",
-          "line": 29,
-          "direction": "out",
-          "default_value": "'0'",
-          "description": ""
-      }
+    {
+      "name": "clk",
+      "type": "std_logic",
+      "line": 15,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "start",
+      "type": "std_logic",
+      "line": 18,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "start_addr",
+      "type": "std_logic_vector(31 downto 0)",
+      "line": 19,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "num_bytes",
+      "type": "std_logic_vector(31 downto 0)",
+      "line": 20,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "burst_valid",
+      "type": "std_logic",
+      "line": 23,
+      "direction": "out",
+      "default_value": "'0'",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "burst_ready",
+      "type": "std_logic",
+      "line": 24,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "burst_addr",
+      "type": "std_logic_vector(31 downto 0)",
+      "line": 25,
+      "direction": "out",
+      "default_value": "(others => '0')",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "burst_length",
+      "type": "natural range 1 to max_burst_length",
+      "line": 26,
+      "direction": "out",
+      "default_value": "1",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "burst_last",
+      "type": "std_logic",
+      "line": 27,
+      "direction": "out",
+      "default_value": "'0'",
+      "description": "",
+      "group": ""
+    }
   ],
   "body": {
-      "processes": [
-          {
-              "name": "main",
-              "sens_list": "",
-              "description": ""
-          }
-      ],
-      "instantiations": []
+    "processes": [
+      {
+        "name": "main",
+        "sens_list": "",
+        "description": ""
+      }
+    ],
+    "instantiations": []
   },
   "declarations": {
-      "types": [
-          {
-              "name": "state_t",
-              "type": "(idle,\n                   compute_burst_length0,\n                   compute_burst_length1,\n                   compute_is_last,\n                   await_accept)",
-              "line": 36,
-              "description": ""
-          }
-      ],
-      "signals": [
-          {
-              "name": "state",
-              "type": "state_t",
-              "line": 41,
-              "description": ""
-          },
-          {
-              "name": "addr",
-              "type": "unsigned(start_addr'range)",
-              "line": 42,
-              "description": ""
-          },
-          {
-              "name": " remaining_bytes",
-              "type": "unsigned(start_addr'range)",
-              "line": 42,
-              "description": ""
-          }
-      ],
-      "constants": [
-          {
-              "name": "c4kbyte",
-              "type": "natural",
-              "default_value": " 4096",
-              "line": 34,
-              "description": ""
-          }
-      ],
-      "functions": []
+    "types": [
+      {
+        "name": "state_t",
+        "type": "(idle,\r\n    compute_burst_length0,\r\n    compute_burst_length1,\r\n    compute_is_last,\r\n    await_accept)",
+        "line": 32,
+        "description": ""
+      }
+    ],
+    "signals": [
+      {
+        "name": "state",
+        "type": "state_t",
+        "line": 37,
+        "description": ""
+      },
+      {
+        "name": "addr",
+        "type": "unsigned(start_addr'range)",
+        "line": 38,
+        "description": ""
+      },
+      {
+        "name": " remaining_bytes",
+        "type": "unsigned(start_addr'range)",
+        "line": 38,
+        "description": ""
+      }
+    ],
+    "constants": [
+      {
+        "name": "c4kbyte",
+        "type": "natural",
+        "default_value": " 4096",
+        "line": 30,
+        "description": ""
+      }
+    ],
+    "functions": []
   }
 }

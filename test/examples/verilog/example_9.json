@@ -1,265 +1,279 @@
 {
-   "libraries": [],
-   "entity": {
-       "name": "axis_baser_tx_64",
-       "description": "\n"
-   },
-   "generics": [
-       {
-           "name": "DATA_WIDTH",
-           "type": "",
-           "default_value": "64",
-           "description": ""
-       },
-       {
-           "name": "KEEP_WIDTH",
-           "type": "",
-           "default_value": "undefined",
-           "description": "**Data width parameter**"
-       },
-       {
-           "name": "HDR_WIDTH",
-           "type": "",
-           "default_value": "2",
-           "description": ""
-       },
-       {
-           "name": "ENABLE_PADDING",
-           "type": "",
-           "default_value": "1",
-           "description": ""
-       },
-       {
-           "name": "ENABLE_DIC",
-           "type": "",
-           "default_value": "1",
-           "description": "enable"
-       },
-       {
-           "name": "MIN_FRAME_LENGTH",
-           "type": "",
-           "default_value": "64",
-           "description": ""
-       }
-   ],
-   "ports": [
-       {
-           "name": "clk",
-           "direction": "input",
-           "type": "wire",
-           "default_value": "",
-           "description": "",
-           "start_line": 36
-       },
-       {
-           "name": "rst",
-           "direction": "input",
-           "type": "wire",
-           "default_value": "",
-           "description": "",
-           "start_line": 37
-       },
-       {
-           "name": "s_axis_tdata",
-           "direction": "input",
-           "type": "wire [2*DATA_WIDTH-1:0]",
-           "default_value": "",
-           "description": "",
-           "start_line": 42
-       },
-       {
-           "name": "s_axis_tkeep",
-           "direction": "input",
-           "type": "wire [2*KEEP_WIDTH-1:0]",
-           "default_value": "",
-           "description": "",
-           "start_line": 43
-       },
-       {
-           "name": "s_axis_tvalid",
-           "direction": "input",
-           "type": "wire",
-           "default_value": "",
-           "description": "",
-           "start_line": 44
-       },
-       {
-           "name": "s_axis_tready",
-           "direction": "output",
-           "type": "wire",
-           "default_value": "",
-           "description": "",
-           "start_line": 45
-       },
-       {
-           "name": "s_axis_tlast",
-           "direction": "input",
-           "type": "wire",
-           "default_value": "",
-           "description": "",
-           "start_line": 46
-       },
-       {
-           "name": "s_axis_tuser",
-           "direction": "input",
-           "type": "wire",
-           "default_value": "",
-           "description": "",
-           "start_line": 47
-       },
-       {
-           "name": "encoded_tx_data",
-           "direction": "output",
-           "type": "wire [2*DATA_WIDTH-1:0]",
-           "default_value": "",
-           "description": "",
-           "start_line": 52
-       },
-       {
-           "name": "encoded_tx_hdr",
-           "direction": "output",
-           "type": "wire [2*HDR_WIDTH-1:0]",
-           "default_value": "",
-           "description": "",
-           "start_line": 53
-       },
-       {
-           "name": "ifg_delay",
-           "direction": "input",
-           "type": "wire [7:0]",
-           "default_value": "",
-           "description": "",
-           "start_line": 58
-       },
-       {
-           "name": "start_packet_0",
-           "direction": "output",
-           "type": "wire",
-           "default_value": "",
-           "description": "",
-           "start_line": 63
-       },
-       {
-           "name": "start_packet_4",
-           "direction": "output",
-           "type": "wire",
-           "default_value": "",
-           "description": "",
-           "start_line": 64
-       },
-       {
-           "name": "error_underflow",
-           "direction": "output",
-           "type": "wire",
-           "default_value": "",
-           "description": "",
-           "start_line": 65
-       }
-   ],
-   "body": {
-       "processes": [],
-       "instantiations": []
-   },
-   "declarations": {
-       "types": [
-           {
-               "name": "port_t",
-               "type": "struct{  \n    logic [4:0] a, b; \n    logic [9:0] m; \n    }",
-               "description": "struct comment",
-               "start_line": 76
-           }
-       ],
-       "signals": [
-           {
-               "name": "a",
-               "type": "wire",
-               "description": "coment abc",
-               "start_line": 70
-           },
-           {
-               "name": "b",
-               "type": "wire",
-               "description": "coment abc",
-               "start_line": 70
-           },
-           {
-               "name": "c",
-               "type": "wire",
-               "description": "coment abc",
-               "start_line": 70
-           },
-           {
-               "name": "ddd",
-               "type": "wire [3:0]",
-               "description": "coment ddd",
-               "start_line": 71
-           },
-           {
-               "name": "aa",
-               "type": "reg",
-               "description": "comment ee",
-               "start_line": 72
-           },
-           {
-               "name": "bb",
-               "type": "reg",
-               "description": "comment ee",
-               "start_line": 72
-           },
-           {
-               "name": "cc",
-               "type": "reg [4:0]",
-               "description": "comment ee",
-               "start_line": 73
-           },
-           {
-               "name": "fff",
-               "type": "logic [3:0]",
-               "description": "comment fff",
-               "start_line": 74
-           },
-           {
-               "name": "t1",
-               "type": "my_type_t",
-               "description": "my_type vars",
-               "start_line": 74
-           },
-           {
-               "name": "t2",
-               "type": "my_type_t",
-               "description": "my_type vars",
-               "start_line": 74
-           },
-           {
-               "name": "t3",
-               "type": "my_type_y",
-               "description": "my_type vars",
-               "start_line": 74
-           }
-       ],
-       "constants": [
-           {
-               "name": "my_local_param",
-               "type": "",
-               "default_value": "10",
-               "description": "local param 1 & 2",
-               "start_line": 68
-           },
-           {
-               "name": "my_local_param1",
-               "type": "",
-               "default_value": "15",
-               "description": "local param 1 & 2",
-               "start_line": 68
-           },
-           {
-               "name": "my_local_param2",
-               "type": "integer",
-               "default_value": "20",
-               "description": "local param 3",
-               "start_line": 69
-           }
-       ],
-       "functions": []
-   }
+  "libraries": [],
+  "entity": {
+    "name": "axis_baser_tx_64",
+    "description": ""
+  },
+  "generics": [
+    {
+      "name": "DATA_WIDTH",
+      "type": "",
+      "default_value": "64",
+      "description": ""
+    },
+    {
+      "name": "KEEP_WIDTH",
+      "type": "",
+      "default_value": "undefined",
+      "description": "**Data width parameter**\r"
+    },
+    {
+      "name": "HDR_WIDTH",
+      "type": "",
+      "default_value": "2",
+      "description": ""
+    },
+    {
+      "name": "ENABLE_PADDING",
+      "type": "",
+      "default_value": "1",
+      "description": ""
+    },
+    {
+      "name": "ENABLE_DIC",
+      "type": "",
+      "default_value": "1",
+      "description": "enable\r"
+    },
+    {
+      "name": "MIN_FRAME_LENGTH",
+      "type": "",
+      "default_value": "64",
+      "description": ""
+    }
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "direction": "input",
+      "type": "wire",
+      "default_value": "",
+      "description": "",
+      "start_line": 36,
+      "group": ""
+    },
+    {
+      "name": "rst",
+      "direction": "input",
+      "type": "wire",
+      "default_value": "",
+      "description": "",
+      "start_line": 37,
+      "group": ""
+    },
+    {
+      "name": "s_axis_tdata",
+      "direction": "input",
+      "type": "wire [2*DATA_WIDTH-1:0]",
+      "default_value": "",
+      "description": "",
+      "start_line": 42,
+      "group": ""
+    },
+    {
+      "name": "s_axis_tkeep",
+      "direction": "input",
+      "type": "wire [2*KEEP_WIDTH-1:0]",
+      "default_value": "",
+      "description": "",
+      "start_line": 43,
+      "group": ""
+    },
+    {
+      "name": "s_axis_tvalid",
+      "direction": "input",
+      "type": "wire",
+      "default_value": "",
+      "description": "",
+      "start_line": 44,
+      "group": ""
+    },
+    {
+      "name": "s_axis_tready",
+      "direction": "output",
+      "type": "wire",
+      "default_value": "",
+      "description": "",
+      "start_line": 45,
+      "group": ""
+    },
+    {
+      "name": "s_axis_tlast",
+      "direction": "input",
+      "type": "wire",
+      "default_value": "",
+      "description": "",
+      "start_line": 46,
+      "group": ""
+    },
+    {
+      "name": "s_axis_tuser",
+      "direction": "input",
+      "type": "wire",
+      "default_value": "",
+      "description": "",
+      "start_line": 47,
+      "group": ""
+    },
+    {
+      "name": "encoded_tx_data",
+      "direction": "output",
+      "type": "wire [2*DATA_WIDTH-1:0]",
+      "default_value": "",
+      "description": "",
+      "start_line": 52,
+      "group": ""
+    },
+    {
+      "name": "encoded_tx_hdr",
+      "direction": "output",
+      "type": "wire [2*HDR_WIDTH-1:0]",
+      "default_value": "",
+      "description": "",
+      "start_line": 53,
+      "group": ""
+    },
+    {
+      "name": "ifg_delay",
+      "direction": "input",
+      "type": "wire [7:0]",
+      "default_value": "",
+      "description": "",
+      "start_line": 58,
+      "group": ""
+    },
+    {
+      "name": "start_packet_0",
+      "direction": "output",
+      "type": "wire",
+      "default_value": "",
+      "description": "",
+      "start_line": 63,
+      "group": ""
+    },
+    {
+      "name": "start_packet_4",
+      "direction": "output",
+      "type": "wire",
+      "default_value": "",
+      "description": "",
+      "start_line": 64,
+      "group": ""
+    },
+    {
+      "name": "error_underflow",
+      "direction": "output",
+      "type": "wire",
+      "default_value": "",
+      "description": "",
+      "start_line": 65,
+      "group": ""
+    }
+  ],
+  "body": {
+    "processes": [],
+    "instantiations": []
+  },
+  "declarations": {
+    "types": [
+      {
+        "name": "port_t",
+        "type": "struct{  \r\n    logic [4:0] a, b; \r\n    logic [9:0] m; \r\n    }",
+        "description": "struct comment",
+        "start_line": 77
+      }
+    ],
+    "signals": [
+      {
+        "name": "a",
+        "type": "wire",
+        "description": "coment abc",
+        "start_line": 70
+      },
+      {
+        "name": "b",
+        "type": "wire",
+        "description": "coment abc",
+        "start_line": 70
+      },
+      {
+        "name": "c",
+        "type": "wire",
+        "description": "coment abc",
+        "start_line": 70
+      },
+      {
+        "name": "ddd",
+        "type": "wire [3:0]",
+        "description": "coment ddd",
+        "start_line": 71
+      },
+      {
+        "name": "aa",
+        "type": "reg",
+        "description": "comment ee",
+        "start_line": 72
+      },
+      {
+        "name": "bb",
+        "type": "reg",
+        "description": "comment ee",
+        "start_line": 72
+      },
+      {
+        "name": "cc",
+        "type": "reg [4:0]",
+        "description": "comment ee",
+        "start_line": 73
+      },
+      {
+        "name": "fff",
+        "type": "logic [3:0]",
+        "description": "comment fff",
+        "start_line": 74
+      },
+      {
+        "name": "t1",
+        "type": "my_type_t",
+        "description": "my_type vars",
+        "start_line": 75
+      },
+      {
+        "name": "t2",
+        "type": "my_type_t",
+        "description": "my_type vars",
+        "start_line": 75
+      },
+      {
+        "name": "t3",
+        "type": "my_type_y",
+        "description": "my_type vars",
+        "start_line": 76
+      }
+    ],
+    "constants": [
+      {
+        "name": "my_local_param",
+        "type": "",
+        "default_value": "10",
+        "description": "local param 1 & 2",
+        "start_line": 68
+      },
+      {
+        "name": "my_local_param1",
+        "type": "",
+        "default_value": "15",
+        "description": "local param 1 & 2",
+        "start_line": 68
+      },
+      {
+        "name": "my_local_param2",
+        "type": "integer",
+        "default_value": "20",
+        "description": "local param 3",
+        "start_line": 69
+      }
+    ],
+    "functions": []
+  }
 }

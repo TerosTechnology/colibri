@@ -1,880 +1,894 @@
 {
   "libraries": [],
   "entity": {
-     "name": "axis_baser_tx_64",
-     "description": "\n"
+    "name": "axis_baser_tx_64",
+    "description": ""
   },
   "generics": [
-     {
-        "name": "DATA_WIDTH",
-        "type": "",
-        "default_value": "64",
-        "description": ""
-     },
-     {
-        "name": "KEEP_WIDTH",
-        "type": "",
-        "default_value": "undefined",
-        "description": "**Data width parameter**"
-     },
-     {
-        "name": "HDR_WIDTH",
-        "type": "",
-        "default_value": "2",
-        "description": ""
-     },
-     {
-        "name": "ENABLE_PADDING",
-        "type": "",
-        "default_value": "1",
-        "description": ""
-     },
-     {
-        "name": "ENABLE_DIC",
-        "type": "",
-        "default_value": "1",
-        "description": "enable"
-     },
-     {
-        "name": "MIN_FRAME_LENGTH",
-        "type": "",
-        "default_value": "64",
-        "description": ""
-     }
+    {
+      "name": "DATA_WIDTH",
+      "type": "",
+      "default_value": "64",
+      "description": ""
+    },
+    {
+      "name": "KEEP_WIDTH",
+      "type": "",
+      "default_value": "undefined",
+      "description": "**Data width parameter**\r"
+    },
+    {
+      "name": "HDR_WIDTH",
+      "type": "",
+      "default_value": "2",
+      "description": ""
+    },
+    {
+      "name": "ENABLE_PADDING",
+      "type": "",
+      "default_value": "1",
+      "description": ""
+    },
+    {
+      "name": "ENABLE_DIC",
+      "type": "",
+      "default_value": "1",
+      "description": "enable\r"
+    },
+    {
+      "name": "MIN_FRAME_LENGTH",
+      "type": "",
+      "default_value": "64",
+      "description": ""
+    }
   ],
   "ports": [
-     {
-        "name": "clk",
-        "direction": "input",
-        "type": "wire",
-        "default_value": "",
-        "description": "",
-        "start_line": 36
-     },
-     {
-        "name": "rst",
-        "direction": "input",
-        "type": "wire",
-        "default_value": "",
-        "description": "",
-        "start_line": 37
-     },
-     {
-        "name": "s_axis_tdata",
-        "direction": "input",
-        "type": "wire [DATA_WIDTH-1:0]",
-        "default_value": "",
-        "description": "",
-        "start_line": 42
-     },
-     {
-        "name": "s_axis_tkeep",
-        "direction": "input",
-        "type": "wire [KEEP_WIDTH-1:0]",
-        "default_value": "",
-        "description": "",
-        "start_line": 43
-     },
-     {
-        "name": "s_axis_tvalid",
-        "direction": "input",
-        "type": "wire",
-        "default_value": "",
-        "description": "",
-        "start_line": 44
-     },
-     {
-        "name": "s_axis_tready",
-        "direction": "output",
-        "type": "wire",
-        "default_value": "",
-        "description": "",
-        "start_line": 45
-     },
-     {
-        "name": "s_axis_tlast",
-        "direction": "input",
-        "type": "wire",
-        "default_value": "",
-        "description": "",
-        "start_line": 46
-     },
-     {
-        "name": "s_axis_tuser",
-        "direction": "input",
-        "type": "wire",
-        "default_value": "",
-        "description": "",
-        "start_line": 47
-     },
-     {
-        "name": "encoded_tx_data",
-        "direction": "output",
-        "type": "wire [DATA_WIDTH-1:0]",
-        "default_value": "",
-        "description": "",
-        "start_line": 52
-     },
-     {
-        "name": "encoded_tx_hdr",
-        "direction": "output",
-        "type": "wire [HDR_WIDTH-1:0]",
-        "default_value": "",
-        "description": "",
-        "start_line": 53
-     },
-     {
-        "name": "ifg_delay",
-        "direction": "input",
-        "type": "wire [7:0]",
-        "default_value": "",
-        "description": "",
-        "start_line": 58
-     },
-     {
-        "name": "start_packet_0",
-        "direction": "output",
-        "type": "wire",
-        "default_value": "",
-        "description": "",
-        "start_line": 63
-     },
-     {
-        "name": "start_packet_4",
-        "direction": "output",
-        "type": "wire",
-        "default_value": "",
-        "description": "",
-        "start_line": 64
-     },
-     {
-        "name": "error_underflow",
-        "direction": "output",
-        "type": "wire",
-        "default_value": "",
-        "description": "",
-        "start_line": 65
-     }
+    {
+      "name": "clk",
+      "direction": "input",
+      "type": "wire",
+      "default_value": "",
+      "description": "",
+      "start_line": 37,
+      "group": ""
+    },
+    {
+      "name": "rst",
+      "direction": "input",
+      "type": "wire",
+      "default_value": "",
+      "description": "",
+      "start_line": 38,
+      "group": ""
+    },
+    {
+      "name": "s_axis_tdata",
+      "direction": "input",
+      "type": "wire [DATA_WIDTH-1:0]",
+      "default_value": "",
+      "description": "",
+      "start_line": 43,
+      "group": ""
+    },
+    {
+      "name": "s_axis_tkeep",
+      "direction": "input",
+      "type": "wire [KEEP_WIDTH-1:0]",
+      "default_value": "",
+      "description": "",
+      "start_line": 44,
+      "group": ""
+    },
+    {
+      "name": "s_axis_tvalid",
+      "direction": "input",
+      "type": "wire",
+      "default_value": "",
+      "description": "",
+      "start_line": 45,
+      "group": ""
+    },
+    {
+      "name": "s_axis_tready",
+      "direction": "output",
+      "type": "wire",
+      "default_value": "",
+      "description": "",
+      "start_line": 46,
+      "group": ""
+    },
+    {
+      "name": "s_axis_tlast",
+      "direction": "input",
+      "type": "wire",
+      "default_value": "",
+      "description": "",
+      "start_line": 47,
+      "group": ""
+    },
+    {
+      "name": "s_axis_tuser",
+      "direction": "input",
+      "type": "wire",
+      "default_value": "",
+      "description": "",
+      "start_line": 48,
+      "group": ""
+    },
+    {
+      "name": "encoded_tx_data",
+      "direction": "output",
+      "type": "wire [DATA_WIDTH-1:0]",
+      "default_value": "",
+      "description": "",
+      "start_line": 53,
+      "group": ""
+    },
+    {
+      "name": "encoded_tx_hdr",
+      "direction": "output",
+      "type": "wire [HDR_WIDTH-1:0]",
+      "default_value": "",
+      "description": "",
+      "start_line": 54,
+      "group": ""
+    },
+    {
+      "name": "ifg_delay",
+      "direction": "input",
+      "type": "wire [7:0]",
+      "default_value": "",
+      "description": "",
+      "start_line": 59,
+      "group": ""
+    },
+    {
+      "name": "start_packet_0",
+      "direction": "output",
+      "type": "wire",
+      "default_value": "",
+      "description": "",
+      "start_line": 64,
+      "group": ""
+    },
+    {
+      "name": "start_packet_4",
+      "direction": "output",
+      "type": "wire",
+      "default_value": "",
+      "description": "",
+      "start_line": 65,
+      "group": ""
+    },
+    {
+      "name": "error_underflow",
+      "direction": "output",
+      "type": "wire",
+      "default_value": "",
+      "description": "",
+      "start_line": 66,
+      "group": ""
+    }
   ],
   "body": {
-     "processes": [
-        {
-           "name": "unnamed",
-           "sens_list": "@*",
-           "description": "",
-           "start_line": 366
-        },
-        {
-           "name": "unnamed",
-           "sens_list": "@*",
-           "description": "",
-           "start_line": 373
-        },
-        {
-           "name": "unnamed",
-           "sens_list": "@*",
-           "description": "",
-           "start_line": 450
-        },
-        {
-           "name": "unnamed",
-           "sens_list": "@(posedge clk)",
-           "description": "",
-           "start_line": 711
-        }
-     ],
-     "instantiations": [
-        {
-           "name": "eth_crc_64",
-           "type": "lfsr",
-           "description": "",
-           "start_line": 332
-        }
-     ]
+    "processes": [
+      {
+        "name": "unnamed",
+        "sens_list": "@*",
+        "description": "",
+        "start_line": 367
+      },
+      {
+        "name": "unnamed",
+        "sens_list": "@*",
+        "description": "",
+        "start_line": 374
+      },
+      {
+        "name": "unnamed",
+        "sens_list": "@*",
+        "description": "",
+        "start_line": 451
+      },
+      {
+        "name": "unnamed",
+        "sens_list": "@(posedge clk)",
+        "description": "",
+        "start_line": 712
+      }
+    ],
+    "instantiations": [
+      {
+        "name": "eth_crc_64",
+        "type": "lfsr",
+        "description": "",
+        "start_line": 333
+      }
+    ]
   },
   "declarations": {
-     "types": [],
-     "signals": [
+    "types": [],
+    "signals": [
       {
-         "name": "state_reg",
-         "type": "reg [2:0]",
-         "description": "",
-         "start_line": 154
+        "name": "state_reg",
+        "type": "reg [2:0]",
+        "description": "",
+        "start_line": 155
       },
       {
-         "name": "state_next",
-         "type": "reg [2:0]",
-         "description": "",
-         "start_line": 154
+        "name": "state_next",
+        "type": "reg [2:0]",
+        "description": "",
+        "start_line": 155
       },
       {
-         "name": "reset_crc",
-         "type": "reg",
-         "description": "",
-         "start_line": 157
+        "name": "reset_crc",
+        "type": "reg",
+        "description": "",
+        "start_line": 158
       },
       {
-         "name": "update_crc",
-         "type": "reg",
-         "description": "",
-         "start_line": 158
+        "name": "update_crc",
+        "type": "reg",
+        "description": "",
+        "start_line": 159
       },
       {
-         "name": "swap_lanes",
-         "type": "reg",
-         "description": "",
-         "start_line": 160
+        "name": "swap_lanes",
+        "type": "reg",
+        "description": "",
+        "start_line": 161
       },
       {
-         "name": "unswap_lanes",
-         "type": "reg",
-         "description": "",
-         "start_line": 161
+        "name": "unswap_lanes",
+        "type": "reg",
+        "description": "",
+        "start_line": 162
       },
       {
-         "name": "lanes_swapped",
-         "type": "reg",
-         "description": "",
-         "start_line": 163
+        "name": "lanes_swapped",
+        "type": "reg",
+        "description": "",
+        "start_line": 164
       },
       {
-         "name": "swap_data",
-         "type": "reg [31:0]",
-         "description": "",
-         "start_line": 164
+        "name": "swap_data",
+        "type": "reg [31:0]",
+        "description": "",
+        "start_line": 165
       },
       {
-         "name": "delay_type_valid",
-         "type": "reg",
-         "description": "",
-         "start_line": 166
+        "name": "delay_type_valid",
+        "type": "reg",
+        "description": "",
+        "start_line": 167
       },
       {
-         "name": "delay_type",
-         "type": "reg [3:0]",
-         "description": "",
-         "start_line": 167
+        "name": "delay_type",
+        "type": "reg [3:0]",
+        "description": "",
+        "start_line": 168
       },
       {
-         "name": "s_axis_tdata_masked",
-         "type": "reg [DATA_WIDTH-1:0]",
-         "description": "",
-         "start_line": 169
+        "name": "s_axis_tdata_masked",
+        "type": "reg [DATA_WIDTH-1:0]",
+        "description": "",
+        "start_line": 170
       },
       {
-         "name": "s_tdata_reg",
-         "type": "reg [DATA_WIDTH-1:0]",
-         "description": "",
-         "start_line": 171
+        "name": "s_tdata_reg",
+        "type": "reg [DATA_WIDTH-1:0]",
+        "description": "",
+        "start_line": 172
       },
       {
-         "name": "s_tdata_next",
-         "type": "reg [DATA_WIDTH-1:0]",
-         "description": "",
-         "start_line": 171
+        "name": "s_tdata_next",
+        "type": "reg [DATA_WIDTH-1:0]",
+        "description": "",
+        "start_line": 172
       },
       {
-         "name": "s_tkeep_reg",
-         "type": "reg [7:0]",
-         "description": "",
-         "start_line": 172
+        "name": "s_tkeep_reg",
+        "type": "reg [7:0]",
+        "description": "",
+        "start_line": 173
       },
       {
-         "name": "s_tkeep_next",
-         "type": "reg [7:0]",
-         "description": "",
-         "start_line": 172
+        "name": "s_tkeep_next",
+        "type": "reg [7:0]",
+        "description": "",
+        "start_line": 173
       },
       {
-         "name": "fcs_output_data_0",
-         "type": "reg [DATA_WIDTH-1:0]",
-         "description": "",
-         "start_line": 174
+        "name": "fcs_output_data_0",
+        "type": "reg [DATA_WIDTH-1:0]",
+        "description": "",
+        "start_line": 175
       },
       {
-         "name": "fcs_output_data_1",
-         "type": "reg [DATA_WIDTH-1:0]",
-         "description": "",
-         "start_line": 175
+        "name": "fcs_output_data_1",
+        "type": "reg [DATA_WIDTH-1:0]",
+        "description": "",
+        "start_line": 176
       },
       {
-         "name": "fcs_output_type_0",
-         "type": "reg [3:0]",
-         "description": "",
-         "start_line": 176
+        "name": "fcs_output_type_0",
+        "type": "reg [3:0]",
+        "description": "",
+        "start_line": 177
       },
       {
-         "name": "fcs_output_type_1",
-         "type": "reg [3:0]",
-         "description": "",
-         "start_line": 177
+        "name": "fcs_output_type_1",
+        "type": "reg [3:0]",
+        "description": "",
+        "start_line": 178
       },
       {
-         "name": "ifg_offset",
-         "type": "reg [7:0]",
-         "description": "",
-         "start_line": 179
+        "name": "ifg_offset",
+        "type": "reg [7:0]",
+        "description": "",
+        "start_line": 180
       },
       {
-         "name": "extra_cycle",
-         "type": "reg",
-         "description": "",
-         "start_line": 181
+        "name": "extra_cycle",
+        "type": "reg",
+        "description": "",
+        "start_line": 182
       },
       {
-         "name": "frame_ptr_reg",
-         "type": "reg [15:0]",
-         "description": "",
-         "start_line": 183
+        "name": "frame_ptr_reg",
+        "type": "reg [15:0]",
+        "description": "",
+        "start_line": 184
       },
       {
-         "name": "frame_ptr_next",
-         "type": "reg [15:0]",
-         "description": "",
-         "start_line": 183
+        "name": "frame_ptr_next",
+        "type": "reg [15:0]",
+        "description": "",
+        "start_line": 184
       },
       {
-         "name": "ifg_count_reg",
-         "type": "reg [7:0]",
-         "description": "",
-         "start_line": 185
+        "name": "ifg_count_reg",
+        "type": "reg [7:0]",
+        "description": "",
+        "start_line": 186
       },
       {
-         "name": "ifg_count_next",
-         "type": "reg [7:0]",
-         "description": "",
-         "start_line": 185
+        "name": "ifg_count_next",
+        "type": "reg [7:0]",
+        "description": "",
+        "start_line": 186
       },
       {
-         "name": "deficit_idle_count_reg",
-         "type": "reg [1:0]",
-         "description": "",
-         "start_line": 186
+        "name": "deficit_idle_count_reg",
+        "type": "reg [1:0]",
+        "description": "",
+        "start_line": 187
       },
       {
-         "name": "deficit_idle_count_next",
-         "type": "reg [1:0]",
-         "description": "",
-         "start_line": 186
+        "name": "deficit_idle_count_next",
+        "type": "reg [1:0]",
+        "description": "",
+        "start_line": 187
       },
       {
-         "name": "s_axis_tready_reg",
-         "type": "reg",
-         "description": "",
-         "start_line": 188
+        "name": "s_axis_tready_reg",
+        "type": "reg",
+        "description": "",
+        "start_line": 189
       },
       {
-         "name": "s_axis_tready_next",
-         "type": "reg",
-         "description": "",
-         "start_line": 188
+        "name": "s_axis_tready_next",
+        "type": "reg",
+        "description": "",
+        "start_line": 189
       },
       {
-         "name": "crc_state",
-         "type": "reg [31:0]",
-         "description": "",
-         "start_line": 190
+        "name": "crc_state",
+        "type": "reg [31:0]",
+        "description": "",
+        "start_line": 191
       },
       {
-         "name": "crc_next0",
-         "type": "wire [31:0]",
-         "description": "",
-         "start_line": 192
+        "name": "crc_next0",
+        "type": "wire [31:0]",
+        "description": "",
+        "start_line": 193
       },
       {
-         "name": "crc_next1",
-         "type": "wire [31:0]",
-         "description": "",
-         "start_line": 193
+        "name": "crc_next1",
+        "type": "wire [31:0]",
+        "description": "",
+        "start_line": 194
       },
       {
-         "name": "crc_next2",
-         "type": "wire [31:0]",
-         "description": "",
-         "start_line": 194
+        "name": "crc_next2",
+        "type": "wire [31:0]",
+        "description": "",
+        "start_line": 195
       },
       {
-         "name": "crc_next3",
-         "type": "wire [31:0]",
-         "description": "",
-         "start_line": 195
+        "name": "crc_next3",
+        "type": "wire [31:0]",
+        "description": "",
+        "start_line": 196
       },
       {
-         "name": "crc_next4",
-         "type": "wire [31:0]",
-         "description": "",
-         "start_line": 196
+        "name": "crc_next4",
+        "type": "wire [31:0]",
+        "description": "",
+        "start_line": 197
       },
       {
-         "name": "crc_next5",
-         "type": "wire [31:0]",
-         "description": "",
-         "start_line": 197
+        "name": "crc_next5",
+        "type": "wire [31:0]",
+        "description": "",
+        "start_line": 198
       },
       {
-         "name": "crc_next6",
-         "type": "wire [31:0]",
-         "description": "",
-         "start_line": 198
+        "name": "crc_next6",
+        "type": "wire [31:0]",
+        "description": "",
+        "start_line": 199
       },
       {
-         "name": "crc_next7",
-         "type": "wire [31:0]",
-         "description": "",
-         "start_line": 199
+        "name": "crc_next7",
+        "type": "wire [31:0]",
+        "description": "",
+        "start_line": 200
       },
       {
-         "name": "encoded_tx_data_reg",
-         "type": "reg [DATA_WIDTH-1:0]",
-         "description": "",
-         "start_line": 201
+        "name": "encoded_tx_data_reg",
+        "type": "reg [DATA_WIDTH-1:0]",
+        "description": "",
+        "start_line": 202
       },
       {
-         "name": "encoded_tx_hdr_reg",
-         "type": "reg [HDR_WIDTH-1:0]",
-         "description": "",
-         "start_line": 202
+        "name": "encoded_tx_hdr_reg",
+        "type": "reg [HDR_WIDTH-1:0]",
+        "description": "",
+        "start_line": 203
       },
       {
-         "name": "output_data_reg",
-         "type": "reg [DATA_WIDTH-1:0]",
-         "description": "",
-         "start_line": 204
+        "name": "output_data_reg",
+        "type": "reg [DATA_WIDTH-1:0]",
+        "description": "",
+        "start_line": 205
       },
       {
-         "name": "output_data_next",
-         "type": "reg [DATA_WIDTH-1:0]",
-         "description": "",
-         "start_line": 204
+        "name": "output_data_next",
+        "type": "reg [DATA_WIDTH-1:0]",
+        "description": "",
+        "start_line": 205
       },
       {
-         "name": "output_type_reg",
-         "type": "reg [3:0]",
-         "description": "",
-         "start_line": 205
+        "name": "output_type_reg",
+        "type": "reg [3:0]",
+        "description": "",
+        "start_line": 206
       },
       {
-         "name": "output_type_next",
-         "type": "reg [3:0]",
-         "description": "",
-         "start_line": 205
+        "name": "output_type_next",
+        "type": "reg [3:0]",
+        "description": "",
+        "start_line": 206
       },
       {
-         "name": "start_packet_0_reg",
-         "type": "reg",
-         "description": "",
-         "start_line": 207
+        "name": "start_packet_0_reg",
+        "type": "reg",
+        "description": "",
+        "start_line": 208
       },
       {
-         "name": "start_packet_0_next",
-         "type": "reg",
-         "description": "",
-         "start_line": 207
+        "name": "start_packet_0_next",
+        "type": "reg",
+        "description": "",
+        "start_line": 208
       },
       {
-         "name": "start_packet_4_reg",
-         "type": "reg",
-         "description": "",
-         "start_line": 208
+        "name": "start_packet_4_reg",
+        "type": "reg",
+        "description": "",
+        "start_line": 209
       },
       {
-         "name": "start_packet_4_next",
-         "type": "reg",
-         "description": "",
-         "start_line": 208
+        "name": "start_packet_4_next",
+        "type": "reg",
+        "description": "",
+        "start_line": 209
       },
       {
-         "name": "error_underflow_reg",
-         "type": "reg",
-         "description": "",
-         "start_line": 209
+        "name": "error_underflow_reg",
+        "type": "reg",
+        "description": "",
+        "start_line": 210
       },
       {
-         "name": "error_underflow_next",
-         "type": "reg",
-         "description": "",
-         "start_line": 209
+        "name": "error_underflow_next",
+        "type": "reg",
+        "description": "",
+        "start_line": 210
       },
       {
-         "name": "j",
-         "type": "integer",
-         "description": "",
-         "start_line": 364
+        "name": "j",
+        "type": "integer",
+        "description": "",
+        "start_line": 365
       }
-     ],
-     "constants": [
+    ],
+    "constants": [
       {
-         "name": "MIN_FL_NOCRC",
-         "type": "",
-         "default_value": "MIN_FRAME_LENGTH-4",
-         "description": "",
-         "start_line": 86
-     },
-     {
-         "name": "MIN_FL_NOCRC_MS",
-         "type": "",
-         "default_value": "MIN_FL_NOCRC & 16'hfff8",
-         "description": "",
-         "start_line": 87
-     },
-     {
-         "name": "MIN_FL_NOCRC_LS",
-         "type": "",
-         "default_value": "MIN_FL_NOCRC & 16'h0007",
-         "description": "",
-         "start_line": 88
-     },
-     {
-         "name": "ETH_PRE",
-         "type": "[7:0]",
-         "default_value": "8'h55",
-         "description": "",
-         "start_line": 90
-     },
-     {
-         "name": "ETH_SFD",
-         "type": "[7:0]",
-         "default_value": "8'hD5",
-         "description": "",
-         "start_line": 90
-     },
-     {
-         "name": "CTRL_IDLE",
-         "type": "[6:0]",
-         "default_value": "7'h00",
-         "description": "",
-         "start_line": 94
-     },
-     {
-         "name": "CTRL_LPI",
-         "type": "[6:0]",
-         "default_value": "7'h06",
-         "description": "",
-         "start_line": 94
-     },
-     {
-         "name": "CTRL_ERROR",
-         "type": "[6:0]",
-         "default_value": "7'h1e",
-         "description": "",
-         "start_line": 94
-     },
-     {
-         "name": "CTRL_RES_0",
-         "type": "[6:0]",
-         "default_value": "7'h2d",
-         "description": "",
-         "start_line": 94
-     },
-     {
-         "name": "CTRL_RES_1",
-         "type": "[6:0]",
-         "default_value": "7'h33",
-         "description": "",
-         "start_line": 94
-     },
-     {
-         "name": "CTRL_RES_2",
-         "type": "[6:0]",
-         "default_value": "7'h4b",
-         "description": "",
-         "start_line": 94
-     },
-     {
-         "name": "CTRL_RES_3",
-         "type": "[6:0]",
-         "default_value": "7'h55",
-         "description": "",
-         "start_line": 94
-     },
-     {
-         "name": "CTRL_RES_4",
-         "type": "[6:0]",
-         "default_value": "7'h66",
-         "description": "",
-         "start_line": 94
-     },
-     {
-         "name": "CTRL_RES_5",
-         "type": "[6:0]",
-         "default_value": "7'h78",
-         "description": "",
-         "start_line": 94
-     },
-     {
-         "name": "O_SEQ_OS",
-         "type": "[3:0]",
-         "default_value": "4'h0",
-         "description": "",
-         "start_line": 105
-     },
-     {
-         "name": "O_SIG_OS",
-         "type": "[3:0]",
-         "default_value": "4'hf",
-         "description": "",
-         "start_line": 105
-     },
-     {
-         "name": "SYNC_DATA",
-         "type": "[1:0]",
-         "default_value": "2'b10",
-         "description": "",
-         "start_line": 109
-     },
-     {
-         "name": "SYNC_CTRL",
-         "type": "[1:0]",
-         "default_value": "2'b01",
-         "description": "",
-         "start_line": 109
-     },
-     {
-         "name": "BLOCK_TYPE_CTRL",
-         "type": "[7:0]",
-         "default_value": "8'h1e",
-         "description": "",
-         "start_line": 113
-     },
-     {
-         "name": "BLOCK_TYPE_OS_4",
-         "type": "[7:0]",
-         "default_value": "8'h2d",
-         "description": "",
-         "start_line": 113
-     },
-     {
-         "name": "BLOCK_TYPE_START_4",
-         "type": "[7:0]",
-         "default_value": "8'h33",
-         "description": "",
-         "start_line": 113
-     },
-     {
-         "name": "BLOCK_TYPE_OS_START",
-         "type": "[7:0]",
-         "default_value": "8'h66",
-         "description": "",
-         "start_line": 113
-     },
-     {
-         "name": "BLOCK_TYPE_OS_04",
-         "type": "[7:0]",
-         "default_value": "8'h55",
-         "description": "",
-         "start_line": 113
-     },
-     {
-         "name": "BLOCK_TYPE_START_0",
-         "type": "[7:0]",
-         "default_value": "8'h78",
-         "description": "",
-         "start_line": 113
-     },
-     {
-         "name": "BLOCK_TYPE_OS_0",
-         "type": "[7:0]",
-         "default_value": "8'h4b",
-         "description": "",
-         "start_line": 113
-     },
-     {
-         "name": "BLOCK_TYPE_TERM_0",
-         "type": "[7:0]",
-         "default_value": "8'h87",
-         "description": "",
-         "start_line": 113
-     },
-     {
-         "name": "BLOCK_TYPE_TERM_1",
-         "type": "[7:0]",
-         "default_value": "8'h99",
-         "description": "",
-         "start_line": 113
-     },
-     {
-         "name": "BLOCK_TYPE_TERM_2",
-         "type": "[7:0]",
-         "default_value": "8'haa",
-         "description": "",
-         "start_line": 113
-     },
-     {
-         "name": "BLOCK_TYPE_TERM_3",
-         "type": "[7:0]",
-         "default_value": "8'hb4",
-         "description": "",
-         "start_line": 113
-     },
-     {
-         "name": "BLOCK_TYPE_TERM_4",
-         "type": "[7:0]",
-         "default_value": "8'hcc",
-         "description": "",
-         "start_line": 113
-     },
-     {
-         "name": "BLOCK_TYPE_TERM_5",
-         "type": "[7:0]",
-         "default_value": "8'hd2",
-         "description": "",
-         "start_line": 113
-     },
-     {
-         "name": "BLOCK_TYPE_TERM_6",
-         "type": "[7:0]",
-         "default_value": "8'he1",
-         "description": "",
-         "start_line": 113
-     },
-     {
-         "name": "BLOCK_TYPE_TERM_7",
-         "type": "[7:0]",
-         "default_value": "8'hff",
-         "description": "",
-         "start_line": 113
-     },
-     {
-         "name": "OUTPUT_TYPE_IDLE",
-         "type": "[3:0]",
-         "default_value": "4'd0",
-         "description": "",
-         "start_line": 130
-     },
-     {
-         "name": "OUTPUT_TYPE_ERROR",
-         "type": "[3:0]",
-         "default_value": "4'd1",
-         "description": "",
-         "start_line": 130
-     },
-     {
-         "name": "OUTPUT_TYPE_START_0",
-         "type": "[3:0]",
-         "default_value": "4'd2",
-         "description": "",
-         "start_line": 130
-     },
-     {
-         "name": "OUTPUT_TYPE_START_4",
-         "type": "[3:0]",
-         "default_value": "4'd3",
-         "description": "",
-         "start_line": 130
-     },
-     {
-         "name": "OUTPUT_TYPE_DATA",
-         "type": "[3:0]",
-         "default_value": "4'd4",
-         "description": "",
-         "start_line": 130
-     },
-     {
-         "name": "OUTPUT_TYPE_TERM_0",
-         "type": "[3:0]",
-         "default_value": "4'd8",
-         "description": "",
-         "start_line": 130
-     },
-     {
-         "name": "OUTPUT_TYPE_TERM_1",
-         "type": "[3:0]",
-         "default_value": "4'd9",
-         "description": "",
-         "start_line": 130
-     },
-     {
-         "name": "OUTPUT_TYPE_TERM_2",
-         "type": "[3:0]",
-         "default_value": "4'd10",
-         "description": "",
-         "start_line": 130
-     },
-     {
-         "name": "OUTPUT_TYPE_TERM_3",
-         "type": "[3:0]",
-         "default_value": "4'd11",
-         "description": "",
-         "start_line": 130
-     },
-     {
-         "name": "OUTPUT_TYPE_TERM_4",
-         "type": "[3:0]",
-         "default_value": "4'd12",
-         "description": "",
-         "start_line": 130
-     },
-     {
-         "name": "OUTPUT_TYPE_TERM_5",
-         "type": "[3:0]",
-         "default_value": "4'd13",
-         "description": "",
-         "start_line": 130
-     },
-     {
-         "name": "OUTPUT_TYPE_TERM_6",
-         "type": "[3:0]",
-         "default_value": "4'd14",
-         "description": "",
-         "start_line": 130
-     },
-     {
-         "name": "OUTPUT_TYPE_TERM_7",
-         "type": "[3:0]",
-         "default_value": "4'd15",
-         "description": "",
-         "start_line": 130
-     },
-     {
-         "name": "STATE_IDLE",
-         "type": "[2:0]",
-         "default_value": "3'd0",
-         "description": "",
-         "start_line": 145
-     },
-     {
-         "name": "STATE_PAYLOAD",
-         "type": "[2:0]",
-         "default_value": "3'd1",
-         "description": "",
-         "start_line": 145
-     },
-     {
-         "name": "STATE_PAD",
-         "type": "[2:0]",
-         "default_value": "3'd2",
-         "description": "",
-         "start_line": 145
-     },
-     {
-         "name": "STATE_FCS_1",
-         "type": "[2:0]",
-         "default_value": "3'd3",
-         "description": "",
-         "start_line": 145
-     },
-     {
-         "name": "STATE_FCS_2",
-         "type": "[2:0]",
-         "default_value": "3'd4",
-         "description": "",
-         "start_line": 145
-     },
-     {
-         "name": "STATE_IFG",
-         "type": "[2:0]",
-         "default_value": "3'd5",
-         "description": "",
-         "start_line": 145
-     },
-     {
-         "name": "STATE_WAIT_END",
-         "type": "[2:0]",
-         "default_value": "3'd6",
-         "description": "",
-         "start_line": 145
-     }
-     ],
-     "functions": []
+        "name": "MIN_FL_NOCRC",
+        "type": "",
+        "default_value": "MIN_FRAME_LENGTH-4",
+        "description": "",
+        "start_line": 87
+      },
+      {
+        "name": "MIN_FL_NOCRC_MS",
+        "type": "",
+        "default_value": "MIN_FL_NOCRC & 16'hfff8",
+        "description": "",
+        "start_line": 88
+      },
+      {
+        "name": "MIN_FL_NOCRC_LS",
+        "type": "",
+        "default_value": "MIN_FL_NOCRC & 16'h0007",
+        "description": "",
+        "start_line": 89
+      },
+      {
+        "name": "ETH_PRE",
+        "type": "[7:0]",
+        "default_value": "8'h55",
+        "description": "",
+        "start_line": 91
+      },
+      {
+        "name": "ETH_SFD",
+        "type": "[7:0]",
+        "default_value": "8'hD5",
+        "description": "",
+        "start_line": 91
+      },
+      {
+        "name": "CTRL_IDLE",
+        "type": "[6:0]",
+        "default_value": "7'h00",
+        "description": "",
+        "start_line": 95
+      },
+      {
+        "name": "CTRL_LPI",
+        "type": "[6:0]",
+        "default_value": "7'h06",
+        "description": "",
+        "start_line": 95
+      },
+      {
+        "name": "CTRL_ERROR",
+        "type": "[6:0]",
+        "default_value": "7'h1e",
+        "description": "",
+        "start_line": 95
+      },
+      {
+        "name": "CTRL_RES_0",
+        "type": "[6:0]",
+        "default_value": "7'h2d",
+        "description": "",
+        "start_line": 95
+      },
+      {
+        "name": "CTRL_RES_1",
+        "type": "[6:0]",
+        "default_value": "7'h33",
+        "description": "",
+        "start_line": 95
+      },
+      {
+        "name": "CTRL_RES_2",
+        "type": "[6:0]",
+        "default_value": "7'h4b",
+        "description": "",
+        "start_line": 95
+      },
+      {
+        "name": "CTRL_RES_3",
+        "type": "[6:0]",
+        "default_value": "7'h55",
+        "description": "",
+        "start_line": 95
+      },
+      {
+        "name": "CTRL_RES_4",
+        "type": "[6:0]",
+        "default_value": "7'h66",
+        "description": "",
+        "start_line": 95
+      },
+      {
+        "name": "CTRL_RES_5",
+        "type": "[6:0]",
+        "default_value": "7'h78",
+        "description": "",
+        "start_line": 95
+      },
+      {
+        "name": "O_SEQ_OS",
+        "type": "[3:0]",
+        "default_value": "4'h0",
+        "description": "",
+        "start_line": 106
+      },
+      {
+        "name": "O_SIG_OS",
+        "type": "[3:0]",
+        "default_value": "4'hf",
+        "description": "",
+        "start_line": 106
+      },
+      {
+        "name": "SYNC_DATA",
+        "type": "[1:0]",
+        "default_value": "2'b10",
+        "description": "",
+        "start_line": 110
+      },
+      {
+        "name": "SYNC_CTRL",
+        "type": "[1:0]",
+        "default_value": "2'b01",
+        "description": "",
+        "start_line": 110
+      },
+      {
+        "name": "BLOCK_TYPE_CTRL",
+        "type": "[7:0]",
+        "default_value": "8'h1e",
+        "description": "",
+        "start_line": 114
+      },
+      {
+        "name": "BLOCK_TYPE_OS_4",
+        "type": "[7:0]",
+        "default_value": "8'h2d",
+        "description": "",
+        "start_line": 114
+      },
+      {
+        "name": "BLOCK_TYPE_START_4",
+        "type": "[7:0]",
+        "default_value": "8'h33",
+        "description": "",
+        "start_line": 114
+      },
+      {
+        "name": "BLOCK_TYPE_OS_START",
+        "type": "[7:0]",
+        "default_value": "8'h66",
+        "description": "",
+        "start_line": 114
+      },
+      {
+        "name": "BLOCK_TYPE_OS_04",
+        "type": "[7:0]",
+        "default_value": "8'h55",
+        "description": "",
+        "start_line": 114
+      },
+      {
+        "name": "BLOCK_TYPE_START_0",
+        "type": "[7:0]",
+        "default_value": "8'h78",
+        "description": "",
+        "start_line": 114
+      },
+      {
+        "name": "BLOCK_TYPE_OS_0",
+        "type": "[7:0]",
+        "default_value": "8'h4b",
+        "description": "",
+        "start_line": 114
+      },
+      {
+        "name": "BLOCK_TYPE_TERM_0",
+        "type": "[7:0]",
+        "default_value": "8'h87",
+        "description": "",
+        "start_line": 114
+      },
+      {
+        "name": "BLOCK_TYPE_TERM_1",
+        "type": "[7:0]",
+        "default_value": "8'h99",
+        "description": "",
+        "start_line": 114
+      },
+      {
+        "name": "BLOCK_TYPE_TERM_2",
+        "type": "[7:0]",
+        "default_value": "8'haa",
+        "description": "",
+        "start_line": 114
+      },
+      {
+        "name": "BLOCK_TYPE_TERM_3",
+        "type": "[7:0]",
+        "default_value": "8'hb4",
+        "description": "",
+        "start_line": 114
+      },
+      {
+        "name": "BLOCK_TYPE_TERM_4",
+        "type": "[7:0]",
+        "default_value": "8'hcc",
+        "description": "",
+        "start_line": 114
+      },
+      {
+        "name": "BLOCK_TYPE_TERM_5",
+        "type": "[7:0]",
+        "default_value": "8'hd2",
+        "description": "",
+        "start_line": 114
+      },
+      {
+        "name": "BLOCK_TYPE_TERM_6",
+        "type": "[7:0]",
+        "default_value": "8'he1",
+        "description": "",
+        "start_line": 114
+      },
+      {
+        "name": "BLOCK_TYPE_TERM_7",
+        "type": "[7:0]",
+        "default_value": "8'hff",
+        "description": "",
+        "start_line": 114
+      },
+      {
+        "name": "OUTPUT_TYPE_IDLE",
+        "type": "[3:0]",
+        "default_value": "4'd0",
+        "description": "",
+        "start_line": 131
+      },
+      {
+        "name": "OUTPUT_TYPE_ERROR",
+        "type": "[3:0]",
+        "default_value": "4'd1",
+        "description": "",
+        "start_line": 131
+      },
+      {
+        "name": "OUTPUT_TYPE_START_0",
+        "type": "[3:0]",
+        "default_value": "4'd2",
+        "description": "",
+        "start_line": 131
+      },
+      {
+        "name": "OUTPUT_TYPE_START_4",
+        "type": "[3:0]",
+        "default_value": "4'd3",
+        "description": "",
+        "start_line": 131
+      },
+      {
+        "name": "OUTPUT_TYPE_DATA",
+        "type": "[3:0]",
+        "default_value": "4'd4",
+        "description": "",
+        "start_line": 131
+      },
+      {
+        "name": "OUTPUT_TYPE_TERM_0",
+        "type": "[3:0]",
+        "default_value": "4'd8",
+        "description": "",
+        "start_line": 131
+      },
+      {
+        "name": "OUTPUT_TYPE_TERM_1",
+        "type": "[3:0]",
+        "default_value": "4'd9",
+        "description": "",
+        "start_line": 131
+      },
+      {
+        "name": "OUTPUT_TYPE_TERM_2",
+        "type": "[3:0]",
+        "default_value": "4'd10",
+        "description": "",
+        "start_line": 131
+      },
+      {
+        "name": "OUTPUT_TYPE_TERM_3",
+        "type": "[3:0]",
+        "default_value": "4'd11",
+        "description": "",
+        "start_line": 131
+      },
+      {
+        "name": "OUTPUT_TYPE_TERM_4",
+        "type": "[3:0]",
+        "default_value": "4'd12",
+        "description": "",
+        "start_line": 131
+      },
+      {
+        "name": "OUTPUT_TYPE_TERM_5",
+        "type": "[3:0]",
+        "default_value": "4'd13",
+        "description": "",
+        "start_line": 131
+      },
+      {
+        "name": "OUTPUT_TYPE_TERM_6",
+        "type": "[3:0]",
+        "default_value": "4'd14",
+        "description": "",
+        "start_line": 131
+      },
+      {
+        "name": "OUTPUT_TYPE_TERM_7",
+        "type": "[3:0]",
+        "default_value": "4'd15",
+        "description": "",
+        "start_line": 131
+      },
+      {
+        "name": "STATE_IDLE",
+        "type": "[2:0]",
+        "default_value": "3'd0",
+        "description": "",
+        "start_line": 146
+      },
+      {
+        "name": "STATE_PAYLOAD",
+        "type": "[2:0]",
+        "default_value": "3'd1",
+        "description": "",
+        "start_line": 146
+      },
+      {
+        "name": "STATE_PAD",
+        "type": "[2:0]",
+        "default_value": "3'd2",
+        "description": "",
+        "start_line": 146
+      },
+      {
+        "name": "STATE_FCS_1",
+        "type": "[2:0]",
+        "default_value": "3'd3",
+        "description": "",
+        "start_line": 146
+      },
+      {
+        "name": "STATE_FCS_2",
+        "type": "[2:0]",
+        "default_value": "3'd4",
+        "description": "",
+        "start_line": 146
+      },
+      {
+        "name": "STATE_IFG",
+        "type": "[2:0]",
+        "default_value": "3'd5",
+        "description": "",
+        "start_line": 146
+      },
+      {
+        "name": "STATE_WAIT_END",
+        "type": "[2:0]",
+        "default_value": "3'd6",
+        "description": "",
+        "start_line": 146
+      }
+    ],
+    "functions": []
   }
 }
