@@ -81,8 +81,9 @@ function compareVhdl(m, n, file) {
   var ch6 = check(m['declarations']['types'], n['declarations']['types'], ['name', 'type', 'description'], "types", file);
   var ch7 = check(m['declarations']['constants'], n['declarations']['constants'], ['name', 'type', 'default_value', 'description'], "constants", file);
   var ch8 = check(m['declarations']['functions'], n['declarations']['functions'], ['name', 'description'], "functions", file);
+  var ch9 = check(m['info'], n['info'], [], "info", file);
 
-  return ch1 && ch2 && ch3 && ch4 && ch5 && ch6 && ch7 && ch8;
+  return ch1 && ch2 && ch3 && ch4 && ch5 && ch6 && ch7 && ch8 && ch9;
 }
 
 function compareVerilogTs(m, n, file) {
@@ -96,42 +97,64 @@ function compareVerilogTs(m, n, file) {
   var ch6 = check(m['declarations']['types'], n['declarations']['types'], ['name', 'type', 'description'], "types", file);
   var ch7 = check(m['declarations']['constants'], n['declarations']['constants'], ['name', 'type', 'default_value', 'description'], "constants", file);
   var ch8 = check(m['declarations']['functions'], n['declarations']['functions'], ['name', 'description'], "functions", file);
+  var ch9 = check(m['info'], n['info'], [], "info", file);
 
-  return ch1 && ch2 && ch3 && ch4 && ch5 && ch6 && ch7 && ch8;
+  return ch1 && ch2 && ch3 && ch4 && ch5 && ch6 && ch7 && ch8 && ch9;
 }
 
 function check(m, n, cmp, type, file) {
-  if (m.length !== n.length) {
-    console.log("*************************************************************");
-    console.log("Fail: " + type.yellow + " in file: " + file.red);
-    console.log("Real ----->".yellow);
-    console.log(m);
-    console.log("Expected ----->".yellow);
-    console.log(n);
-    console.log("*************************************************************");
-    return false;
+  if (m === undefined && n === undefined){
+    return true;
   }
-  for (let i = 0; i < m.length; ++i) {
-    for (let z = 0; z < cmp.length; ++z) {
-      // console.log(m[i]['name'])
-      // console.log(file)
-      // console.log(type)
-      // console.log(cmp[z])
+  // test for arrays
+  if (m.constructor === n.constructor && m.constructor === Array){
+    if (m.length !== n.length) {
+      console.log("*************************************************************");
+      console.log("Fail: " + type.yellow + " in file: " + file.red);
+      console.log("Real ----->".yellow);
+      console.log(m);
+      console.log("Expected ----->".yellow);
+      console.log(n);
+      console.log("*************************************************************");
+      return false;
+    }
+    for (let i = 0; i < m.length; ++i) {
+      for (let z = 0; z < cmp.length; ++z) {
+        // console.log(m[i]['name'])
+        // console.log(file)
+        // console.log(type)
+        // console.log(cmp[z])
+  
+        let name_m;
+        let name_n;
+        if (m[i][cmp[z]] === undefined) {
+          name_m = "";
+        }
+        else {
+          name_m = m[i][cmp[z]].toLowerCase().replace(/\s/g, '').replace(/\t/g, '');
+        }
+        name_n = n[i][cmp[z]].toLowerCase().replace(/\s/g, '').replace(/\t/g, '');
 
-      let name_m;
-      let name_n;
-      if (m[i][cmp[z]] === undefined) {
-        name_m = "";
+        if (name_m !== name_n) {
+          console.log("*********************************************************");
+          console.log(JSON.stringify(name_m));
+          console.log(JSON.stringify(name_n));
+          console.log("Fail: " + type.yellow + " in file: " + file.red);
+          console.log("Real ----->".yellow);
+          console.log(m);
+          console.log("Expected ----->".yellow);
+          console.log(n);
+          console.log("*********************************************************");
+          return false;
+        }
       }
-      else {
-        name_m = m[i][cmp[z]].toLowerCase().replace(/\s/g, '').replace(/\t/g, '');
-      }
-      name_n = n[i][cmp[z]].toLowerCase().replace(/\s/g, '').replace(/\t/g, '');
-
-      if (name_m !== name_n) {
+    }
+  }else {
+    // test for objects
+    Object.keys(m).forEach(function(key) {
+      if (n[key] === undefined){
         console.log("*********************************************************");
-        console.log(JSON.stringify(name_m));
-        console.log(JSON.stringify(name_n));
+        console.log("Key "+key+" is not found !");
         console.log("Fail: " + type.yellow + " in file: " + file.red);
         console.log("Real ----->".yellow);
         console.log(m);
@@ -140,7 +163,21 @@ function check(m, n, cmp, type, file) {
         console.log("*********************************************************");
         return false;
       }
+  });
+  Object.keys(n).forEach(function(key) {
+    if (m[key] === undefined){
+      console.log("*********************************************************");
+      console.log("Key "+key+" is not found !");
+      console.log("Fail: " + type.yellow + " in file: " + file.red);
+      console.log("Real ----->".yellow);
+      console.log(m);
+      console.log("Expected ----->".yellow);
+      console.log(n);
+      console.log("*********************************************************");
+      return false;
+      return false;
     }
+  });
   }
   return true;
 }
