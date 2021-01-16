@@ -136,6 +136,14 @@ class Ts_base_parser {
     desc_root.description = desc_root.description.replace(description_regex,"");
     desc_root.description = desc_root.description.replace(/(\r\n[\s]*\r\n)|(\n[\s]*\n)/gm,"");
     dic[file_type] = desc_root;
+    if (file_type === "entity"){
+      let processes_list = dic['body']['processes']
+      if (processes_list.length > 0){
+        for (let i = 0; i < processes_list.length; i++) {
+          dic.body.processes[i].description = dic.body.processes[i].description.replace(description_regex,"");
+        }
+      }
+    }
     return dic
   }
 
