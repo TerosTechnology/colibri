@@ -1,112 +1,120 @@
 {
-   "libraries": [],
-   "entity": {
-      "name": "uart_rx",
-      "description": "\n"
-   },
-   "generics": [
+  "libraries": [],
+  "entity": {
+    "name": "uart_rx",
+    "description": ""
+  },
+  "generics": [
+    {
+      "name": "cycles_per_bit",
+      "type": "integer",
+      "default_value": "434",
+      "description": "  #one parameter\r"
+    }
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 9,
+      "group": ""
+    },
+    {
+      "name": "rx",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 12,
+      "group": ""
+    },
+    {
+      "name": "overflow",
+      "direction": "output",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 14,
+      "group": ""
+    },
+    {
+      "name": "tready",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 17,
+      "group": ""
+    },
+    {
+      "name": "tvalid",
+      "direction": "output",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 18,
+      "group": ""
+    },
+    {
+      "name": "tdata",
+      "direction": "output",
+      "type": "[7:0]",
+      "default_value": "",
+      "description": "",
+      "start_line": 19,
+      "group": ""
+    }
+  ],
+  "body": {
+    "processes": [
       {
-         "name": "cycles_per_bit",
-         "type": "integer",
-         "default_value": "434",
-         "description": "  #one parameter"
+        "name": "unnamed",
+        "sens_list": "@(posedge clk)",
+        "description": "",
+        "start_line": 28
       }
-   ],
-   "ports": [
+    ],
+    "instantiations": []
+  },
+  "declarations": {
+    "types": [
       {
-         "name": "clk",
-         "direction": "input",
-         "type": "",
-         "default_value": "",
-         "description": "",
-         "start_line": 9
-      },
-      {
-         "name": "rx",
-         "direction": "input",
-         "type": "",
-         "default_value": "",
-         "description": "",
-         "start_line": 12
-      },
-      {
-         "name": "overflow",
-         "direction": "output",
-         "type": "",
-         "default_value": "",
-         "description": "",
-         "start_line": 14
-      },
-      {
-         "name": "tready",
-         "direction": "input",
-         "type": "",
-         "default_value": "",
-         "description": "",
-         "start_line": 17
-      },
-      {
-         "name": "tvalid",
-         "direction": "output",
-         "type": "",
-         "default_value": "",
-         "description": "",
-         "start_line": 18
-      },
-      {
-         "name": "tdata",
-         "direction": "output",
-         "type": "[7:0]",
-         "default_value": "",
-         "description": "",
-         "start_line": 19
+        "name": "state_t",
+        "type": "enum       {idle, receiving, done}",
+        "description": "",
+        "start_line": 21
       }
-   ],
-   "body": {
-      "processes": [
-         {
-            "name": "unnamed",
-            "sens_list": "@(posedge clk)",
-            "description": "",
-            "start_line": 28
-         }
-      ],
-      "instantiations": []
-   },
-   "declarations": {
-      "types": [
-         {
-            "name": "state_t",
-            "type": "enum       {idle, receiving, done}",
-            "description": ""
-         }
-      ],
-      "signals": [
-         {
-            "name": "state",
-            "type": "state_t",
-            "description": ""
-         },
-         {
-            "name": "data",
-            "type": "logic [7:0]",
-            "description": "",
-            "start_line": 24
-         },
-         {
-            "name": "cycles",
-            "type": "logic [$bits(cycles_per_bit)-1:0]",
-            "description": "",
-            "start_line": 25
-         },
-         {
-            "name": "index",
-            "type": "logic [$bits($size(data))-1:0]",
-            "description": "",
-            "start_line": 26
-         }
-      ],
-      "constants": [],
-      "functions": []
-   }
+    ],
+    "signals": [
+      {
+        "name": "state",
+        "type": "state_t",
+        "description": "",
+        "start_line": 22
+      },
+      {
+        "name": "data",
+        "type": "logic [7:0]",
+        "description": "",
+        "start_line": 24
+      },
+      {
+        "name": "cycles",
+        "type": "logic [$bits(cycles_per_bit)-1:0]",
+        "description": "",
+        "start_line": 25
+      },
+      {
+        "name": "index",
+        "type": "logic [$bits($size(data))-1:0]",
+        "description": "",
+        "start_line": 26
+      }
+    ],
+    "constants": [],
+    "functions": []
+  }
 }

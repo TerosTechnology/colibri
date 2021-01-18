@@ -1,68 +1,56 @@
 {
-  "libraries":[
-     
-  ],
-  "entity":{
-     "name":"t_gate_switch",
-     "description":"\n"
+  "libraries": [],
+  "entity": {
+    "name": "t_gate_switch",
+    "description": ""
   },
-  "generics":[
-     
+  "generics": [],
+  "ports": [
+    {
+      "name": "L",
+      "direction": "inout",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 5,
+      "group": ""
+    },
+    {
+      "name": "R",
+      "direction": "inout",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 6,
+      "group": ""
+    },
+    {
+      "name": "nC",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 7,
+      "group": ""
+    },
+    {
+      "name": "C",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 8,
+      "group": ""
+    }
   ],
-  "ports":[
-     {
-        "name":"L",
-        "direction":"inout",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":5
-     },
-     {
-        "name":"R",
-        "direction":"inout",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":6
-     },
-     {
-        "name":"nC",
-        "direction":"input",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":7
-     },
-     {
-        "name":"C",
-        "direction":"input",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":8
-     }
-  ],
-  "body":{
-     "processes":[
-        
-     ],
-     "instantiations":[
-        
-     ]
+  "body": {
+    "processes": [],
+    "instantiations": []
   },
-  "declarations":{
-     "types":[
-        
-     ],
-     "signals":[
-        
-     ],
-     "constants":[
-        
-     ],
-     "functions":[
-        
-     ]
+  "declarations": {
+    "types": [],
+    "signals": [],
+    "constants": [],
+    "functions": []
   }
 }

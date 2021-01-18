@@ -1,240 +1,241 @@
 {
-  "libraries":[
-     
-  ],
-  "entity":{
-     "name":"uart",
-     "description":"\n"
+  "libraries": [],
+  "entity": {
+    "name": "uart",
+    "description": ""
   },
-  "generics":[
-     
+  "generics": [],
+  "ports": [
+    {
+      "name": "reset",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 22,
+      "group": ""
+    },
+    {
+      "name": "txclk",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 23,
+      "group": ""
+    },
+    {
+      "name": "ld_tx_data",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 24,
+      "group": ""
+    },
+    {
+      "name": "tx_data",
+      "direction": "input",
+      "type": "[7:0]",
+      "default_value": "",
+      "description": "",
+      "start_line": 25,
+      "group": ""
+    },
+    {
+      "name": "tx_enable",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 26,
+      "group": ""
+    },
+    {
+      "name": "tx_out",
+      "direction": "output",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 27,
+      "group": ""
+    },
+    {
+      "name": "tx_empty",
+      "direction": "output",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 28,
+      "group": ""
+    },
+    {
+      "name": "rxclk",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 29,
+      "group": ""
+    },
+    {
+      "name": "uld_rx_data",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 30,
+      "group": ""
+    },
+    {
+      "name": "rx_data",
+      "direction": "output",
+      "type": "[7:0]",
+      "default_value": "",
+      "description": "",
+      "start_line": 31,
+      "group": ""
+    },
+    {
+      "name": "rx_enable",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 32,
+      "group": ""
+    },
+    {
+      "name": "rx_in",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 33,
+      "group": ""
+    },
+    {
+      "name": "rx_empty",
+      "direction": "output",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 34,
+      "group": ""
+    }
   ],
-  "ports":[
-     {
-        "name":"reset",
-        "direction":"input",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":22
-     },
-     {
-        "name":"txclk",
-        "direction":"input",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":23
-     },
-     {
-        "name":"ld_tx_data",
-        "direction":"input",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":24
-     },
-     {
-        "name":"tx_data",
-        "direction":"input",
-        "type":"[7:0]",
-        "default_value":"",
-        "description":"",
-        "start_line":25
-     },
-     {
-        "name":"tx_enable",
-        "direction":"input",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":26
-     },
-     {
-        "name":"tx_out",
-        "direction":"output",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":27
-     },
-     {
-        "name":"tx_empty",
-        "direction":"output",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":28
-     },
-     {
-        "name":"rxclk",
-        "direction":"input",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":29
-     },
-     {
-        "name":"uld_rx_data",
-        "direction":"input",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":30
-     },
-     {
-        "name":"rx_data",
-        "direction":"output",
-        "type":"[7:0]",
-        "default_value":"",
-        "description":"",
-        "start_line":31
-     },
-     {
-        "name":"rx_enable",
-        "direction":"input",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":32
-     },
-     {
-        "name":"rx_in",
-        "direction":"input",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":33
-     },
-     {
-        "name":"rx_empty",
-        "direction":"output",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":34
-     }
-  ],
-  "body":{
-     "processes":[
-        {
-           "name":"unnamed",
-           "sens_list":"@ (posedge rxclk or posedge reset)",
-           "description":"",
-           "start_line":54
-        },
-        {
-           "name":"unnamed",
-           "sens_list":"@ (posedge txclk or posedge reset)",
-           "description":"",
-           "start_line":118
-        }
-     ],
-     "instantiations":[
-        
-     ]
+  "body": {
+    "processes": [
+      {
+        "name": "unnamed",
+        "sens_list": "@ (posedge rxclk or posedge reset)",
+        "description": "",
+        "start_line": 54
+      },
+      {
+        "name": "unnamed",
+        "sens_list": "@ (posedge txclk or posedge reset)",
+        "description": "",
+        "start_line": 118
+      }
+    ],
+    "instantiations": []
   },
-  "declarations":{
-     "types":[
-        
-     ],
-     "signals":[
-        {
-           "name":"tx_reg",
-           "type":"reg [7:0]",
-           "description":"",
-           "start_line":37
-        },
-        {
-           "name":"tx_empty",
-           "type":"reg",
-           "description":"",
-           "start_line":38
-        },
-        {
-           "name":"tx_over_run",
-           "type":"reg",
-           "description":"",
-           "start_line":39
-        },
-        {
-           "name":"tx_cnt",
-           "type":"reg [3:0]",
-           "description":"",
-           "start_line":40
-        },
-        {
-           "name":"tx_out",
-           "type":"reg",
-           "description":"",
-           "start_line":41
-        },
-        {
-           "name":"rx_reg",
-           "type":"reg [7:0]",
-           "description":"",
-           "start_line":42
-        },
-        {
-           "name":"rx_data",
-           "type":"reg [7:0]",
-           "description":"",
-           "start_line":43
-        },
-        {
-           "name":"rx_sample_cnt",
-           "type":"reg [3:0]",
-           "description":"",
-           "start_line":44
-        },
-        {
-           "name":"rx_cnt",
-           "type":"reg [3:0]",
-           "description":"",
-           "start_line":45
-        },
-        {
-           "name":"rx_frame_err",
-           "type":"reg",
-           "description":"",
-           "start_line":46
-        },
-        {
-           "name":"rx_over_run",
-           "type":"reg",
-           "description":"",
-           "start_line":47
-        },
-        {
-           "name":"rx_empty",
-           "type":"reg",
-           "description":"",
-           "start_line":48
-        },
-        {
-           "name":"rx_d1",
-           "type":"reg",
-           "description":"",
-           "start_line":49
-        },
-        {
-           "name":"rx_d2",
-           "type":"reg",
-           "description":"",
-           "start_line":50
-        },
-        {
-           "name":"rx_busy",
-           "type":"reg",
-           "description":"",
-           "start_line":51
-        }
-     ],
-     "constants":[
-        
-     ],
-     "functions":[
-        
-     ]
+  "declarations": {
+    "types": [],
+    "signals": [
+      {
+        "name": "tx_reg",
+        "type": "reg [7:0]",
+        "description": "",
+        "start_line": 37
+      },
+      {
+        "name": "tx_empty",
+        "type": "reg",
+        "description": "",
+        "start_line": 38
+      },
+      {
+        "name": "tx_over_run",
+        "type": "reg",
+        "description": "",
+        "start_line": 39
+      },
+      {
+        "name": "tx_cnt",
+        "type": "reg [3:0]",
+        "description": "",
+        "start_line": 40
+      },
+      {
+        "name": "tx_out",
+        "type": "reg",
+        "description": "",
+        "start_line": 41
+      },
+      {
+        "name": "rx_reg",
+        "type": "reg [7:0]",
+        "description": "",
+        "start_line": 42
+      },
+      {
+        "name": "rx_data",
+        "type": "reg [7:0]",
+        "description": "",
+        "start_line": 43
+      },
+      {
+        "name": "rx_sample_cnt",
+        "type": "reg [3:0]",
+        "description": "",
+        "start_line": 44
+      },
+      {
+        "name": "rx_cnt",
+        "type": "reg [3:0]",
+        "description": "",
+        "start_line": 45
+      },
+      {
+        "name": "rx_frame_err",
+        "type": "reg",
+        "description": "",
+        "start_line": 46
+      },
+      {
+        "name": "rx_over_run",
+        "type": "reg",
+        "description": "",
+        "start_line": 47
+      },
+      {
+        "name": "rx_empty",
+        "type": "reg",
+        "description": "",
+        "start_line": 48
+      },
+      {
+        "name": "rx_d1",
+        "type": "reg",
+        "description": "",
+        "start_line": 49
+      },
+      {
+        "name": "rx_d2",
+        "type": "reg",
+        "description": "",
+        "start_line": 50
+      },
+      {
+        "name": "rx_busy",
+        "type": "reg",
+        "description": "",
+        "start_line": 51
+      }
+    ],
+    "constants": [],
+    "functions": []
   }
 }

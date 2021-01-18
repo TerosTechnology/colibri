@@ -1,84 +1,76 @@
 {
-  "libraries":[
-     
-  ],
-  "entity":{
-     "name":"gray_counter",
-     "description":"\n"
+  "libraries": [],
+  "entity": {
+    "name": "gray_counter",
+    "description": ""
   },
-  "generics":[
-     
+  "generics": [],
+  "ports": [
+    {
+      "name": "clk",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 16,
+      "group": ""
+    },
+    {
+      "name": " rst",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 16,
+      "group": ""
+    },
+    {
+      "name": " enable",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 16,
+      "group": ""
+    },
+    {
+      "name": "out",
+      "direction": "output",
+      "type": "[ 7:0]",
+      "default_value": "",
+      "description": "",
+      "start_line": 18,
+      "group": ""
+    }
   ],
-  "ports":[
-     {
-        "name":"clk",
-        "direction":"input",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":16
-     },
-     {
-        "name":" rst",
-        "direction":"input",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":16
-     },
-     {
-        "name":" enable",
-        "direction":"input",
-        "type":"",
-        "default_value":"",
-        "description":"",
-        "start_line":16
-     },
-     {
-        "name":"out",
-        "direction":"output",
-        "type":"[ 7:0]",
-        "default_value":"",
-        "description":"",
-        "start_line":18
-     }
-  ],
-  "body":{
-     "processes":[
-        {
-           "name":"unnamed",
-           "sens_list":"@ (posedge clk)",
-           "description":"",
-           "start_line":23
-        }
-     ],
-     "instantiations":[
-        
-     ]
-  },
-  "declarations":{
-     "types":[
-        
-     ],
-     "signals":[
+  "body": {
+    "processes": [
       {
-        "name":"out",
-        "type":"wire [7:0]",
-        "description":"",
-        "start_line":21
-     },
-        {
-           "name":"count",
-           "type":"reg [7:0]",
-           "description":"",
-           "start_line":21
-        }
-     ],
-     "constants":[
-        
-     ],
-     "functions":[
-        
-     ]
+        "name": "unnamed",
+        "sens_list": "@ (posedge clk)",
+        "description": "",
+        "start_line": 23
+      }
+    ],
+    "instantiations": []
+  },
+  "declarations": {
+    "types": [],
+    "signals": [
+      {
+        "name": "out",
+        "type": "wire [7:0]",
+        "description": "",
+        "start_line": 20
+      },
+      {
+        "name": "count",
+        "type": "reg [7:0]",
+        "description": "",
+        "start_line": 21
+      }
+    ],
+    "constants": [],
+    "functions": []
   }
 }

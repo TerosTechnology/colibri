@@ -41,6 +41,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
 
   async get_all(sourceCode, comment_symbol) {
     let structure;
+    let file_type;
     if (comment_symbol !== undefined) {
       this.comment_symbol = comment_symbol;
     }
@@ -54,6 +55,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       if (module_header.length === 0) {
         let arch_body = tree;
         let body_elements = this.get_body_elements_and_declarations(arch_body, lines, comments, true);
+        file_type = "package";
 
         structure = {
           "package": this.get_package_declaration(tree.rootNode, lines), // package_identifier 
@@ -67,6 +69,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       } else {
         let arch_body = this.get_architecture_body(tree);
         let body_elements = this.get_body_elements_and_declarations(arch_body, lines, comments);
+        file_type = "entity";
 
         structure = {
           'libraries': this.get_libraries(tree.rootNode, lines, comments),  // includes
@@ -84,6 +87,11 @@ class Parser extends ts_base_parser.Ts_base_parser {
             'functions': body_elements.functions
           }
         };
+      }
+      structure =  this.parse_doxy(structure,file_type);
+      if (file_type === "entity"){
+        structure = this.parse_ports_group(structure);
+        structure = this.parse_virtual_bus(structure);
       }
       return structure;
     }
