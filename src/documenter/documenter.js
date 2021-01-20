@@ -113,13 +113,7 @@ class Documenter {
     //Entity
     if (code_tree['entity'] !== undefined) {
       //Title
-      if (code_tree['info']['title'] !== undefined){
-        markdown_doc += "# " + code_tree['info']['title'] + "\n";
-      }else{
-        markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
-      }
-      //Optional info section
-      markdown_doc += this._get_info_section(code_tree);
+      markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
       //Diagram
       await this._save_svg_from_code_tree(path, code_tree);
       markdown_doc += "## Diagram\n";
@@ -139,18 +133,12 @@ class Documenter {
       }
       markdown_doc += wavedrom_description;
       //Generics and ports
-      markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics'],code_tree['virtual_buses']);
+      markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics']);
     }
     //Package
     if (code_tree.package !== undefined) {
       //Title
-      if (code_tree['info']['title'] !== undefined){
-        markdown_doc += "# " + code_tree['info']['title'] + "\n";
-      }else{
-        markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
-      }
-      //Optional info section
-      markdown_doc += this._get_info_section(code_tree);
+      markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
       //Description
       markdown_doc += "## Description\n";
       markdown_doc += code_tree['package']['description'] + "\n";
@@ -208,13 +196,7 @@ class Documenter {
     //Entity
     if (code_tree['entity'] !== undefined) {
       //Title
-      if (code_tree['info']['title'] !== undefined){
-        markdown_doc += "# " + code_tree['info']['title'] + "\n";
-      }else{
-        markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
-      }
-      //Optional info section
-      markdown_doc += this._get_info_section(code_tree);
+      markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
       //Diagram
       markdown_doc += "## Diagram\n";
       let path_diagram = temp.openSync().path;
@@ -236,18 +218,12 @@ class Documenter {
       markdown_doc += wavedrom_description;
 
       //Generics and ports
-      markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics'],code_tree['virtual_buses']);
+      markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics']);
     }
     //Package
     if (code_tree.package !== undefined) {
       //Title
-      if (code_tree['info']['title'] !== undefined){
-        markdown_doc += "# " + code_tree['info']['title'] + "\n";
-      }else{
-        markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
-      }
-      //Optional info section
-      markdown_doc += this._get_info_section(code_tree);
+      markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
       //Description
       markdown_doc += "## Description\n";
       markdown_doc += code_tree['package']['description'] + "\n";
@@ -363,14 +339,7 @@ class Documenter {
     //Entity
     if (code_tree['entity'] !== undefined) {
       //Title
-      let doc_title;
-      if (code_tree['info']['title'] !== undefined){
-        doc_title = "# " + code_tree['info']['title'] + "\n";
-      }else{
-        doc_title = "# Entity: " + code_tree['entity']['name'] + "\n";
-      }
-      html += converter.makeHtml(doc_title);
-      html += converter.makeHtml(this._get_info_section(code_tree));
+      html += converter.makeHtml("# Entity: " + code_tree['entity']['name'] + "\n");
       //Description
       html += converter.makeHtml("## Diagram\n");
       html += converter.makeHtml((await this._get_diagram_svg_from_code_tree(code_tree) + "\n").replace(/\*/g, "\\*"));
@@ -385,19 +354,12 @@ class Documenter {
       }
       html += html_description;
       //Generics and ports
-      html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], code_tree['generics'],code_tree['virtual_buses']));
+      html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], code_tree['generics']));
     }
     //Package
     if (code_tree.package !== undefined) {
       //Title
-      let doc_title;
-      if (code_tree['info']['title'] !== undefined){
-        doc_title = "# " + code_tree['info']['title'] + "\n";
-      }else{
-        doc_title = "# Package: " + code_tree['package']['name'] + "\n";
-      }
-      html += converter.makeHtml(doc_title);
-      html += converter.makeHtml(this._get_info_section(code_tree));
+      html += converter.makeHtml("# Package: " + code_tree['package']['name'] + "\n");
       html += converter.makeHtml("## Description\n");
       html += converter.makeHtml(code_tree['package']['description'] + "\n");
     }
@@ -628,27 +590,7 @@ class Documenter {
     this.code_tree = await this._get_code_tree();
   }
 
-  _get_info_section(code_tree){
-    let markdown_doc = "";
-    //Doxygen parsed commands insertion (only if available)
-    if (code_tree['info']['file'] !== undefined){
-      markdown_doc += "- **File:** " + code_tree['info']['file'] + "\n";
-    }
-    if (code_tree['info']['author'] !== undefined){
-      markdown_doc += "- **Author:** " + code_tree['info']['author'] + "\n";
-    }
-    if (code_tree['info']['version'] !== undefined){
-      markdown_doc += "- **Version:** " + code_tree['info']['version'] + "\n";
-    }
-    if (code_tree['info']['date'] !== undefined){
-      markdown_doc += "- **Date:** " + code_tree['info']['date'] + "\n";
-    }
-    if (code_tree['info']['copyright'] !== undefined){
-      markdown_doc += "- **Copyright:** " + code_tree['info']['copyright'] + "\n";
-    }
-    return markdown_doc;
-  }
-  _get_in_out_section(ports, generics,virtual_buses) {
+  _get_in_out_section(ports, generics) {
     let md = "";
     //Title
     md += "## Generics and ports\n";
@@ -659,30 +601,7 @@ class Documenter {
     }
     md += "### Table 1.2 Ports\n";
     if (ports.length !== 0) {
-      if (virtual_buses !== undefined) {
-        let virtual_buses_to_add = virtual_buses.filter(obj => obj.keep_ports === true);
-        if (virtual_buses_to_add.length > 0) {
-          for (let i = 0; i < virtual_buses_to_add.length; i++) {
-            const element = virtual_buses_to_add[i];
-            ports = ports.filter(function(value, index, arr){ 
-              return value.name !== element.name;
-          });
-          ports = ports.concat(element.ports)
-          }
-        }
-      }
       md += this._get_doc_ports(ports);
-    }
-    if (virtual_buses !== undefined) {
-      let virtual_buses_to_show = virtual_buses.filter(obj => obj.keep_ports === false);
-      if (virtual_buses_to_show.length > 0) {
-        md += "### 1.3 Virtual Buses\n";
-        for (let i = 0; i < virtual_buses_to_show.length; i++) {
-          const element = virtual_buses_to_show[i];
-          md += "### Table 1.3."+(i+1).toString()+" "+ element.name+"\n";
-          md += this._get_doc_ports(element.ports);
-        }
-      }
     }
     return md;
   }
@@ -783,12 +702,8 @@ class Documenter {
     let table = [];
     table.push(["Port name", "Direction", "Type", "Description"]);
     for (let i = 0; i < ports.length; ++i) {
-      let direction = ports[i]['direction'].replace(/\r/g, ' ').replace(/\n/g, ' ')
-      if (ports[i]['type'] === "virtual_bus"){
-        direction = "-";
-      }
       table.push([ports[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
-      direction,
+      ports[i]['direction'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       ports[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       ports[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
