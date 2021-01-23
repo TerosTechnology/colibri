@@ -45,9 +45,9 @@ function deep_check(m, n, name, file,exclude) {
       console.log("Fail: " + name.yellow + " in file: " + file.red);
       console.log(("Comparing the strings " + name + " resulted in different values").yellow)
       console.log("Real ----->".yellow);
-      console.log(m);
+      console.log(m.replace(/\n/g, '\\n').replace(/\r/g, '\\r'));
       console.log("Expected ----->".yellow);
-      console.log(n);
+      console.log(n.replace(/\n/g, '\\n').replace(/\r/g, '\\r'));
       console.log("*********************************************************");
       return false;
     } else {
