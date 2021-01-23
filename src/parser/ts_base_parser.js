@@ -119,13 +119,18 @@ class Ts_base_parser {
       // clean up the description field
       desc_root.description = desc_root.description.replace(single_line_regex, "");
     }
-    // look for copyrights regex
-    const copyright_regex = /^\s*[@\\]copyright\s(?:(?![\\@$]).)*/gms;
-    let copyright = desc_root.description.match(copyright_regex);
+    // look for copyrights regex, it can be followed by another description or not
+    const copyright_regex_followed = /^\s*[@\\]copyright.*\n\n/gms;
+    const copyright_regex_not_followed = /^\s*[@\\]copyright.*/gms;
+
+    let copyright = desc_root.description.match(copyright_regex_followed);
+    if (copyright === null) {
+      copyright = desc_root.description.match(copyright_regex_not_followed);
+    }
     if (copyright !== null) {
       let stripped_copyright = copyright[0].split(/\n[\s]*\n/gm);
       for (let index = 0; index < stripped_copyright.length; index++) {
-        if (stripped_copyright[index] !== undefined && stripped_copyright[index].match(copyright_regex) !== null) {
+        if (stripped_copyright[index] !== undefined && stripped_copyright[index].match(copyright_regex_not_followed) !== null) {
           dic.info.copyright = stripped_copyright[index].replace(/^\s*[@\\]copyright\s/, "");
           desc_root.description = desc_root.description.replace(stripped_copyright[index], "");
         }
