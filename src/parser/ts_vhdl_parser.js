@@ -319,7 +319,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
             }
           }
           if (check === false) {
-            comments += txt_comment.slice(1);
+            comments += txt_comment.slice(1)+"\n";
           }
         }
       }

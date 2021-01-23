@@ -120,8 +120,8 @@ class Ts_base_parser {
       desc_root.description = desc_root.description.replace(single_line_regex, "");
     }
     // look for copyrights regex, it can be followed by another description or not
-    const copyright_regex_followed = /^\s*[@\\]copyright.*\n\n/gms;
-    const copyright_regex_not_followed = /^\s*[@\\]copyright.*/gms;
+    const copyright_regex_followed = /^\s*[@\\]copyright\s.*\n\n/gms;
+    const copyright_regex_not_followed = /^\s*[@\\]copyright\s.*/gms;
 
     let copyright = desc_root.description.match(copyright_regex_followed);
     if (copyright === null) {
@@ -180,7 +180,8 @@ class Ts_base_parser {
     return dic;
   }
   parse_virtual_bus(dic) {
-    const virtual_bus_regex = /(^\s*[@\\]virtualbus\s)(?:(?![$]).)*/gm;
+    const virtual_bus_regex_followed = /^\s*[@\\]virtualbus\s.*\n\n/gms;
+    const virtual_bus_regex_not_followed = /^\s*[@\\]virtualbus\s.*/
     const virtual_bus_end_regex = /^\s*[@\\]endvirtualbus\s*/gm;
     const virtual_bus_dir_regex = /^\s*[@\\]dir\s/gm;
     const virtual_bus_keep_regex = /^\s*[@\\]keepports\s/gm
@@ -203,20 +204,37 @@ class Ts_base_parser {
     let virtual_bus_open = false;
     // loop along all ports
     for (let i = 0; i < ports.length; i++) {
-      let virtual_bus = Array.from(ports[i].description.matchAll(virtual_bus_regex));
+      // strip description from \r if present to deal with \n exclusively
+      ports[i].description = ports[i].description.replace(/\r/gm,"");
+      
+      if (ports[i].description.match(virtual_bus_end_regex) !== null) {
+        dic.ports[i].description = ports[i].description.replace(virtual_bus_end_regex, "");
+        if (virtual_bus_open){
+          virtual_bus_open = false;
+          virtual_bus_array.push(clone(virtual_bus_struct));
+          virtual_bus_struct = clone(virtual_bus_base_struct);
+        }
+      }
 
-      if (virtual_bus.length > 0) {
+      let virtual_bus = ports[i].description.match(virtual_bus_regex_followed);
+      
+      if (virtual_bus === null){
+        virtual_bus = ports[i].description.match(virtual_bus_regex_not_followed);
+      } 
+
+      if (virtual_bus !== null) {
         if (virtual_bus_open) {
           // new virtual bus is found and another one was still open, add the old one to the array and clean it 
           virtual_bus_array.push(clone(virtual_bus_struct));
           virtual_bus_struct = clone(virtual_bus_base_struct);
         }
-        let virtual_bus_description = virtual_bus[0][0];
+        let virtual_bus_description = virtual_bus[0];
         // clean the port description from the found virtual bus command
-        dic.ports[i].description = ports[i].description.replace(virtual_bus[0][0], "");
+        dic.ports[i].description = ports[i].description.replace(virtual_bus_regex_not_followed, "");
+        dic.ports[i].description = ports[i].description.replace(/\n\n/, "");
         dic.ports[i].description = ports[i].description.replace(virtual_bus_end_regex, "");
         // strip virtual bus description from the command part
-        virtual_bus_description = virtual_bus_description.replace(virtual_bus[0][1], "");
+        virtual_bus_description = virtual_bus_description.replace(/^\s*[@\\]virtualbus\s/, "");
         // construct the name and description of virtual bus
         let virtual_bus_name = virtual_bus_description.match(/^\s*\w+/)[0]
         virtual_bus_description = virtual_bus_description.replace(virtual_bus_name, "");
@@ -224,6 +242,7 @@ class Ts_base_parser {
         // look for optional direction
         if (virtual_bus_dir !== null && virtual_bus_dir.length > 0) {
           virtual_bus_description = virtual_bus_description.replace(virtual_bus_dir[0], "");
+          virtual_bus_description = virtual_bus_description.replace(/\n\n/,"");
           virtual_bus_dir = virtual_bus_description.match(/^\s*(out|in)/gm);
           if (virtual_bus_dir.length > 0) {
             virtual_bus_description = virtual_bus_description.replace(virtual_bus_dir[0], "");
@@ -242,21 +261,16 @@ class Ts_base_parser {
         virtual_bus_struct.description = virtual_bus_description;
         // keep the virtual bus opened to add incoming ports
         virtual_bus_open = true;
-      } else if (virtual_bus.length == 0 && virtual_bus_open) {
-        // check for closing command
-        if (ports[i].description.match(virtual_bus_end_regex) !== null) {
-          dic.ports[i].description = ports[i].description.replace(virtual_bus_end_regex, "");
-          virtual_bus_open = false;
-          virtual_bus_array.push(clone(virtual_bus_struct));
-          virtual_bus_struct = clone(virtual_bus_base_struct);
-        }
       }
+
       if (virtual_bus_open) {
         // copy the port to the newly created virtualbus
         virtual_bus_struct.ports.push(clone(ports[i]));
         // append current index to be removed
         ports_to_remove.push(clone(i))
       }
+      // remove any added \n to description
+      dic.ports[i].description = ports[i].description.replace(/\n/, "");
     }
     if (virtual_bus_array.length > 0) {
       // append the vbus to the json
