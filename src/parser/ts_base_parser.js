@@ -103,6 +103,8 @@ class Ts_base_parser {
   parse_doxy(dic, file_type) {
     // remove any spaces between linefeed and trim the string
     let desc_root = dic[file_type];
+    // always remove carriage return
+    desc_root.description = desc_root.description.replace(/\r/gm,"");
     desc_root.description = desc_root.description.trim().replace(/\n\s/gm, "\n")
     // look for single line commands
     const single_line_regex = /^\s*[@\\](file|author|version|date|title)\s.+$/gm;
