@@ -105,7 +105,6 @@ class Ts_base_parser {
     let desc_root = dic[file_type];
     // always remove carriage return
     desc_root.description = desc_root.description.replace(/\r/gm,"");
-    desc_root.description = desc_root.description.trim().replace(/\n\s/gm, "\n")
     // look for single line commands
     const single_line_regex = /^\s*[@\\](file|author|version|date|title)\s.+$/gm;
     // get all matches for single line attributes
@@ -124,7 +123,7 @@ class Ts_base_parser {
     const copyright_regex = /^\s*[@\\]copyright\s(?:(?![\\@$]).)*/gms;
     let copyright = desc_root.description.match(copyright_regex);
     if (copyright !== null) {
-      let stripped_copyright = copyright[0].split(/(\r\n[\s]*\r\n)|(\n[\s]*\n)/gm);
+      let stripped_copyright = copyright[0].split(/\n[\s]*\n/gm);
       for (let index = 0; index < stripped_copyright.length; index++) {
         if (stripped_copyright[index] !== undefined && stripped_copyright[index].match(copyright_regex) !== null) {
           dic.info.copyright = stripped_copyright[index].replace(/^\s*[@\\]copyright\s/, "");
@@ -135,7 +134,7 @@ class Ts_base_parser {
     // clean @details and @brief and create the new description
     const description_regex = /^\s*[@\\](brief|details)\s/gm;
     desc_root.description = desc_root.description.replace(description_regex, "");
-    desc_root.description = desc_root.description.replace(/(\r\n[\s]*\r\n)|(\n[\s]*\n)/gm, "");
+    desc_root.description = desc_root.description.replace(/\n[\s]*\n/gm, "");
     dic[file_type] = desc_root;
     if (file_type === "entity") {
       let processes_list = dic['body']['processes']

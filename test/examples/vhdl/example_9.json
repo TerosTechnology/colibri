@@ -1,7 +1,7 @@
 {
   "entity": {
     "name": "arith_counter_bcd",
-    "description": "Some description can be added here\r\nalso in multi-lines\rAnother description can be added here\r\rAnd more core description can be added here\r\nanother description of the core is also ok"
+    "description": "Some description can be added here\nalso in multi-linesAnother description can be added hereAnd more core description can be added here\nanother description of the core is also ok"
   },
   "generics": [
     {
@@ -10,7 +10,7 @@
       "line": 12,
       "direction": "",
       "default_value": "",
-      "description": " Number of BCD digits\r"
+      "description": " Number of BCD digits"
     }
   ],
   "ports": [
@@ -20,7 +20,7 @@
       "line": 16,
       "direction": "in",
       "default_value": "",
-      "description": " system clock\r",
+      "description": " system clock",
       "group": ""
     },
     {
@@ -29,7 +29,7 @@
       "line": 17,
       "direction": "in",
       "default_value": "",
-      "description": " Reset to 0\r",
+      "description": " Reset to 0",
       "group": ""
     },
     {
@@ -38,7 +38,7 @@
       "line": 18,
       "direction": "in",
       "default_value": "",
-      "description": " Increment\r",
+      "description": " Increment",
       "group": ""
     },
     {
@@ -47,7 +47,7 @@
       "line": 19,
       "direction": "out",
       "default_value": "",
-      "description": " Value output\r",
+      "description": " Value output",
       "group": ""
     }
   ],

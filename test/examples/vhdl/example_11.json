@@ -1,7 +1,7 @@
 {
   "entity": {
     "name": "video_core",
-    "description": "Some description can be added here\r\nalso in multi-lines\rAnother description can be added here\r\nAnd more core description can be added here"
+    "description": "Some description can be added here\nalso in multi-linesAnother description can be added here\nAnd more core description can be added here"
   },
   "generics": [],
   "ports": [
@@ -11,7 +11,7 @@
       "line": 27,
       "direction": "in",
       "default_value": "",
-      "description": " core clock, 100 Mhz\r",
+      "description": " core clock, 100 Mhz",
       "group": ""
     },
     {
@@ -20,7 +20,7 @@
       "line": 29,
       "direction": "in",
       "default_value": "",
-      "description": " asynchronous active low reset\r",
+      "description": " asynchronous active low reset",
       "group": ""
     },
     {
@@ -29,7 +29,7 @@
       "line": 78,
       "direction": "in",
       "default_value": "",
-      "description": "data out signal, read data from memory\r",
+      "description": "data out signal, read data from memory",
       "group": ""
     },
     {
@@ -38,7 +38,7 @@
       "line": 80,
       "direction": "out",
       "default_value": "",
-      "description": " memory address to enable read \r",
+      "description": " memory address to enable read ",
       "group": ""
     },
     {
@@ -85,7 +85,7 @@
     "author": "el3ctrician (elbadriahmad@gmail.com)",
     "version": "0.1",
     "date": "2020-07-10",
-    "copyright": " Copyright (c) 2021 by TerosHDL\r\n             GNU Public License\r\n This program is free software: you can redistribute it and/or modify\r\n it under the terms of the GNU General Public License as published by\r\n the Free Software Foundation, either version 3 of the License, or\r\n (at your option) any later version.\r\n This program is distributed in the hope that it will be useful,\r\n but WITHOUT ANY WARRANTY; without even the implied warranty of\r\n MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\r\n GNU General Public License for more details.\r\n You should have received a copy of the GNU General Public License\r\n along with this program.  If not, see <https://www.gnu.org/licenses/>\r"
+    "copyright": " Copyright (c) 2021 by TerosHDL\n             GNU Public License\n This program is free software: you can redistribute it and/or modify\n it under the terms of the GNU General Public License as published by\n the Free Software Foundation, either version 3 of the License, or\n (at your option) any later version.\n This program is distributed in the hope that it will be useful,\n but WITHOUT ANY WARRANTY; without even the implied warranty of\n MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n GNU General Public License for more details.\n You should have received a copy of the GNU General Public License\n along with this program.  If not, see <https://www.gnu.org/licenses/>"
   },
   "virtual_buses": [
     {
@@ -100,7 +100,7 @@
           "line": 31,
           "direction": "in",
           "default_value": "",
-          "description": "\r",
+          "description": "",
           "group": ""
         },
         {
@@ -279,7 +279,7 @@
           "line": 54,
           "direction": "in",
           "default_value": "",
-          "description": "axis data bus, transfers two pixels per clock with pixel width of 12 bits in mono color\r",
+          "description": "axis data bus, transfers two pixels per clock with pixel width of 12 bits in mono color",
           "group": ""
         },
         {
@@ -288,7 +288,7 @@
           "line": 56,
           "direction": "in",
           "default_value": "",
-          "description": " axis last, used to indicate the end of packet which in video context refer to line\r",
+          "description": " axis last, used to indicate the end of packet which in video context refer to line",
           "group": ""
         },
         {
@@ -297,7 +297,7 @@
           "line": 58,
           "direction": "in",
           "default_value": "",
-          "description": " axis user, usually is user defined but in video context it marks the start of a frame\r",
+          "description": " axis user, usually is user defined but in video context it marks the start of a frame",
           "group": ""
         },
         {
@@ -306,7 +306,7 @@
           "line": 60,
           "direction": "in",
           "default_value": "",
-          "description": " axis valid handshake signal\r",
+          "description": " axis valid handshake signal",
           "group": ""
         },
         {
@@ -315,7 +315,7 @@
           "line": 62,
           "direction": "out",
           "default_value": "",
-          "description": " axis ready handshake signal\r",
+          "description": " axis ready handshake signal",
           "group": ""
         }
       ]
@@ -332,7 +332,7 @@
           "line": 66,
           "direction": "out",
           "default_value": "",
-          "description": "\r axis data bus, transfers two pixels per clock with pixel width of 10 bits in mono color\r",
+          "description": " axis data bus, transfers two pixels per clock with pixel width of 10 bits in mono color",
           "group": ""
         },
         {
@@ -341,7 +341,7 @@
           "line": 68,
           "direction": "out",
           "default_value": "",
-          "description": " axis last, used to indicate the end of packet which in video context refer to line\r",
+          "description": " axis last, used to indicate the end of packet which in video context refer to line",
           "group": ""
         },
         {
@@ -350,7 +350,7 @@
           "line": 70,
           "direction": "out",
           "default_value": "",
-          "description": " axis user, usually is user defined but in video context it marks the start of a frame\r",
+          "description": " axis user, usually is user defined but in video context it marks the start of a frame",
           "group": ""
         },
         {
@@ -359,7 +359,7 @@
           "line": 72,
           "direction": "out",
           "default_value": "",
-          "description": " axis valid handshake signal\r",
+          "description": " axis valid handshake signal",
           "group": ""
         },
         {
@@ -368,7 +368,7 @@
           "line": 74,
           "direction": "in",
           "default_value": "",
-          "description": " axis ready handshake signal\r",
+          "description": " axis ready handshake signal",
           "group": ""
         }
       ]
