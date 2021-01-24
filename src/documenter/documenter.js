@@ -113,7 +113,7 @@ class Documenter {
     //Entity
     if (code_tree['entity'] !== undefined) {
       //Title
-      if (code_tree['info']['title'] !== undefined){
+      if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
         markdown_doc += "# " + code_tree['info']['title'] + "\n";
       }else{
         markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
@@ -144,7 +144,7 @@ class Documenter {
     //Package
     if (code_tree.package !== undefined) {
       //Title
-      if (code_tree['info']['title'] !== undefined){
+      if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
         markdown_doc += "# " + code_tree['info']['title'] + "\n";
       }else{
         markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
@@ -208,7 +208,7 @@ class Documenter {
     //Entity
     if (code_tree['entity'] !== undefined) {
       //Title
-      if (code_tree['info']['title'] !== undefined){
+      if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
         markdown_doc += "# " + code_tree['info']['title'] + "\n";
       }else{
         markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
@@ -241,7 +241,7 @@ class Documenter {
     //Package
     if (code_tree.package !== undefined) {
       //Title
-      if (code_tree['info']['title'] !== undefined){
+      if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
         markdown_doc += "# " + code_tree['info']['title'] + "\n";
       }else{
         markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
@@ -364,7 +364,7 @@ class Documenter {
     if (code_tree['entity'] !== undefined) {
       //Title
       let doc_title;
-      if (code_tree['info']['title'] !== undefined){
+      if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
         doc_title = "# " + code_tree['info']['title'] + "\n";
       }else{
         doc_title = "# Entity: " + code_tree['entity']['name'] + "\n";
@@ -391,7 +391,7 @@ class Documenter {
     if (code_tree.package !== undefined) {
       //Title
       let doc_title;
-      if (code_tree['info']['title'] !== undefined){
+      if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
         doc_title = "# " + code_tree['info']['title'] + "\n";
       }else{
         doc_title = "# Package: " + code_tree['package']['name'] + "\n";
