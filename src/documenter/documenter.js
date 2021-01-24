@@ -631,20 +631,22 @@ class Documenter {
   _get_info_section(code_tree){
     let markdown_doc = "";
     //Doxygen parsed commands insertion (only if available)
-    if (code_tree['info']['file'] !== undefined){
-      markdown_doc += "- **File:** " + code_tree['info']['file'] + "\n";
-    }
-    if (code_tree['info']['author'] !== undefined){
-      markdown_doc += "- **Author:** " + code_tree['info']['author'] + "\n";
-    }
-    if (code_tree['info']['version'] !== undefined){
-      markdown_doc += "- **Version:** " + code_tree['info']['version'] + "\n";
-    }
-    if (code_tree['info']['date'] !== undefined){
-      markdown_doc += "- **Date:** " + code_tree['info']['date'] + "\n";
-    }
-    if (code_tree['info']['copyright'] !== undefined){
-      markdown_doc += "- **Copyright:** " + code_tree['info']['copyright'] + "\n";
+    if (code_tree['info'] !== undefined){
+      if (code_tree['info']['file'] !== undefined){
+        markdown_doc += "- **File:** " + code_tree['info']['file'] + "\n";
+      }
+      if (code_tree['info']['author'] !== undefined){
+        markdown_doc += "- **Author:** " + code_tree['info']['author'] + "\n";
+      }
+      if (code_tree['info']['version'] !== undefined){
+        markdown_doc += "- **Version:** " + code_tree['info']['version'] + "\n";
+      }
+      if (code_tree['info']['date'] !== undefined){
+        markdown_doc += "- **Date:** " + code_tree['info']['date'] + "\n";
+      }
+      if (code_tree['info']['copyright'] !== undefined){
+        markdown_doc += "- **Copyright:** " + code_tree['info']['copyright'] + "\n";
+      }
     }
     return markdown_doc;
   }
