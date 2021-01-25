@@ -22,6 +22,8 @@ const clone = require('clone');
 
 class Ts_base_parser {
 
+  command_end_regex = /^\s*[@\\]end\s*/gm;
+
   search_multiple_in_tree(element, matching_title) {
     var arr_match = [];
     function recursive_searchTree(element, matching_title) {
@@ -104,7 +106,7 @@ class Ts_base_parser {
     // remove any spaces between linefeed and trim the string
     let desc_root = dic[file_type];
     // always remove carriage return
-    desc_root.description = desc_root.description.replace(/\r/gm,"");
+    desc_root.description = desc_root.description.replace(/\r/gm, "");
     // look for single line commands
     const single_line_regex = /^\s*[@\\](file|author|version|date|title)\s.+$/gm;
     // get all matches for single line attributes
@@ -154,26 +156,28 @@ class Ts_base_parser {
 
   parse_ports_group(dic) {
     const group_regex = /^\s*[@\\]portgroup\s.*$/gm;
-    const group_end_regex = /^\s*[@\\]endportgroup\s*/gm;
-  
     let ports = dic.ports;
     // hold the current group name
     let group_name = "";
+    // flag to check if a group is open
+    let group_open = false;
     // loop along all ports
     for (let i = 0; i < ports.length; i++) {
-      let end_group = ports[i].description.match(group_end_regex);
-      if (end_group !== null && end_group.length > 0) {
+      let end_group = ports[i].description.match(this.command_end_regex);
+      if (end_group !== null && end_group.length > 0 && group_open) {
         ports[i].description = ports[i].description.replace(end_group[0], "");
         group_name = "";
+        group_open = false;
       }
       let group = ports[i].description.match(group_regex);
       // look for a new group name
       if (group !== null && group.length > 0) {
+        group_open = true;
         ports[i].description = ports[i].description.replace(/^\s*[@\\]portgroup\s/gm, "");
         group_name = ports[i].description.match(/^\s*\w+/)[0];
         ports[i].description = ports[i].description.replace(group_name, "");
       }
-  
+
       ports[i].group = group_name;
     }
     dic.ports = ports;
@@ -182,7 +186,6 @@ class Ts_base_parser {
   parse_virtual_bus(dic) {
     const virtual_bus_regex_followed = /^\s*[@\\]virtualbus\s.*\n\n/gms;
     const virtual_bus_regex_not_followed = /^\s*[@\\]virtualbus\s.*/
-    const virtual_bus_end_regex = /^\s*[@\\]endvirtualbus\s*/gm;
     const virtual_bus_dir_regex = /^\s*[@\\]dir\s/gm;
     const virtual_bus_keep_regex = /^\s*[@\\]keepports\s/gm
     // the base struct is used to reset the virtual_bus_struct when needed
@@ -205,11 +208,11 @@ class Ts_base_parser {
     // loop along all ports
     for (let i = 0; i < ports.length; i++) {
       // strip description from \r if present to deal with \n exclusively
-      ports[i].description = ports[i].description.replace(/\r/gm,"");
-      
-      if (ports[i].description.match(virtual_bus_end_regex) !== null) {
-        dic.ports[i].description = ports[i].description.replace(virtual_bus_end_regex, "");
-        if (virtual_bus_open){
+      ports[i].description = ports[i].description.replace(/\r/gm, "");
+
+      if (ports[i].description.match(this.command_end_regex) !== null) {
+        dic.ports[i].description = ports[i].description.replace(this.command_end_regex, "");
+        if (virtual_bus_open) {
           virtual_bus_open = false;
           virtual_bus_array.push(clone(virtual_bus_struct));
           virtual_bus_struct = clone(virtual_bus_base_struct);
@@ -217,10 +220,10 @@ class Ts_base_parser {
       }
 
       let virtual_bus = ports[i].description.match(virtual_bus_regex_followed);
-      
-      if (virtual_bus === null){
+
+      if (virtual_bus === null) {
         virtual_bus = ports[i].description.match(virtual_bus_regex_not_followed);
-      } 
+      }
 
       if (virtual_bus !== null) {
         if (virtual_bus_open) {
@@ -232,7 +235,7 @@ class Ts_base_parser {
         // clean the port description from the found virtual bus command
         dic.ports[i].description = ports[i].description.replace(virtual_bus_regex_not_followed, "");
         dic.ports[i].description = ports[i].description.replace(/\n\n/, "");
-        dic.ports[i].description = ports[i].description.replace(virtual_bus_end_regex, "");
+        dic.ports[i].description = ports[i].description.replace(this.command_end_regex, "");
         // strip virtual bus description from the command part
         virtual_bus_description = virtual_bus_description.replace(/^\s*[@\\]virtualbus\s/, "");
         // construct the name and description of virtual bus
@@ -242,7 +245,7 @@ class Ts_base_parser {
         // look for optional direction
         if (virtual_bus_dir !== null && virtual_bus_dir.length > 0) {
           virtual_bus_description = virtual_bus_description.replace(virtual_bus_dir[0], "");
-          virtual_bus_description = virtual_bus_description.replace(/\n\n/,"");
+          virtual_bus_description = virtual_bus_description.replace(/\n\n/, "");
           virtual_bus_dir = virtual_bus_description.match(/^\s*(out|in)/gm);
           if (virtual_bus_dir.length > 0) {
             virtual_bus_description = virtual_bus_description.replace(virtual_bus_dir[0], "");
@@ -289,7 +292,7 @@ class Ts_base_parser {
           "direction": element.direction,
           "default_value": "",
           "description": element.description,
-          "group" : ""
+          "group": ""
         });
       }
     }

@@ -48,7 +48,7 @@ entity video_core is
     s_axi_rresp   : out std_logic_vector(1 downto 0);
     s_axi_rvalid  : out std_logic;
     s_axi_rready  : in std_logic;
-    --! @endvirtualbus
+    --! @end
 
     --! @virtualbus video_in_axi_stream @dir in a slave axi stream interface for video in
     --!
@@ -75,7 +75,7 @@ entity video_core is
     video_out_tvalid : out std_logic;
     --! axis ready handshake signal
     video_out_tready : in  std_logic;
-    --! @endvirtualbus
+    --! @end
 
     --! data out signal, read data from memory
     mem_dout : in  std_logic_vector(LUT_WORD_SIZE-1 downto 0);
