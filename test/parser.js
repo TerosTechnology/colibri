@@ -49,7 +49,7 @@ if (process.argv[2] === 'verilog') {
 
 //////////////////////////////////////////////////////////////////////////////
 if (process.argv[2] === 'vhdl') {
-  for (let x = 0; x < 13; ++x) {
+  for (let x = 0; x < 14; ++x) {
     var ParserLang = General.LANGUAGES.VHDL;
     let example_exp_result = fs.readFileSync(__dirname + '/examples/vhdl/example_' + x + '.json', 'utf8');
     example_exp_result = JSON.parse(example_exp_result);

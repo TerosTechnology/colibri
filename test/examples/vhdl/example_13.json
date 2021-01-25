@@ -1,0 +1,325 @@
+{
+  "entity": {
+    "name": "video_core",
+    "description": "Some description can be added here\n also in multi-lines\nAnother description can be added here\n And more core description can be added here",
+    "mermaid": " \n graph TD\n   A[Hard] -->|Text| B(Round)\n   B --> C{Decision}\n   C -->|One| D[Result 1]\n   C -->|Two| E[Result 2]\n "
+  },
+  "generics": [],
+  "ports": [
+    {
+      "name": "clk",
+      "type": "std_logic",
+      "line": 27,
+      "direction": "in",
+      "default_value": "",
+      "description": " core clock, 100 Mhz",
+      "group": ""
+    },
+    {
+      "name": "reset_n",
+      "type": "std_logic",
+      "line": 29,
+      "direction": "in",
+      "default_value": "",
+      "description": " asynchronous active low reset",
+      "group": ""
+    },
+    {
+      "name": "s_axi_awaddr",
+      "type": "std_logic_vector(AXI_LITE_ADDR_WIDTH - 1 downto 0)",
+      "line": 31,
+      "direction": "in",
+      "default_value": "",
+      "description": " an AXI4-Lite interface to write core registers",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "s_axi_awprot",
+      "type": "std_logic_vector(2 downto 0)",
+      "line": 32,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "s_axi_awvalid",
+      "type": "std_logic",
+      "line": 33,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "s_axi_awready",
+      "type": "std_logic",
+      "line": 34,
+      "direction": "out",
+      "default_value": "",
+      "description": "",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "s_axi_wdata",
+      "type": "std_logic_vector(AXI_LITE_DATA_WIDTH - 1 downto 0)",
+      "line": 35,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "s_axi_wstrb",
+      "type": "std_logic_vector((AXI_LITE_DATA_WIDTH/8) - 1 downto 0)",
+      "line": 36,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "s_axi_wvalid",
+      "type": "std_logic",
+      "line": 37,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "s_axi_wready",
+      "type": "std_logic",
+      "line": 38,
+      "direction": "out",
+      "default_value": "",
+      "description": "",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "s_axi_bresp",
+      "type": "std_logic_vector(1 downto 0)",
+      "line": 39,
+      "direction": "out",
+      "default_value": "",
+      "description": "",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "s_axi_bvalid",
+      "type": "std_logic",
+      "line": 40,
+      "direction": "out",
+      "default_value": "",
+      "description": "",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "s_axi_bready",
+      "type": "std_logic",
+      "line": 41,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "s_axi_araddr",
+      "type": "std_logic_vector(AXI_LITE_ADDR_WIDTH - 1 downto 0)",
+      "line": 42,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "s_axi_arprot",
+      "type": "std_logic_vector(2 downto 0)",
+      "line": 43,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "s_axi_arvalid",
+      "type": "std_logic",
+      "line": 44,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "s_axi_arready",
+      "type": "std_logic",
+      "line": 45,
+      "direction": "out",
+      "default_value": "",
+      "description": "",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "s_axi_rdata",
+      "type": "std_logic_vector(AXI_LITE_DATA_WIDTH - 1 downto 0)",
+      "line": 46,
+      "direction": "out",
+      "default_value": "",
+      "description": "",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "s_axi_rresp",
+      "type": "std_logic_vector(1 downto 0)",
+      "line": 47,
+      "direction": "out",
+      "default_value": "",
+      "description": "",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "s_axi_rvalid",
+      "type": "std_logic",
+      "line": 48,
+      "direction": "out",
+      "default_value": "",
+      "description": "",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "s_axi_rready",
+      "type": "std_logic",
+      "line": 49,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": "axi_lite_config"
+    },
+    {
+      "name": "video_in_tdata",
+      "type": "std_logic_vector(23 downto 0)",
+      "line": 54,
+      "direction": "in",
+      "default_value": "",
+      "description": " a slave axi stream interface for video in  axis data bus, transfers two pixels per clock with pixel width of 12 bits in mono color",
+      "group": "video_in_axi_stream"
+    },
+    {
+      "name": "video_in_tlast",
+      "type": "std_logic",
+      "line": 56,
+      "direction": "in",
+      "default_value": "",
+      "description": " axis last, used to indicate the end of packet which in video context refer to line",
+      "group": "video_in_axi_stream"
+    },
+    {
+      "name": "video_in_tuser",
+      "type": "std_logic_vector(0 downto 0)",
+      "line": 58,
+      "direction": "in",
+      "default_value": "",
+      "description": " axis user, usually is user defined but in video context it marks the start of a frame",
+      "group": "video_in_axi_stream"
+    },
+    {
+      "name": "video_in_tvalid",
+      "type": "std_logic",
+      "line": 60,
+      "direction": "in",
+      "default_value": "",
+      "description": " axis valid handshake signal",
+      "group": "video_in_axi_stream"
+    },
+    {
+      "name": "video_in_tready",
+      "type": "std_logic",
+      "line": 62,
+      "direction": "out",
+      "default_value": "",
+      "description": " axis ready handshake signal",
+      "group": "video_in_axi_stream"
+    },
+    {
+      "name": "video_out_tdata",
+      "type": "std_logic_vector(23 downto 0)",
+      "line": 66,
+      "direction": "out",
+      "default_value": "",
+      "description": " a master axi stream interface for video out  axis data bus, transfers two pixels per clock with pixel width of 10 bits in mono color",
+      "group": "video_out_axi_stream"
+    },
+    {
+      "name": "video_out_tlast",
+      "type": "std_logic",
+      "line": 68,
+      "direction": "out",
+      "default_value": "",
+      "description": " axis last, used to indicate the end of packet which in video context refer to line",
+      "group": "video_out_axi_stream"
+    },
+    {
+      "name": "video_out_tuser",
+      "type": "std_logic_vector(0 downto 0)",
+      "line": 70,
+      "direction": "out",
+      "default_value": "",
+      "description": " axis user, usually is user defined but in video context it marks the start of a frame",
+      "group": "video_out_axi_stream"
+    },
+    {
+      "name": "video_out_tvalid",
+      "type": "std_logic",
+      "line": 72,
+      "direction": "out",
+      "default_value": "",
+      "description": " axis valid handshake signal",
+      "group": "video_out_axi_stream"
+    },
+    {
+      "name": "video_out_tready",
+      "type": "std_logic",
+      "line": 74,
+      "direction": "in",
+      "default_value": "",
+      "description": " axis ready handshake signal",
+      "group": "video_out_axi_stream"
+    },
+    {
+      "name": "mem_dout",
+      "type": "std_logic_vector(LUT_WORD_SIZE-1 downto 0)",
+      "line": 78,
+      "direction": "in",
+      "default_value": "",
+      "description": "data out signal, read data from memory",
+      "group": ""
+    },
+    {
+      "name": "mem_addr",
+      "type": "std_logic_vector(LUT_ADDR_SIZE-1  downto 0)",
+      "line": 80,
+      "direction": "out",
+      "default_value": "",
+      "description": " memory address to enable read ",
+      "group": ""
+    }
+  ],
+  "body": {
+    "processes": [],
+    "instantiations": []
+  },
+  "declarations": {
+    "types": [],
+    "signals": [],
+    "constants": [],
+    "functions": []
+  },
+  "info": {
+    "title": "Video Core",
+    "file": "example_11.vhd",
+    "author": "el3ctrician (elbadriahmad@gmail.com)",
+    "version": "0.1",
+    "date": "2020-07-10",
+    "copyright": " Copyright (c) 2021 by TerosHDL\n             GNU Public License\n This program is free software: you can redistribute it and/or modify\n it under the terms of the GNU General Public License as published by\n the Free Software Foundation, either version 3 of the License, or\n (at your option) any later version.\n This program is distributed in the hope that it will be useful,\n but WITHOUT ANY WARRANTY; without even the implied warranty of\n MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n GNU General Public License for more details.\n You should have received a copy of the GNU General Public License\n along with this program.  If not, see <https://www.gnu.org/licenses/>"
+  }
+}

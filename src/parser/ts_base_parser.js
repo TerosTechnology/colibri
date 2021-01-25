@@ -154,6 +154,29 @@ class Ts_base_parser {
     return dic
   }
 
+  parse_mermaid(dic,file_type) {
+    // the command regex
+    const mermaid_regex = /^\s*[@\\]mermaid\s*.*[@\\]end/gms;
+    // a variable to hold if a mermaid is found and currently opened
+    let mermaid_open = false;
+    // easy access to the entity description
+    let desc_root = dic[file_type];
+    // hold the mermaid data
+    let mermaid = "";
+    // always remove carriage return
+    desc_root.description = desc_root.description.replace(/\r/gm, "");
+    let match = desc_root.description.match(mermaid_regex)
+    if (match !== undefined && match !== null && match.length > 0) {
+      desc_root.description = desc_root.description.replace(match[0],"");
+      mermaid = match[0].replace(/[@\\]mermaid/gm,"")
+      mermaid = mermaid.replace(/[@\\]end/gm,"")
+      desc_root.description = desc_root.description.replace("\n\n","")
+      dic[file_type]['description'] = desc_root.description
+      dic[file_type]['mermaid'] = mermaid;
+    }
+    return dic;
+  }
+
   parse_ports_group(dic) {
     const group_regex = /^\s*[@\\]portgroup\s.*$/gm;
     let ports = dic.ports;
@@ -227,7 +250,7 @@ class Ts_base_parser {
 
       if (virtual_bus !== null) {
         if (virtual_bus_open) {
-          // new virtual bus is found and another one was still open, add the old one to the array and clean it 
+          // new virtual bus is found and another one was still open, add the old one to the array and clean it
           virtual_bus_array.push(clone(virtual_bus_struct));
           virtual_bus_struct = clone(virtual_bus_base_struct);
         }
