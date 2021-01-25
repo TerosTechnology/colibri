@@ -130,7 +130,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
           description += txt_comment.slice(1);
         }
         else {
-          description = '';
+          // description = '';
         }
       }
       else {
@@ -186,7 +186,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
           entity_description += txt_comment.slice(1);
         }
         else {
-          entity_description = '';
+          // entity_description = '';
         }
       }
       else {
@@ -223,7 +223,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
               entity_description += txt_comment.slice(1);
             }
             else {
-              entity_description = '';
+              // entity_description = '';
             }
           }
         }
@@ -235,7 +235,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
           entity_description += txt_comment.slice(1);
         }
         else {
-          entity_description = '';
+          // entity_description = '';
         }
       }
       else {

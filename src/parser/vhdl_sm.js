@@ -49,7 +49,7 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
     catch (e) {
       // eslint-disable-next-line no-console
       console.log(e);
-      return [];
+      return { 'svg': [], 'stm': [] };
     }
     let stm = [];
     let svg = [];
