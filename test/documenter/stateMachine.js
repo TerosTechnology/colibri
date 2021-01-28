@@ -38,7 +38,7 @@ for (let i = 0; i < language.length-1; ++i) {
     var expected = JSON.parse(fs.readFileSync('resources' + path.sep + 'state_machines'
       + path.sep + language[i] + path.sep + 'sm_' + x + '.json', 'utf8'));
     get_stm(language[i], code, comment_symbol).then(out => {
-      fs.writeFileSync("/home/ismael/Desktop/test.json", JSON.stringify(out), 'utf8');
+      // fs.writeFileSync("/home/ismael/Desktop/test.json", JSON.stringify(out), 'utf8');
       if (deep_check(out, expected, `${language[i]}`,`sm_${x}.${extension[i]}`,['description'])) {
         console.log("Testing... state machine: " + x + " " + language[i] + ": Ok!".green);
       }
