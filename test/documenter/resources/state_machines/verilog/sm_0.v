@@ -18,6 +18,15 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
+module fsm0 (
+  input clock,
+  input reset,
+  output gnt_0,gnt_1,
+  input req_0,req_1
+);
+
+typedef enum {IDLE, GNT0, GNT1} state_t;
+state_t state = idle;
 
 always @ (posedge clock)
 begin : FSM
@@ -51,3 +60,4 @@ end else
    default : state <= #1 IDLE;
 endcase
 end
+endmodule

@@ -18,6 +18,16 @@
 --
 -- You should have received a copy of the GNU General Public License
 -- along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
+entity sm_0 is
+    port (
+        Clk   : in std_logic;
+        nRst : in std_logic
+        
+    );
+end entity;
+architecture rtl of sm_0 is
+
+begin
 
 process(Clk) is
 begin
@@ -133,3 +143,4 @@ begin
         end if;
     end if;
 end process;
+end architecture;

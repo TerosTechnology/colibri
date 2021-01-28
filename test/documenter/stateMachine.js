@@ -1,4 +1,4 @@
-// Copyright 2020 Teros Technology
+// Copyright 2020-2021 Teros Technology
 //
 // Ismael Perez Rojo
 // Carlos Alberto Ruiz Naranjo
@@ -19,36 +19,40 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
+const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 const Colibri = require('../../src/main');
+const stm_parser = require('../../src/parser/stm_parser');
+const General = Colibri.General;
+const deep_check = require('../helper.js');
 
-let options = {
-  'type' : "normal",
-  'parameters' : [
-    {'parameter' : "X"},
-    {'parameter' : "Y"}
-  ]
-}
-var language = ["vhdl"];
-for (let i=0;i<language.length;++i){
-  console.log('****************************************************************');
-  for (let x=0;x<7;++x){
-    var code     = fs.readFileSync('resources'+path.sep+'state_machines'+path.sep+language[i]+path.sep+'sm_'+x+'.vhd','utf8');
-    var expected = fs.readFileSync('resources'+path.sep+'state_machines'+path.sep+language[i]+path.sep+'sm_'+x+'.txt','utf8');
-    if (language[i] == "vhdl")
-      var stmGenerator = new Colibri.Documenter.get_state_machine_hdl_svg(code,"vhdl");
-    else
-      //var stmGenerator = new Colibri.Documenter.StateMachineVerilog();
-    var out      = stmGenerator.get_svg(code);
-    if(expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'') == expected.replace(/\n/g,'').replace(/ /g,'').replace(/\r/g,'')){
-      console.log("Testing... state machine: " + x +" "+language[i]+": Ok!");
-    }
-    else{
-      console.log("Expected: " + expected);
-      console.log("Real: " + out);
-      console.log("Testing... state machine: " + x +" "+language[i]+": Fail!");
-      throw new Error('Test error.');
-    }
+let comment_symbol = "!";
+let language = [General.LANGUAGES.VHDL, General.LANGUAGES.VERILOG];
+let extension = ['vhd','v'];
+
+console.log('****************************************************************');
+for (let i = 0; i < language.length-1; ++i) {
+  for (let x = 0; x < 1; x++) {
+    var code = fs.readFileSync(`resources${path.sep}state_machines${path.sep}${language[i]}${path.sep}sm_${x}.${extension[i]}`, 'utf8');
+    var expected = JSON.parse(fs.readFileSync('resources' + path.sep + 'state_machines'
+      + path.sep + language[i] + path.sep + 'sm_' + x + '.json', 'utf8'));
+    get_stm(language[i], code, comment_symbol).then(out => {
+      fs.writeFileSync("/home/ismael/Desktop/test.json", JSON.stringify(out), 'utf8');
+      if (deep_check(out, expected, `${language[i]}`,`sm_${x}.${extension[i]}`,['description'])) {
+        console.log("Testing... state machine: " + x + " " + language[i] + ": Ok!".green);
+      }
+      else {
+        console.log("Expected: " + expected);
+        console.log("Real: " + out);
+        console.log("Testing... state machine: " + x + " " + language[i] + ": Fail!".red);
+        throw new Error('Test error.'.red);
+      }
+    });
   }
+}
+
+async function get_stm(lang, code, comment_symbol) {
+  let stm_array = await stm_parser.get_svg_sm(lang, code, comment_symbol);
+  return stm_array.stm;
 }
