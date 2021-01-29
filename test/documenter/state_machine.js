@@ -29,23 +29,36 @@ const deep_check = require('../helper.js');
 
 let comment_symbol = "!";
 let language = [General.LANGUAGES.VHDL, General.LANGUAGES.VERILOG];
-let extension = ['vhd','v'];
+let extension = ['vhd', 'v'];
 
 console.log('****************************************************************');
-for (let i = 0; i < language.length-1; ++i) {
-  for (let x = 0; x < 1; x++) {
-    var code = fs.readFileSync(`resources${path.sep}state_machines${path.sep}${language[i]}${path.sep}sm_${x}.${extension[i]}`, 'utf8');
+if (process.argv[2] === 'vhdl') {
+  let lang = language[0];
+  let file= extension[0];
+  let num_test = 1;
+  check_lang(lang, num_test,file);
+}
+if (process.argv[2] === 'verilog') {
+  let lang = language[1];
+  let file= extension[1];
+  let num_test = 1;
+  check_lang(lang, num_test,file);
+}
+
+function check_lang(lang, num_test,file) {
+  for (let x = 0; x < num_test; x++) {
+    var code = fs.readFileSync(`resources${path.sep}state_machines${path.sep}${lang}${path.sep}sm_${x}.${file}`, 'utf8');
     var expected = JSON.parse(fs.readFileSync('resources' + path.sep + 'state_machines'
-      + path.sep + language[i] + path.sep + 'sm_' + x + '.json', 'utf8'));
-    get_stm(language[i], code, comment_symbol).then(out => {
+      + path.sep + lang + path.sep + 'sm_' + x + '.json', 'utf8'));
+    get_stm(lang, code, comment_symbol).then(out => {
       // fs.writeFileSync("/home/ismael/Desktop/test.json", JSON.stringify(out), 'utf8');
-      if (deep_check(out, expected, `${language[i]}`,`sm_${x}.${extension[i]}`,['description'])) {
-        console.log("Testing... state machine: " + x + " " + language[i] + ": Ok!".green);
+      if (deep_check(out, expected, `${lang}`, `sm_${x}.${file}`, ['description'])) {
+        console.log("Testing... state machine: " + x + " " + lang + ": Ok!".green);
       }
       else {
         console.log("Expected: " + expected);
         console.log("Real: " + out);
-        console.log("Testing... state machine: " + x + " " + language[i] + ": Fail!".red);
+        console.log("Testing... state machine: " + x + " " + lang + ": Fail!".red);
         throw new Error('Test error.'.red);
       }
     });
