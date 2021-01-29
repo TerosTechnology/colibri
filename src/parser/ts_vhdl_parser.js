@@ -155,6 +155,8 @@ class Parser extends ts_base_parser.Ts_base_parser {
     let entity_description = '';
     let entity_name = '';
 
+    let description = this.get_entity_declaration_description(code);
+
     let break_p = false;
     let cursor = tree.walk();
     let result;
@@ -192,9 +194,61 @@ class Parser extends ts_base_parser.Ts_base_parser {
       }
     }
     while (cursor.gotoNextSibling() === true && break_p === false);
-    let entity = { 'name': entity_name, 'description': entity_description };
+    let entity = { 'name': entity_name, 'description': description };
     return { 'entity': entity, 'generics': result.generics, 'ports': result.ports };
   }
+
+  get_entity_declaration_description(code) {
+    let comment_symbol = this.comment_symbol;
+    if (comment_symbol === '') {
+      comment_symbol = ' ';
+    }
+
+    let tree = this.parse(code);
+
+    let entity_description = '';
+
+    let break_p = false;
+    let cursor = tree.walk();
+    cursor.gotoFirstChild();
+    do {
+      if (cursor.nodeType === 'design_unit') {
+        cursor.gotoFirstChild();
+        do {
+          if (cursor.nodeType === 'entity_declaration') {
+          }
+          else if (cursor.nodeType === 'comment') {
+            let txt_comment = cursor.nodeText.slice(2);
+            if (txt_comment[0] === comment_symbol) {
+              entity_description += txt_comment.slice(1);
+            }
+            else {
+              entity_description = '';
+            }
+          }
+        }
+        while (cursor.gotoNextSibling() === true && break_p === false);
+      }
+      else if (cursor.nodeType === 'comment') {
+        let txt_comment = cursor.nodeText.slice(2);
+        if (txt_comment[0] === comment_symbol) {
+          entity_description += txt_comment.slice(1);
+        }
+        else {
+          entity_description = '';
+        }
+      }
+      else {
+        entity_description = '';
+      }
+    }
+    while (cursor.gotoNextSibling() === true && break_p === false);
+    return entity_description;
+  }
+
+
+
+
 
   get_generics_and_ports(p) {
     let generics = [];
