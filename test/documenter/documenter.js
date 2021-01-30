@@ -77,7 +77,7 @@ for (let x = 0; x < 2; x++) {
         fs.unlinkSync(__dirname + path_lib.sep + type + `output_test_${x}_html.html`);
         throw new Error(`Error ${x} ${type}HTML.`.red);
       }
-      console.log(`Test ${x}  ${type}HTML -> OK!`.green);
+      console.log(`Test ${x} ${type}HTML -> OK!`.green);
       fs.unlinkSync(__dirname + path_lib.sep + type + `output_test_${x}_html.html`);
     });
     //Test Markdown
@@ -85,7 +85,7 @@ for (let x = 0; x < 2; x++) {
       let filename_expected = base_name_resources + `output_test_${x}_md.md`;
       let expected_file_buffer = fs.readFileSync(filename_expected, 'utf-8');
       let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + `output_test_${x}_md.md`, 'utf-8');
-      if ((file_buffer === expected_file_buffer) !== true) {
+      if ((file_buffer.replace(/\s+/g, '') === expected_file_buffer.replace(/\s+/g, '')) !== true) {
         fs.unlinkSync(__dirname + path_lib.sep + type + `output_test_${x}_md.md`);
         throw new Error(`Error ${x} ${type}Markdown.`.red);
       }
@@ -118,6 +118,22 @@ for (let x = 0; x < 2; x++) {
       console.log(`Test ${x} ${type}svg -> OK!`.green);
       fs.unlinkSync(__dirname + path_lib.sep + type + `output_test_${x}_svg.svg`);
     });
-
+    //Test save FSM
+    if (x===1) {
+    documenter_vhdl._save_fsms(__dirname + path_lib.sep + type + `stm_example_00.svg`).then(function () {
+      let filename_expected = base_name_resources + `stm_example_00.svg`;
+      let expected_file_buffer = fs.readFileSync(filename_expected);
+      let file_buffer = fs.readFileSync(__dirname + path_lib.sep + `stm_example_00.svg`);
+      if (file_buffer.equals(expected_file_buffer) !== true) {
+        // fs.unlinkSync(__dirname + path_lib.sep + type + `stm_example_00.svg\n`);
+        throw new Error(`Error save FSM file: ${x} ${type}svg.`.red);
+      }
+      console.log(`Test save FSM file: ${x} ${type}svg -> OK!`.green);
+      // fs.unlinkSync(__dirname + path_lib.sep + type + `stm_example_00.svg\n`);
+    });
+  }
   }
 }
+
+
+
