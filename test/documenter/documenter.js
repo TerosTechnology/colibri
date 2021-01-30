@@ -41,79 +41,83 @@ var options = {
 
 var html_differ = new html_diff(options);
 
-let file_vhdl = __dirname + path_lib.sep + "resources" + path_lib.sep + "vhdl"
-  + path_lib.sep + "test_0.vhd";
 
-let code_vhdl = fs.readFileSync(file_vhdl, { encoding: 'utf8' });
-let lang_vhdl = General.LANGUAGES.VHDL;
-let comment_symbol_vhdl = "!";
+for (let x = 0; x < 2; x++) {
 
-let custom_css = [false, true];
-for (let i = 0; i < custom_css.length; ++i) {
-  let options = undefined;
-  let base_name_resources = __dirname + path_lib.sep + "resources" + path_lib.sep
-    + "vhdl" + path_lib.sep + "output" + path_lib.sep;
-  let type = "";
-  //Use custom css configuration
-  if (custom_css[i] === true) {
-    let custom_css_vhdl = __dirname + path_lib.sep + "resources" + path_lib.sep + "vhdl"
-      + path_lib.sep + "custom.css";
-    options = { 'custom_css_path': custom_css_vhdl };
-    base_name_resources = __dirname + path_lib.sep + "resources" + path_lib.sep
-      + "vhdl" + path_lib.sep + "output_custom_css" + path_lib.sep;
-    type = "custom_css_";
-  }
+  let file_vhdl = __dirname + path_lib.sep + "resources" + path_lib.sep + "vhdl"
+    + path_lib.sep + `test_${x}.vhd`;
 
+  let code_vhdl = fs.readFileSync(file_vhdl, { encoding: 'utf8' });
+  let lang_vhdl = General.LANGUAGES.VHDL;
+  let comment_symbol_vhdl = "!";
   let documenter_vhdl = new Documenter.Documenter(code_vhdl, lang_vhdl, comment_symbol_vhdl);
-  //Test HTML
-  documenter_vhdl.save_html(__dirname + path_lib.sep + type + "output_test_0_html.html", options).then(function () {
-    let filename_expected = base_name_resources + "output_test_0_html.html";
-    let expected_file_buffer = fs.readFileSync(filename_expected,'utf-8');
-    let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_html.html",'utf-8');
-    if (html_differ.isEqual(expected_file_buffer, file_buffer) !== true) { 
-      fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_html.html");
-      throw new Error(`Error ${type}HTML.`.red);
+
+  let custom_css = [false, true];
+  for (let i = 0; i < custom_css.length; ++i) {
+    let options = undefined;
+    let base_name_resources = __dirname + path_lib.sep + "resources" + path_lib.sep
+      + "vhdl" + path_lib.sep + "output" + path_lib.sep;
+    let type = "";
+    //Use custom css configuration
+    if (custom_css[i] === true) {
+      let custom_css_vhdl = __dirname + path_lib.sep + "resources" + path_lib.sep + "vhdl"
+        + path_lib.sep + "custom.css";
+      options = { 'custom_css_path': custom_css_vhdl };
+      base_name_resources = __dirname + path_lib.sep + "resources" + path_lib.sep
+        + "vhdl" + path_lib.sep + "output_custom_css" + path_lib.sep;
+      type = "custom_css_";
     }
-    console.log(`Test  ${type}HTML -> OK!`.green);
-    fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_html.html");
-  });
-  //Test Markdown
-  documenter_vhdl.save_markdown(__dirname + path_lib.sep + type + "output_test_0_md.md").then(function () {
-    let filename_expected = base_name_resources + "output_test_0_md.md";
-    let expected_file_buffer = fs.readFileSync(filename_expected,'utf-8');
-    let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_md.md",'utf-8');
-    if ((file_buffer===expected_file_buffer) !== true) {
-      fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_md.md");
-      throw new Error(`Error  ${type}Markdown.`.red);
-    }
-    console.log(`Test  ${type}Markdown -> OK!`.green);
-    fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_md.md");
-  });
-  //Test PDF
-  if (os.platform !== "win32") {
-    documenter_vhdl.save_pdf(__dirname + path_lib.sep + type + "output_test_0_pdf.pdf", options).then(function () {
-      let filename_expected = base_name_resources + "output_test_0_pdf.svg";
-      let expected_file_buffer = fs.readFileSync(filename_expected);
-      let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_md.svg");
-      if (file_buffer.equals(expected_file_buffer) !== true) {
-        fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_md.svg");
-        throw new Error(`Error  ${type}pdf.`.red);
+
+    //Test HTML
+    documenter_vhdl.save_html(__dirname + path_lib.sep + type + `output_test_${x}_html.html`, options).then(function () {
+      let filename_expected = base_name_resources + `output_test_${x}_html.html`;
+      let expected_file_buffer = fs.readFileSync(filename_expected, 'utf-8');
+      let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + `output_test_${x}_html.html`, 'utf-8');
+      if (html_differ.isEqual(expected_file_buffer, file_buffer) !== true) {
+        fs.unlinkSync(__dirname + path_lib.sep + type + `output_test_${x}_html.html`);
+        throw new Error(`Error ${x} ${type}HTML.`.red);
       }
-      console.log(`Test  ${type}pdf -> OK!`.green);
-      fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_md.svg");
+      console.log(`Test ${x}  ${type}HTML -> OK!`.green);
+      fs.unlinkSync(__dirname + path_lib.sep + type + `output_test_${x}_html.html`);
     });
-  }
-  //Test SVG
-    documenter_vhdl.save_svg(__dirname + path_lib.sep + type + "output_test_0_svg.svg").then(function() {
-      let filename_expected = base_name_resources + "output_test_0_svg.svg";
-      let expected_file_buffer = fs.readFileSync(filename_expected);
-      let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_svg.svg");
-      if (file_buffer.equals(expected_file_buffer) !== true){
-        fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_svg.svg");
-        throw new Error(`Error  ${type}svg.`.red);
+    //Test Markdown
+    documenter_vhdl.save_markdown(__dirname + path_lib.sep + type + `output_test_${x}_md.md`).then(function () {
+      let filename_expected = base_name_resources + `output_test_${x}_md.md`;
+      let expected_file_buffer = fs.readFileSync(filename_expected, 'utf-8');
+      let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + `output_test_${x}_md.md`, 'utf-8');
+      if ((file_buffer === expected_file_buffer) !== true) {
+        fs.unlinkSync(__dirname + path_lib.sep + type + `output_test_${x}_md.md`);
+        throw new Error(`Error ${x} ${type}Markdown.`.red);
       }
-      console.log(`Test  ${type}svg -> OK!`.green);
-      fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_svg.svg");
+      console.log(`Test ${x} ${type}Markdown -> OK!`.green);
+      fs.unlinkSync(__dirname + path_lib.sep + type + `output_test_${x}_md.md`);
+    });
+    //Test PDF
+    if (os.platform !== "win32") {
+      documenter_vhdl.save_pdf(__dirname + path_lib.sep + type + `output_test_${x}_pdf.pdf`, options).then(function () {
+        let filename_expected = base_name_resources + `output_test_${x}_pdf.svg`;
+        let expected_file_buffer = fs.readFileSync(filename_expected);
+        let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + `output_test_${x}_md.svg`);
+        if (file_buffer.equals(expected_file_buffer) !== true) {
+          fs.unlinkSync(__dirname + path_lib.sep + type + `output_test_${x}_md.svg`);
+          throw new Error(`Error ${x} ${type}pdf.`.red);
+        }
+        console.log(`Test ${x} ${type}pdf -> OK!`.green);
+        fs.unlinkSync(__dirname + path_lib.sep + type + `output_test_${x}_md.svg`);
+      });
+    }
+    //Test SVG
+    documenter_vhdl.save_svg(__dirname + path_lib.sep + type + `output_test_${x}_svg.svg`).then(function () {
+      let filename_expected = base_name_resources + `output_test_${x}_svg.svg`;
+      let expected_file_buffer = fs.readFileSync(filename_expected);
+      let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + `output_test_${x}_svg.svg`);
+      if (file_buffer.equals(expected_file_buffer) !== true) {
+        fs.unlinkSync(__dirname + path_lib.sep + type + `output_test_${x}_svg.svg`);
+        throw new Error(`Error ${x} ${type}svg.`.red);
+      }
+      console.log(`Test ${x} ${type}svg -> OK!`.green);
+      fs.unlinkSync(__dirname + path_lib.sep + type + `output_test_${x}_svg.svg`);
     });
 
+  }
 }
