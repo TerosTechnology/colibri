@@ -1,0 +1,209 @@
+[
+    {
+        "description": "",
+        "name": "",
+        "state_variable_name": "State",
+        "states": [
+            {
+                "name": "NorthNext",
+                "transitions": [
+                    {
+                        "condition": "Counter = ClockFrequencyHz * 5 -1",
+                        "destination": "StartNorth",
+                        "start_position": [
+                            63,
+                            23
+                        ],
+                        "end_position": [
+                            63,
+                            56
+                        ]
+                    }
+                ],
+                "start_position": [
+                    59,
+                    21
+                ],
+                "end_position": [
+                    59,
+                    30
+                ]
+            },
+            {
+                "name": "StartNorth",
+                "transitions": [
+                    {
+                        "condition": "Counter = ClockFrequencyHz * 5 -1",
+                        "destination": "North",
+                        "start_position": [
+                            74,
+                            23
+                        ],
+                        "end_position": [
+                            74,
+                            56
+                        ]
+                    }
+                ],
+                "start_position": [
+                    69,
+                    21
+                ],
+                "end_position": [
+                    69,
+                    31
+                ]
+            },
+            {
+                "name": "North",
+                "transitions": [
+                    {
+                        "condition": "Counter = ClockFrequencyHz * 60 -1",
+                        "destination": "StopNorth",
+                        "start_position": [
+                            84,
+                            23
+                        ],
+                        "end_position": [
+                            84,
+                            57
+                        ]
+                    }
+                ],
+                "start_position": [
+                    80,
+                    21
+                ],
+                "end_position": [
+                    80,
+                    26
+                ]
+            },
+            {
+                "name": "StopNorth",
+                "transitions": [
+                    {
+                        "condition": "Counter = ClockFrequencyHz * 5 -1",
+                        "destination": "WestNext",
+                        "start_position": [
+                            94,
+                            23
+                        ],
+                        "end_position": [
+                            94,
+                            56
+                        ]
+                    }
+                ],
+                "start_position": [
+                    90,
+                    21
+                ],
+                "end_position": [
+                    90,
+                    30
+                ]
+            },
+            {
+                "name": "WestNext",
+                "transitions": [
+                    {
+                        "condition": "Counter = ClockFrequencyHz * 5 -1",
+                        "destination": "StartWest",
+                        "start_position": [
+                            104,
+                            23
+                        ],
+                        "end_position": [
+                            104,
+                            56
+                        ]
+                    }
+                ],
+                "start_position": [
+                    100,
+                    21
+                ],
+                "end_position": [
+                    100,
+                    29
+                ]
+            },
+            {
+                "name": "StartWest",
+                "transitions": [
+                    {
+                        "condition": "Counter = ClockFrequencyHz * 5 -1",
+                        "destination": "West",
+                        "start_position": [
+                            115,
+                            23
+                        ],
+                        "end_position": [
+                            115,
+                            56
+                        ]
+                    }
+                ],
+                "start_position": [
+                    110,
+                    21
+                ],
+                "end_position": [
+                    110,
+                    30
+                ]
+            },
+            {
+                "name": "West",
+                "transitions": [
+                    {
+                        "condition": "Counter = ClockFrequencyHz * 60 -1",
+                        "destination": "StopWest",
+                        "start_position": [
+                            125,
+                            23
+                        ],
+                        "end_position": [
+                            125,
+                            57
+                        ]
+                    }
+                ],
+                "start_position": [
+                    121,
+                    21
+                ],
+                "end_position": [
+                    121,
+                    25
+                ]
+            },
+            {
+                "name": "StopWest",
+                "transitions": [
+                    {
+                        "condition": "Counter = ClockFrequencyHz * 5 -1",
+                        "destination": "NorthNext",
+                        "start_position": [
+                            135,
+                            23
+                        ],
+                        "end_position": [
+                            135,
+                            56
+                        ]
+                    }
+                ],
+                "start_position": [
+                    131,
+                    21
+                ],
+                "end_position": [
+                    131,
+                    29
+                ]
+            }
+        ]
+    }
+]

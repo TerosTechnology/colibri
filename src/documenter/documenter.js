@@ -165,7 +165,7 @@ class Documenter {
       markdown_doc += "## State machines\n";
       for (let i = 0; i < stm_array.length; ++i) {
         let entity_name = code_tree['entity']['name'];
-        let stm_path = `${path_lib.dirname(path)}${path_lib.sep}stm_${entity_name}_${i}${i}.svg\n`;
+        let stm_path = `${path_lib.dirname(path)}${path_lib.sep}stm_${entity_name}_${i}${i}.svg`;
         if (stm_array[i].description !== '') {
           markdown_doc += '- ' + stm_array[i].description;
         }
@@ -518,7 +518,7 @@ class Documenter {
     let stm_array = await this._get_stm();
     for (let i = 0; i < stm_array.length; ++i) {
       let entity_name = code_tree['entity']['name'];
-      let stm_path = `${path_lib.dirname(path)}${path_lib.sep}stm_${entity_name}_${i}${i}.svg\n`;
+      let stm_path = `${path_lib.dirname(path)}${path_lib.sep}stm_${entity_name}_${i}${i}.svg`;
       if (stm_array[i].description !== '') {
         markdown_doc += '- ' + stm_array[i].description;
       }

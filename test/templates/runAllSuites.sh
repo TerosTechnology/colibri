@@ -19,3 +19,10 @@ cd ../..
 cd examples/verilog
 SIM=icarus pytest -s
 cd ../..
+# Remove folders
+rm ./examples/vhdl/runpy/*gcda
+rm ./examples/vhdl/runpy/*gcno
+rm -r ./examples/vhdl/runpy/coverage
+rm -r ./examples/vhdl/runpy/vunit_out
+rm ./examples/vhdl/runpy/*info
+rm -r ./examples/verilog/obj_dir

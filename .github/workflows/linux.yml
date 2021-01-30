@@ -6,7 +6,7 @@ jobs:
   test-linter:
     runs-on: ubuntu-18.04
     container:
-      image: docker://terostech/multi-simulator:1.0.2
+      image: docker://terostech/multi-simulator:latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
@@ -28,6 +28,20 @@ jobs:
         run: |
           npm install .
           npm run-script testTemplates
+  # ****************************************************************************
+  # ****************************************************************************
+  test-documenter:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v1
+      - name: Test
+        run: |
+          npm install .
+          npm run-script testDocumenter
   # ****************************************************************************
   # ****************************************************************************
   test-stm:
