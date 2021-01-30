@@ -125,11 +125,11 @@ for (let x = 0; x < 2; x++) {
       let expected_file_buffer = fs.readFileSync(filename_expected);
       let file_buffer = fs.readFileSync(__dirname + path_lib.sep + `stm_example_00.svg`);
       if (file_buffer.equals(expected_file_buffer) !== true) {
-        // fs.unlinkSync(__dirname + path_lib.sep + type + `stm_example_00.svg\n`);
+        // fs.unlinkSync(__dirname + path_lib.sep + type + `stm_example_00.svg`);
         throw new Error(`Error save FSM file: ${x} ${type}svg.`.red);
       }
       console.log(`Test save FSM file: ${x} ${type}svg -> OK!`.green);
-      // fs.unlinkSync(__dirname + path_lib.sep + type + `stm_example_00.svg\n`);
+      // fs.unlinkSync(__dirname + path_lib.sep + type + `stm_example_00.svg`);
     });
   }
   }
