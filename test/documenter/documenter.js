@@ -24,10 +24,22 @@
 const colors = require('colors');
 const os = require('os');
 const fs = require('fs');
+const html_diff = require('html-differ').HtmlDiffer;
 const path_lib = require('path');
 const Colibri = require('../../src/main');
 const Documenter = Colibri.Documenter;
 const General = Colibri.General;
+
+var options = {
+  ignoreAttributes: [],
+  compareAttributesAsJSON: [],
+  ignoreWhitespaces: true,
+  ignoreComments: true,
+  ignoreEndTags: false,
+  ignoreDuplicateAttributes: false
+};
+
+var html_differ = new html_diff(options);
 
 let file_vhdl = __dirname + path_lib.sep + "resources" + path_lib.sep + "vhdl"
   + path_lib.sep + "test_0.vhd";
@@ -56,26 +68,26 @@ for (let i = 0; i < custom_css.length; ++i) {
   //Test HTML
   documenter_vhdl.save_html(__dirname + path_lib.sep + type + "output_test_0_html.html", options).then(function () {
     let filename_expected = base_name_resources + "output_test_0_html.html";
-    let expected_file_buffer = fs.readFileSync(filename_expected);
-    let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_html.html");
-    if (file_buffer.equals(expected_file_buffer) !== true) {
-      fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_html.html")
+    let expected_file_buffer = fs.readFileSync(filename_expected,'utf-8');
+    let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_html.html",'utf-8');
+    if (html_differ.isEqual(expected_file_buffer, file_buffer) !== true) { 
+      fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_html.html");
       throw new Error(`Error ${type}HTML.`.red);
     }
     console.log(`Test  ${type}HTML -> OK!`.green);
-    fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_html.html")
+    fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_html.html");
   });
   //Test Markdown
   documenter_vhdl.save_markdown(__dirname + path_lib.sep + type + "output_test_0_md.md").then(function () {
     let filename_expected = base_name_resources + "output_test_0_md.md";
-    let expected_file_buffer = fs.readFileSync(filename_expected);
-    let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_md.md");
-    if (file_buffer.equals(expected_file_buffer) !== true) {
-      fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_md.md")
+    let expected_file_buffer = fs.readFileSync(filename_expected,'utf-8');
+    let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_md.md",'utf-8');
+    if ((file_buffer===expected_file_buffer) !== true) {
+      fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_md.md");
       throw new Error(`Error  ${type}Markdown.`.red);
     }
     console.log(`Test  ${type}Markdown -> OK!`.green);
-    fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_md.md")
+    fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_md.md");
   });
   //Test PDF
   if (os.platform !== "win32") {
@@ -84,11 +96,11 @@ for (let i = 0; i < custom_css.length; ++i) {
       let expected_file_buffer = fs.readFileSync(filename_expected);
       let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_md.svg");
       if (file_buffer.equals(expected_file_buffer) !== true) {
-        fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_md.svg")
+        fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_md.svg");
         throw new Error(`Error  ${type}pdf.`.red);
       }
       console.log(`Test  ${type}pdf -> OK!`.green);
-      fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_md.svg")
+      fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_md.svg");
     });
   }
   //Test SVG
@@ -97,10 +109,11 @@ for (let i = 0; i < custom_css.length; ++i) {
       let expected_file_buffer = fs.readFileSync(filename_expected);
       let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + "output_test_0_svg.svg");
       if (file_buffer.equals(expected_file_buffer) !== true){
-        fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_svg.svg")
+        fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_svg.svg");
         throw new Error(`Error  ${type}svg.`.red);
       }
       console.log(`Test  ${type}svg -> OK!`.green);
-      fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_svg.svg")
+      fs.unlinkSync(__dirname + path_lib.sep + type + "output_test_0_svg.svg");
     });
+
 }

@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "colors": "x",
+    "html-differ": "x",
     "eslint": "*",
     "prettier": "*",
     "babel-eslint": "*",

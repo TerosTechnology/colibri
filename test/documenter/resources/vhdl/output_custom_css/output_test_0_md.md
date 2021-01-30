@@ -4,6 +4,7 @@
 ## Diagram
 ![Diagram](custom_css_output_test_0_md.svg "Diagram")
 ## Description
+ Description entity
 ## Generics and ports
 ### Table 1.1 Generics
 | Generic name | Type    | Value | Description          |
