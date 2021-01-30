@@ -83,9 +83,10 @@ for (let x = 0; x < 2; x++) {
     //Test Markdown
     documenter_vhdl.save_markdown(__dirname + path_lib.sep + type + `output_test_${x}_md.md`).then(function () {
       let filename_expected = base_name_resources + `output_test_${x}_md.md`;
-      let expected_file_buffer = fs.readFileSync(filename_expected, 'utf-8');
-      let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + `output_test_${x}_md.md`, 'utf-8');
-      if ((file_buffer.replace(/\s+/g, '') === expected_file_buffer.replace(/\s+/g, '')) !== true) {
+      let expected_file_buffer = fs.readFileSync(filename_expected, 'utf-8').replace(/\s+/g, '').replace(/-+/g, '');
+      let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type
+         + `output_test_${x}_md.md`, 'utf-8').replace(/\s+/g, '').replace(/-+/g, ''); 
+      if ((file_buffer === expected_file_buffer) !== true) {
         fs.unlinkSync(__dirname + path_lib.sep + type + `output_test_${x}_md.md`);
         throw new Error(`Error ${x} ${type}Markdown.`.red);
       }
