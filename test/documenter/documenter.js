@@ -85,7 +85,7 @@ for (let x = 0; x < 2; x++) {
       let filename_expected = base_name_resources + `output_test_${x}_md.md`;
       let expected_file_buffer = fs.readFileSync(filename_expected, 'utf-8').replace(/\s+/g, '').replace(/-+/g, '');
       let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type
-         + `output_test_${x}_md.md`, 'utf-8').replace(/\s+/g, '').replace(/-+/g, ''); 
+        + `output_test_${x}_md.md`, 'utf-8').replace(/\s+/g, '').replace(/-+/g, '');
       if ((file_buffer === expected_file_buffer) !== true) {
         fs.unlinkSync(__dirname + path_lib.sep + type + `output_test_${x}_md.md`);
         throw new Error(`Error ${x} ${type}Markdown.`.red);
@@ -120,19 +120,19 @@ for (let x = 0; x < 2; x++) {
       fs.unlinkSync(__dirname + path_lib.sep + type + `output_test_${x}_svg.svg`);
     });
     //Test save FSM
-    if (x===1) {
-    documenter_vhdl._save_fsms(__dirname + path_lib.sep + type + `stm_example_00.svg`).then(function () {
-      let filename_expected = base_name_resources + `stm_example_00.svg`;
-      let expected_file_buffer = fs.readFileSync(filename_expected);
-      let file_buffer = fs.readFileSync(__dirname + path_lib.sep + `stm_example_00.svg`);
-      if (file_buffer.equals(expected_file_buffer) !== true) {
+    if (x === 1 && (os.platform() !== "win32")) {
+      documenter_vhdl._save_fsms(__dirname + path_lib.sep + type + `stm_example_00.svg`).then(function () {
+        let filename_expected = base_name_resources + `stm_example_00.svg`;
+        let expected_file_buffer = fs.readFileSync(filename_expected);
+        let file_buffer = fs.readFileSync(__dirname + path_lib.sep + `stm_example_00.svg`);
+        if (file_buffer.equals(expected_file_buffer) !== true) {
+          // fs.unlinkSync(__dirname + path_lib.sep + type + `stm_example_00.svg`);
+          throw new Error(`Error save FSM file: ${x} ${type}svg.`.red);
+        }
+        console.log(`Test save FSM file: ${x} ${type}svg -> OK!`.green);
         // fs.unlinkSync(__dirname + path_lib.sep + type + `stm_example_00.svg`);
-        throw new Error(`Error save FSM file: ${x} ${type}svg.`.red);
-      }
-      console.log(`Test save FSM file: ${x} ${type}svg -> OK!`.green);
-      // fs.unlinkSync(__dirname + path_lib.sep + type + `stm_example_00.svg`);
-    });
-  }
+      });
+    }
   }
 }
 
