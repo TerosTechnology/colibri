@@ -27,9 +27,32 @@
 const General = require('../general/general');
 const Codes = require('./codes');
 const ParserLib = require('../parser/factory');
+const fs = require('fs');
 
 class Verilog_editor {
   constructor() { }
+
+  get_header(header_file_path) {
+    if (header_file_path === undefined || header_file_path === '') {
+      return '';
+    }
+
+    try {
+      let header_f = fs.readFileSync(header_file_path, 'utf8');
+      let lines = header_f.split(/\r?\n/g);
+      let header = '';
+      for (let i = 0; i < lines.length; i++) {
+        const element = lines[i];
+        header += `//  ${element}\n`;
+      }
+      return header + '\n';
+    }
+    catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+      return '';
+    }
+  }
 
   async generate(src, options) {
     let parser = new ParserLib.ParserFactory;
@@ -38,6 +61,9 @@ class Verilog_editor {
     if (structure === undefined) {
       return undefined;
     }
+
+    let header = this.get_header(options.header_file_path);
+
     var vunit = false;
     var version = General.VERILOGSTANDARS.VERILOG2001;
     if (options !== null) {
@@ -45,7 +71,7 @@ class Verilog_editor {
       version = options['version'];
     }
     var space = '  ';
-    var str = '';
+    var str = header;
     if (vunit === true) {
       str += this.set_vunit_libraries();
       str += '\n';

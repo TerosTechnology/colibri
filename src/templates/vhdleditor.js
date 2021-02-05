@@ -25,11 +25,57 @@
 const Codes = require('./codes');
 const ParserLib = require('../parser/factory');
 const General = require('../general/general');
+const fs = require('fs');
 
 class Vhdl_editor {
   constructor() { }
 
+  get_header(header_file_path) {
+    if (header_file_path === undefined || header_file_path === '') {
+      return '';
+    }
+
+    try {
+      let header_f = fs.readFileSync(header_file_path, 'utf8');
+      let lines = header_f.split(/\r?\n/g);
+      let header = '';
+      for (let i = 0; i < lines.length; i++) {
+        const element = lines[i];
+        header += `--  ${element}\n`;
+      }
+      return header + '\n';
+    }
+    catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+      return '';
+    }
+  }
+
   async generate(src, options) {
+    let header = this.get_header(options.header_file_path);
+
+    this.indet_0 = '';
+    this.indet_1 = '';
+    this.indet_2 = '';
+    this.indet_3 = '';
+    if (options !== undefined && options.indent_char !== undefined) {
+      let base = options.indent_char;
+      this.indet_0 = base.repeat(0);
+      this.indet_1 = base.repeat(1);
+      this.indet_2 = base.repeat(2);
+      this.indet_3 = base.repeat(3);
+      this.indet_4 = base.repeat(4);
+    }
+    else {
+      let base = '    ';
+      this.indet_0 = base.repeat(0);
+      this.indet_1 = base.repeat(1);
+      this.indet_2 = base.repeat(2);
+      this.indet_3 = base.repeat(3);
+      this.indet_4 = base.repeat(4);
+    }
+
     let parser = new ParserLib.ParserFactory;
     parser = await parser.getParser(General.LANGUAGES.VHDL, '');
     parser.init();
@@ -41,8 +87,8 @@ class Vhdl_editor {
     if (options !== null) {
       vunit = options['type'] === Codes.TYPESTESTBENCH.VUNIT;
     }
-    let space = '  ';
-    let str = '';
+    let space = this.indet_1;
+    let str = header;
     str += "library ieee;\nuse ieee.std_logic_1164.all;\nuse ieee.numeric_std.all;\n";
     str += '\n';
     if (vunit === true) {
@@ -125,7 +171,7 @@ class Vhdl_editor {
   set_Vunit_Entity(m) {
     var str = '';
     str += 'entity ' + m['name'] + '_tb is\n';
-    str += '  generic (runner_cfg : string);\n';
+    str += this.indet_1 + 'generic (runner_cfg : string);\n';
     str += 'end;\n';
     return str;
   }
@@ -174,31 +220,31 @@ class Vhdl_editor {
   set_Component(space, name, generics, ports) {
     var str = '';
     //Component name
-    str += space + 'component ' + name + '\n';
+    str += this.indet_1 + 'component ' + name + '\n';
     //Generics
     if (generics.length > 0) {
-      str += space + '  generic (\n';
+      str += this.indet_2 + 'generic (\n';
       for (let x = 0; x < generics.length - 1; ++x) {
-        str += space + '    ' + generics[x]['name'] + ' : ' + generics[x]['type'] + ';\n';
+        str += this.indet_3 + generics[x]['name'] + ' : ' + generics[x]['type'] + ';\n';
       }
-      str += space + '    ' + generics[generics.length - 1]['name'] + ' : ' +
+      str += this.indet_3 + generics[generics.length - 1]['name'] + ' : ' +
         generics[generics.length - 1]['type'] + '\n';
-      str += space + '  );\n';
+      str += this.indet_2 + ');\n';
     }
     //Ports
     if (ports.length > 0) {
-      str += space + '  port (\n';
+      str += this.indet_2 + '  port (\n';
       for (let x = 0; x < ports.length - 1; ++x) {
-        str += space + '    ' + ports[x]['name'] + ' : ' + ports[x]['direction'] + ' ' +
+        str += this.indet_3 + ports[x]['name'] + ' : ' + ports[x]['direction'] + ' ' +
           ports[x]['type'] + ';\n';
       }
-      str += space + '    ' + ports[ports.length - 1]['name'] + ' : ' +
+      str += this.indet_3 + ports[ports.length - 1]['name'] + ' : ' +
         ports[ports.length - 1]['direction'] + ' ' +
         ports[ports.length - 1]['type'] + '\n';
-      str += space + '  );\n';
+      str += this.indet_2 + ');\n';
     }
     //End component
-    str += space + 'end component;\n';
+    str += this.indet_1 + 'end component;\n';
 
     return str;
   }
@@ -207,52 +253,52 @@ class Vhdl_editor {
     var str = '';
     //Instance name
     if (vunit !== undefined && vunit === true) {
-      str += space + name + '_inst : entity src_lib.' + name + '\n';
+      str += this.indet_1 + name + '_inst : entity src_lib.' + name + '\n';
     } else if (vhdl2008 !== undefined && vhdl2008 === true) {
-      str += space + name + '_inst : entity work.' + name + '\n';
+      str += this.indet_1 + name + '_inst : entity work.' + name + '\n';
     } else {
-      str += space + name + '_inst : ' + name + '\n';
+      str += this.indet_1 + name + '_inst : ' + name + '\n';
     }
     //Generics
     if (generics.length > 0) {
-      str += space + '  generic map (\n';
+      str += this.indet_2 + 'generic map (\n';
       for (let x = 0; x < generics.length - 1; ++x) {
-        str += space + '    ' + generics[x]['name'] + ' => ' + generics[x]['name'] + ',\n';
+        str += this.indet_3 + generics[x]['name'] + ' => ' + generics[x]['name'] + ',\n';
       }
-      str += space + '    ' + generics[generics.length - 1]['name'] + ' => '
+      str += this.indet_3 + generics[generics.length - 1]['name'] + ' => '
         + generics[generics.length - 1]['name'] + '\n';
-      str += space + '  )\n';
+      str += this.indet_2 + ')\n';
     }
     //Ports
     if (ports.length > 0) {
-      str += space + '  port map (\n';
+      str += this.indet_2 + 'port map (\n';
       for (let x = 0; x < ports.length - 1; ++x) {
-        str += space + '    ' + ports[x]['name'] + ' => ' + ports[x]['name'] + ',\n';
+        str += this.indet_3 + ports[x]['name'] + ' => ' + ports[x]['name'] + ',\n';
       }
-      str += space + '    ' + ports[ports.length - 1]['name'] + ' => ' + ports[ports.length - 1]['name'] + '\n';
-      str += space + '  );\n';
+      str += this.indet_3 + ports[ports.length - 1]['name'] + ' => ' + ports[ports.length - 1]['name'] + '\n';
+      str += this.indet_2 + ');\n';
     }
     return str;
   }
 
-  set_Vunit_Process(space) {
+  set_Vunit_Process() {
     var str = '';
-    str += space + 'main : process\n';
-    str += space + 'begin\n';
-    str += space + '  test_runner_setup(runner, runner_cfg);\n';
-    str += space + '  while test_suite loop\n';
-    str += space + '    if run("test_alive") then\n';
-    str += space + '      info("Hello world test_alive");\n';
-    str += space + '      wait for 100 ns;\n';
-    str += space + '      test_runner_cleanup(runner);\n';
-    str += space + '      \n';
-    str += space + '    elsif run("test_0") then\n';
-    str += space + '      info("Hello world test_0");\n';
-    str += space + '      wait for 100 ns;\n';
-    str += space + '      test_runner_cleanup(runner);\n';
-    str += space + '    end if;\n';
-    str += space + '  end loop;\n';
-    str += space + 'end process main;\n';
+    str += this.indet_1 + 'main : process\n';
+    str += this.indet_1 + 'begin\n';
+    str += this.indet_2 + 'test_runner_setup(runner, runner_cfg);\n';
+    str += this.indet_2 + 'while test_suite loop\n';
+    str += this.indet_3 + 'if run("test_alive") then\n';
+    str += this.indet_4 + 'info("Hello world test_alive");\n';
+    str += this.indet_4 + 'wait for 100 ns;\n';
+    str += this.indet_4 + 'test_runner_cleanup(runner);\n';
+    str += this.indet_4 + '\n';
+    str += this.indet_3 + 'elsif run("test_0") then\n';
+    str += this.indet_4 + 'info("Hello world test_0");\n';
+    str += this.indet_4 + 'wait for 100 ns;\n';
+    str += this.indet_4 + 'test_runner_cleanup(runner);\n';
+    str += this.indet_3 + 'end if;\n';
+    str += this.indet_2 + 'end loop;\n';
+    str += this.indet_1 + 'end process main;\n';
     return str;
   }
 
@@ -260,10 +306,10 @@ class Vhdl_editor {
     var str = '';
     str += '-- ' + space + "clk_process : process\n";
     str += '-- ' + space + "begin\n";
-    str += '-- ' + space + "  clk <= '1';\n";
-    str += '-- ' + space + "  wait for clk_period/2;\n";
-    str += '-- ' + space + "  clk <= '0';\n";
-    str += '-- ' + space + "  wait for clk_period/2;\n";
+    str += '-- ' + space + this.indet_0 + "clk <= '1';\n";
+    str += '-- ' + space + this.indet_0 + "wait for clk_period/2;\n";
+    str += '-- ' + space + this.indet_0 + "clk <= '0';\n";
+    str += '-- ' + space + this.indet_0 + "wait for clk_period/2;\n";
     str += '-- ' + space + "end process clk_process;\n";
     return str;
   }
@@ -271,6 +317,27 @@ class Vhdl_editor {
 
 class Vhdl_component extends Vhdl_editor {
   async generate(src, options) {
+    this.indet_0 = '';
+    this.indet_1 = '';
+    this.indet_2 = '';
+    this.indet_3 = '';
+    if (options !== undefined && options.indent_char !== undefined) {
+      let base = options.indent_char;
+      this.indet_0 = base.repeat(0);
+      this.indet_1 = base.repeat(0);
+      this.indet_2 = base.repeat(1);
+      this.indet_3 = base.repeat(2);
+      this.indet_4 = base.repeat(3);
+    }
+    else {
+      let base = '    ';
+      this.indet_0 = base.repeat(0);
+      this.indet_1 = base.repeat(0);
+      this.indet_2 = base.repeat(1);
+      this.indet_3 = base.repeat(2);
+      this.indet_4 = base.repeat(3);
+    }
+
     let parser = new ParserLib.ParserFactory;
     parser = await parser.getParser(General.LANGUAGES.VHDL, '');
     parser.init();
