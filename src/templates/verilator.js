@@ -54,7 +54,10 @@ class verilator {
   }
 
   async generate(src, options) {
-    let header = this.get_header(options.header_file_path);
+    let header = '';
+    if (options !== undefined) {
+      header = this.get_header(options.header_file_path);
+    }
 
     this.indet_0 = '';
     this.indet_1 = '';
@@ -89,10 +92,13 @@ class verilator {
   }
 
   header(header) {
+    if (header === undefined) {
+      header = '';
+    }
     this.str_out = header;
-    this.str_out += "//include <stdlib.h>\n";
-    this.str_out += '//include "V' + this.str.entity["name"] + '.h"\n';
-    this.str_out += '//include "verilated.h"\n\n';
+    this.str_out += "#include <stdlib.h>\n";
+    this.str_out += '#include "V' + this.str.entity["name"] + '.h"\n';
+    this.str_out += '#include "verilated.h"\n\n';
     this.str_out += 'int main(int argc, char **argv, char** env) {\n';
     this.str_out += this.indet_0 + '// Initialize Verilators variables\n';
     this.str_out += this.indet_0 + 'Verilated::commandArgs(argc, argv);\n\n';

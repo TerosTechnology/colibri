@@ -62,7 +62,10 @@ class Verilog_editor {
       return undefined;
     }
 
-    let header = this.get_header(options.header_file_path);
+    let header = '';
+    if (options !== undefined) {
+      header = this.get_header(options.header_file_path);
+    }
 
     var vunit = false;
     var version = General.VERILOGSTANDARS.VERILOG2001;

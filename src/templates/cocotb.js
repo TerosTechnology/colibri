@@ -61,7 +61,10 @@ class cocotb {
     }
     let test = "";
 
-    let header = this.get_header(options.header_file_path);
+    let header = '';
+    if (options !== undefined) {
+      header = this.get_header(options.header_file_path);
+    }
 
     this.indet_0 = '';
     this.indet_1 = '';
