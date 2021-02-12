@@ -48,9 +48,47 @@ class Modelsim extends Base_linter {
   }
 
   // options = {custom_bin:"", custom_arguments:""}
-  async lint_from_file(file, options) {
-    let errors = await this._lint(file, options);
+  async lint_from_file(file, options, libraries) {
+    let libraries_command = '';
+    if (libraries !== undefined) {
+      libraries_command = this.get_libraries_command(libraries, file);
+    }
+
+    let errors = await this._lint(file, options, libraries_command);
     return errors;
+  }
+
+  get_libraries_command(libraries, current_file) {
+    let is_in_prj = false;
+    try {
+      let libraries_cmd = '';
+      for (let i = 0; i < libraries.length; i++) {
+        const lib = libraries[i];
+        for (let j = 0; j < lib.files.length; j++) {
+          const file = lib.files[j];
+          if (current_file !== file) {
+            if (lib.name === '') {
+              libraries_cmd += ` -work work ${file}`;
+            }
+            else {
+              libraries_cmd += ` -work ${lib.name} ${file}`;
+            }
+          }
+          else {
+            is_in_prj = true;
+          }
+        }
+      }
+      if (is_in_prj === false) {
+        return '';
+      }
+      else {
+        return libraries_cmd;
+      }
+    }
+    catch (e) {
+      return '';
+    }
   }
 
   async lint_from_code(file, code, options) {
@@ -59,9 +97,9 @@ class Modelsim extends Base_linter {
     return errors;
   }
 
-  async _lint(file, options) {
+  async _lint(file, options, libraries_command) {
     let result = await this._exec_linter(file, this.PARAMETERS.SYNT,
-      this.PARAMETERS.SYNT_WINDOWS, options);
+      this.PARAMETERS.SYNT_WINDOWS, options, libraries_command);
     file = file.replace('\\ ', ' ');
     let errors_str = result.stdout;
     let errors_str_lines = errors_str.split(/\r?\n/g);

@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-12-02 10:21:56
+ * @LastEditTime: 2021-02-08 11:27:12
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /srsLTE_FPGA/home/carlos/repo/colibri/src/linter/xvhdl.js
+ */
 // The MIT License (MIT)
 
 // Copyright (c) 2016 Masahiro H
@@ -32,10 +40,64 @@ class Xvhdl extends Base_linter {
   }
 
   // options = {custom_bin:"", custom_arguments:""}
-  async lint_from_file(file, options) {
+  async lint_from_file(file, options, libraries) {
+    let libraries_command = '';
+    if (libraries !== undefined) {
+      libraries_command = this.get_libraries_command(libraries, file);
+    }
+    await this._delete_previus_lint();
     let normalized_file = file.replace(' ', '\\ ');
-    let errors = await this._lint(normalized_file, options);
+    let errors = await this._lint(normalized_file, options, libraries_command);
     return errors;
+  }
+
+  async _delete_previus_lint() {
+    const os = require('os');
+    const exec = require('child_process').exec;
+
+    let command = '';
+    if (os.platform() === "win32") {
+      command = 'del xvhdl.pb && rmdir xsim.dir';
+    }
+    else {
+      command = 'rm xvhdl.pb; rm -R xsim.dir';
+    }
+    await exec(command);
+  }
+
+  get_libraries_command(libraries, current_file) {
+    let is_in_prj = false;
+    try {
+      let libraries_cmd = '';
+      for (let i = 0; i < libraries.length; i++) {
+        const lib = libraries[i];
+        let libraries_cmd_i = '';
+        for (let j = 0; j < lib.files.length; j++) {
+          const file = lib.files[j];
+          if (current_file !== file) {
+            libraries_cmd_i += ` ${file} `;
+          }
+          else {
+            is_in_prj = true;
+          }
+        }
+        if (lib.name === '' && libraries_cmd_i !== '') {
+          libraries_cmd += ` --work work ${libraries_cmd_i}`;
+        }
+        else if (libraries_cmd_i !== '') {
+          libraries_cmd += ` --work ${lib.name} ${libraries_cmd_i}`;
+        }
+      }
+      if (is_in_prj === false) {
+        return '';
+      }
+      else {
+        return libraries_cmd;
+      }
+    }
+    catch (e) {
+      return '';
+    }
   }
 
   async lint_from_code(file, code, options) {
@@ -44,9 +106,9 @@ class Xvhdl extends Base_linter {
     return errors;
   }
 
-  async _lint(file, options) {
+  async _lint(file, options, libraries_command) {
     let result = await this._exec_linter(file, this.PARAMETERS.SYNT,
-      this.PARAMETERS.SYNT_WINDOWS, options);
+      this.PARAMETERS.SYNT_WINDOWS, options, libraries_command);
     file = file.replace('\\ ', ' ');
     let errors_str = result.stdout;
     let errors_str_lines = errors_str.split(/\r?\n/g);
