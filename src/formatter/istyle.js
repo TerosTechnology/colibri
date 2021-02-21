@@ -67,7 +67,8 @@ class Istyle extends Base_formatter {
     return formatted_code;
   }
 
-  async _exec_formatter(command) {  
+  async _exec_formatter(command) {
+    console.log(`[colibri][istyle formatter] ${command}`);  
     const exec = require('child_process').exec;
       return new Promise((resolve) => {
         exec(command, (error, stdout, stderr) => {
