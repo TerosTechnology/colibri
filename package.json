@@ -33,7 +33,9 @@
     "wavedrom": "*",
     "onml": "*",
     "json5": "*",
-    "bit-field": "*"
+    "bit-field": "*",
+    "js-yaml": "*",
+    "commander": "7.1.0"
   },
   "devDependencies": {
     "colors": "x",
@@ -45,9 +47,12 @@
     "eslint-plugin-prettier": "*"
   },
   "python": {
-    "execPath": "python",
+    "execPath": "python3",
     "dependencies": {
       "vunit_hdl": "==4.2.0"
     }
+  },
+  "bin": {
+    "hdl-documenter": "bin/hdl-documenter"
   }
 }
