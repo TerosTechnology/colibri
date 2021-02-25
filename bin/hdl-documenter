@@ -11,7 +11,7 @@ program.version(require('../package.json').version)
 program.parse(process.argv);
 const options = program.opts();
 let yml_file = options.file
-yml_file = '/home/carlos/workspace/srsLTE_FPGA/lib/src/phy/ue/fpga_ue/sync/doc/doc.yml'
+// yml_file = '/home/carlos/workspace/srsLTE_FPGA/lib/src/phy/ue/fpga_ue/DFT_precoding/doc/doc.yml'
 
 const yaml = require('js-yaml')
 const fs = require('fs')
@@ -107,9 +107,7 @@ function generate_and_save_documentation_ip(index_output_path, lib_output_path, 
   if (internal_ips !== undefined && internal_ips.length !== 0){
     internal_ips_section = save_internal_ips(lib_output_path, internal_ips);
   }
-  save_md_ip(lib_output_path, source, internal_ips_section, lib_output_path);
-  
-  fs.writeFileSync(index_output_path + '/README.md', main_doc);
+  save_md_ip(lib_output_path, source, internal_ips_section, lib_output_path);  
 }
 
 function save_internal_ips(output_path, internal_ips){
@@ -120,7 +118,8 @@ function save_internal_ips(output_path, internal_ips){
     const source = internal_ips[i];
     const filename = path_lib.basename(source, path_lib.extname(source));
     main_doc += "- [" + filename + "](./" + filename + ".md)\n";
-    save_md_ip(output_path, source);
+    save_md_ip(output_path, source, undefined, undefined);
+    
   }
   return main_doc;
 }
@@ -145,7 +144,6 @@ function save_md_ip(output_path, path, internal_ips_section, output_svg_path){
     lang = "verilog";
     symbol = symbol_verilog;
   }
-
   let config = {custom_section: internal_ips_section, custom_svg_path: output_svg_path}
 
   let contents = fs.readFileSync(path, 'utf8');

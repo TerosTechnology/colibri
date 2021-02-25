@@ -92,17 +92,21 @@ class Documenter {
   async save_markdown(path, config) {
     let custom_section = undefined;
     let custom_svg_path = path;
-    if (config !== undefined){
-      if (custom_section !== undefined){
-        custom_section = config.custom_section;
-      }
-      if (custom_svg_path !== undefined){
-        custom_svg_path = config.custom_svg_path;
-      }
-    }
 
     let file = path_lib.dirname(custom_svg_path) + path_lib.sep + 
           path_lib.basename(custom_svg_path, path_lib.extname(custom_svg_path)) + ".svg";
+
+    if (config !== undefined){
+      if (config.custom_section !== undefined){
+        custom_section = config.custom_section;
+      }
+      if (config.custom_svg_path !== undefined){
+        custom_svg_path = config.custom_svg_path;
+        file = custom_svg_path + path_lib.sep + 
+            path_lib.basename(path, path_lib.extname(path)) + ".svg";
+      }
+    }
+
     fs.writeFileSync(path, await this._get_markdown(file, null, custom_section));
   }
   // ***************************************************************************
