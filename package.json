@@ -17,41 +17,37 @@
   "author": "",
   "license": "GPL-3.0",
   "dependencies": {
-    "bit-field": "*",
-    "commander": "7.1.0",
-    "d3": "5.12.0",
-    "d3-graphviz": "2.6.1",
-    "js-yaml": "*",
-    "json5": "*",
     "markdown-pdf": "10.0.0",
-    "nopy": "^0.2.3",
-    "onml": "*",
-    "sequelize": "x",
-    "shelljs": "0.8.3",
-    "showdown": "^1.9.0",
-    "state-machine-cat": "7.0.13",
     "svg.js": "2.7.1",
     "svgdom": "0.0.21",
+    "shelljs": "0.8.3",
+    "state-machine-cat": "7.0.13",
+    "sequelize": "x",
+    "axios": "x",
+    "d3": "5.12.0",
+    "d3-graphviz": "2.6.1",
+    "web-tree-sitter": "^0.16.2",
     "temp": "^0.9.0",
+    "showdown": "^1.9.0",
+    "nopy": "^0.2.3",
     "wavedrom": "*",
-    "web-tree-sitter": "^0.16.2"
+    "onml": "*",
+    "json5": "*",
+    "bit-field": "*"
   },
   "devDependencies": {
-    "babel-eslint": "*",
     "colors": "x",
-    "eslint": "*",
-    "eslint-config-prettier": "*",
-    "eslint-plugin-prettier": "*",
     "html-differ": "x",
-    "prettier": "*"
+    "eslint": "*",
+    "prettier": "*",
+    "babel-eslint": "*",
+    "eslint-config-prettier": "*",
+    "eslint-plugin-prettier": "*"
   },
   "python": {
-    "execPath": "python3",
+    "execPath": "python",
     "dependencies": {
       "vunit_hdl": "==4.2.0"
     }
-  },
-  "bin": {
-    "hdl-documenter": "bin/hdl-documenter"
   }
 }
