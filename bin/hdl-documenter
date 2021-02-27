@@ -11,7 +11,6 @@ program.version(require('../package.json').version)
 program.parse(process.argv);
 const options = program.opts();
 let yml_file = options.file
-// yml_file = '/home/carlos/workspace/srsLTE_FPGA/lib/src/phy/ue/fpga_ue/DFT_precoding/doc/doc.yml'
 
 const yaml = require('js-yaml')
 const fs = require('fs')
