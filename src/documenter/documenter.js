@@ -106,8 +106,8 @@ class Documenter {
             path_lib.basename(path, path_lib.extname(path)) + ".svg";
       }
     }
-
-    fs.writeFileSync(path, await this._get_markdown(file, null, custom_section));
+    let md = await this._get_markdown(file, null, custom_section);
+    fs.writeFileSync(path, md);
   }
   // ***************************************************************************
   async get_html(options) {
@@ -168,7 +168,6 @@ class Documenter {
         markdown_doc += `\n${custom_section}\n`;
       }
     }
-
 
     //Signals, constants and types
     if (code_tree['declarations'] !== undefined) {

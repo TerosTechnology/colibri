@@ -1,5 +1,3 @@
-&nbsp;&nbsp;
-
 # Entity: structure
 ## Diagram
 ![Diagram](output_test_0_md.svg "Diagram")
