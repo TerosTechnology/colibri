@@ -45,7 +45,7 @@
     "eslint-plugin-prettier": "*"
   },
   "python": {
-    "execPath": "python",
+    "execPath": "python3",
     "dependencies": {
       "vunit_hdl": "==4.2.0"
     }
