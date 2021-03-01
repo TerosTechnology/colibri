@@ -1,5 +1,3 @@
-&nbsp;&nbsp;
-
 # Entity: example
 ## Diagram
 ![Diagram](output_test_1_md.svg "Diagram")

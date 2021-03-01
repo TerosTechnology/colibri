@@ -53,7 +53,12 @@ class Dependency_graph {
         execPath: python_exec_path
       }).then(({ code, stdout, stderr }) => {
         resolve(stdout);
-      });
+      })
+      .catch((e) => {
+        resolve(undefined);
+        console.log(e);
+        // Handle the error!
+      })
     });
   }
   async get_dependency_graph_svg(sources, python3_path) {

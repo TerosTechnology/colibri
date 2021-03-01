@@ -89,9 +89,25 @@ class Documenter {
     await this._save_fsms(path);
     await this._save_wavedrom(path);
   }
-  async save_markdown(path) {
-    let file = path_lib.dirname(path) + path_lib.sep + path_lib.basename(path, path_lib.extname(path)) + ".svg";
-    fs.writeFileSync(path, await this._get_markdown(file));
+  async save_markdown(path, config) {
+    let custom_section = undefined;
+    let custom_svg_path = path;
+
+    let file = path_lib.dirname(custom_svg_path) + path_lib.sep + 
+          path_lib.basename(custom_svg_path, path_lib.extname(custom_svg_path)) + ".svg";
+
+    if (config !== undefined){
+      if (config.custom_section !== undefined){
+        custom_section = config.custom_section;
+      }
+      if (config.custom_svg_path !== undefined){
+        custom_svg_path = config.custom_svg_path;
+        file = custom_svg_path + path_lib.sep + 
+            path_lib.basename(path, path_lib.extname(path)) + ".svg";
+      }
+    }
+    let md = await this._get_markdown(file, null, custom_section);
+    fs.writeFileSync(path, md);
   }
   // ***************************************************************************
   async get_html(options) {
@@ -99,7 +115,7 @@ class Documenter {
     return html_doc;
   }
 
-  async _get_markdown(path, extra_top_space) {
+  async _get_markdown(path, extra_top_space, custom_section) {
     let extra_top_space_l = "";
     if (extra_top_space !== null && extra_top_space !== false) {
       extra_top_space_l = "&nbsp;&nbsp;\n\n";
@@ -132,6 +148,10 @@ class Documenter {
         wavedrom_description = wavedrom_description.replace("$cholosimeone$" + i, img);
       }
       markdown_doc += wavedrom_description;
+      //Custom section
+      if (custom_section !== undefined){
+        markdown_doc += `\n${custom_section}\n`;
+      }
       //Generics and ports
       markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics']);
     }
@@ -142,6 +162,11 @@ class Documenter {
       //Description
       markdown_doc += "## Description\n";
       markdown_doc += code_tree['package']['description'] + "\n";
+
+      //Custom section
+      if (custom_section !== undefined){
+        markdown_doc += `\n${custom_section}\n`;
+      }
     }
 
     //Signals, constants and types
