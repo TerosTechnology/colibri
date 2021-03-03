@@ -36,11 +36,14 @@ function doc_library(lib){
 
   let index_output_path = lib['readme-index-path'];
   let lib_output_path = lib['readme-ips-path'];
+  let lib_output_from_readme_path = lib['readme-ips-from-readme-path'];
+
   let internal_ips = [];
 
   for (const x in ips) {
     const ip = ips[x];
     const source = ip.source;
+    const custom_doc = ip.custom_doc;
 
     if (source !== undefined){
       const ip_name = ip.name;
@@ -49,18 +52,20 @@ function doc_library(lib){
       }
       let ip_obj = {
         'source':source,
-        'internal_ips':internal_ips
+        'internal_ips':internal_ips,
+        'custom_doc':custom_doc
       }
       ips_obj.push(ip_obj);
     }
   }
 
-  generate_and_save_documentation(index_output_path, lib_output_path, ips, name);
+  generate_and_save_documentation(index_output_path, lib_output_path, lib_output_from_readme_path, ips, name);
 }
 
 function doc_ip(lib){
   let name = lib.name;
   let source = lib.source;
+  let custom_doc = lib.custom_doc;
   let internal_ips = lib.internal_ips;
   if (internal_ips === undefined){
     internal_ips = [];
@@ -68,7 +73,8 @@ function doc_ip(lib){
 
   let ip_obj = {
     'source':source,
-    'internal_ips':internal_ips
+    'internal_ips':internal_ips,
+    'custom_doc':custom_doc
   }
 
   let index_output_path = lib['readme-index-path'];
@@ -78,7 +84,7 @@ function doc_ip(lib){
   generate_and_save_documentation_ip(index_output_path, lib_output_path, lib_output_from_readme_path, ip_obj, name);
 }
 
-function generate_and_save_documentation(index_output_path, lib_output_path, ips, name) {
+function generate_and_save_documentation(index_output_path, lib_output_path, lib_output_from_readme_path, ips, name) {
   const path_lib = require('path');
 
   let main_doc = "# " + name + "\n\n";
@@ -89,12 +95,19 @@ function generate_and_save_documentation(index_output_path, lib_output_path, ips
     const ip_name = ips[i].name;
     const filename = path_lib.basename(source, path_lib.extname(source));
 
-    main_doc += "- [" + ip_name + "](./" + filename + ".md)\n";
+    if (lib_output_from_readme_path !== undefined){
+      main_doc += "- [" + ip_name + "]( " + lib_output_from_readme_path + path_lib.sep + filename + ".md)\n";
+    }
+    else{
+      main_doc += "- [" + ip_name + "](./" + filename + ".md)\n";
+    }
     let internal_ips_section = '';
     if (internal_ips !== undefined && internal_ips.length !== 0){
       internal_ips_section = save_internal_ips(lib_output_path, internal_ips);
     }
-    save_md_ip(lib_output_path, source, internal_ips_section);
+    if (ips[i].custom_doc !== true){
+      save_md_ip(lib_output_path, source, internal_ips_section);
+    }
   }
   fs.writeFileSync(index_output_path + '/README.md', main_doc);
 }
@@ -108,7 +121,9 @@ function generate_and_save_documentation_ip(index_output_path, lib_output_path,
   if (internal_ips !== undefined && internal_ips.length !== 0){
     internal_ips_section = save_internal_ips(lib_output_path, internal_ips, lib_output_from_readme_path);
   }
-  save_md_ip(index_output_path, source, internal_ips_section, lib_output_path, 'README');  
+  if (ip.custom_doc !== true){
+    save_md_ip(index_output_path, source, internal_ips_section, lib_output_path, 'README');  
+  }
 }
 
 function save_internal_ips(output_path, internal_ips, lib_output_from_readme_path){
@@ -121,6 +136,9 @@ function save_internal_ips(output_path, internal_ips, lib_output_from_readme_pat
     let filename2 = path_lib.basename(source, path_lib.extname(source));
     if (lib_output_from_readme_path !== undefined){
       filename2 = lib_output_from_readme_path + path_lib.sep +  filename2;
+      main_doc += "- [" + filename + "](./" + filename2 + ".md)\n";
+    }
+    else{
       main_doc += "- [" + filename + "](./" + filename2 + ".md)\n";
     }
     save_md_ip(output_path, source, undefined, undefined);
@@ -157,4 +175,3 @@ function save_md_ip(output_path, path, internal_ips_section, output_svg_path, re
   }
   doc_inst.save_markdown(output_path + path_lib.sep + filename + ".md", config);
 }
-
