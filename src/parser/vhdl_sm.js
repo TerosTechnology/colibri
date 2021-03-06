@@ -34,16 +34,19 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
   
   async get_svg_sm(code) {
     try {
-      const Parser = require('web-tree-sitter');
+      const Parser = await require('web-tree-sitter');
       await Parser.init();
-      const parser = new Parser();
+      this.parser = new Parser();
       let Lang = await
         Parser.Language.load(Path.join(__dirname, Path.sep + "parsers" + Path.sep + "tree-sitter-vhdl.wasm"));
-      parser.setLanguage(Lang);
+      this.parser.setLanguage(Lang);
+    }
+    catch(e){console.log(e);}
 
-      let process;
-      let tree;
-      tree = parser.parse(code);
+    let process;
+    let tree;
+    try {
+      tree = this.parser.parse(code);
       process = this.get_process(tree);
     }
     catch (e) {
