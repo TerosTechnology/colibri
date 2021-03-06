@@ -1,13 +1,13 @@
 {
   "name": "jsteros",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Backend for terosHDL IDE",
   "main": "src/main.js",
   "scripts": {
     "testLinter": "cd test && cd linter && node linter",
     "testTemplates": "cd test && cd templates && node coco_test && node verilator_test && node vunit_runpy && node tb_vhdl && node tb_verilog && node component",
     "testDocumenter": "cd test && cd documenter && node documenter",
-    "test-stm": "cd test && cd documenter && node stateMachine",
+    "test-stm": "cd test && cd documenter && node state_machine vhdl && node state_machine verilog",
     "testProjectManager": "cd test && cd project_manager && node project_manager",
     "testParser": "cd test && node parser verilog && node parser vhdl",
     "testSuites": "cd test && cd templates && sh runAllSuites.sh",
@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "colors": "x",
+    "html-differ": "x",
     "eslint": "*",
     "prettier": "*",
     "babel-eslint": "*",

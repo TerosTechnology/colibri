@@ -29,13 +29,16 @@ class Parser extends ts_base_parser.Ts_base_parser {
   }
 
   async init() {
-    this.code = '';
-    const Parser = require('web-tree-sitter');
-    await Parser.init();
-    this.parser = new Parser();
-    let Lang = await
-      Parser.Language.load(path.join(__dirname, path.sep + "parsers" + path.sep + "tree-sitter-vhdl.wasm"));
-    this.parser.setLanguage(Lang);
+    try{
+      this.code = '';
+      const Parser = require('web-tree-sitter');
+      await Parser.init();
+      this.parser = new Parser();
+      let Lang = await
+        Parser.Language.load(path.join(__dirname, path.sep + "parsers" + path.sep + "tree-sitter-vhdl.wasm"));
+      this.parser.setLanguage(Lang);
+    }
+    catch(e){console.log(e);}
   }
 
   parse(code) {
@@ -135,7 +138,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
           description += txt_comment.slice(1);
         }
         else {
-          description = '';
+          // description = '';
         }
       }
       else {
@@ -191,7 +194,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
           entity_description += txt_comment.slice(1);
         }
         else {
-          entity_description = '';
+          // entity_description = '';
         }
       }
       else {
@@ -228,7 +231,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
               entity_description += txt_comment.slice(1);
             }
             else {
-              entity_description = '';
+              // entity_description = '';
             }
           }
         }
@@ -240,7 +243,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
           entity_description += txt_comment.slice(1);
         }
         else {
-          entity_description = '';
+          // entity_description = '';
         }
       }
       else {

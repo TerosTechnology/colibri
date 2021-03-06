@@ -20,7 +20,6 @@
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
 const Path = require('path');
-const Parser = require('web-tree-sitter');
 const stm_base = require('./stm_base_parser');
 
 class Paser_stm_vhdl extends stm_base.Parser_stm_base {
@@ -28,28 +27,32 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
     super();
     this.comment_symbol = comment_symbol;
   }
-
+  
   set_comment_symbol(comment_symbol) {
     this.comment_symbol = comment_symbol;
   }
-
+  
   async get_svg_sm(code) {
-    await Parser.init();
-    const parser = new Parser();
-    let Lang = await
-      Parser.Language.load(Path.join(__dirname, Path.sep + "parsers" + Path.sep + "tree-sitter-vhdl.wasm"));
-    parser.setLanguage(Lang);
+    try {
+      const Parser = await require('web-tree-sitter');
+      await Parser.init();
+      this.parser = new Parser();
+      let Lang = await
+        Parser.Language.load(Path.join(__dirname, Path.sep + "parsers" + Path.sep + "tree-sitter-vhdl.wasm"));
+      this.parser.setLanguage(Lang);
+    }
+    catch(e){console.log(e);}
 
     let process;
     let tree;
     try {
-      tree = parser.parse(code);
+      tree = this.parser.parse(code);
       process = this.get_process(tree);
     }
     catch (e) {
       // eslint-disable-next-line no-console
       console.log(e);
-      return [];
+      return { 'svg': [], 'stm': [] };
     }
     let stm = [];
     let svg = [];

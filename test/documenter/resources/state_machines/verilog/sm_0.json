@@ -1,0 +1,132 @@
+[
+    {
+        "description": "",
+        "name": "FSM",
+        "state_variable_name": "state",
+        "states": [
+            {
+                "name": "IDLE",
+                "transitions": [
+                    {
+                        "condition": "req_0 == 1'b1",
+                        "destination": "GNT0",
+                        "start_position": [
+                            39,
+                            31
+                        ],
+                        "end_position": [
+                            39,
+                            32
+                        ]
+                    },
+                    {
+                        "condition": "req_1 == 1'b1",
+                        "destination": "GNT1",
+                        "start_position": [
+                            43,
+                            31
+                        ],
+                        "end_position": [
+                            43,
+                            32
+                        ]
+                    },
+                    {
+                        "condition": "not (req_0 == 1'b1)\nnot (req_1 == 1'b1)\n",
+                        "destination": "IDLE",
+                        "start_position": [
+                            45,
+                            31
+                        ],
+                        "end_position": [
+                            45,
+                            32
+                        ]
+                    }
+                ],
+                "start_position": [
+                    38,
+                    3
+                ],
+                "end_position": [
+                    38,
+                    7
+                ]
+            },
+            {
+                "name": "GNT0",
+                "transitions": [
+                    {
+                        "condition": "req_0 == 1'b1",
+                        "destination": "GNT0",
+                        "start_position": [
+                            48,
+                            31
+                        ],
+                        "end_position": [
+                            48,
+                            32
+                        ]
+                    },
+                    {
+                        "condition": "not (req_0 == 1'b1)\n",
+                        "destination": "IDLE",
+                        "start_position": [
+                            51,
+                            31
+                        ],
+                        "end_position": [
+                            51,
+                            32
+                        ]
+                    }
+                ],
+                "start_position": [
+                    47,
+                    3
+                ],
+                "end_position": [
+                    47,
+                    7
+                ]
+            },
+            {
+                "name": "GNT1",
+                "transitions": [
+                    {
+                        "condition": "req_1 == 1'b1",
+                        "destination": "GNT1",
+                        "start_position": [
+                            54,
+                            31
+                        ],
+                        "end_position": [
+                            54,
+                            32
+                        ]
+                    },
+                    {
+                        "condition": "not (req_1 == 1'b1)\n",
+                        "destination": "IDLE",
+                        "start_position": [
+                            57,
+                            31
+                        ],
+                        "end_position": [
+                            57,
+                            32
+                        ]
+                    }
+                ],
+                "start_position": [
+                    53,
+                    3
+                ],
+                "end_position": [
+                    53,
+                    7
+                ]
+            }
+        ]
+    }
+]

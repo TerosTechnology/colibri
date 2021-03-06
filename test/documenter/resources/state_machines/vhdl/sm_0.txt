@@ -1,8 +1,0 @@
-NorthNext => StartNorth:  Counter = ClockFrequencyHz * 5 -1 ;
-StartNorth => North:  Counter = ClockFrequencyHz * 5 -1 ;
-North => StopNorth:  Counter = ClockFrequencyHz * 60 -1 ;
-StopNorth => WestNext:  Counter = ClockFrequencyHz * 5 -1 ;
-WestNext => StartWest:  Counter = ClockFrequencyHz * 5 -1 ;
-StartWest => West:  Counter = ClockFrequencyHz * 5 -1 ;
-West => StopWest:  Counter = ClockFrequencyHz * 60 -1 ;
-StopWest => NorthNext:  Counter = ClockFrequencyHz * 5 -1 ;

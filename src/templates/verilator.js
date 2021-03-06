@@ -21,6 +21,7 @@
 
 const ParserLib = require('../parser/factory');
 const General = require('../general/general');
+const fs = require('fs');
 
 class verilator {
   constructor() {
@@ -29,7 +30,54 @@ class verilator {
     this.language = General.LANGUAGES.VERILOG;
     this.path = require('path');
   }
-  async generate(src) {
+
+  get_header(header_file_path) {
+    if (header_file_path === undefined || header_file_path === '') {
+      return '';
+    }
+
+    try {
+      let header_f = fs.readFileSync(header_file_path, 'utf8');
+      let lines = header_f.split(/\r?\n/g);
+      let header = '';
+      for (let i = 0; i < lines.length; i++) {
+        const element = lines[i];
+        header += `#  ${element}\n`;
+      }
+      return header + '\n';
+    }
+    catch (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+      return '';
+    }
+  }
+
+  async generate(src, options) {
+    let header = '';
+    if (options !== undefined) {
+      header = this.get_header(options.header_file_path);
+    }
+
+    this.indet_0 = '';
+    this.indet_1 = '';
+    this.indet_2 = '';
+    this.indet_3 = '';
+    if (options !== undefined && options.indent_char !== undefined) {
+      let base = options.indent_char;
+      this.indet_0 = base.repeat(0);
+      this.indet_1 = base.repeat(1);
+      this.indet_2 = base.repeat(2);
+      this.indet_3 = base.repeat(3);
+    }
+    else {
+      let base = '  ';
+      this.indet_0 = base.repeat(0);
+      this.indet_1 = base.repeat(1);
+      this.indet_2 = base.repeat(2);
+      this.indet_3 = base.repeat(3);
+    }
+
     let parser = new ParserLib.ParserFactory;
     parser = await parser.getParser(this.language, '');
     let structure = await parser.get_all(src);
@@ -37,21 +85,25 @@ class verilator {
       return undefined;
     }
     this.str = structure;
-    this.header();
+    this.header(header);
     this.loop();
     this.verilatortb();
     return this.str_out;
   }
 
-  header() {
-    this.str_out = "#include <stdlib.h>\n";
+  header(header) {
+    if (header === undefined) {
+      header = '';
+    }
+    this.str_out = header;
+    this.str_out += "#include <stdlib.h>\n";
     this.str_out += '#include "V' + this.str.entity["name"] + '.h"\n';
     this.str_out += '#include "verilated.h"\n\n';
     this.str_out += 'int main(int argc, char **argv, char** env) {\n';
-    this.str_out += '  // Initialize Verilators variables\n';
-    this.str_out += '  Verilated::commandArgs(argc, argv);\n\n';
-    this.str_out += '  // Create an instance of our module under test\n';
-    this.str_out += '  V' + this.str.entity["name"] + ' *tb = new V' + this.str.entity["name"] + ';\n\n';
+    this.str_out += this.indet_0 + '// Initialize Verilators variables\n';
+    this.str_out += this.indet_0 + 'Verilated::commandArgs(argc, argv);\n\n';
+    this.str_out += this.indet_0 + '// Create an instance of our module under test\n';
+    this.str_out += this.indet_0 + 'V' + this.str.entity["name"] + ' *tb = new V' + this.str.entity["name"] + ';\n\n';
   }
 
   loop() {
@@ -72,17 +124,17 @@ class verilator {
     this.str_out += '//  } exit(EXIT_SUCCESS);\n\n';
     for (let x = 0; x < this.str.ports.length; x++) {
       if (this.str.ports[x]["direction"] === "input") {
-        this.str_out += '    tb-> ' + this.str.ports[x]["name"] + ' = 1;\n';
+        this.str_out += this.indet_1 + 'tb-> ' + this.str.ports[x]["name"] + ' = 1;\n';
       }
     }
     this.str_out += '    tb->eval();\n';
     for (let x = 0; x < this.str.ports.length; x++) {
       if (this.str.ports[x]["direction"] === "output") {
-        this.str_out += '    printf(" Output ' + this.str.ports[x]["name"] + ': %d \\n",tb-> '
+        this.str_out += this.indet_1 + 'printf(" Output ' + this.str.ports[x]["name"] + ': %d \\n",tb-> '
           + this.str.ports[x]["name"] + ');\n';
       }
     }
-    this.str_out += '   exit(EXIT_SUCCESS);\n}';
+    this.str_out += this.indet_1 + 'exit(EXIT_SUCCESS);\n}';
   }
 
   verilatortb() {

@@ -1,0 +1,177 @@
+#!/usr/bin/env node
+
+let colibri = require('../src/main.js')
+let program = require('commander')
+
+program.version(require('../package.json').version)
+    .option('-f, --file [path]', 'Path of the YML file to documenter')
+    .usage('[options] <hdl-documenter>')
+    .parse(process.argv)
+
+program.parse(process.argv);
+const options = program.opts();
+let yml_file = options.file
+
+const yaml = require('js-yaml')
+const fs = require('fs')
+try {
+  const doc = yaml.load(fs.readFileSync(yml_file, 'utf8'));
+  for (const x in doc) {
+    if (x === 'library'){
+      doc_library(doc[x]);
+    }
+    else if(x === 'ip'){
+      doc_ip(doc[x]);
+    }
+  }
+} catch (e) {
+  console.log(e);
+}
+
+function doc_library(lib){
+  let name = lib.name;
+  let ips = lib.ips;
+
+  let ips_obj = [];
+
+  let index_output_path = lib['readme-index-path'];
+  let lib_output_path = lib['readme-ips-path'];
+  let lib_output_from_readme_path = lib['readme-ips-from-readme-path'];
+
+  let internal_ips = [];
+
+  for (const x in ips) {
+    const ip = ips[x];
+    const source = ip.source;
+    const custom_doc = ip.custom_doc;
+
+    if (source !== undefined){
+      const ip_name = ip.name;
+      if (ip.internal_ips !== undefined){
+        internal_ips = ip.internal_ips
+      }
+      let ip_obj = {
+        'source':source,
+        'internal_ips':internal_ips,
+        'custom_doc':custom_doc
+      }
+      ips_obj.push(ip_obj);
+    }
+  }
+
+  generate_and_save_documentation(index_output_path, lib_output_path, lib_output_from_readme_path, ips, name);
+}
+
+function doc_ip(lib){
+  let name = lib.name;
+  let source = lib.source;
+  let custom_doc = lib.custom_doc;
+  let internal_ips = lib.internal_ips;
+  if (internal_ips === undefined){
+    internal_ips = [];
+  }
+
+  let ip_obj = {
+    'source':source,
+    'internal_ips':internal_ips,
+    'custom_doc':custom_doc
+  }
+
+  let index_output_path = lib['readme-index-path'];
+  let lib_output_path = lib['readme-ips-path'];
+  let lib_output_from_readme_path = lib['readme-ips-from-readme-path'];
+
+  generate_and_save_documentation_ip(index_output_path, lib_output_path, lib_output_from_readme_path, ip_obj, name);
+}
+
+function generate_and_save_documentation(index_output_path, lib_output_path, lib_output_from_readme_path, ips, name) {
+  const path_lib = require('path');
+
+  let main_doc = "# " + name + "\n\n";
+
+  for (let i = 0; i < ips.length; ++i) {
+    const source = ips[i].source;
+    const internal_ips = ips[i].internal_ips;
+    const ip_name = ips[i].name;
+    const filename = path_lib.basename(source, path_lib.extname(source));
+
+    if (lib_output_from_readme_path !== undefined){
+      main_doc += "- [" + ip_name + "]( " + lib_output_from_readme_path + path_lib.sep + filename + ".md)\n";
+    }
+    else{
+      main_doc += "- [" + ip_name + "](./" + filename + ".md)\n";
+    }
+    let internal_ips_section = '';
+    if (internal_ips !== undefined && internal_ips.length !== 0){
+      internal_ips_section = save_internal_ips(lib_output_path, internal_ips);
+    }
+    if (ips[i].custom_doc !== true){
+      save_md_ip(lib_output_path, source, internal_ips_section);
+    }
+  }
+  fs.writeFileSync(index_output_path + '/README.md', main_doc);
+}
+
+function generate_and_save_documentation_ip(index_output_path, lib_output_path, 
+    lib_output_from_readme_path, ip, name) {
+  const internal_ips = ip.internal_ips;
+  const source = ip.source;
+
+  let internal_ips_section = '';
+  if (internal_ips !== undefined && internal_ips.length !== 0){
+    internal_ips_section = save_internal_ips(lib_output_path, internal_ips, lib_output_from_readme_path);
+  }
+  if (ip.custom_doc !== true){
+    save_md_ip(index_output_path, source, internal_ips_section, lib_output_path, 'README');  
+  }
+}
+
+function save_internal_ips(output_path, internal_ips, lib_output_from_readme_path){
+  const path_lib = require('path');
+  let main_doc = "## Intenal IPs\n";
+
+  for (let i = 0; i < internal_ips.length; ++i) {
+    const source = internal_ips[i];
+    let filename = path_lib.basename(source, path_lib.extname(source));
+    let filename2 = path_lib.basename(source, path_lib.extname(source));
+    if (lib_output_from_readme_path !== undefined){
+      filename2 = lib_output_from_readme_path + path_lib.sep +  filename2;
+      main_doc += "- [" + filename + "](./" + filename2 + ".md)\n";
+    }
+    else{
+      main_doc += "- [" + filename + "](./" + filename2 + ".md)\n";
+    }
+    save_md_ip(output_path, source, undefined, undefined);
+  }
+  return main_doc;
+}
+
+function save_md_ip(output_path, path, internal_ips_section, output_svg_path, readme_name){
+  const path_lib = require('path');
+  let symbol_vhdl = '!';
+  let symbol_verilog = '!';
+
+  let lang = "vhdl";
+  let symbol = "!";
+
+  let filename = path_lib.basename(path, path_lib.extname(path));
+  if (path_lib.extname(path) === '.vhd' || path_lib.extname(path) === '.vho'
+    || path_lib.extname(path) === '.vhdl') {
+    lang = "vhdl";
+    symbol = symbol_vhdl;
+  }
+  else if (path_lib.extname(path) === '.v' || path_lib.extname(path) === '.vh'
+    || path_lib.extname(path) === '.vl' || path_lib.extname(path) === '.sv'
+    || path_lib.extname(path) === '.SV') {
+    lang = "verilog";
+    symbol = symbol_verilog;
+  }
+  let config = {custom_section: internal_ips_section, custom_svg_path: output_svg_path}
+
+  let contents = fs.readFileSync(path, 'utf8');
+  let doc_inst = new colibri.Documenter.Documenter(contents, lang, symbol);
+  if (readme_name !== undefined){
+    filename = readme_name;
+  }
+  doc_inst.save_markdown(output_path + path_lib.sep + filename + ".md", config);
+}

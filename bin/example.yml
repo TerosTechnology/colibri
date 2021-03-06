@@ -1,0 +1,13 @@
+library:
+  name: Common IPs
+  readme-index-path: /home/carlos/workspace/srsLTE_FPGA/lib/src/phy/ue/fpga_ue/common
+  readme-ips-path: /home/carlos/workspace/srsLTE_FPGA/lib/src/phy/ue/fpga_ue/common/doc
+  ips:
+
+    - name: Synchronous FIFO
+      source: /home/carlos/workspace/srsLTE_FPGA/lib/src/phy/ue/fpga_ue/common/RTL_code/sync_fifo.vhd
+
+    - name: Asynchronous simple FIFO
+      source: /home/carlos/workspace/srsLTE_FPGA/lib/src/phy/ue/fpga_ue/common/RTL_code/async_fifo_simple.vhd
+
+

@@ -21,7 +21,6 @@
 
 const stm_base = require('./stm_base_parser');
 const Path = require('path');
-const Parser = require('web-tree-sitter');
 const { lab } = require('d3');
 
 class Paser_stm_verilog extends stm_base.Parser_stm_base {
@@ -29,17 +28,21 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
     super();
     this.comment_symbol = comment_symbol;
   }
-
+  
   set_comment_symbol(comment_symbol) {
     this.comment_symbol = comment_symbol;
   }
-
+  
   async init() {
-    await Parser.init();
-    this.parser = new Parser();
-    let Lang = await Parser.Language.load(Path.join(__dirname, Path.sep + "parsers" + Path.sep + "tree-sitter-verilog.wasm"));
-    this.parser.setLanguage(Lang);
-    this.loaded_wasm = true;
+    try{
+      const Parser = require('web-tree-sitter');
+      await Parser.init();
+      this.parser = new Parser();
+      let Lang = await Parser.Language.load(Path.join(__dirname, Path.sep + "parsers" + Path.sep + "tree-sitter-verilog.wasm"));
+      this.parser.setLanguage(Lang);
+      this.loaded_wasm = true;
+    }
+    catch(e){console.log(e);}
   }
 
   async get_svg_sm(code) {
@@ -51,7 +54,7 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
     catch (e) {
       // eslint-disable-next-line no-console
       // console.log(e);
-      return [];
+      return { 'svg': [], 'stm': [] };
     }
     let stm = [];
     let svg = [];
@@ -251,12 +254,6 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
   //////////////////////////////////////////////////////////////////////////////
 
   get_states(p, state_variable_name) {
-    //Check if other case 
-    let cases_others = this.search_multiple_in_tree(p, 'case_statement');
-    if (cases_others.length !== 0) {
-      return [];
-    }
-
     let case_items = this.get_item_multiple_from_childs(p, 'case_item');
     let case_state = [];
     for (let i = 0; i < case_items.length; ++i) {
