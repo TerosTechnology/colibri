@@ -74,7 +74,7 @@ for (let x = 0; x < 2; x++) {
       let expected_file_buffer = fs.readFileSync(filename_expected, 'utf-8');
       let file_buffer = fs.readFileSync(__dirname + path_lib.sep + type + `output_test_${x}_html.html`, 'utf-8');
       if (html_differ.isEqual(expected_file_buffer, file_buffer) !== true) {
-        fs.unlinkSync(__dirname + path_lib.sep + type + `output_test_${x}_html.html`);
+        // fs.unlinkSync(__dirname + path_lib.sep + type + `output_test_${x}_html.html`);
         throw new Error(`Error ${x} ${type}HTML.`.red);
       }
       console.log(`Test ${x} ${type}HTML -> OK!`.green);

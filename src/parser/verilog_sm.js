@@ -21,7 +21,6 @@
 
 const stm_base = require('./stm_base_parser');
 const Path = require('path');
-const Parser = require('web-tree-sitter');
 const { lab } = require('d3');
 
 class Paser_stm_verilog extends stm_base.Parser_stm_base {
@@ -29,17 +28,21 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
     super();
     this.comment_symbol = comment_symbol;
   }
-
+  
   set_comment_symbol(comment_symbol) {
     this.comment_symbol = comment_symbol;
   }
-
+  
   async init() {
-    await Parser.init();
-    this.parser = new Parser();
-    let Lang = await Parser.Language.load(Path.join(__dirname, Path.sep + "parsers" + Path.sep + "tree-sitter-verilog.wasm"));
-    this.parser.setLanguage(Lang);
-    this.loaded_wasm = true;
+    try{
+      const Parser = require('web-tree-sitter');
+      await Parser.init();
+      this.parser = new Parser();
+      let Lang = await Parser.Language.load(Path.join(__dirname, Path.sep + "parsers" + Path.sep + "tree-sitter-verilog.wasm"));
+      this.parser.setLanguage(Lang);
+      this.loaded_wasm = true;
+    }
+    catch(e){console.log(e);}
   }
 
   async get_svg_sm(code) {
