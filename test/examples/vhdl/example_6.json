@@ -1,73 +1,77 @@
 {
   "entity": {
-      "name": "arith_counter_bcd",
-      "description": ""
+    "name": "arith_counter_bcd",
+    "description": ""
   },
   "generics": [
-      {
-          "name": "DIGITS",
-          "type": "positive",
-          "line": 52,
-          "direction": "",
-          "default_value": "",
-          "description": " Number of BCD digits"
-      }
+    {
+      "name": "DIGITS",
+      "type": "positive",
+      "line": 52,
+      "direction": "",
+      "default_value": "",
+      "description": " Number of BCD digits\r"
+    }
   ],
   "ports": [
-      {
-          "name": "clk",
-          "type": "std_logic",
-          "line": 55,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "rst",
-          "type": "std_logic",
-          "line": 56,
-          "direction": "in",
-          "default_value": "",
-          "description": " Reset to 0"
-      },
-      {
-          "name": "inc",
-          "type": "std_logic",
-          "line": 57,
-          "direction": "in",
-          "default_value": "",
-          "description": " Increment"
-      },
-      {
-          "name": "val",
-          "type": "T_BCD_VECTOR(DIGITS+DIGITS-1 downto 0)",
-          "line": 58,
-          "direction": "out",
-          "default_value": "",
-          "description": " Value output"
-      }
+    {
+      "name": "clk",
+      "type": "std_logic",
+      "line": 55,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "rst",
+      "type": "std_logic",
+      "line": 56,
+      "direction": "in",
+      "default_value": "",
+      "description": " Reset to 0\r",
+      "group": ""
+    },
+    {
+      "name": "inc",
+      "type": "std_logic",
+      "line": 57,
+      "direction": "in",
+      "default_value": "",
+      "description": " Increment\r",
+      "group": ""
+    },
+    {
+      "name": "val",
+      "type": "T_BCD_VECTOR(DIGITS+DIGITS-1 downto 0)",
+      "line": 58,
+      "direction": "out",
+      "default_value": "",
+      "description": " Value output\r",
+      "group": ""
+    }
   ],
   "body": {
-      "processes": [],
-      "instantiations": []
+    "processes": [],
+    "instantiations": []
   },
   "declarations": {
-      "types": [],
-      "signals": [
-          {
-              "name": "p",
-              "type": "unsigned(DIGITS+DIGITS-1 downto 0)",
-              "line": 65,
-              "description": " Stage Overflows=Propagates"
-          },
-          {
-              "name": "c",
-              "type": "unsigned(DIGITS+DIGITS   downto 0)",
-              "line": 66,
-              "description": ""
-          }
-      ],
-      "constants": [],
-      "functions": []
+    "types": [],
+    "signals": [
+      {
+        "name": "p",
+        "type": "unsigned(DIGITS+DIGITS-1 downto 0)",
+        "line": 65,
+        "description": " Stage Overflows=Propagates\r"
+      },
+      {
+        "name": "c",
+        "type": "unsigned(DIGITS+DIGITS   downto 0)",
+        "line": 66,
+        "description": ""
+      }
+    ],
+    "constants": [],
+    "functions": []
   }
 }

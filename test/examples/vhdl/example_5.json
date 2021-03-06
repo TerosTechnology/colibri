@@ -1,187 +1,197 @@
 {
   "entity": {
-      "name": "FIR_filter",
-      "description": ""
+    "name": "FIR_filter",
+    "description": ""
   },
   "generics": [],
   "ports": [
-      {
-          "name": "rst",
-          "type": "std_logic",
-          "line": 17,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "clk",
-          "type": "std_logic",
-          "line": 18,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "coef_ld",
-          "type": "std_logic",
-          "line": 19,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "start",
-          "type": "std_logic",
-          "line": 19,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "o_enable",
-          "type": "std_logic",
-          "line": 20,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "bypass",
-          "type": "std_logic",
-          "line": 21,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "Yn_in",
-          "type": "std_logic_vector(15 downto 0)",
-          "line": 22,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "Xn_in",
-          "type": "std_logic_vector(15 downto 0)",
-          "line": 22,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "Xn_out",
-          "type": "std_logic_vector(3 downto 0)",
-          "line": 23,
-          "direction": "out",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "Yn_out",
-          "type": "std_logic_vector(15 downto 0)",
-          "line": 24,
-          "direction": "out",
-          "default_value": "",
-          "description": ""
-      }
+    {
+      "name": "rst",
+      "type": "std_logic",
+      "line": 17,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "clk",
+      "type": "std_logic",
+      "line": 18,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "coef_ld",
+      "type": "std_logic",
+      "line": 19,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "start",
+      "type": "std_logic",
+      "line": 19,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "o_enable",
+      "type": "std_logic",
+      "line": 20,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "bypass",
+      "type": "std_logic",
+      "line": 21,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "Yn_in",
+      "type": "std_logic_vector(15 downto 0)",
+      "line": 22,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "Xn_in",
+      "type": "std_logic_vector(15 downto 0)",
+      "line": 22,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "Xn_out",
+      "type": "std_logic_vector(3 downto 0)",
+      "line": 23,
+      "direction": "out",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "Yn_out",
+      "type": "std_logic_vector(15 downto 0)",
+      "line": 24,
+      "direction": "out",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    }
   ],
   "body": {
-      "processes": [],
-      "instantiations": []
+    "processes": [],
+    "instantiations": []
   },
   "declarations": {
-      "types": [
-          {
-              "name": "klx4",
-              "type": "",
-              "line": 38,
-              "description": ""
-          },
-          {
-              "name": "kx8",
-              "type": "",
-              "line": 39,
-              "description": ""
-          },
-          {
-              "name": "klx8",
-              "type": "",
-              "line": 40,
-              "description": ""
-          },
-          {
-              "name": "kx16",
-              "type": "",
-              "line": 41,
-              "description": ""
-          },
-          {
-              "name": "klx16",
-              "type": "",
-              "line": 42,
-              "description": ""
-          }
-      ],
-      "signals": [
-          {
-              "name": "REG1",
-              "type": "klx4",
-              "line": 45,
-              "description": ""
-          },
-          {
-              "name": " REG2",
-              "type": "klx4",
-              "line": 45,
-              "description": ""
-          },
-          {
-              "name": " COEF",
-              "type": "klx4",
-              "line": 45,
-              "description": ""
-          },
-          {
-              "name": "MULT8",
-              "type": "kx8",
-              "line": 46,
-              "description": ""
-          },
-          {
-              "name": "MULT16",
-              "type": "kx16",
-              "line": 47,
-              "description": ""
-          },
-          {
-              "name": "SUM",
-              "type": "klx16",
-              "line": 48,
-              "description": ""
-          },
-          {
-              "name": "Xn_tmp",
-              "type": "bit4",
-              "line": 49,
-              "description": ""
-          },
-          {
-              "name": "Yn_tmp",
-              "type": "bit16",
-              "line": 50,
-              "description": ""
-          }
-      ],
-      "constants": [
-          {
-              "name": "K",
-              "type": "integer",
-              "default_value": " 4",
-              "line": 30,
-              "description": ""
-          }
-      ],
-      "functions": []
+    "types": [
+      {
+        "name": "klx4",
+        "type": "",
+        "line": 38,
+        "description": ""
+      },
+      {
+        "name": "kx8",
+        "type": "",
+        "line": 39,
+        "description": ""
+      },
+      {
+        "name": "klx8",
+        "type": "",
+        "line": 40,
+        "description": ""
+      },
+      {
+        "name": "kx16",
+        "type": "",
+        "line": 41,
+        "description": ""
+      },
+      {
+        "name": "klx16",
+        "type": "",
+        "line": 42,
+        "description": ""
+      }
+    ],
+    "signals": [
+      {
+        "name": "REG1",
+        "type": "klx4",
+        "line": 45,
+        "description": ""
+      },
+      {
+        "name": " REG2",
+        "type": "klx4",
+        "line": 45,
+        "description": ""
+      },
+      {
+        "name": " COEF",
+        "type": "klx4",
+        "line": 45,
+        "description": ""
+      },
+      {
+        "name": "MULT8",
+        "type": "kx8",
+        "line": 46,
+        "description": ""
+      },
+      {
+        "name": "MULT16",
+        "type": "kx16",
+        "line": 47,
+        "description": ""
+      },
+      {
+        "name": "SUM",
+        "type": "klx16",
+        "line": 48,
+        "description": ""
+      },
+      {
+        "name": "Xn_tmp",
+        "type": "bit4",
+        "line": 49,
+        "description": ""
+      },
+      {
+        "name": "Yn_tmp",
+        "type": "bit16",
+        "line": 50,
+        "description": ""
+      }
+    ],
+    "constants": [
+      {
+        "name": "K",
+        "type": "integer",
+        "default_value": " 4",
+        "line": 30,
+        "description": ""
+      }
+    ],
+    "functions": []
   }
 }

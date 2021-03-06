@@ -1,128 +1,134 @@
 {
   "entity": {
-      "name": "arith_counter_gray",
-      "description": ""
+    "name": "arith_counter_gray",
+    "description": ""
   },
   "generics": [
-      {
-          "name": "BITS",
-          "type": "positive",
-          "line": 39,
-          "direction": "",
-          "default_value": "",
-          "description": " Bit width of the counter"
-      },
-      {
-          "name": "INIT",
-          "type": "natural",
-          "line": 40,
-          "direction": "",
-          "default_value": "0",
-          "description": " Initial/reset counter value"
-      }
+    {
+      "name": "BITS",
+      "type": "positive",
+      "line": 37,
+      "direction": "",
+      "default_value": "",
+      "description": " Bit width of the counter\r"
+    },
+    {
+      "name": "INIT",
+      "type": "natural",
+      "line": 38,
+      "direction": "",
+      "default_value": "0",
+      "description": " Initial/reset counter value\r"
+    }
   ],
   "ports": [
-      {
-          "name": "clk",
-          "type": "std_logic",
-          "line": 43,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "rst",
-          "type": "std_logic",
-          "line": 44,
-          "direction": "in",
-          "default_value": "",
-          "description": " Reset to INIT value"
-      },
-      {
-          "name": "inc",
-          "type": "std_logic",
-          "line": 45,
-          "direction": "in",
-          "default_value": "",
-          "description": " Increment"
-      },
-      {
-          "name": "dec",
-          "type": "std_logic",
-          "line": 46,
-          "direction": "in",
-          "default_value": "'0'",
-          "description": " Decrement"
-      },
-      {
-          "name": "val",
-          "type": "std_logic_vector(BITS-1 downto 0)",
-          "line": 47,
-          "direction": "out",
-          "default_value": "",
-          "description": " Value output"
-      },
-      {
-          "name": "cry",
-          "type": "std_logic",
-          "line": 48,
-          "direction": "out",
-          "default_value": "",
-          "description": " Carry output"
-      }
+    {
+      "name": "clk",
+      "type": "std_logic",
+      "line": 41,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "rst",
+      "type": "std_logic",
+      "line": 42,
+      "direction": "in",
+      "default_value": "",
+      "description": " Reset to INIT value\r",
+      "group": ""
+    },
+    {
+      "name": "inc",
+      "type": "std_logic",
+      "line": 43,
+      "direction": "in",
+      "default_value": "",
+      "description": " Increment\r",
+      "group": ""
+    },
+    {
+      "name": "dec",
+      "type": "std_logic",
+      "line": 44,
+      "direction": "in",
+      "default_value": "'0'",
+      "description": " Decrement\r",
+      "group": ""
+    },
+    {
+      "name": "val",
+      "type": "std_logic_vector(BITS - 1 downto 0)",
+      "line": 45,
+      "direction": "out",
+      "default_value": "",
+      "description": " Value output\r",
+      "group": ""
+    },
+    {
+      "name": "cry",
+      "type": "std_logic",
+      "line": 46,
+      "direction": "out",
+      "default_value": "",
+      "description": " Carry output\r",
+      "group": ""
+    }
   ],
   "body": {
-      "processes": [
-          {
-              "name": "unnamed",
-              "sens_list": "clk",
-              "description": ""
-          }
-      ],
-      "instantiations": []
+    "processes": [
+      {
+        "name": "unnamed",
+        "sens_list": "clk",
+        "description": ""
+      }
+    ],
+    "instantiations": []
   },
   "declarations": {
-      "types": [],
-      "signals": [
-          {
-              "name": "gray_cnt_r",
-              "type": "unsigned(BITS-1 downto 0)",
-              "line": 77,
-              "description": ""
-          },
-          {
-              "name": "gray_cnt_nxt",
-              "type": "unsigned(BITS-1 downto 0)",
-              "line": 78,
-              "description": ""
-          },
-          {
-              "name": "en",
-              "type": "std_logic",
-              "line": 80,
-              "description": ""
-          }
-      ],
-      "constants": [
-          {
-              "name": "INIT_GRAY",
-              "type": "unsigned(BITS-1 downto 0)",
-              "default_value": " gray_encode(INIT, BITS)",
-              "line": 76,
-              "description": ""
-          }
-      ],
-      "functions": [
-          {
-              "name": "gray_encode",
-              "line": 56,
-              "description": ""
-          },
-          {
-              "name": "parity",
-              "line": 66,
-              "description": ""
-          }
-      ]
+    "types": [],
+    "signals": [
+      {
+        "name": "gray_cnt_r",
+        "type": "unsigned(BITS - 1 downto 0)",
+        "line": 73,
+        "description": ""
+      },
+      {
+        "name": "gray_cnt_nxt",
+        "type": "unsigned(BITS - 1 downto 0)",
+        "line": 74,
+        "description": ""
+      },
+      {
+        "name": "en",
+        "type": "std_logic",
+        "line": 76,
+        "description": ""
+      }
+    ],
+    "constants": [
+      {
+        "name": "INIT_GRAY",
+        "type": "unsigned(BITS - 1 downto 0)",
+        "default_value": " gray_encode(INIT, BITS)",
+        "line": 72,
+        "description": ""
+      }
+    ],
+    "functions": [
+      {
+        "name": "gray_encode",
+        "line": 52,
+        "description": ""
+      },
+      {
+        "name": "parity",
+        "line": 62,
+        "description": ""
+      }
+    ]
   }
 }

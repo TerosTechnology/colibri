@@ -1,0 +1,71 @@
+{
+  "entity": {
+    "name": "arith_counter_bcd",
+    "description": "Some description can be added here\n also in multi-linesAnother description can be added here And more core description can be added here"
+  },
+  "generics": [
+    {
+      "name": "DIGITS",
+      "type": "positive",
+      "line": 25,
+      "direction": "",
+      "default_value": "",
+      "description": " Number of BCD digits"
+    }
+  ],
+  "ports": [
+    {
+      "name": "clk",
+      "type": "std_logic",
+      "line": 29,
+      "direction": "in",
+      "default_value": "",
+      "description": " system clock",
+      "group": ""
+    },
+    {
+      "name": "rst",
+      "type": "std_logic",
+      "line": 30,
+      "direction": "in",
+      "default_value": "",
+      "description": " Reset to 0",
+      "group": ""
+    },
+    {
+      "name": "inc",
+      "type": "std_logic",
+      "line": 31,
+      "direction": "in",
+      "default_value": "",
+      "description": " Increment",
+      "group": ""
+    },
+    {
+      "name": "val",
+      "type": "T_BCD_VECTOR(DIGITS+DIGITS-1 downto 0)",
+      "line": 32,
+      "direction": "out",
+      "default_value": "",
+      "description": " Value output",
+      "group": ""
+    }
+  ],
+  "body": {
+    "processes": [],
+    "instantiations": []
+  },
+  "declarations": {
+    "types": [],
+    "signals": [],
+    "constants": [],
+    "functions": []
+  },
+  "info": {
+    "file": "example_8.vhd",
+    "author": "el3ctrician (elbadriahmad@gmail.com)",
+    "version": "0.1",
+    "date": "2020-07-10",
+    "copyright": " Copyright (c) 2021 by TerosHDL\n             GNU Public License\n This program is free software: you can redistribute it and/or modify\n it under the terms of the GNU General Public License as published by\n the Free Software Foundation, either version 3 of the License, or\n (at your option) any later version.\n This program is distributed in the hope that it will be useful,\n but WITHOUT ANY WARRANTY; without even the implied warranty of\n MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n GNU General Public License for more details.\n You should have received a copy of the GNU General Public License\n along with this program.  If not, see <https://www.gnu.org/licenses/>"
+  }
+}

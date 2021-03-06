@@ -1,78 +1,82 @@
 {
-   "libraries": [],
-   "entity": {
-      "name": "clk_div",
-      "description": "\n"
-   },
-   "generics": [],
-   "ports": [
+  "libraries": [],
+  "entity": {
+    "name": "clk_div",
+    "description": ""
+  },
+  "generics": [],
+  "ports": [
+    {
+      "name": "clk_in",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 9,
+      "group": ""
+    },
+    {
+      "name": "reset",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 10,
+      "group": ""
+    },
+    {
+      "name": "enable",
+      "direction": "input",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 11,
+      "group": ""
+    },
+    {
+      "name": "clk_out",
+      "direction": "output",
+      "type": "",
+      "default_value": "",
+      "description": "",
+      "start_line": 12,
+      "group": ""
+    }
+  ],
+  "body": {
+    "processes": [
       {
-         "name": "clk_in",
-         "direction": "input",
-         "type": "",
-         "default_value": "",
-         "description": "",
-         "start_line": 9
-      },
-      {
-         "name": "reset",
-         "direction": "input",
-         "type": "",
-         "default_value": "",
-         "description": "",
-         "start_line": 10
-      },
-      {
-         "name": "enable",
-         "direction": "input",
-         "type": "",
-         "default_value": "",
-         "description": "",
-         "start_line": 11
-      },
-      {
-         "name": "clk_out",
-         "direction": "output",
-         "type": "",
-         "default_value": "",
-         "description": "",
-         "start_line": 12
+        "name": "unnamed",
+        "sens_list": "@ (posedge clk_in)",
+        "description": "",
+        "start_line": 19
       }
-   ],
-   "body": {
-      "processes": [
-         {
-            "name": "unnamed",
-            "sens_list": "@ (posedge clk_in)",
-            "description": "",
-            "start_line": 19
-         }
-      ],
-      "instantiations": []
-   },
-   "declarations": {
-      "types": [],
-      "signals": [
-         {
-            "name": "clk_in",
-            "type": "wire",
-            "description": "",
-            "start_line": 14
-         },
-         {
-            "name": "enable",
-            "type": "wire",
-            "description": "",
-            "start_line": 15
-         },
-         {
-            "name": "clk_out",
-            "type": "reg",
-            "description": "",
-            "start_line": 17
-         }
-      ],
-      "constants": [],
-      "functions": []
-   }
+    ],
+    "instantiations": []
+  },
+  "declarations": {
+    "types": [],
+    "signals": [
+      {
+        "name": "clk_in",
+        "type": "wire",
+        "description": "",
+        "start_line": 14
+      },
+      {
+        "name": "enable",
+        "type": "wire",
+        "description": "",
+        "start_line": 15
+      },
+      {
+        "name": "clk_out",
+        "type": "reg",
+        "description": "",
+        "start_line": 17
+      }
+    ],
+    "constants": [],
+    "functions": []
+  }
 }

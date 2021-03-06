@@ -50,17 +50,22 @@ class Parser extends ts_base_parser.Ts_base_parser {
   }
 
   get_all(code, comment_symbol) {
+    let struct;
     if (comment_symbol !== undefined) {
       this.comment_symbol = comment_symbol;
     }
     let entity_file = this.get_entity_file(code);
     if (entity_file === undefined) {
       let package_file = this.get_package_file(code);
-      return package_file;
+      struct = this.parse_doxy(package_file,"package");
     }
     else {
-      return entity_file;
+      struct =  this.parse_doxy(entity_file,"entity");
+      struct =  this.parse_mermaid(entity_file,"entity");
+      struct =  this.parse_ports_group(struct);
+      struct =  this.parse_virtual_bus(struct);
     }
+    return struct;
   }
 
   get_entity_file(code) {
@@ -318,7 +323,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
             }
           }
           if (check === false) {
-            comments += txt_comment.slice(1);
+            comments += txt_comment.slice(1)+"\n";
           }
         }
       }

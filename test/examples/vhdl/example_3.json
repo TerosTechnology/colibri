@@ -1,115 +1,123 @@
 {
   "entity": {
-      "name": "axi_dma_regs",
-      "description": ""
+    "name": "axi_dma_regs",
+    "description": ""
   },
   "generics": [],
   "ports": [
-      {
-          "name": "clk",
-          "type": "std_logic",
-          "line": 17,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "axils_m2s",
-          "type": "axil_m2s_t",
-          "line": 19,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "axils_s2m",
-          "type": "axil_s2m_t",
-          "line": 20,
-          "direction": "out",
-          "default_value": "axil_s2m_init",
-          "description": ""
-      },
-      {
-          "name": "start_transfer",
-          "type": "std_logic",
-          "line": 22,
-          "direction": "out",
-          "default_value": "'0'",
-          "description": ""
-      },
-      {
-          "name": "transfer_done",
-          "type": "std_logic",
-          "line": 23,
-          "direction": "in",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "src_address",
-          "type": "std_logic_vector(31 downto 0)",
-          "line": 25,
-          "direction": "out",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "dst_address",
-          "type": "std_logic_vector(31 downto 0)",
-          "line": 26,
-          "direction": "out",
-          "default_value": "",
-          "description": ""
-      },
-      {
-          "name": "num_bytes",
-          "type": "std_logic_vector(31 downto 0)",
-          "line": 27,
-          "direction": "out",
-          "default_value": "",
-          "description": ""
-      }
+    {
+      "name": "clk",
+      "type": "std_logic",
+      "line": 17,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "axils_m2s",
+      "type": "axil_m2s_t",
+      "line": 19,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "axils_s2m",
+      "type": "axil_s2m_t",
+      "line": 20,
+      "direction": "out",
+      "default_value": "axil_s2m_init",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "start_transfer",
+      "type": "std_logic",
+      "line": 22,
+      "direction": "out",
+      "default_value": "'0'",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "transfer_done",
+      "type": "std_logic",
+      "line": 23,
+      "direction": "in",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "src_address",
+      "type": "std_logic_vector(31 downto 0)",
+      "line": 25,
+      "direction": "out",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "dst_address",
+      "type": "std_logic_vector(31 downto 0)",
+      "line": 26,
+      "direction": "out",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    },
+    {
+      "name": "num_bytes",
+      "type": "std_logic_vector(31 downto 0)",
+      "line": 27,
+      "direction": "out",
+      "default_value": "",
+      "description": "",
+      "group": ""
+    }
   ],
   "body": {
-      "processes": [
-          {
-              "name": "main",
-              "sens_list": "",
-              "description": ""
-          }
-      ],
-      "instantiations": []
+    "processes": [
+      {
+        "name": "main",
+        "sens_list": "",
+        "description": ""
+      }
+    ],
+    "instantiations": []
   },
   "declarations": {
-      "types": [
-          {
-              "name": "state_t",
-              "type": "(idle,\n                   writing,\n                   write_response,\n                   reading)",
-              "line": 33,
-              "description": ""
-          }
-      ],
-      "signals": [
-          {
-              "name": "state",
-              "type": "state_t",
-              "line": 37,
-              "description": ""
-          },
-          {
-              "name": "addr",
-              "type": "std_logic_vector(axils_m2s.ar.addr'range)",
-              "line": 39,
-              "description": ""
-          }
-      ],
-      "constants": [],
-      "functions": [
-          {
-              "name": "cmp_word_address",
-              "line": 42,
-              "description": ""
-          }
-      ]
+    "types": [
+      {
+        "name": "state_t",
+        "type": "(idle,\r\n    writing,\r\n    write_response,\r\n    reading)",
+        "line": 33,
+        "description": ""
+      }
+    ],
+    "signals": [
+      {
+        "name": "state",
+        "type": "state_t",
+        "line": 37,
+        "description": ""
+      },
+      {
+        "name": "addr",
+        "type": "std_logic_vector(axils_m2s.ar.addr'range)",
+        "line": 39,
+        "description": ""
+      }
+    ],
+    "constants": [],
+    "functions": [
+      {
+        "name": "cmp_word_address",
+        "line": 42,
+        "description": ""
+      }
+    ]
   }
 }
