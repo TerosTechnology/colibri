@@ -365,9 +365,9 @@ class Documenter {
     if (code_tree['entity'] !== undefined) {
       //Title
       html += converter.makeHtml("# Entity: " + code_tree['entity']['name'] + "\n");
-      //Description
+      //Diagram
       html += converter.makeHtml("## Diagram\n");
-      html += converter.makeHtml((await this._get_diagram_svg_from_code_tree(code_tree) + "\n").replace(/\*/g, "\\*"));
+      html += converter.makeHtml((await this._get_diagram_svg_from_code_tree(code_tree) + "\n").replace(/\*/g, "\\*").replace(/\`/g, "\\`"));
       //Description
       html += converter.makeHtml("## Description\n");
       const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
