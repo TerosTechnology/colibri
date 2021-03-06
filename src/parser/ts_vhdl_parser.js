@@ -29,13 +29,16 @@ class Parser extends ts_base_parser.Ts_base_parser {
   }
 
   async init() {
-    this.code = '';
-    const Parser = require('web-tree-sitter');
-    await Parser.init();
-    this.parser = new Parser();
-    let Lang = await
-      Parser.Language.load(path.join(__dirname, path.sep + "parsers" + path.sep + "tree-sitter-vhdl.wasm"));
-    this.parser.setLanguage(Lang);
+    try{
+      this.code = '';
+      const Parser = require('web-tree-sitter');
+      await Parser.init();
+      this.parser = new Parser();
+      let Lang = await
+        Parser.Language.load(path.join(__dirname, path.sep + "parsers" + path.sep + "tree-sitter-vhdl.wasm"));
+      this.parser.setLanguage(Lang);
+    }
+    catch(e){console.log(e);}
   }
 
   parse(code) {

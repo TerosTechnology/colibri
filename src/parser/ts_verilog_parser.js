@@ -20,7 +20,6 @@
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
 const path = require('path');
-const Tree_sitter = require('web-tree-sitter');
 const ts_base_parser = require('./ts_base_parser');
 
 class Parser extends ts_base_parser.Ts_base_parser {
@@ -31,12 +30,16 @@ class Parser extends ts_base_parser.Ts_base_parser {
   }
 
   async init() {
-    await Tree_sitter.init();
-    this.parser = new Tree_sitter();
-    let Lang = await Tree_sitter.Language.load(path.join(__dirname, path.sep +
-      "parsers" + path.sep + "tree-sitter-verilog.wasm"));
-    this.parser.setLanguage(Lang);
-    this.loaded_wasm = true;
+    try{
+      const Tree_sitter = require('web-tree-sitter');
+      await Tree_sitter.init();
+      this.parser = new Tree_sitter();
+      let Lang = await Tree_sitter.Language.load(path.join(__dirname, path.sep +
+        "parsers" + path.sep + "tree-sitter-verilog.wasm"));
+      this.parser.setLanguage(Lang);
+      this.loaded_wasm = true;
+    }
+    catch(e){console.log(e);}
   }
 
   async get_all(sourceCode, comment_symbol) {
