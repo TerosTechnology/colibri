@@ -26,6 +26,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
   constructor(comment_symbol) {
     super();
     this.comment_symbol = comment_symbol;
+    this.loaded = false;
   }
 
   async init() {
@@ -37,6 +38,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       let Lang = await
         Parser.Language.load(path.join(__dirname, path.sep + "parsers" + path.sep + "tree-sitter-vhdl.wasm"));
       this.parser.setLanguage(Lang);
+      this.loaded = true;
     }
     catch(e){console.log(e);}
   }
@@ -50,6 +52,9 @@ class Parser extends ts_base_parser.Ts_base_parser {
   }
 
   get_all(code, comment_symbol) {
+    if (this.loaded === false){
+      return undefined;
+    }
     let struct;
     if (comment_symbol !== undefined) {
       this.comment_symbol = comment_symbol;
@@ -73,11 +78,14 @@ class Parser extends ts_base_parser.Ts_base_parser {
       let code_lines = code.split('\n');
 
       let entity_declaration = this.get_entity_declaration(code);
-      if (code_lines.length > 10000) {
+      if (code_lines.length > 99999999999999) {
         let elements = {
           'entity': entity_declaration.entity,
           'generics': entity_declaration.generics,
-          'ports': entity_declaration.ports
+          'ports': entity_declaration.ports,
+          'body': { 'processes': [], 'instantiations': [] },
+          'declarations': {'types': [], 'signals': [],
+          'constants': [], 'functions': []}
         };
         return elements;
       }

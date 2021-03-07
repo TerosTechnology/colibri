@@ -26,7 +26,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
   constructor(comment_symbol) {
     super();
     this.comment_symbol = comment_symbol;
-    this.loaded_wasm = false;
+    this.loaded = false;
   }
 
   async init() {
@@ -37,12 +37,15 @@ class Parser extends ts_base_parser.Ts_base_parser {
       let Lang = await Tree_sitter.Language.load(path.join(__dirname, path.sep +
         "parsers" + path.sep + "tree-sitter-verilog.wasm"));
       this.parser.setLanguage(Lang);
-      this.loaded_wasm = true;
+      this.loaded = true;
     }
     catch(e){console.log(e);}
   }
 
   async get_all(sourceCode, comment_symbol) {
+    if (this.loaded === false){
+      return undefined;
+    }
     let structure;
     let file_type;
     if (comment_symbol !== undefined) {
