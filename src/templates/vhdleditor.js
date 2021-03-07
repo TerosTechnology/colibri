@@ -1,4 +1,4 @@
-// Copyright 2020 Teros Technology
+// Copyright 2021 Teros Technology
 //
 // Ismael Perez Rojo
 // Carlos Alberto Ruiz Naranjo
@@ -19,7 +19,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-//TODO: regular la tabulación.
 //TODO: estandarizar ports y genrics.
 
 const Codes = require('./codes');

@@ -93,7 +93,7 @@ function check(expected, out,tested,language) {
   else{
     console.log("Testing... " + tested +" "+language+": Fail!".red);
     if (process.argv[2] === 'out') {
-      fs.writeFileSync("/home/ismael/Desktop/test.txt", out, 'utf8');
+      fs.writeFileSync(__dirname + '/examples/'+process.argv[2]+'/example_'+out+'.txt', out, 'utf8');
       console.log(out);
     }
     throw new Error('Test error.');

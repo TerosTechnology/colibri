@@ -36,7 +36,7 @@
       "direction": "input",
       "type": "[WIDTH-1:0]",
       "default_value": "",
-      "description": "**descrition**",
+      "description": "**description**",
       "start_line": 11,
       "group": ""
     },

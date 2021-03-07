@@ -54,7 +54,7 @@ for (let x = 0; x < 3; x++) {
     } else {
       console.log("Testing... tbVerilog 2001: Fail!".red + " --> file: ".yellow + 'example_' + x + '.v');
       if (process.argv[2] === 'out') {
-        fs.writeFileSync("/home/ismael/Desktop/test.txt", test, 'utf8');
+        fs.writeFileSync(__dirname + '/examples/'+process.argv[2]+'/test_v_tb/example_'+x+'.txt',test, 'utf8');
         console.log(test);
       }
       throw new Error('Test error.');
@@ -87,7 +87,7 @@ for (let x = 0; x < 3; x++) {
     } else {
       console.log("Testing... tbVerilogVunit 2001: Fail!".red + " --> file: ".yellow + 'example_' + x + '.v');
       if (process.argv[2] === 'out') {
-        fs.writeFileSync("/home/ismael/Desktop/test.txt", test_vunit, 'utf8');
+        fs.writeFileSync(__dirname + '/examples/'+process.argv[2]+'/test_v_vunit_tb/example_'+x+'.txt', test_vunit, 'utf8');
         console.log(test_vunit);
       }
       throw new Error('Test error.');
