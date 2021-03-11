@@ -262,7 +262,13 @@ class Ts_base_parser {
         // strip virtual bus description from the command part
         virtual_bus_description = virtual_bus_description.replace(/^\s*[@\\]virtualbus\s/, "");
         // construct the name and description of virtual bus
-        let virtual_bus_name = virtual_bus_description.match(/^\s*\w+/)[0]
+        let virtual_bus_name = virtual_bus_description.match(/^\s*\w+/);
+        if (virtual_bus_name !== null) {
+          virtual_bus_name = virtual_bus_description.match(/^\s*\w+/)[0];
+        }
+        else {
+          virtual_bus_name = "";
+        }
         virtual_bus_description = virtual_bus_description.replace(virtual_bus_name, "");
         let virtual_bus_dir = virtual_bus_description.match(virtual_bus_dir_regex);
         // look for optional direction
@@ -270,10 +276,12 @@ class Ts_base_parser {
           virtual_bus_description = virtual_bus_description.replace(virtual_bus_dir[0], "");
           virtual_bus_description = virtual_bus_description.replace(/\n\n/, "");
           virtual_bus_dir = virtual_bus_description.match(/^\s*(out|in)/gm);
-          if (virtual_bus_dir.length > 0) {
+          if (virtual_bus_dir !== null) {
             virtual_bus_description = virtual_bus_description.replace(virtual_bus_dir[0], "");
+            virtual_bus_struct.direction = virtual_bus_dir[0].trim();
+          } else{
+            virtual_bus_struct.direction = "in";
           }
-          virtual_bus_struct.direction = virtual_bus_dir[0].trim();
         }
         // look for optional flag to keep in signals in table
         let keep_ports = virtual_bus_description.match(virtual_bus_keep_regex);
