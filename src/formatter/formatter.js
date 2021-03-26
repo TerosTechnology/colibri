@@ -22,6 +22,7 @@
 const Vsg = require('./vsg');
 const Standalone_vhdl = require('./standalone_vhdl');
 const Istyle = require('./istyle');
+const S3SV = require('./s3sv');
 
 // const Verible = require('./verible');
 const General = require('../general/general');
@@ -37,12 +38,15 @@ class Formatter {
     else if (formatter_name === General.FORMATTERS.ISTYLE) {
       return this.get_istyle();
     }
+    else if (formatter_name === General.FORMATTERS.S3SV) {
+      return this.get_s3sv();
+    }
     else if (formatter_name === General.FORMATTERS.VERIBLE) {
     //   return this.get_verible();
     }
     else if (formatter_name === General.FORMATTERS.STANDALONE) {
       return this.get_standalone_vhdl();
-    }
+    }  
     else{
       throw new Error('Formatter name not supported.');
     }
@@ -60,7 +64,11 @@ class Formatter {
   get_vsg() {
     return new Vsg.Vsg();
   }
+  get_s3sv() {
+    return new S3SV.S3SV();
+  }
 }
+
 
 // eslint-disable-next-line no-undef
 module.exports = {

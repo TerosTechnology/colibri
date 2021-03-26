@@ -30,6 +30,7 @@ const FORMATTERS = {
   ISTYLE : 'istyle',
   VERIBLE : 'verible',
   VSG : 'vsg',
+  S3SV: 's3sv',
   STANDALONE : 'standalone'
 };
 
