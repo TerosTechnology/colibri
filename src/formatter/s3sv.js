@@ -25,8 +25,8 @@ class S3SV extends Base_formatter {
   constructor() {
     super();
 
-    let cpython3_path = vscode.workspace.getConfiguration('teroshdl.global').get("python3-path"); // string
-    this.python3_path = cpython3_path == "" ? "python3" : cpython3_path;
+    //let cpython3_path = vscode.workspace.getConfiguration('teroshdl.global').get("python3-path"); // string
+    this.python3_path = "python3";
 
     this.use_tabs = false;
     this.indent_size = 2;
@@ -34,16 +34,15 @@ class S3SV extends Base_formatter {
     this.one_decl_per_line = false;
   }
 
-  update_params() 
-  {
-    this.use_tabs =          vscode.workspace.getConfiguration('teroshdl.formatter.verilog').get("useTabs")
-    this.indent_size =       vscode.workspace.getConfiguration('teroshdl.formatter.verilog').get("indentSize")
-    this.one_bind_per_line = vscode.workspace.getConfiguration('teroshdl.formatter.verilog.s3sv').get("oneBindPerLine");
-    this.one_decl_per_line = vscode.workspace.getConfiguration('teroshdl.formatter.verilog.s3sv').get("oneDeclarationPerLine");
-  }
-
   //Options: {custom_path:"/path/to/bin, custom_bin:"bin", style:"path/to/rules.json" extra_args:""}
   async format_from_code(code,options){
+
+    this.python3_path =      options["python3_path"]
+    this.use_tabs =          options["use_tabs"]
+    this.indent_size =       options["indent_size"]
+    this.one_bind_per_line = options["one_bind_per_line"]
+    this.one_decl_per_line = options["one_decl_per_line"]
+
     let temp_file = await this._create_temp_file_of_code(code);
     let formatted_code = await this._format(temp_file,options);
     return formatted_code;
