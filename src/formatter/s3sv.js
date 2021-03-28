@@ -17,7 +17,6 @@
 
 const fs = require('fs');
 const os = require('os');
-const vscode = require('vscode');
 const path_lib = require('path');
 const Base_formatter = require('./base_formatter');
 
