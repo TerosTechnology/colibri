@@ -1261,14 +1261,14 @@ class VerilogBeautifier():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Verilog Beautifier')
-    parser.add_argument('-i','--input' , required=True ,                          help='Verilog filename to beautify')
-    parser.add_argument('-o','--output', required=False,           default='',    help='Output filename. Default to input filename.')
-    parser.add_argument('-t','--tab'   , required=False,           default=False, help='Use tabulation for indentation (default: False')
-    parser.add_argument('-s','--space' , required=False, type=int, default=3,     help='Number of space for an indentation level. Default to 3.')
-    parser.add_argument('--no-oneBindPerLine', dest='oneBindPerLine', action='store_false', help='Allow more than one port binding per line in instance')
-    parser.add_argument('--oneDeclPerLine', dest='oneDeclPerLine', default=False, action='store_true', help='Force only one declration per line.')
+    parser.add_argument('-i','--input' , required=True ,                                   help='Verilog filename to beautify')
+    parser.add_argument('-o','--output', required=False,              default='',          help='Output filename. Default to input filename.')
+    parser.add_argument('-s','--space' , required=False, type=int   , default=3,           help='Number of space for an indentation level. Default to 3.')
+    parser.add_argument('--use-tabs',                                 action="store_true", help='Use tabulation for indentation (default: False')
+    parser.add_argument('--no-oneBindPerLine', dest='oneBindPerLine', action='store_false',help='Allow more than one port binding per line in instance')
+    parser.add_argument('--oneDeclPerLine', dest='oneDeclPerLine',    action='store_true', help='Force only one declration per line.')
     parser.set_defaults(oneBindPerLine=True)
     args = parser.parse_args()
-    beautifier = VerilogBeautifier(nbSpace=args.space, useTab=args.tab, oneBindPerLine=args.oneBindPerLine, oneDeclPerLine=args.oneDeclPerLine)
+    beautifier = VerilogBeautifier(nbSpace=args.space, useTab=args.use_tabs, oneBindPerLine=args.oneBindPerLine, oneDeclPerLine=args.oneDeclPerLine)
     beautifier.beautifyFile(fnameIn=args.input, fnameOut=args.output)
 
