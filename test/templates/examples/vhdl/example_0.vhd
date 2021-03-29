@@ -37,8 +37,8 @@ use		ieee.numeric_std.all;
 
 entity arith_counter_gray is
 	generic (
-		BITS : positive;															--! Bit width of the counter
-		INIT : natural 				:= 0										--! Initial/reset counter value
+		BITS : positive := 8;										--! Bit width of the counter
+		INIT : natural 	:= 0										--! Initial/reset counter value
 	);
 	port (
 		clk : in	std_logic;

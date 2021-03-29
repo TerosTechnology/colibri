@@ -19,11 +19,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-//TODO: regular la tabulación.
-//TODO: estandarizar ports y genrics.
-//TODO: versión
-//TODO: vunit
-
 const General = require('../general/general');
 const Codes = require('./codes');
 const ParserLib = require('../parser/factory');
@@ -146,7 +141,11 @@ class Verilog_editor {
     var str = '';
     str += `${space}// Parameters\n`;
     for (let x = 0; x < m.length; ++x) {
-      str += `${space}localparam ${m[x]['type']} ${m[x]['name']} = 1;\n`;
+      if (m[x]['default_value'] !== "" || m[x]['default_value'] !== undefined) {
+        str += `${space}localparam ${m[x]['type']} ${m[x]['name']} = ${m[x]['default_value']};\n`;
+      }else{
+        str += `${space}localparam ${m[x]['type']} ${m[x]['name']} = 1;\n`;
+      }
     }
     return str;
   }

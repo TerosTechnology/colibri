@@ -3,9 +3,9 @@
 module behav_counter_tb;
 
   // Parameters
-  localparam  DATA_WIDTH = 1;
-  localparam  KEEP_WIDTH = 1;
-  localparam  HDR_WIDTH = 1;
+  localparam  DATA_WIDTH = 64;
+  localparam  KEEP_WIDTH = undefined;
+  localparam  HDR_WIDTH = 2;
 
   // Ports
   reg [7:0] d;

@@ -3,7 +3,7 @@
 module comp_tb;
 
   // Parameters
-  localparam  p_size = 1;
+  localparam  p_size = 12;
 
   // Ports
   reg clk = 0;

@@ -19,8 +19,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-//TODO: estandarizar ports y genrics.
-
 const Codes = require('./codes');
 const ParserLib = require('../parser/factory');
 const General = require('../general/general');
@@ -137,21 +135,6 @@ class Vhdl_editor {
     str += '--\n';
     str += 'library vunit_lib;\n';
     str += 'context vunit_lib.vunit_context;\n';
-    str += '-- use vunit_lib.array_pkg.all;\n';
-    str += '-- use vunit_lib.lang.all;\n';
-    str += '-- use vunit_lib.string_ops.all;\n';
-    str += '-- use vunit_lib.dictionary.all;\n';
-    str += '-- use vunit_lib.path.all;\n';
-    str += '-- use vunit_lib.log_types_pkg.all;\n';
-    str += '-- use vunit_lib.log_special_types_pkg.all;\n';
-    str += '-- use vunit_lib.log_pkg.all;\n';
-    str += '-- use vunit_lib.check_types_pkg.all;\n';
-    str += '-- use vunit_lib.check_special_types_pkg.all;\n';
-    str += '-- use vunit_lib.check_pkg.all;\n';
-    str += '-- use vunit_lib.run_types_pkg.all;\n';
-    str += '-- use vunit_lib.run_special_types_pkg.all;\n';
-    str += '-- use vunit_lib.run_base_pkg.all;\n';
-    str += '-- use vunit_lib.run_pkg.all;\n';
     return str;
   }
 
@@ -191,23 +174,28 @@ class Vhdl_editor {
     str += space + '-- Generics\n';
     for (let x = 0; x < m.length; ++x) {
       var normalized_type = m[x]['type'].replace(/\s/g, '').toLowerCase();
-      if (normalized_type === "integer") {
-        str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ' := 0;\n';
-      }
-      else if (normalized_type === "signed" || normalized_type === "unsigned") {
-        str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + " := (others => '0');\n";
+      if (m[x]['default_value'] !== "" || m[x]['default_value'] !== undefined) {
+        str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ' := '+ m[x]['default_value'] +';\n';
+        
+      }else{
+        if (normalized_type === "integer") {
+          str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ' := 0;\n';
+        }
+        else if (normalized_type === "signed" || normalized_type === "unsigned") {
+          str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + " := (others => '0');\n";
 
+        }
+        else if (normalized_type === "string") {
+          str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ' := "";\n';
+        }
+        else if (normalized_type === "boolean") {
+          str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ' := false;\n';
+        }
+        else {
+          str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ';\n';
+        }
       }
-      else if (normalized_type === "string") {
-        str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ' := "";\n';
-      }
-      else if (normalized_type === "boolean") {
-        str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ' := false;\n';
-      }
-      else {
-        str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ';\n';
-      }
-    }
+    } 
     return str;
   }
 
@@ -291,12 +279,12 @@ class Vhdl_editor {
     str += this.indet_2 + 'while test_suite loop\n';
     str += this.indet_3 + 'if run("test_alive") then\n';
     str += this.indet_4 + 'info("Hello world test_alive");\n';
-    str += this.indet_4 + 'wait for 100 ns;\n';
+    str += this.indet_4 + 'wait for 100 * clk_period;\n';
     str += this.indet_4 + 'test_runner_cleanup(runner);\n';
     str += this.indet_4 + '\n';
     str += this.indet_3 + 'elsif run("test_0") then\n';
     str += this.indet_4 + 'info("Hello world test_0");\n';
-    str += this.indet_4 + 'wait for 100 ns;\n';
+    str += this.indet_4 + 'wait for 100 * clk_period;\n';
     str += this.indet_4 + 'test_runner_cleanup(runner);\n';
     str += this.indet_3 + 'end if;\n';
     str += this.indet_2 + 'end loop;\n';
