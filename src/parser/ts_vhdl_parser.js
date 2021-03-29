@@ -69,6 +69,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       struct =  this.parse_mermaid(entity_file,"entity");
       struct =  this.parse_ports_group(struct);
       struct =  this.parse_virtual_bus(struct);
+      struct.entity.description = this.normalize_description(struct.entity.description);
     }
     return struct;
   }

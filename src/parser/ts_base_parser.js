@@ -141,7 +141,7 @@ class Ts_base_parser {
     // clean @details and @brief and create the new description
     const description_regex = /^\s*[@\\](brief|details)\s/gm;
     desc_root.description = desc_root.description.replace(description_regex, "");
-    desc_root.description = desc_root.description.replace(/\n[\s]*\n/gm, "");
+    // desc_root.description = desc_root.description.replace(/\n[\s]*\n/gm, "");
     dic[file_type] = desc_root;
     if (file_type === "entity") {
       let processes_list = dic['body']['processes']
@@ -152,6 +152,12 @@ class Ts_base_parser {
       }
     }
     return dic
+  }
+
+  normalize_description(description){
+    let desc_inst = description.replace(/\n\s*\n/g, '<br>');
+    desc_inst = desc_inst.replace(/\n/g, '');
+    return desc_inst;
   }
 
   parse_mermaid(dic,file_type) {
