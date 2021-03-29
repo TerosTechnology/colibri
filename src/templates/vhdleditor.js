@@ -19,8 +19,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-//TODO: estandarizar ports y genrics.
-
 const Codes = require('./codes');
 const ParserLib = require('../parser/factory');
 const General = require('../general/general');
@@ -176,7 +174,7 @@ class Vhdl_editor {
     str += space + '-- Generics\n';
     for (let x = 0; x < m.length; ++x) {
       var normalized_type = m[x]['type'].replace(/\s/g, '').toLowerCase();
-      if (m[x]['default_value']!=="") {
+      if (m[x]['default_value'] !== "" || m[x]['default_value'] !== undefined) {
         str += space + 'constant ' + m[x]['name'] + ' : ' + m[x]['type'] + ' := '+ m[x]['default_value'] +';\n';
         
       }else{

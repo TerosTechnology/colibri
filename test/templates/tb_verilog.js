@@ -57,6 +57,11 @@ for (let x = 0; x < 3; x++) {
         fs.writeFileSync(__dirname + '/examples/'+process.argv[2]+'/test_v_tb/example_'+x+'.txt',test, 'utf8');
         console.log(test);
       }
+      console.log("Expected -->".yellow);
+      console.log(test_Expected);
+      console.log("Real     -->".yellow);
+      console.log(test);
+      console.log("Testing... tbVerilog: Fail!".red);
       throw new Error('Test error.');
     }
   });
@@ -90,6 +95,11 @@ for (let x = 0; x < 3; x++) {
         fs.writeFileSync(__dirname + '/examples/'+process.argv[2]+'/test_v_vunit_tb/example_'+x+'.txt', test_vunit, 'utf8');
         console.log(test_vunit);
       }
+      console.log("Expected -->".yellow);
+      console.log(test_Expected_vunit);
+      console.log("Real     -->".yellow);
+      console.log(test_vunit);
+      console.log("Testing... tbVerilogVunit: Fail!".red);
       throw new Error('Test error.');
     }
     console.log('****************************************************************');
