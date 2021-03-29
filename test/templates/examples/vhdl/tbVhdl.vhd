@@ -25,8 +25,8 @@ architecture bench of arith_counter_gray_tb is
   -- Clock period
   constant clk_period : time := 5 ns;
   -- Generics
-  constant BITS : positive;
-  constant INIT : natural;
+  constant BITS : positive := 8;
+  constant INIT : natural := 0;
 
   -- Ports
   signal clk : std_logic;

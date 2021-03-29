@@ -6,21 +6,6 @@ library src_lib;
 --
 library vunit_lib;
 context vunit_lib.vunit_context;
--- use vunit_lib.array_pkg.all;
--- use vunit_lib.lang.all;
--- use vunit_lib.string_ops.all;
--- use vunit_lib.dictionary.all;
--- use vunit_lib.path.all;
--- use vunit_lib.log_types_pkg.all;
--- use vunit_lib.log_special_types_pkg.all;
--- use vunit_lib.log_pkg.all;
--- use vunit_lib.check_types_pkg.all;
--- use vunit_lib.check_special_types_pkg.all;
--- use vunit_lib.check_pkg.all;
--- use vunit_lib.run_types_pkg.all;
--- use vunit_lib.run_special_types_pkg.all;
--- use vunit_lib.run_base_pkg.all;
--- use vunit_lib.run_pkg.all;
 
 entity arith_counter_gray_tb is
   generic (runner_cfg : string);
@@ -32,8 +17,8 @@ architecture bench of arith_counter_gray_tb is
   -- Clock period
   constant clk_period : time := 5 ns;
   -- Generics
-  constant BITS : positive;
-  constant INIT : natural;
+  constant BITS : positive := 8;
+  constant INIT : natural := 0;
 
   -- Ports
   signal clk : std_logic;
@@ -65,12 +50,12 @@ begin
     while test_suite loop
       if run("test_alive") then
         info("Hello world test_alive");
-        wait for 100 ns;
+        wait for 100 * clk_period;
         test_runner_cleanup(runner);
         
       elsif run("test_0") then
         info("Hello world test_0");
-        wait for 100 ns;
+        wait for 100 * clk_period;
         test_runner_cleanup(runner);
       end if;
     end loop;
