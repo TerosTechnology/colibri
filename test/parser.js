@@ -64,7 +64,6 @@ if (process.argv[2] === 'vhdl') {
       else {
         console.log("Test...  fail!".red);
         throw new Error('Test errors'.red);
-
       }
     });
   }

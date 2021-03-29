@@ -5,7 +5,6 @@
 --! @details Another description can be added here
 --! @version 0.1
 --! @date 2020-07-10
---! 
 --! @copyright  Copyright (c) 2021 by TerosHDL
 --!              GNU Public License
 --!  This program is free software: you can redistribute it and/or modify

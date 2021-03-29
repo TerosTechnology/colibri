@@ -1,6 +1,6 @@
 //! @file example_8.vhd
 //! @author el3ctrician (elbadriahmad@gmail.com)
-//! @brief Some description can be added here
+//! @brief Some description can be added here 
 //! also in multi-lines
 //! @details Another description can be added here
 //! @version 0.1

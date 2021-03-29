@@ -5,7 +5,6 @@
 --! @details Another description can be added here
 --! @version 0.1
 --! @date 2020-07-10
---! 
 --! And more core description can be added here
 --! another description of the core is also ok 
 entity arith_counter_bcd is

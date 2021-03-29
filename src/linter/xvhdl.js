@@ -48,6 +48,7 @@ class Xvhdl extends Base_linter {
     await this._delete_previus_lint();
     let normalized_file = file.replace(' ', '\\ ');
     let errors = await this._lint(normalized_file, options, libraries_command);
+    await this._delete_previus_lint();
     return errors;
   }
 
@@ -57,10 +58,10 @@ class Xvhdl extends Base_linter {
 
     let command = '';
     if (os.platform() === "win32") {
-      command = 'del xvhdl.pb && rmdir xsim.dir';
+      command = 'del xvhdl.pb && del xvhdl.log && rmdir xsim.dir';
     }
     else {
-      command = 'rm xvhdl.pb; rm -R xsim.dir';
+      command = 'rm xvhdl.pb; rm xvhdl.log; rm -R xsim.dir';
     }
     await exec(command);
   }

@@ -99,6 +99,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       if (file_type === "entity"){
         structure = this.parse_ports_group(structure);
         structure = this.parse_virtual_bus(structure);
+        structure.entity.description = this.normalize_description(structure.entity.description);
       }
       return structure;
     }
