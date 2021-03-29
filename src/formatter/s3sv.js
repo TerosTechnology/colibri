@@ -54,8 +54,11 @@ class S3SV extends Base_formatter {
 
     //Argument construction from members parameters
     let args = " ";
-    args += "-t " + (this.use_tabs ? "True" : "False") + " ";
+    
     args += `-s ${this.indent_size} `;
+    if(this.use_tabs) {
+      args += "--use-tabs ";
+    }
     if (! this.one_bind_per_line) {
       args += "--no-oneBindPerLine "
     }
