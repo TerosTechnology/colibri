@@ -2,7 +2,7 @@
   "libraries": [],
   "entity": {
     "name": "add2_and_clip_reg",
-    "description": "Some description can be added here   also in multi-linesAnother description can be added here<br>  And more core description can be added here<br>"
+    "description": "Some description can be added here \n  also in multi-lines\nAnother description can be added here\n\n\n \n\n \n  And more core description can be added here\n \n"
   },
   "generics": [
     {

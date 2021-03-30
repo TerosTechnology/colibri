@@ -309,6 +309,13 @@ class Documenter {
     return markdown_doc;
   }
 
+  normalize_description(description){
+    let desc_inst = description.replace(/\n\s*\n/g, '<br>');
+    desc_inst = desc_inst.replace(/\n/g, '');
+    desc_inst = desc_inst.replace(/<br \/>/g,'');
+    return desc_inst;
+  }
+
   async _get_html_from_code(options) {
     let html_style = "";
     let html_style_preview = `
@@ -408,6 +415,7 @@ class Documenter {
       for (let i = 0; i < wavedrom.length; ++i) {
         html_description = html_description.replace("$cholosimeone$" + i, wavedrom[i]);
       }
+      html_description = this.normalize_description(html_description);
       html += html_description;
       //Generics and ports
       html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], code_tree['generics'],code_tree['virtual_buses']));

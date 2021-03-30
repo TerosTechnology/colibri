@@ -1,7 +1,7 @@
 {
   "entity": {
     "name": "arith_counter_bcd",
-    "description": "<br> core description can be added here without using the @details and @brief another description of the core is also ok"
+    "description": "\n\n\n\n \n core description can be added here without using the @details and @brief\n another description of the core is also ok\n"
   },
   "generics": [
     {
