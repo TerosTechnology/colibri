@@ -24,7 +24,7 @@
 // exports.VerilogEditor = require('./editor/verilogeditor')
 // exports.VhdlParser     = require('./parser/vhdlparser');
 // exports.VerilogParser     = require('./parser/verilogparser');
-exports.Simulators = require('./simulators/simulators');
+// exports.Simulators = require('./simulators/simulators');
 
 //******************************************************************************
 //General
