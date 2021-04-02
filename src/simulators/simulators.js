@@ -19,7 +19,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-const axios = require("axios");
 const Codes = require('./codes')
 
 class Simulators {
@@ -30,6 +29,7 @@ class Simulators {
     const url = baseURL+'/suites/';
     const getData = async url => {
       try {
+        const axios = require("axios");
         const response = await axios.get(url);
         rsp['result'] = Codes.CODE_RESPONSE['SUCCESSFUL'];
         rsp['data']   = response.data;
@@ -48,6 +48,7 @@ class Simulators {
     const url = baseURL+'/tests/';
     const getData = async url => {
       try {
+        const axios = require("axios");
         const response = await axios.post(url,project);
         rsp['result'] = Codes.CODE_RESPONSE['SUCCESSFUL'];
         rsp['data']   = response.data;
