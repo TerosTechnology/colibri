@@ -20,7 +20,6 @@
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
 function diagramGenerator(structure, bn) {
-  const fs = require('fs');
   const window = require('svgdom');
   const SVG = require('svg.js')(window);
   const document = window.document;

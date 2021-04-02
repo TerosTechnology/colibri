@@ -21,7 +21,6 @@
 
 const stm_base = require('./stm_base_parser');
 const Path = require('path');
-const { lab } = require('d3');
 
 class Paser_stm_verilog extends stm_base.Parser_stm_base {
   constructor(comment_symbol) {
@@ -38,10 +37,12 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
       const Parser = require('web-tree-sitter');
       await Parser.init();
       this.parser = new Parser();
-      let Lang = await Parser.Language.load(Path.join(__dirname, Path.sep + "parsers" + Path.sep + "tree-sitter-verilog.wasm"));
+      let Lang = await Parser.Language.load(Path.join(__dirname, Path.sep + 
+          "parsers" + Path.sep + "tree-sitter-verilog.wasm"));
       this.parser.setLanguage(Lang);
       this.loaded_wasm = true;
     }
+    // eslint-disable-next-line no-console
     catch(e){console.log(e);}
   }
 
@@ -397,8 +398,6 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
     let cursor = p.walk();
     cursor.gotoFirstChild();
     do {
-      let start_position = cursor.startPosition;
-      let end_position = cursor.endPosition;
       if (cursor.nodeType === 'else') {
         let break_p = false;
         while (break_p === false && cursor.gotoNextSibling() !== false) {
@@ -537,15 +536,11 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
 
   get_start_position_array(p) {
     let tmp_position = p.code.startPosition;
-
-    let position = [tmp_position.row, tmp_position.column];
     return tmp_position;
   }
 
   get_end_position_array(p) {
     let tmp_position = p.code.endPosition;
-
-    let position = [tmp_position.row, tmp_position.column];
     return tmp_position;
   }
 
