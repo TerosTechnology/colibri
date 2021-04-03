@@ -24,7 +24,7 @@
 // exports.VerilogEditor = require('./editor/verilogeditor')
 // exports.VhdlParser     = require('./parser/vhdlparser');
 // exports.VerilogParser     = require('./parser/verilogparser');
-exports.Simulators = require('./simulators/simulators');
+// exports.Simulators = require('./simulators/simulators');
 
 //******************************************************************************
 //General
@@ -61,4 +61,4 @@ exports.State_machine = require('./parser/stm_parser');
 //******************************************************************************
 //nopy
 //******************************************************************************
-exports.Nopy = require('./nopy/api');
+exports.Nopy = require('./nopy/python_tools');

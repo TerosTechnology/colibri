@@ -1,8 +1,7 @@
 {
   "entity": {
     "name": "arith_counter_bcd",
-    "description": "Some description can be added here also in multi-linesAnother description can be added here <br> And more core description can be added here"
-  },
+    "description": "Some description can be added here\n also in multi-linesAnother description can be added here And more core description can be added here"  },
   "generics": [
     {
       "name": "DIGITS",

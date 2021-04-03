@@ -155,6 +155,7 @@ class Ts_base_parser {
   }
 
   normalize_description(description){
+    return description;
     let desc_inst = description.replace(/\n\s*\n/g, '<br>');
     desc_inst = desc_inst.replace(/\n/g, '');
     return desc_inst;

@@ -19,10 +19,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-const fs = require('fs');
-const os = require('os');
-const path_lib = require('path');
-const Base_formatter = require('./base_formatter');
+const fs = require("fs");
+const os = require("os");
+const path_lib = require("path");
+const Base_formatter = require("./base_formatter");
 
 class Istyle extends Base_formatter {
   constructor() {
@@ -30,56 +30,52 @@ class Istyle extends Base_formatter {
   }
 
   //Options: {custom_path:"/path/to/bin, custom_bin:"bin", style:"path/to/rules.json" extra_args:""}
-  async format_from_code(code,options){
+  async format_from_code(code, options) {
     let temp_file = await this._create_temp_file_of_code(code);
-    let formatted_code = await this._format(temp_file,options);
+    let formatted_code = await this._format(temp_file, options);
     return formatted_code;
   }
 
-  async _format(file,options){
+  async _format(file, options) {
     let path_bin = `${__dirname}${path_lib.sep}bin${path_lib.sep}svistyle${path_lib.sep}`;
     let platform = os.platform();
-    if (platform === "darwin"){
+    if (platform === "darwin") {
       path_bin += "istyle-darwin";
-    }
-    else if (platform === "linux"){
+    } else if (platform === "linux") {
       path_bin += "istyle-linux";
-    }
-    else if (platform === "win32"){
+    } else if (platform === "win32") {
       path_bin += "istyle-win32.exe";
     }
 
     let synt = "";
-    if (options !== undefined && options.style !== undefined){
+    if (options === undefined || options.style === undefined) {
       synt = `${path_bin} --style=ansi `;
-    }
-    else{
-      synt = `${path_bin} --style=${options.style} `;
+    } else {
+      synt = `${path_bin} ${options.style} `;
     }
 
-    if (options !== undefined && options.extra_args !== undefined){
+    if (options !== undefined && options.extra_args !== undefined) {
       synt += options.extra_args;
     }
     synt += file;
 
     await this._exec_formatter(synt);
-    let formatted_code = fs.readFileSync(file, 'utf8');
+    let formatted_code = fs.readFileSync(file, "utf8");
     return formatted_code;
   }
 
   async _exec_formatter(command) {
-    console.log(`[colibri][istyle formatter] ${command}`);  
-    const exec = require('child_process').exec;
-      return new Promise((resolve) => {
-        exec(command, (error, stdout, stderr) => {
-          let result = {'stdout':stdout,'stderr':stderr};
-          resolve(result);
+    console.log(`[colibri][istyle formatter] ${command}`);
+    const exec = require("child_process").exec;
+    return new Promise((resolve) => {
+      exec(command, (error, stdout, stderr) => {
+        let result = { stdout: stdout, stderr: stderr };
+        resolve(result);
       });
     });
   }
-
 }
 
 module.exports = {
-  Istyle: Istyle
+  Istyle: Istyle,
 };

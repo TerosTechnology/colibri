@@ -1,8 +1,7 @@
 {
   "entity": {
     "name": "video_core",
-    "description": "Some description can be added here\nalso in multi-linesAnother description can be added here\nAnd more core description can be added here"
-  },
+    "description": "Some description can be added here\nalso in multi-linesAnother description can be added here\nAnd more core description can be added here"  },
   "generics": [],
   "ports": [
     {

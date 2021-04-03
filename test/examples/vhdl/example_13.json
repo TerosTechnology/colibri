@@ -1,8 +1,7 @@
 {
   "entity": {
     "name": "video_core",
-    "description": "Some description can be added here\n also in multi-lines\nAnother description can be added here\n And more core description can be added here",
-    "mermaid": " \n graph TD\n   A[Hard] -->|Text| B(Round)\n   B --> C{Decision}\n   C -->|One| D[Result 1]\n   C -->|Two| E[Result 2]\n "
+    "description": "Some description can be added here\n also in multi-lines\nAnother description can be added here\n And more core description can be added here",    "mermaid": " \n graph TD\n   A[Hard] -->|Text| B(Round)\n   B --> C{Decision}\n   C -->|One| D[Result 1]\n   C -->|Two| E[Result 2]\n "
   },
   "generics": [],
   "ports": [
