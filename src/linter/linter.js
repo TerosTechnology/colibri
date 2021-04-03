@@ -63,8 +63,7 @@ class Linter {
       return this.get_svlint();
     }
     else {
-      console.log(`[colibri][error] Linter name ${linter_name} not supported `);
-      throw new Error('Linter name not supported.');
+      return undefined;
     }
   }
 

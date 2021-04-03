@@ -17,10 +17,10 @@
 // You should have received a copy of the GNU General Public License
 // along with TerosHDL.  If not, see <https://www.gnu.org/licenses/>.
 
-const nopy = require('../nopy/api');
-const path_lib = require('path');
-const Viz = require('./viz/viz');
-const worker = require('./viz/full.render');
+const python_tools = require("../nopy/python_tools");
+const path_lib = require("path");
+const Viz = require("./viz/viz");
+const worker = require("./viz/full.render");
 
 class Dependency_graph {
   constructor(graph) {
@@ -32,35 +32,19 @@ class Dependency_graph {
     let str = "";
     if (sources.length !== 0) {
       for (let i = 0; i < sources.length - 1; ++i) {
-        str += sources[i]['name'] + ",";
+        str += sources[i]["name"] + ",";
       }
-      str += sources[sources.length - 1]['name'];
-    }
-    let python_exec_path = python3_path;
-    if (python3_path === '') {
-      python_exec_path = await nopy.get_python_exec();
+      str += sources[sources.length - 1]["name"];
     }
 
-    let py_path = __dirname + path_lib.sep + "vunit_dependency.py";
-    if (python_exec_path === undefined || python_exec_path === '') {
-      return undefined;
-    }
-    // eslint-disable-next-line no-unused-vars
-    return new Promise(function (resolve, reject) {
-      nopy.spawnPython([py_path, str], {
-        interop: "buffer",
-        // eslint-disable-next-line no-unused-vars
-        execPath: python_exec_path
-      }).then(({ code, stdout, stderr }) => {
-        resolve(stdout);
-      })
-      .catch((e) => {
-        resolve(undefined);
-        console.log(e);
-        // Handle the error!
-      })
-    });
+    let python_script_path = `${__dirname}${path_lib.sep}vunit_dependency.py ${str}`;
+    let result = await python_tools.exec_python_script(
+      python3_path,
+      python_script_path
+    );
+    return result.stdout;
   }
+
   async get_dependency_graph_svg(sources, python3_path) {
     let dependencies = await this.create_dependency_graph(sources, python3_path);
     var viz = new Viz(worker);
