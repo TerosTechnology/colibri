@@ -27,7 +27,7 @@
     "showdown": "1.9.1",
     "state-machine-cat": "7.4.2",
     "svg.js": "2.7.1",
-    "svgdom": "0.1.8",
+    "svgdom": "^0.0.21",
     "temp": "0.9.4",
     "wavedrom": "2.6.8",
     "web-tree-sitter": "^0.16.2"
