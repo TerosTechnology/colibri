@@ -1,7 +1,4 @@
 "use strict";
-const fs = require("fs");
-const process = require("process");
-const commander = require("commander");
 const VHDLFormatter_1 = require("./VHDLFormatter");
 
 class Beautifuler {
