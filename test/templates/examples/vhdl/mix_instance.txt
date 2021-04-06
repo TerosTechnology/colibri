@@ -1,0 +1,14 @@
+arith_counter_gray 
+    #(
+        .BITS(BITS ),
+        .INIT (
+        INIT )
+    )
+    arith_counter_gray_dut (
+        .clk (clk ),
+        .rst (rst ),
+        .inc (inc ),
+        .dec (dec ),
+        .val (val ),
+        .cry  ( cry)
+    );

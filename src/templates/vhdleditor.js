@@ -1,4 +1,4 @@
-// Copyright 2021 Teros Technology
+// Copyright 2020-2021 Teros Technology
 //
 // Ismael Perez Rojo
 // Carlos Alberto Ruiz Naranjo
@@ -329,7 +329,14 @@ class Vhdl_component extends Vhdl_editor {
     }
 
     let parser = new ParserLib.ParserFactory;
-    parser = await parser.getParser(General.LANGUAGES.VHDL, '');
+    let lang;
+    if (options['type'] === Codes.TYPESCOMPONENTS.MIX_COMPONENT 
+    || options['type'] === Codes.TYPESCOMPONENTS.MIX_INSTANCE) {
+      lang = General.LANGUAGES.VERILOG;
+    }else{
+      lang = General.LANGUAGES.VHDL;
+    }
+    parser = await parser.getParser(lang, '');
     parser.init();
     let structure = await parser.get_all(src);
     if (structure === undefined) {
@@ -337,13 +344,15 @@ class Vhdl_component extends Vhdl_editor {
     }
     if (options === null) { return ""; }
     var component = "";
-    if (options['type'] === Codes.TYPESCOMPONENTS.COMPONENT) {
+    if (options['type'] === Codes.TYPESCOMPONENTS.COMPONENT
+    || options['type'] === Codes.TYPESCOMPONENTS.MIX_COMPONENT) {
       component = this.set_Component('  ', structure['entity']['name'],
         structure['generics'], structure['ports'], false);
     } else if (options['type'] === Codes.TYPESCOMPONENTS.INSTANCE) {
       component = this.set_Instance('  ', structure['entity']['name'],
         structure['generics'], structure['ports'], false, false);
-    } else if (options['type'] === Codes.TYPESCOMPONENTS.INSTANCE_VHDL2008) {
+    } else if (options['type'] === Codes.TYPESCOMPONENTS.INSTANCE_VHDL2008
+    || options['type'] === Codes.TYPESCOMPONENTS.MIX_INSTANCE) {
       component = this.set_Instance('  ', structure['entity']['name'],
         structure['generics'], structure['ports'], false, true);
     } else if (options['type'] === Codes.TYPESCOMPONENTS.SIGNALS) {

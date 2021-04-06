@@ -1,0 +1,6 @@
+  signal clk : std_logic;
+  signal rst : std_logic;
+  signal inc : std_logic;
+  signal dec : std_logic;
+  signal val : std_logic_vector(BITS-1 downto 0);
+  signal cry : std_logic;

@@ -1,0 +1,17 @@
+component uart
+      port (
+        reset : input ;
+        txclk : input ;
+        ld_tx_data : input ;
+        tx_data : input [7:0];
+        tx_enable : input ;
+        tx_out : output ;
+        tx_empty : output ;
+        rxclk : input ;
+        uld_rx_data : input ;
+        rx_data : output [7:0];
+        rx_enable : input ;
+        rx_in : input ;
+        rx_empty : output 
+    );
+end component;

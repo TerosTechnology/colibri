@@ -1,4 +1,4 @@
-// Copyright 2020 Teros Technology
+// Copyright 2020-2021 Teros Technology
 //
 // Ismael Perez Rojo
 // Carlos Alberto Ruiz Naranjo
@@ -25,13 +25,18 @@ const TYPES = {
   VUNIT : 'vunit',
   TESTBENCH : 'tb',
   COMPONENT : 'component',
+  MIX_COMPONENT : 'mix_component'
 };
 
 const TYPESCOMPONENTS = {
   COMPONENT : 'component',
   INSTANCE : 'instance',
   INSTANCE_VHDL2008 : 'instance_vhdl_2008',
-  SIGNALS : 'signals'
+  SIGNALS : 'signals',
+  MIX_INSTANCE : 'mix_instance',
+  MIX_INSTANCE_VHDL2008 : 'mix_instance_vhdl_2008',
+  MIX_SIGNALS : 'mix_signals',
+  MIX_COMPONENT : 'mix_component'
 };
 
 const TYPESTESTBENCH = {
