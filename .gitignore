@@ -25,3 +25,6 @@ vunit_out
 *.info
 *.pb
 xsim.dir
+/bin/example/*.md
+/bin/example/doc/*md
+/bin/example/doc/*svg
