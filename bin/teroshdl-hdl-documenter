@@ -1,19 +1,19 @@
 #!/usr/bin/env node
 
-let colibri = require('../src/main.js')
-let program = require('commander')
+let colibri = require('../src/main.js');
+let program = require('commander');
 
 program.version(require('../package.json').version)
     .option('-f, --file [path]', 'Path of the YML file to documenter')
     .usage('[options] <hdl-documenter>')
-    .parse(process.argv)
+    .parse(process.argv);
 
 program.parse(process.argv);
 const options = program.opts();
-let yml_file = options.file
+let yml_file = options.file;
 
-const yaml = require('js-yaml')
-const fs = require('fs')
+const yaml = require('js-yaml');
+const fs = require('fs');
 try {
   const doc = yaml.load(fs.readFileSync(yml_file, 'utf8'));
   for (const x in doc) {
@@ -48,13 +48,13 @@ function doc_library(lib){
     if (source !== undefined){
       const ip_name = ip.name;
       if (ip.internal_ips !== undefined){
-        internal_ips = ip.internal_ips
+        internal_ips = ip.internal_ips;
       }
       let ip_obj = {
         'source':source,
         'internal_ips':internal_ips,
         'custom_doc':custom_doc
-      }
+      };
       ips_obj.push(ip_obj);
     }
   }
@@ -75,7 +75,7 @@ function doc_ip(lib){
     'source':source,
     'internal_ips':internal_ips,
     'custom_doc':custom_doc
-  }
+  };
 
   let index_output_path = lib['readme-index-path'];
   let lib_output_path = lib['readme-ips-path'];
@@ -166,7 +166,7 @@ function save_md_ip(output_path, path, internal_ips_section, output_svg_path, re
     lang = "verilog";
     symbol = symbol_verilog;
   }
-  let config = {custom_section: internal_ips_section, custom_svg_path: output_svg_path}
+  let config = {custom_section: internal_ips_section, custom_svg_path: output_svg_path};
 
   let contents = fs.readFileSync(path, 'utf8');
   let doc_inst = new colibri.Documenter.Documenter(contents, lang, symbol);

@@ -1,0 +1,18 @@
+library:
+  name: Common modules
+  readme-index-path: ../
+  readme-ips-path: ./
+  readme-ips-from-readme-path: ./doc
+  ips:
+
+    - name: Module 0
+      source: ../rtl/module_0.vhd
+
+    - name: Module 1
+      source: ../rtl/module_1.vhd
+
+
+
+
+
+

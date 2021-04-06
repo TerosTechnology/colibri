@@ -49,5 +49,6 @@ async function exec_python_script(python3_path, python_script_path) {
 }
 
 module.exports = {
+  get_python_exec,
   exec_python_script,
 };
