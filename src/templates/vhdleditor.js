@@ -238,6 +238,67 @@ class Vhdl_editor {
 
     return str;
   }
+  
+  set_Mix_Component(space, name, generics, ports) {
+    var str = '';
+    //Component name
+    str += this.indet_1 + 'component ' + name + '\n';
+    //Generics
+    if (generics.length > 0) {
+      str += this.indet_2 + 'generic (\n';
+      for (let x = 0; x < generics.length - 1; ++x) {
+        let type = this.__vhdl_types(generics[x]['type']);
+        str += this.indet_3 + generics[x]['name'] + ' : ' + type + ';\n';
+      }
+      let type = this.__vhdl_types(generics[generics.length - 1]['type']);
+      str += this.indet_3 + generics[generics.length - 1]['name'] + ' : ' +
+      type + '\n';
+      str += this.indet_2 + ');\n';
+    }
+    //Ports
+    if (ports.length > 0) {
+      str += this.indet_2 + '  port (\n';
+      for (let x = 0; x < ports.length - 1; ++x) {
+        let port = this.__vhdl_ports(ports[x]['direction']);
+        let type = this.__vhdl_types(ports[x]['type']);
+        str += this.indet_3 + ports[x]['name'] + ' : ' + port + ' ' +
+        type + ';\n';
+      }
+      let port = this.__vhdl_ports(ports[ports.length - 1]['direction']);
+      let type = this.__vhdl_types(ports[ports.length - 1]['type']);
+      str += this.indet_3 + ports[ports.length - 1]['name'] + ' : ' +
+      port + ' ' +
+      type + '\n';
+      str += this.indet_2 + ');\n';
+    }
+    //End component
+    str += this.indet_1 + 'end component;\n';
+
+    return str;
+  }
+
+  __vhdl_ports(port){
+    let out_port="";
+    if (port=== 'input') {
+      out_port = 'in';
+    } else if (port=== 'output'){
+      out_port = 'out';
+    }
+    return out_port;
+  }
+
+  __vhdl_types(type){
+    let out_type="";
+    if (type=== '') {
+      out_type = 'std_logic';
+    } else if (type.includes('[') ){
+      out_type = type.replace('[','(').replace(']',')'); 
+      out_type = `std_logic_vector ${out_type.replace(':',' downto ')}`;
+    }else{
+      out_type = type;
+    }
+    return out_type;
+  }
 
   set_Instance(space, name, generics, ports, vunit, vhdl2008) {
     var str = '';
@@ -344,9 +405,11 @@ class Vhdl_component extends Vhdl_editor {
     }
     if (options === null) { return ""; }
     var component = "";
-    if (options['type'] === Codes.TYPESCOMPONENTS.COMPONENT
-    || options['type'] === Codes.TYPESCOMPONENTS.MIX_COMPONENT) {
+    if (options['type'] === Codes.TYPESCOMPONENTS.COMPONENT) {
       component = this.set_Component('  ', structure['entity']['name'],
+        structure['generics'], structure['ports'], false);
+    } else if (options['type'] === Codes.TYPESCOMPONENTS.MIX_COMPONENT) {
+      component = this.set_Mix_Component('  ', structure['entity']['name'],
         structure['generics'], structure['ports'], false);
     } else if (options['type'] === Codes.TYPESCOMPONENTS.INSTANCE) {
       component = this.set_Instance('  ', structure['entity']['name'],
