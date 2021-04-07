@@ -247,12 +247,13 @@ class Vhdl_editor {
     if (generics.length > 0) {
       str += this.indet_2 + 'generic (\n';
       for (let x = 0; x < generics.length - 1; ++x) {
-        let type = this.__vhdl_types(generics[x]['type']);
-        str += this.indet_3 + generics[x]['name'] + ' : ' + type + ';\n';
+        let type = this.__vhdl_types(generics[x]['type'],true);
+        str += this.indet_3 + generics[x]['name'] + ' : ' + type + 
+        generics[x]['default_value'] + ';\n';
       }
-      let type = this.__vhdl_types(generics[generics.length - 1]['type']);
+      let type = this.__vhdl_types(generics[generics.length - 1]['type'],true);
       str += this.indet_3 + generics[generics.length - 1]['name'] + ' : ' +
-      type + '\n';
+      type + generics[generics.length - 1]['default_value'] + '\n'; 
       str += this.indet_2 + ');\n';
     }
     //Ports
@@ -287,12 +288,12 @@ class Vhdl_editor {
     return out_port;
   }
 
-  __vhdl_types(type){
+  __vhdl_types(type,generic=false){
     let out_type="";
-    if (type=== '') {
+    if ((type === '' || type === 'wire') && generic !== true) {
       out_type = 'std_logic';
     } else if (type.includes('[') ){
-      out_type = type.replace('[','(').replace(']',')'); 
+      out_type = type.replace('[','(').replace(']',')').replace('wire', ''); 
       out_type = `std_logic_vector ${out_type.replace(':',' downto ')}`;
     }else{
       out_type = type;
