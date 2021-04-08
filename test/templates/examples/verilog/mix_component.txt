@@ -1,0 +1,17 @@
+component uart
+      port (
+        reset : in std_logic ;
+        txclk : in std_logic ;
+        ld_tx_data : in std_logic ;
+        tx_data : in std_logic_vector (7 downto 0);
+        tx_enable : in std_logic ;
+        tx_out : out std_logic ;
+        tx_empty : out std_logic ;
+        rxclk : in std_logic ;
+        uld_rx_data : in std_logic ;
+        rx_data : out std_logic_vector (7 downto 0);
+        rx_enable : in std_logic ;
+        rx_in : in std_logic ;
+        rx_empty : out std_logic 
+    );
+end component;

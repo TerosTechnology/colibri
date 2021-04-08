@@ -1,4 +1,4 @@
-// Copyright 2020 Teros Technology
+// Copyright 2020-2021 Teros Technology
 //
 // Ismael Perez Rojo
 // Carlos Alberto Ruiz Naranjo
@@ -55,6 +55,14 @@ class Templates_factory {
         }
         else if(language === General.LANGUAGES.VERILOG){
           template = this.get_verilog_component();
+        }
+      }
+      else if(type === Codes.TYPES.MIX_COMPONENT){
+        if (language === General.LANGUAGES.VHDL){
+          template = this.get_verilog_component();
+        }
+        else if(language === General.LANGUAGES.VERILOG){
+          template = this.get_vhdl_component();
         }
       }
     return template;
