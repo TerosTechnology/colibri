@@ -327,7 +327,6 @@ class Documenter extends markdown_lib.Markdown {
   #state_machine {width:70%;height:70%;display: block;margin: auto;}
   code {color:#545253;}
   #teroshdl {color:black;}
-  div.templateTerosHDL { background-color: white;position:absolute; }
   #teroshdl td,#teroshdl th,#teroshdl h1,#teroshdl h2,#teroshdl h3 {color: black;}
   #teroshdl h1,#teroshdl h2 {font-weight:bold;}
   #teroshdl tr:hover {background-color: #ddd;}
@@ -336,6 +335,10 @@ class Documenter extends markdown_lib.Markdown {
   }
   #teroshdl p {color:black;}
   #teroshdl p {margin-left:2.5%;}
+  #teroshdl p {
+    margin-top:5px;
+    margin-bottom:5px
+  }
   #teroshdl th { background-color: #ffd78c;}
   #teroshdl tr:nth-child(even){background-color: #f2f2f2;}
 </style>
@@ -355,6 +358,10 @@ class Documenter extends markdown_lib.Markdown {
     }
     #teroshdl p {color:black;}
     #teroshdl p {margin-left:2.5%;}
+    #teroshdl p {
+      margin-top:5px;
+      margin-bottom:5px
+    }
     #teroshdl th { background-color: #ffd78c;}
     #teroshdl tr:nth-child(even){background-color: #f2f2f2;}
   </style>
@@ -410,8 +417,9 @@ class Documenter extends markdown_lib.Markdown {
       html += converter.makeHtml((await this._get_diagram_svg_from_code_tree(code_tree) + "\n").replace(/\*/g, "\\*").replace(/\`/g, "\\`"));
       //Description
       html += converter.makeHtml("## Description\n");
-      const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
+      let { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
 
+      description = this.remove_description_spaces(description);
       let html_description = converter.makeHtml(description);
 
       for (let i = 0; i < wavedrom.length; ++i) {
@@ -467,6 +475,16 @@ class Documenter extends markdown_lib.Markdown {
     html += '<br><br><br><br><br><br>';
 
     return { 'html': html, error: false };
+  }
+
+  remove_description_spaces(description){
+    let description_split = description.split(/\r?\n/);
+    let description_trail = '';
+    for (let i = 0; i < description_split.length; i++) {
+      const element = description_split[i];
+      description_trail += element.trim() + '\n';
+    }
+    return description_trail;
   }
 
   async _get_pdf(path, options) {
