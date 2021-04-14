@@ -460,11 +460,18 @@ class Parser extends ts_base_parser.Ts_base_parser {
     let statement_item = this.get_item_from_childs(statement, 'statement_item');
     let procedural_timing_control_statement =
       this.get_item_from_childs(statement_item, 'procedural_timing_control_statement');
-    let statement_or_null = this.get_item_from_childs(procedural_timing_control_statement, 'statement_or_null');
-    let statement_2 = this.get_item_from_childs(statement_or_null, 'statement');
-    let statement_item_2 = this.get_item_from_childs(statement_2, 'statement_item');
-    let seq_block = this.get_item_from_childs(statement_item_2, 'seq_block');
-    return seq_block;
+
+    if (procedural_timing_control_statement !== undefined){
+      let statement_or_null = this.get_item_from_childs(procedural_timing_control_statement, 'statement_or_null');
+      let statement_2 = this.get_item_from_childs(statement_or_null, 'statement');
+      let statement_item_2 = this.get_item_from_childs(statement_2, 'statement_item');
+      let seq_block = this.get_item_from_childs(statement_item_2, 'seq_block');
+      return seq_block;
+    }
+    else{
+      let seq_block = this.get_item_from_childs(statement_item, 'seq_block');
+      return seq_block;
+    }
   }
 
   getPortName(port, lines) {
