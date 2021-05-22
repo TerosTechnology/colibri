@@ -103,6 +103,9 @@ class Ts_base_parser {
   }
 
   parse_doxy(dic, file_type) {
+    if (dic.info === undefined){
+      dic.info = {};
+    }
     // remove any spaces between linefeed and trim the string
     let desc_root = dic[file_type];
     // always remove carriage return
@@ -151,7 +154,7 @@ class Ts_base_parser {
         }
       }
     }
-    return dic
+    return dic;
   }
 
   normalize_description(description){

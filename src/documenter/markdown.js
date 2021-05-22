@@ -105,7 +105,7 @@ class Markdown {
     }
 
     if ((signals.length !== 0 && this.config.signals !== 'none') ||
-      (constants.length !== 0 && this.config.constants !== 'none') || types.length !== 0) {
+      (constants.length !== 0 && this.config.constants !== 'none') && types.length !== 0) {
       //Title
       md += "## Signals, constants and types\n";
       //Tables
