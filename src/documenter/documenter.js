@@ -93,6 +93,7 @@ class Documenter extends markdown_lib.Markdown {
   }
   async save_markdown(path, config) {
     let custom_section = undefined;
+    let custom_svg_path_in_readme = undefined;
     let custom_svg_path = path;
 
     let file = path_lib.dirname(custom_svg_path) + path_lib.sep + 
@@ -107,8 +108,11 @@ class Documenter extends markdown_lib.Markdown {
         file = custom_svg_path + path_lib.sep + 
             path_lib.basename(path, path_lib.extname(path)) + ".svg";
       }
+      if (config.custom_svg_path_in_readme !== undefined){
+        custom_svg_path_in_readme = config.custom_svg_path_in_readme;
+      }
     }
-    let md = await this._get_markdown(file, null, custom_section);
+    let md = await this._get_markdown(file, null, custom_section, custom_svg_path_in_readme);
     fs.writeFileSync(path, md);
   }
   // ***************************************************************************
@@ -117,7 +121,7 @@ class Documenter extends markdown_lib.Markdown {
     return html_doc;
   }
 
-  async _get_markdown(path, extra_top_space, custom_section) {
+  async _get_markdown(path, extra_top_space, custom_section, custom_svg_path_in_readme) {
     let extra_top_space_l = "";
     if (extra_top_space !== null && extra_top_space !== false) {
       extra_top_space_l = "&nbsp;&nbsp;\n\n";
@@ -141,7 +145,12 @@ class Documenter extends markdown_lib.Markdown {
       //Diagram
       await this._save_svg_from_code_tree(path, code_tree);
       markdown_doc += "## Diagram\n";
-      markdown_doc += '![Diagram](' + path_lib.basename(path) + ' "Diagram")';
+      if (custom_svg_path_in_readme !== undefined){
+        markdown_doc += '![Diagram](' + custom_svg_path_in_readme + ' "Diagram")';
+      }
+      else{
+        markdown_doc += '![Diagram](' + path_lib.basename(path) + ' "Diagram")';
+      }
       markdown_doc += "\n";
       //Description
       markdown_doc += "## Description\n";
