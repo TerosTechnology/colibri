@@ -1,5 +1,26 @@
 #!/usr/bin/env node
 
+// Copyright 2021 Teros Technology
+//
+// Ismael Perez Rojo
+// Carlos Alberto Ruiz Naranjo
+// Alfredo Saez
+//
+// This file is part of Colibri.
+//
+// Colibri is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Colibri is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
+
 let colibri = require('../src/main.js');
 let program = require('commander');
 const dependency = require('../src/projectManager/dependency_graph');
@@ -187,9 +208,6 @@ async function save_doc_trs(files, path){
   let symbol_vhdl = '!';
   let symbol_verilog = '!';
 
-  let lang = "vhdl";
-  let symbol = "!";
-
   let config = {'custom_section': undefined, 
     'custom_svg_path': undefined, 
     'custom_svg_path_in_readme': undefined,
@@ -202,9 +220,7 @@ async function save_doc_trs(files, path){
     let with_dependency_graph = false;
     let project_name = 'Project name';
     let python3_path = "";
-
-  // let doc_inst = new colibri.Documenter.Documenter(contents, lang, symbol);
-  
+ 
   let dependency_graph = new dependency.Dependency_graph();
   let svg_dependency_graph = dependency_graph.get_dependency_graph_svg(files, python3_path);
 
