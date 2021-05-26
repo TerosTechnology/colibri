@@ -6,11 +6,10 @@ class Beautifuler {
     let new_line_after_symbols = new VHDLFormatter_1.NewLineSettings();
     new_line_after_symbols.newLineAfter = ["then", ";"];
     new_line_after_symbols.noNewLineAfter = ["port", "generic"];
-    let settings = this.getDefaultBeautifierSettings(new_line_after_symbols);
-    settings.SignAlignSettings = new VHDLFormatter_1.signAlignSettings(true, true, "local", ["PORT", "GENERIC"]);
 
     const result = this.beautifyIntern(input, options);
     if (result.err !== null) {
+      // eslint-disable-next-line no-console
       console.error(`-- [ERROR]: could not beautify`);
     }
     return result.data;
@@ -32,10 +31,11 @@ class Beautifuler {
   }
 
   getDefaultBeautifierSettings(newLineSettings, signAlignSettings = null, indentation = "  ") {
-    return new VHDLFormatter_1.BeautifierSettings(false, false, false, signAlignSettings, "lowercase", "lowercase", indentation, newLineSettings, "\r\n");
+    return new VHDLFormatter_1.BeautifierSettings(false, false, false, true, signAlignSettings, 
+      "lowercase", "lowercase", indentation, newLineSettings, "\r\n", false);
   }
 }
 
 module.exports = {
   Beautifuler: Beautifuler
-}
+};

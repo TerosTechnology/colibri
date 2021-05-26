@@ -243,15 +243,6 @@ class Ts_base_parser {
       // strip description from \r if present to deal with \n exclusively
       ports[i].description = ports[i].description.replace(/\r/gm, "");
 
-      if (ports[i].description.match(this.command_end_regex) !== null) {
-        dic.ports[i].description = ports[i].description.replace(this.command_end_regex, "");
-        if (virtual_bus_open) {
-          virtual_bus_open = false;
-          virtual_bus_array.push(clone(virtual_bus_struct));
-          virtual_bus_struct = clone(virtual_bus_base_struct);
-        }
-      }
-
       let virtual_bus = ports[i].description.match(virtual_bus_regex_followed);
 
       if (virtual_bus === null) {
@@ -315,6 +306,15 @@ class Ts_base_parser {
       }
       // remove any added \n to description
       dic.ports[i].description = ports[i].description.replace(/\n/, "");
+
+      if (ports[i].description.match(this.command_end_regex) !== null) {
+        dic.ports[i].description = ports[i].description.replace(this.command_end_regex, "");
+        if (virtual_bus_open) {
+          virtual_bus_open = false;
+          virtual_bus_array.push(clone(virtual_bus_struct));
+          virtual_bus_struct = clone(virtual_bus_base_struct);
+        }
+      }
     }
     if (virtual_bus_array.length > 0) {
       // append the vbus to the json
