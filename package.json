@@ -21,6 +21,8 @@
     "bit-field": "1.3.6",
     "clone": "^2.1.2",
     "json5": "*",
+    "js-yaml": "*",
+    "commander": "*",
     "markdown-pdf": "10.0.0",
     "onml": "2.1.0",
     "shelljs": "0.8.4",
