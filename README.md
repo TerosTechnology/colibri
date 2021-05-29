@@ -16,9 +16,19 @@ sudo npm install -g .
 
 - Documenter example:
 
+### Documenter with yml file
 ```
 cd /bin/example
 teroshdl-hdl-documenter -f example.yml
+```
+
+### Documenter with teros project manager file or EDAM file
+
+Documentation will be generated in `./doc` folder
+```
+cd /bin/example
+teroshdl-hdl-documenter -p trs_example.trs 
+teroshdl-hdl-documenter -p edam_example.edam -o html 
 ```
 
 

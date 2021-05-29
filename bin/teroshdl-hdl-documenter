@@ -53,6 +53,11 @@ function doc_trs(){
     let doc_path = "doc";
     let trs_path = path_lib.dirname(trs_file);
     let out_dir = `${trs_path}/${doc_path}`;
+    let ext = path_lib.extname(trs_file);
+    if ((ext !== ".trs") && (ext !== ".TRS") && (ext !== ".edam") && (ext !== ".EDAM")) {
+      console.log("Invalid input file: It must be .trs or .edam");
+      return;
+    }
     fs.mkdirSync(out_dir);
     const doc = JSON.parse(fs.readFileSync(trs_file, 'utf8'));
     shell.cd(trs_path);
