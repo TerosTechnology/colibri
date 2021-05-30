@@ -27,37 +27,39 @@ const dependency = require('../src/projectManager/dependency_graph');
 const yaml = require('js-yaml');
 const fs = require('fs');
 const shell = require('shelljs');
+const path_lib = require('path');
 
 program.version(require('../package.json').version)
-    .option('-f, --file [path]', 'Path of the YML file to documenter')
-    .option('-p, --trs [path]', 'Path of the TRS or EDAM file to documenter')
+    .option('-f, --file [path]', 'Path of the YML, TRS or EDAM file to documenter')
     .option('-o, --out [type]', 'Documentation format: md, html')
     .usage('[options] <hdl-documenter>')
     .parse(process.argv);
 
 program.parse(process.argv);
 const options = program.opts();
+check_file_ext();
 
-if (options.file !== undefined ) {
-  doc_yml();
-}
-else if (options.trs !== undefined ){
-  doc_trs();
+function check_file_ext(){
+  let file = options.file;
+  let file_ext = path_lib.extname(file);
+  if (file_ext === ".yml" || file_ext === ".YML" ) {
+    doc_yml();
+  }
+  else if ((file_ext === ".trs") || (file_ext === ".TRS") || (file_ext === ".edam") || (file_ext === ".EDAM") ){
+    doc_trs();
+  }
+  else{
+    console.log("Invalid input file: It must be '.yml', '.trs' or '.edam'");
+  }
 }
 
 function doc_trs(){
-  let trs_file = options.trs;
+  let trs_file = options.file;
   let out = options.out;
   try {
-    const path_lib = require('path');
     let doc_path = "doc";
     let trs_path = path_lib.dirname(trs_file);
     let out_dir = `${trs_path}/${doc_path}`;
-    let ext = path_lib.extname(trs_file);
-    if ((ext !== ".trs") && (ext !== ".TRS") && (ext !== ".edam") && (ext !== ".EDAM")) {
-      console.log("Invalid input file: It must be .trs or .edam");
-      return;
-    }
     fs.mkdirSync(out_dir);
     const doc = JSON.parse(fs.readFileSync(trs_file, 'utf8'));
     shell.cd(trs_path);
