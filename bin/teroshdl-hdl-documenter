@@ -57,7 +57,7 @@ function doc_trs(){
   let trs_file = options.file;
   let out = options.out;
   try {
-    let doc_path = "doc";
+    let doc_path = "built_doc";
     let trs_path = path_lib.dirname(trs_file);
     let out_dir = `${trs_path}/${doc_path}`;
     fs.mkdirSync(out_dir);
