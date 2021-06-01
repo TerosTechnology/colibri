@@ -37,23 +37,23 @@ program.version(require('../package.json').version)
 
 program.parse(process.argv);
 const options = program.opts();
-check_file_ext();
+check_file_ext(file);
 
-function check_file_ext(){
+function check_file_ext(options){
   let file = options.file;
   let file_ext = path_lib.extname(file);
   if (file_ext === ".yml" || file_ext === ".YML" ) {
     doc_yml();
   }
   else if ((file_ext === ".trs") || (file_ext === ".TRS") || (file_ext === ".edam") || (file_ext === ".EDAM") ){
-    doc_trs();
+    doc_trs(options);
   }
   else{
     console.log("Invalid input file: It must be '.yml', '.trs' or '.edam'");
   }
 }
 
-function doc_trs(){
+function doc_trs(options){
   let trs_file = options.file;
   let out = options.out;
   try {
