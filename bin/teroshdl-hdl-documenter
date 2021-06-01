@@ -43,7 +43,7 @@ function check_file_ext(options){
   let file = options.file;
   let file_ext = path_lib.extname(file);
   if (file_ext === ".yml" || file_ext === ".YML" ) {
-    doc_yml();
+    doc_yml(options);
   }
   else if ((file_ext === ".trs") || (file_ext === ".TRS") || (file_ext === ".edam") || (file_ext === ".EDAM") ){
     doc_trs(options);
@@ -69,7 +69,7 @@ function doc_trs(options){
   }
 }
 
-function doc_yml(){
+function doc_yml(options){
   let yml_file = options.file;
   try {
     const doc = yaml.load(fs.readFileSync(yml_file, 'utf8'));
