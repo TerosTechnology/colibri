@@ -13,12 +13,27 @@
 ```
 sudo npm install -g .
 ```
+- Commands
+```
+'-f, --file [path]', Path of the YML file to documenter
+'-o, --out  [type]', Documentation format: md, html
+```
 
-- Documenter example:
+### Documenter examples:
 
+**Documenter with yml file**
 ```
 cd /bin/example
 teroshdl-hdl-documenter -f example.yml
+```
+
+**Documenter with teros project manager file or EDAM file**
+
+Documentation will be generated in `./built_doc` folder for EDAM/TRS files
+```
+cd /bin/example
+teroshdl-hdl-documenter -f trs_example.trs 
+teroshdl-hdl-documenter -f edam_example.edam -o html 
 ```
 
 

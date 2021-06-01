@@ -1,31 +1,89 @@
 #!/usr/bin/env node
 
+// Copyright 2021 Teros Technology
+//
+// Ismael Perez Rojo
+// Carlos Alberto Ruiz Naranjo
+// Alfredo Saez
+//
+// This file is part of Colibri.
+//
+// Colibri is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Colibri is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
+
 let colibri = require('../src/main.js');
 let program = require('commander');
+const dependency = require('../src/projectManager/dependency_graph');
+const yaml = require('js-yaml');
+const fs = require('fs');
+const shell = require('shelljs');
+const path_lib = require('path');
 
 program.version(require('../package.json').version)
-    .option('-f, --file [path]', 'Path of the YML file to documenter')
+    .option('-f, --file [path]', 'Path of the YML, TRS or EDAM file to documenter')
+    .option('-o, --out [type]', 'Documentation format: md, html')
     .usage('[options] <hdl-documenter>')
     .parse(process.argv);
 
 program.parse(process.argv);
 const options = program.opts();
-let yml_file = options.file;
+check_file_ext(options);
 
-const yaml = require('js-yaml');
-const fs = require('fs');
-try {
-  const doc = yaml.load(fs.readFileSync(yml_file, 'utf8'));
-  for (const x in doc) {
-    if (x === 'library'){
-      doc_library(doc[x]);
-    }
-    else if(x === 'ip'){
-      doc_ip(doc[x]);
-    }
+function check_file_ext(options){
+  let file = options.file;
+  let file_ext = path_lib.extname(file);
+  if (file_ext === ".yml" || file_ext === ".YML" ) {
+    doc_yml(options);
   }
-} catch (e) {
-  console.log(e);
+  else if ((file_ext === ".trs") || (file_ext === ".TRS") || (file_ext === ".edam") || (file_ext === ".EDAM") ){
+    doc_trs(options);
+  }
+  else{
+    console.log("Invalid input file: It must be '.yml', '.trs' or '.edam'");
+  }
+}
+
+function doc_trs(options){
+  let trs_file = options.file;
+  let out = options.out;
+  try {
+    let doc_path = "built_doc";
+    let trs_path = path_lib.dirname(trs_file);
+    let out_dir = `${trs_path}/${doc_path}`;
+    fs.mkdirSync(out_dir);
+    const doc = JSON.parse(fs.readFileSync(trs_file, 'utf8'));
+    shell.cd(trs_path);
+    doc_trs_ip(doc,doc_path, out);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function doc_yml(options){
+  let yml_file = options.file;
+  try {
+    const doc = yaml.load(fs.readFileSync(yml_file, 'utf8'));
+    for (const x in doc) {
+      if (x === 'library'){
+        doc_library(doc[x]);
+      }
+      else if(x === 'ip'){
+        doc_ip(doc[x]);
+      }
+    }
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 function doc_library(lib){
@@ -60,6 +118,25 @@ function doc_library(lib){
   }
 
   generate_and_save_documentation(index_output_path, lib_output_path, lib_output_from_readme_path, ips, name);
+}
+
+function doc_trs_ip(doc, path, out){
+  let file_list =[];
+  let project_name = doc.name;
+  for (let x=0; x<doc.files.length;x++) {
+    file_list.push(doc.files[x].name);
+  }
+  switch (out) {
+    case "html":
+      save_doc_html_trs(file_list,path,project_name);
+      break;
+    case "md":
+      save_doc_md_trs(file_list,path,project_name);
+      break;
+    default:
+      save_doc_md_trs(file_list,path,project_name);
+      break;
+  }
 }
 
 function doc_ip(lib){
@@ -146,6 +223,59 @@ function save_internal_ips(output_path, internal_ips, lib_output_from_readme_pat
   }
   return main_doc;
 }
+
+async function save_doc_md_trs(files, path, project_name){
+  let symbol_vhdl = '!';
+  let symbol_verilog = '!';
+
+  let config = {'custom_section': undefined, 
+    'custom_svg_path': undefined, 
+    'custom_svg_path_in_readme': undefined,
+    'fsm': true,
+    'signals': 'all',
+    'constants': 'all',
+    'process': 'all'
+    };
+
+    let with_dependency_graph = true;
+    let python3_path = "";
+
+  let dependency_graph = new dependency.Dependency_graph();
+  let svg_dependency_graph = await dependency_graph.get_dependency_graph_svg(gen_names_str(files), python3_path);
+  colibri.Documenter.get_md_doc_from_array(files, path, symbol_vhdl, symbol_verilog,
+    svg_dependency_graph, project_name, with_dependency_graph, config);
+
+  }
+  async function save_doc_html_trs(files, path, project_name){
+    let symbol_vhdl = '!';
+    let symbol_verilog = '!';
+    
+    let config = {'custom_section': undefined, 
+    'custom_svg_path': undefined, 
+    'custom_svg_path_in_readme': undefined,
+    'fsm': true,
+    'signals': 'all',
+    'constants': 'all',
+    'process': 'all'
+  };
+  
+  let with_dependency_graph = true;
+  let python3_path = "";
+  
+  let dependency_graph = new dependency.Dependency_graph();
+  let svg_dependency_graph = await dependency_graph.get_dependency_graph_svg(gen_names_str(files), python3_path);
+  colibri.Documenter.get_html_doc_from_array(files, path, symbol_vhdl, symbol_verilog,
+    svg_dependency_graph, project_name, with_dependency_graph, config);
+    
+  }
+
+  function gen_names_str(files){
+    let sources = [];
+    for (let i = 0; i < files.length; i++) {
+      sources.push({name: files[i]});
+    }
+    return sources;
+  }
 
 async function save_md_ip(output_path, path, internal_ips_section, output_svg_path, readme_name, 
       lib_output_from_readme_path){
