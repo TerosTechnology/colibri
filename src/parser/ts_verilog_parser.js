@@ -192,7 +192,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
             last_element_position = cursor.startPosition.row;
             let new_instantiations = this.get_instantiations(cursor.currentNode(), lines, general_comments);
             new_instantiations = this.set_description_to_array(new_instantiations, comments, general_comments);
-            instantiations_array = types_array.concat(new_instantiations);
+            instantiations_array = instantiations_array.concat(new_instantiations);
             comments = '';
           }
           else {
