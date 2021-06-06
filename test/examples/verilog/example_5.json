@@ -198,12 +198,14 @@
       }
     ],
     "instantiations": [
-      {
-        "name": "eth_crc_64",
-        "type": "lfsr",
-        "description": "",
-        "start_line": 332
-      }
+      { "name": "eth_crc_8", "type": "lfsr", "description": "", "start_line": 220 },
+      { "name": "eth_crc_16", "type": "lfsr", "description": "", "start_line": 236 },
+      { "name": "eth_crc_24", "type": "lfsr", "description": "", "start_line": 252 },
+      { "name": "eth_crc_32", "type": "lfsr", "description": "", "start_line": 268 },
+      { "name": "eth_crc_40", "type": "lfsr", "description": "", "start_line": 284 },
+      { "name": "eth_crc_48", "type": "lfsr", "description": "", "start_line": 300 },
+      { "name": "eth_crc_56", "type": "lfsr", "description": "", "start_line": 316 },
+      { "name": "eth_crc_64", "type": "lfsr", "description": "", "start_line": 332 }
     ]
   },
   "declarations": {

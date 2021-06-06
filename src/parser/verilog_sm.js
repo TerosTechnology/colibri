@@ -134,10 +134,18 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
     let statement_item = this.get_item_from_childs(statement, 'statement_item');
     let procedural_timing_control_statement =
       this.get_item_from_childs(statement_item, 'procedural_timing_control_statement');
+    if (procedural_timing_control_statement === undefined){
+      let seq_block = this.get_item_from_childs(statement_item, 'seq_block');
+      return seq_block;
+    }
     let statement_or_null = this.get_item_from_childs(procedural_timing_control_statement, 'statement_or_null');
     let statement_2 = this.get_item_from_childs(statement_or_null, 'statement');
     let statement_item_2 = this.get_item_from_childs(statement_2, 'statement_item');
     let seq_block = this.get_item_from_childs(statement_item_2, 'seq_block');
+    if (seq_block === undefined){
+      let cond_statement = this.get_item_from_childs(statement_item_2, 'conditional_statement');
+      return cond_statement;
+    }
 
     return seq_block;
   }
