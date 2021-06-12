@@ -23,8 +23,7 @@ const Viz = require("./viz/viz");
 const worker = require("./viz/full.render");
 
 class Dependency_graph {
-  constructor(graph) {
-    this.graph = graph;
+  constructor() {
     this.dependency_graph_svg = "";
   }
 
@@ -32,9 +31,9 @@ class Dependency_graph {
     let str = "";
     if (sources.length !== 0) {
       for (let i = 0; i < sources.length - 1; ++i) {
-        str += sources[i]["name"] + ",";
+        str += sources[i] + ",";
       }
-      str += sources[sources.length - 1]["name"];
+      str += sources[sources.length - 1];
     }
 
     let python_script_path = `${__dirname}${path_lib.sep}vunit_dependency.py ${str}`;
