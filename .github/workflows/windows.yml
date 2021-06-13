@@ -30,22 +30,22 @@ jobs:
           npm run-script testTemplates
   # ****************************************************************************
   # ****************************************************************************
-  test-documenter:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-latest]
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v1
-      - name: Set up Python python 3.6
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.6
-      - name: Test
-        run: |
-          npm install .
-          npm run-script testDocumenter
+  # test-documenter:
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     matrix:
+  #       os: [windows-latest]
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v1
+  #     - name: Set up Python python 3.6
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: 3.6
+  #     - name: Test
+  #       run: |
+  #         npm install .
+  #         npm run-script testDocumenter
   # ****************************************************************************
   # ****************************************************************************
   test-stm:
@@ -62,18 +62,18 @@ jobs:
           npm run-script test-stm
   # ****************************************************************************
   # ****************************************************************************
-  test-ProjectManager:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-latest]
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v1
-      - name: Test
-        run: |
-          npm install .
-          npm run-script testProjectManager
+  # test-ProjectManager:
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     matrix:
+  #       os: [windows-latest]
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v1
+  #     - name: Test
+  #       run: |
+  #         npm install .
+  #         npm run-script testProjectManager
   # ****************************************************************************
   test-Parser:
     runs-on: ${{ matrix.os }}
