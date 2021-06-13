@@ -93,5 +93,5 @@ function gen_names_str(files){
 }
 
 module.exports = {
-  doc_yml : doc_trs
+  doc_trs : doc_trs
 };
