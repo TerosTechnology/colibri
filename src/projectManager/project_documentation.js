@@ -39,6 +39,11 @@ class Project_documenter{
   
   async save_doc(type, output_dir_doc, symbol_vhdl, symbol_verilog,
     with_dependency_graph = true, python3_path, config) {
+
+    if (config.dependency_graph === false){
+      with_dependency_graph = false;
+    }
+
     let sources_arr = this.get_sources_as_array();
     let project_name = this.name;
     let svg_dependency_graph;
@@ -55,8 +60,6 @@ class Project_documenter{
         symbol_verilog, svg_dependency_graph, project_name, with_dependency_graph, config); 
     }
   }
-
-
 
   async get_dependency_graph_dot(python3_path) {
     let sources_arr = this.get_sources_as_array();
