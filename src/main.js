@@ -49,7 +49,6 @@ exports.Documenter = require('./documenter/documenter');
 //******************************************************************************
 //ProjectManager
 //******************************************************************************
-exports.Project_manager = require('./projectManager/projectManager');
 exports.Edam = require('./projectManager/edam');
 //******************************************************************************
 //Formatter
