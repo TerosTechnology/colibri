@@ -176,7 +176,10 @@ class Parser extends ts_base_parser.Ts_base_parser {
 
     let break_p = false;
     let cursor = tree.walk();
-    let result;
+    let result = {
+      generics : [],
+      ports: []
+    };
     cursor.gotoFirstChild();
     do {
       if (cursor.nodeType === 'design_unit') {
