@@ -264,7 +264,7 @@ class Edam_file {
 
   get_file_type(file) {
     let vhdl_type = ['.vhd', '.vho', 'vhdl'];
-    let verilog_type = ['.vhd', '.vho', 'vhdl'];
+    let verilog_type = ['.v', '.vh', '.vl'];
 
     const path = require('path');
     let extension = path.extname(file).toLowerCase();

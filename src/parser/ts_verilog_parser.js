@@ -414,6 +414,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
     while (cursor.gotoNextSibling() === true && break_p === false);
     return arch_body;
   }
+  
 
   set_description_to_array(arr, txt, general_comments) {
     for (let i = 0; i < arr.length; ++i) {
@@ -885,6 +886,21 @@ class Parser extends ts_base_parser.Ts_base_parser {
       let port_name = this.extract_data(arr[0], lines);
       let split_port_name = port_name.split(',');
       for (let x = 0; x < split_port_name.length; ++x) { return port_name; }
+    }
+  }
+
+  async get_only_entity_name(code) {
+    if (this.loaded === false){
+      return undefined;
+    }
+    const tree = await this.parser.parse(code);
+    let cursor = tree.walk();
+    let arr = this.search_multiple_in_tree(cursor.currentNode(), 'module_identifier');
+    if (arr === undefined){
+      return '';
+    }
+    else{
+      return arr[0].text;
     }
   }
 
