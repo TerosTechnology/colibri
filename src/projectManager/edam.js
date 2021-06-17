@@ -20,6 +20,7 @@
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 const path_lib = require('path');
 const prj_documenter = require('./project_documentation');
+const utils = require('../utils/utils');
 
 function json_edam_to_yml_edam(json_data){
   const json2yaml = require('./json2yaml').json2yaml;
@@ -263,17 +264,16 @@ class Edam_file {
   }
 
   get_file_type(file) {
-    let vhdl_type = ['.vhd', '.vho', 'vhdl'];
-    let verilog_type = ['.v', '.vh', '.vl'];
-
     const path = require('path');
     let extension = path.extname(file).toLowerCase();
 
     let file_type = '';
-    if (vhdl_type.includes(extension)) {
+    let lang = utils.get_lang_from_extension(extension);
+
+    if (lang === 'vhdl') {
       file_type = 'vhdlSource-2008';
     }
-    else if (verilog_type.includes(extension)) {
+    else if (lang === 'verilog' || lang === 'systemverilog') {
       file_type = 'verilogSource-2005';
     }
     else if (extension === '.ucf') {
