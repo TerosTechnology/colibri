@@ -74,6 +74,18 @@ class Parser extends ts_base_parser.Ts_base_parser {
     return struct;
   }
 
+  async get_only_entity_name(code){
+    if (this.loaded === false){
+      return undefined;
+    }
+    let entity_declaration = this.get_entity_declaration(code);
+    let entity_name = '';
+    if (entity_declaration !== undefined && entity_declaration.entity !== undefined){
+      entity_name = entity_declaration.entity.name;
+    }
+    return entity_name;
+  }
+
   get_entity_file(code) {
     try {
       let code_lines = code.split('\n');
