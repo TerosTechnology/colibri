@@ -173,23 +173,19 @@ class Custom_yml{
   async save_md_ip(output_path, path, internal_ips_section, output_svg_path, readme_name, 
         lib_output_from_readme_path){
     const path_lib = require('path');
-    let symbol_vhdl = '!';
-    let symbol_verilog = '!';
 
     let lang = "vhdl";
-    let symbol = "!";
+    let symbol = this.doc_option.symbol;
 
     let filename = path_lib.basename(path, path_lib.extname(path));
     if (path_lib.extname(path) === '.vhd' || path_lib.extname(path) === '.vho'
       || path_lib.extname(path) === '.vhdl') {
       lang = "vhdl";
-      symbol = symbol_vhdl;
     }
     else if (path_lib.extname(path) === '.v' || path_lib.extname(path) === '.vh'
       || path_lib.extname(path) === '.vl' || path_lib.extname(path) === '.sv'
       || path_lib.extname(path) === '.SV') {
       lang = "verilog";
-      symbol = symbol_verilog;
     }
     let custom_svg_path_in_readme = undefined;
     if (readme_name === 'README'){

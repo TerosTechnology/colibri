@@ -22,7 +22,7 @@
 /* eslint-disable no-console */
 
 let custom_yml = require('./custom_yml');
-let edam = require('./edam');
+let edam_yml = require('./edam');
 let program = require('commander');
 const path_lib = require('path');
 const { exit } = require('process');
@@ -30,13 +30,15 @@ const { exit } = require('process');
 const doc_options_choice = ['none', 'all', 'only_commented'];
 
 program.version(require('../package.json').version)
-    .option('-f, --file [path]', 'Path of the YML, TRS or EDAM file to documenter')
+    .option('-fcustom, --filecustom [path]', 'Path of the YML file for documenter')
+    .option('-f, --file [path]', 'Path of the EDAM yml file for documenter')
     .option('-o, --out [type]', 'Documentation format: md, html')
     .option('-dep, --dep', `Include dependency graph in the documentation: ${doc_options_choice}`, true)
     .option('-fsm, --fsm', `Include finite state machines in the documentation: ${doc_options_choice}`, true)
     .option('-s, --signals <type>', `Include signals/regs/wires in the documentation: ${doc_options_choice}`, 'none')
     .option('-c, --constants <type>', `Include constants/types in the documentation: ${doc_options_choice}`, 'none')
     .option('-p, --process <type>', `Include process/always in the documentation: ${doc_options_choice}`, 'none')
+    .option('-sym, --symbol <type>', `Special character to parse comments into documentation`,'!')
     .usage('[options] <hdl-documenter>')
     .parse(process.argv);
 
@@ -64,12 +66,15 @@ function get_documentation_config(options){
   let include_process = options.process;
   validate_config('process',include_process);
 
+  let doc_symbol = options.symbol;
+
   let config = {
     "dependency_graph": include_dependency_graph,
     "fsm": include_fsm,
     "signals": include_signals,
     "constants": include_constants,
-    "process": include_process
+    "process": include_process,
+    "symbol": doc_symbol
   };
   return config;
 }
@@ -82,18 +87,29 @@ function validate_config(name, config_data){
 }
 
 function check_file_ext(options, doc_config){
-  let file = options.file;
-  let file_ext = path_lib.extname(file);
-  if (file_ext === ".yml" || file_ext === ".YML" ) {
-    let customo_yml_c = custom_yml.Custom_yml(doc_config);
-    customo_yml_c.doc_yml(options);
-  }
-  else if ((file_ext === ".trs") || (file_ext === ".TRS") || (file_ext === ".edam") || (file_ext === ".EDAM") ){
-    edam.doc_trs(options);
+  let file_custom = options.filecustom;
+  if (file_custom !== undefined) {
+    let file_ext = path_lib.extname(file_custom);
+    if (file_ext === ".yml" || file_ext === ".YML" ) {
+      let custom_yml = custom_yml.Custom_yml(doc_config);
+      custom_yml.doc_yml(options);
+    }
   }
   else{
     // eslint-disable-next-line no-console
-    console.log("Invalid input file: It must be '.yml', '.trs' or '.edam'");
+    console.log("Invalid input custom file: It must be an'.yml' file ");
+  }
+  let file = options.file;
+  if (file !== undefined) {
+    let file_ext = path_lib.extname(file);
+    if (file_ext === ".yml" || file_ext === ".YML" ){
+      let edam_yml = edam_yml.Doc_edam(doc_config);
+      edam_yml.doc_trs(options);
+    }
+  }
+  else{
+    // eslint-disable-next-line no-console
+    console.log("Invalid input file: It must be an EDAM '.yml' file ");
   }
 }
 
