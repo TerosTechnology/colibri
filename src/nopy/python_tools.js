@@ -17,32 +17,54 @@
 // You should have received a copy of the GNU General Public License
 // along with TerosHDL.  If not, see <https://www.gnu.org/licenses/>.
 
-async function get_python_exec() {
-  let command = "python3 --version";
+async function get_python_exec(python_path) {
+  // Check custom python3 path
+  if (python_path !== ''){
+    let python_path_check = await check_custom_python_path(python_path);
+    return python_path_check;
+  }
+
+  //Check system python3 path with binary python3
+  let binary = 'python3';
+  let python_path_check = await check_custom_python_path(binary);
+  if (python_path_check !== ''){
+    return python_path_check;
+  }
+
+  //Check system python3 path with binary python
+  binary = 'python';
+  python_path_check = await check_custom_python_path(binary);
+  return python_path_check;
+}
+
+async function check_custom_python_path(python_path) {
+  // eslint-disable-next-line max-len
+  let command = `${python_path} -c "import sys; check_version = sys.version_info > (3,0); exit(0) if check_version == True else exit(-1)"`;
   let result_command = await _exec_command(command);
-  //python3 exec exists
-  if (result_command.stderr === "") {
-    return "python3";
+  if (result_command.error !== 0) {
+    return python_path;
   } else {
-    return "python";
+    return "";
   }
 }
+
 
 async function _exec_command(command) {
   const exec = require("child_process").exec;
   return new Promise((resolve) => {
     exec(command, (error, stdout, stderr) => {
-      let result = { error: error, stdout: stdout, stderr: stderr };
+      let error_code = 0;
+      if (error !== undefined){
+        error_code = -1;
+      }
+      let result = { error: error_code, stdout: stdout, stderr: stderr };
       resolve(result);
     });
   });
 }
 
 async function exec_python_script(python3_path, python_script_path) {
-  let python_path = python3_path;
-  if (python3_path === "" || python3_path === undefined) {
-    python_path = await get_python_exec();
-  }
+  let python_path = await get_python_exec(python3_path);
   let command = `${python_path} ${python_script_path}`;
   let result = await _exec_command(command);
   return result;

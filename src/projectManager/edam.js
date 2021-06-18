@@ -20,6 +20,7 @@
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 const path_lib = require('path');
 const prj_documenter = require('./project_documentation');
+const utils = require('../utils/utils');
 
 function json_edam_to_yml_edam(json_data){
   const json2yaml = require('./json2yaml').json2yaml;
@@ -77,11 +78,10 @@ class Edam_project extends prj_documenter.Project_documenter{
   }
 
   save_as_yml(path, tool_configuration){
-    const jsteros = require('jsteros');
     const fs = require("fs");
     let dir_path = path_lib.dirname(path);
     let edam_json = this.get_json_prj(tool_configuration, dir_path);
-    let edam_yml = jsteros.Edam.json_edam_to_yml_edam(edam_json);
+    let edam_yml = json_edam_to_yml_edam(edam_json);
     fs.writeFileSync(path, edam_yml, "utf8");
   }
 
@@ -263,33 +263,38 @@ class Edam_file {
   }
 
   get_file_type(file) {
-    let vhdl_type = ['.vhd', '.vho', 'vhdl'];
-    let verilog_type = ['.vhd', '.vho', 'vhdl'];
-
     const path = require('path');
     let extension = path.extname(file).toLowerCase();
 
     let file_type = '';
-    if (vhdl_type.includes(extension)) {
+    let lang = utils.get_lang_from_extension(extension);
+
+    if (lang === 'vhdl') {
       file_type = 'vhdlSource-2008';
     }
-    else if (verilog_type.includes(extension)) {
+    else if (lang === 'verilog') {
       file_type = 'verilogSource-2005';
     }
-    else if (extension === '.ucf') {
-      file_type = 'ucf';
+    else if (lang === 'systemverilog') {
+      file_type = 'systemVerilogSource';
     }
-    else if (extension === '.xdc') {
-      file_type = 'xdc';
+    else if (extension === '.c') {
+      file_type = 'cSource';
     }
-    else if (extension === '.xci') {
-      file_type = 'xci';
+    else if (extension === '.cpp') {
+      file_type = 'cppSource';
     }
-    else if (extension === '.qip') {
-      file_type = 'qip';
+    else if (extension === '.vbl') {
+      file_type = 'veribleLintRules';
+    }
+    else if (extension === '.tcl') {
+      file_type = 'tclSource';
     }
     else if (extension === '.py') {
       file_type = 'python';
+    }
+    else {
+      file_type = extension.substring(1).toLocaleUpperCase();
     }
     return file_type;
   }
