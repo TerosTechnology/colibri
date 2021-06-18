@@ -22,7 +22,7 @@
 function get_lang_from_extension(extension){
   const vhdl_type = ['.vhd', '.vho', '.vhdl'];
   const verilog_type = ['.v', '.vh', '.vl'];
-  const system_verilog_type = ['.v', '.vh', '.vl'];
+  const system_verilog_type = ['.sv', '.svh'];
 
   if (vhdl_type.includes(extension) === true){
     return 'vhdl';
