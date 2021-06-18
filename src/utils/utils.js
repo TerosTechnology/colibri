@@ -20,11 +20,11 @@
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
 function get_lang_from_extension(extension){
-  const vhdl_type = ['.vhd', '.vho', 'vhdl'];
+  const vhdl_type = ['.vhd', '.vho', '.vhdl'];
   const verilog_type = ['.v', '.vh', '.vl'];
   const system_verilog_type = ['.v', '.vh', '.vl'];
 
-  if (vhdl_type.includes(vhdl_type) === true){
+  if (vhdl_type.includes(extension) === true){
     return 'vhdl';
   }
   else if(verilog_type.includes(extension) === true){

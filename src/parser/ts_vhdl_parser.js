@@ -60,7 +60,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       this.comment_symbol = comment_symbol;
     }
     let entity_file = this.get_entity_file(code);
-    if (entity_file === undefined) {
+    if (entity_file === undefined || entity_file.entity.name === '') {
       let package_file = this.get_package_file(code);
       struct = this.parse_doxy(package_file,"package");
     }
@@ -143,28 +143,34 @@ class Parser extends ts_base_parser.Ts_base_parser {
     let cursor = tree.walk();
     cursor.gotoFirstChild();
     do {
-      if (cursor.nodeType === 'package_declaration') {
+      if (cursor.nodeType === 'design_unit') {
         cursor.gotoFirstChild();
-        do {
-          if (cursor.nodeType === 'identifier') {
-            name = cursor.nodeText;
-            break_p = true;
+        do{
+          if (cursor.nodeType === 'package_declaration') {
+            cursor.gotoFirstChild();
+            do {
+              if (cursor.nodeType === 'identifier') {
+                name = cursor.nodeText;
+                break_p = true;
+              }
+            }
+            while (cursor.gotoNextSibling() === true && break_p === false);
           }
-        }
-        while (cursor.gotoNextSibling() === true && break_p === false);
+          else if (cursor.nodeType === 'comment') {
+            let txt_comment = cursor.nodeText.slice(2);
+            if (txt_comment[0] === comment_symbol) {
+              description += txt_comment.slice(1);
+            }
+            else {
+              // description = '';
+            }
+          }
+          else {
+            description = '';
+          }
       }
-      else if (cursor.nodeType === 'comment') {
-        let txt_comment = cursor.nodeText.slice(2);
-        if (txt_comment[0] === comment_symbol) {
-          description += txt_comment.slice(1);
-        }
-        else {
-          // description = '';
-        }
-      }
-      else {
-        description = '';
-      }
+      while (cursor.gotoNextSibling() === true && break_p === false);
+    }
     }
     while (cursor.gotoNextSibling() === true && break_p === false);
     let package_t = { 'name': name, 'description': description };
@@ -600,29 +606,61 @@ class Parser extends ts_base_parser.Ts_base_parser {
     return arch_declaration;
   }
 
+  // get_package_top_declaration(code) {
+  //   let tree = this.parse(code);
+
+  //   let break_p = false;
+  //   let declaration = undefined;
+  //   let cursor = tree.walk();
+  //   cursor.gotoFirstChild();
+  //   do {
+  //     if (cursor.nodeType === 'package_declaration') {
+  //       cursor.gotoFirstChild();
+  //       do {
+  //         if (cursor.nodeType === 'declarative_part') {
+  //           declaration = cursor.currentNode();
+  //           break_p = true;
+  //         }
+  //       }
+  //       while (cursor.gotoNextSibling() === true && break_p === false);
+  //     }
+
+  //   }
+  //   while (cursor.gotoNextSibling() === true && break_p === false);
+  //   return declaration;
+  // }
+
+
   get_package_top_declaration(code) {
     let tree = this.parse(code);
 
-    let break_p = false;
     let declaration = undefined;
+
+    let break_p = false;
     let cursor = tree.walk();
     cursor.gotoFirstChild();
     do {
-      if (cursor.nodeType === 'package_declaration') {
+      if (cursor.nodeType === 'design_unit') {
         cursor.gotoFirstChild();
-        do {
-          if (cursor.nodeType === 'declarative_part') {
-            declaration = cursor.currentNode();
-            break_p = true;
+        do{
+          if (cursor.nodeType === 'package_declaration') {
+            cursor.gotoFirstChild();
+            do {
+              if (cursor.nodeType === 'declarative_part') {
+                declaration = cursor.currentNode();
+                break_p = true;
+              }
+            }
+            while (cursor.gotoNextSibling() === true && break_p === false);
           }
-        }
-        while (cursor.gotoNextSibling() === true && break_p === false);
       }
-
+      while (cursor.gotoNextSibling() === true && break_p === false);
+    }
     }
     while (cursor.gotoNextSibling() === true && break_p === false);
     return declaration;
   }
+
 
 
   get_declaration_elements(type, code) {

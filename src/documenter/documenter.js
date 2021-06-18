@@ -24,6 +24,7 @@ const path_lib = require('path');
 const Diagram = require('./diagram');
 const Stm = require('../parser/stm_parser');
 const ParserLib = require('../parser/factory');
+const css_const_style = require('./css_style');
 const showdown = require('showdown');
 const json5 = require('json5');
 const temp = require('temp');
@@ -77,7 +78,8 @@ class Documenter extends markdown_lib.Markdown {
     else {
       options.html_style = 'save';
     }
-    let html_value = await this.get_html(options);
+    const extra_top_space = false;
+    let html_value = await this.get_html(options, extra_top_space);
     let html_doc = html_value.html;
     fs.writeFileSync(path, html_doc);
   }
@@ -116,8 +118,8 @@ class Documenter extends markdown_lib.Markdown {
     fs.writeFileSync(path, md);
   }
   // ***************************************************************************
-  async get_html(options) {
-    let html_doc = await this._get_html_from_code(options);
+  async get_html(options, extra_top_space) {
+    let html_doc = await this._get_html_from_code(options, extra_top_space);
     return html_doc;
   }
 
@@ -327,61 +329,15 @@ class Documenter extends markdown_lib.Markdown {
     return desc_inst;
   }
 
-  async _get_html_from_code(options) {
-    let html_style = "";
-    let html_style_preview = `
-<style>
-  #teroshdl h1,#teroshdl h2,#teroshdl h3,#teroshdl table, #teroshdl svg {margin-left:2.5%;}
-  svg {width:100%;height:100%;}
-  #state_machine {width:70%;height:70%;display: block;margin: auto;}
-  code {color:#545253;}
-  #teroshdl {color:black;}
-  #teroshdl td,#teroshdl th,#teroshdl h1,#teroshdl h2,#teroshdl h3 {color: black;}
-  #teroshdl h1,#teroshdl h2 {font-weight:bold;}
-  #teroshdl tr:hover {background-color: #ddd;}
-  #teroshdl td, #teroshdl th {
-    border: 1px solid grey
-  }
-  #teroshdl p {color:black;}
-  #teroshdl p {margin-left:2.5%;}
-  #teroshdl p {
-    margin-top:5px;
-    margin-bottom:5px
-  }
-  #teroshdl th { background-color: #ffd78c;}
-  #teroshdl tr:nth-child(even){background-color: #f2f2f2;}
-</style>
-<div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%">\n`;
-
-    let html_style_save = `
-  <style>
-    #teroshdl h1,#teroshdl h2,#teroshdl h3,#teroshdl table, #teroshdl svg {margin-left:2.5%;width:60%}
-    code {color:#545253;}
-    #teroshdl {color:black;}
-    div.templateTerosHDL { background-color: white;position:absolute; }
-    #teroshdl td,#teroshdl th,#teroshdl h1,#teroshdl h2,#teroshdl h3 {color: black;}
-    #teroshdl h1,#teroshdl h2 {font-weight:bold}
-    #teroshdl tr:hover {background-color: #ddd;}
-    #teroshdl td, #teroshdl th {
-      border: 1px solid grey;
-    }
-    #teroshdl p {color:black;}
-    #teroshdl p {margin-left:2.5%;}
-    #teroshdl p {
-      margin-top:5px;
-      margin-bottom:5px
-    }
-    #teroshdl th { background-color: #ffd78c;}
-    #teroshdl tr:nth-child(even){background-color: #f2f2f2;}
-  </style>
-  <div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%">\n`;
+  async _get_html_from_code(options, extra_top_space) {
+    let html_style = `<div class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%">\n`;
 
     if (options !== undefined && options.html_style !== undefined
       && options.html_style === "save") {
-      html_style = html_style_save;
+      html_style = css_const_style.html_style_save + html_style;
     }
     else {
-      html_style = html_style_preview;
+      html_style = css_const_style.html_style_preview + html_style;
     }
 
     //HTML style
@@ -409,7 +365,9 @@ class Documenter extends markdown_lib.Markdown {
     let converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
     converter.setFlavor('github');
 
-    html += converter.makeHtml("&nbsp;&nbsp;\n\n");
+    if (extra_top_space === true){
+      html += "<br><br><br><br><br><br>\n";
+    }
     //Entity
     if (code_tree['entity'] !== undefined) {
       //Title
@@ -437,7 +395,8 @@ class Documenter extends markdown_lib.Markdown {
       html_description = this.normalize_description(html_description);
       html += html_description;
       //Generics and ports
-      html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], code_tree['generics'],code_tree['virtual_buses']));
+      html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], 
+            code_tree['generics'],code_tree['virtual_buses']));
     }
     //Package
     if (code_tree.package !== undefined) {

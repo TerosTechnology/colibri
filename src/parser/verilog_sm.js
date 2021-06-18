@@ -42,8 +42,7 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
       this.parser.setLanguage(Lang);
       this.loaded_wasm = true;
     }
-    // eslint-disable-next-line no-console
-    catch(e){console.log(e);}
+    catch(e){console.log('');}
   }
 
   async get_svg_sm(code) {
@@ -53,8 +52,6 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
       process = this.get_process(tree);
     }
     catch (e) {
-      // eslint-disable-next-line no-console
-      // console.log(e);
       return { 'svg': [], 'stm': [] };
     }
     let stm = [];
@@ -65,8 +62,6 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
         states = this.get_process_info(process[i]);
       }
       catch (e) {
-        // eslint-disable-next-line no-console
-        // console.log(e);
         states = undefined;
       }
       if (states !== undefined) {

@@ -78,11 +78,10 @@ class Edam_project extends prj_documenter.Project_documenter{
   }
 
   save_as_yml(path, tool_configuration){
-    const jsteros = require('jsteros');
     const fs = require("fs");
     let dir_path = path_lib.dirname(path);
     let edam_json = this.get_json_prj(tool_configuration, dir_path);
-    let edam_yml = jsteros.Edam.json_edam_to_yml_edam(edam_json);
+    let edam_yml = json_edam_to_yml_edam(edam_json);
     fs.writeFileSync(path, edam_yml, "utf8");
   }
 
@@ -273,23 +272,29 @@ class Edam_file {
     if (lang === 'vhdl') {
       file_type = 'vhdlSource-2008';
     }
-    else if (lang === 'verilog' || lang === 'systemverilog') {
+    else if (lang === 'verilog') {
       file_type = 'verilogSource-2005';
     }
-    else if (extension === '.ucf') {
-      file_type = 'ucf';
+    else if (lang === 'systemverilog') {
+      file_type = 'systemVerilogSource';
     }
-    else if (extension === '.xdc') {
-      file_type = 'xdc';
+    else if (extension === '.c') {
+      file_type = 'cSource';
     }
-    else if (extension === '.xci') {
-      file_type = 'xci';
+    else if (extension === '.cpp') {
+      file_type = 'cppSource';
     }
-    else if (extension === '.qip') {
-      file_type = 'qip';
+    else if (extension === '.vbl') {
+      file_type = 'veribleLintRules';
+    }
+    else if (extension === '.tcl') {
+      file_type = 'tclSource';
     }
     else if (extension === '.py') {
       file_type = 'python';
+    }
+    else {
+      file_type = extension.substring(1).toLocaleUpperCase();
     }
     return file_type;
   }

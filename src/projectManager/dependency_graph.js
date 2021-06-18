@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Copyright 2019
 // Carlos Alberto Ruiz Naranjo, Ismael Pérez Rojo,
 // Alfredo Enrique Sáez Pérez de la Lastra
@@ -19,8 +20,6 @@
 
 const python_tools = require("../nopy/python_tools");
 const path_lib = require("path");
-const Viz = require("./viz/viz");
-const worker = require("./viz/full.render");
 
 class Dependency_graph {
   constructor() {
@@ -41,17 +40,26 @@ class Dependency_graph {
       python3_path,
       python_script_path
     );
-    return result.stdout;
+    let dep_graph = '';
+    if (result.error === 0){
+      dep_graph = result.stdout;
+    }
+    return dep_graph;
   }
 
   async get_dependency_graph_svg(sources, python3_path) {
     let dependencies = await this.create_dependency_graph(sources, python3_path);
-    var viz = new Viz(worker);
-    return new Promise(function (resolve) {
-      viz.renderString(dependencies).then(function (string) {
-        resolve(string);
+    try{
+      const Viz = require("./viz/viz");
+      const worker = require("./viz/full.render");
+      var viz = new Viz(worker);
+      return new Promise(function (resolve) {
+        viz.renderString(dependencies).then(function (string) {
+          resolve(string);
+        });
       });
-    });
+    }
+    catch(e){console.log('');}
   }
 }
 
