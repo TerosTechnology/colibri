@@ -32,7 +32,7 @@ class Doc_edam {
   }
 
   doc_trs(options) {
-    let trs_file = options.file;
+    let trs_file = options.edam;
     let out = options.out;
     try {
       let doc_path = "built_doc";

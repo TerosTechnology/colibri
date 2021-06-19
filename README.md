@@ -29,13 +29,12 @@ teroshdl-hdl-documenter -f example.yml
 
 **Documenter with teros project manager file or EDAM file**
 
-Documentation will be generated in `./built_doc` folder for EDAM/TRS files
+Documentation will be generated in `./built_doc`
 ```
 cd /bin/example
-teroshdl-hdl-documenter -f trs_example.trs 
-teroshdl-hdl-documenter -f edam_example.edam -o html 
+teroshdl-hdl-documenter -e example_edam.yml 
+teroshdl-hdl-documenter -e example_edam.yml -o html 
 ```
-
 
 
 ## Third-party

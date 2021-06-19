@@ -175,7 +175,7 @@ class Custom_yml{
     const path_lib = require('path');
 
     let lang = "vhdl";
-    let symbol = this.doc_option.symbol;
+    let symbol = this.doc_options.symbol;
 
     let filename = path_lib.basename(path, path_lib.extname(path));
     if (path_lib.extname(path) === '.vhd' || path_lib.extname(path) === '.vho'
@@ -214,7 +214,8 @@ class Custom_yml{
       'fsm': true,
       'signals': 'none',
       'constants': 'none',
-      'process': 'none'
+      'process': 'none',
+      'symbol': '!'
     };
     documenter.set_config(global_config);
   }

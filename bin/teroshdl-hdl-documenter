@@ -30,8 +30,8 @@ const { exit } = require('process');
 const doc_options_choice = ['none', 'all', 'only_commented'];
 
 program.version(require('../package.json').version)
-    .option('-fcustom, --filecustom [path]', 'Path of the YML file for documenter')
-    .option('-f, --file [path]', 'Path of the EDAM yml file for documenter')
+    .option('-f, --file [path]', 'Path of the YML file for documenter')
+    .option('-e, --edam [path]', 'Path of the EDAM yml file for documenter')
     .option('-o, --out [type]', 'Documentation format: md, html')
     .option('-dep, --dep', `Include dependency graph in the documentation: ${doc_options_choice}`, true)
     .option('-fsm, --fsm', `Include finite state machines in the documentation: ${doc_options_choice}`, true)
@@ -87,28 +87,31 @@ function validate_config(name, config_data){
 }
 
 function check_file_ext(options, doc_config){
-  let file_custom = options.filecustom;
+  let file_custom = options.file;
   if (file_custom !== undefined) {
     let file_ext = path_lib.extname(file_custom);
     if (file_ext === ".yml" || file_ext === ".YML" ) {
-      let custom_yml = custom_yml.Custom_yml(doc_config);
-      custom_yml.doc_yml(options);
+      let custom_yml_c = new custom_yml.Custom_yml(doc_config);
+      custom_yml_c.doc_yml(options);
+    }
+    else{
+      // eslint-disable-next-line no-console
+      console.log("Invalid input custom file: It must be an'.yml' file ");
     }
   }
-  else{
-    // eslint-disable-next-line no-console
-    console.log("Invalid input custom file: It must be an'.yml' file ");
-  }
-  let file = options.file;
+  let file = options.edam;
   if (file !== undefined) {
     let file_ext = path_lib.extname(file);
     if (file_ext === ".yml" || file_ext === ".YML" ){
-      let edam_yml = edam_yml.Doc_edam(doc_config);
-      edam_yml.doc_trs(options);
+      let edam_yml_c = new edam_yml.Doc_edam(doc_config);
+      edam_yml_c.doc_trs(options);
+    }
+    else{
+      // eslint-disable-next-line no-console
+      console.log("Invalid input file: It must be an EDAM '.yml' file ");
     }
   }
-  else{
-    // eslint-disable-next-line no-console
+  if (file_custom === undefined && file === undefined) {
     console.log("Invalid input file: It must be an EDAM '.yml' file ");
   }
 }
