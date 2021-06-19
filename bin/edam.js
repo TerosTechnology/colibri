@@ -24,7 +24,8 @@ const fs = require("fs");
 const shell = require("shelljs");
 const path_lib = require("path");
 const yaml = require("js-yaml");
-let colibri = require("../src/main.js");
+// let colibri = require("../src/main.js");
+let project_edam = require("../src/projectManager/edam.js");
 
 class Doc_edam {
   constructor(doc_options) {
@@ -39,126 +40,82 @@ class Doc_edam {
       let trs_path = path_lib.dirname(trs_file);
       let out_dir = `${trs_path}/${doc_path}`;
       fs.mkdirSync(out_dir);
-      const doc = yaml.load(fs.readFileSync(trs_file, "utf8")); //const doc = JSON.parse(fs.readFileSync(trs_file, 'utf8'));
+      trs_file = yaml.load(fs.readFileSync(trs_file, "utf8"));
       shell.cd(trs_path);
-      this.doc_trs_ip(doc, doc_path, out);
+      this.doc_trs_ip(trs_file, doc_path, out);
     } catch (e) {
       console.log(e);
     }
   }
 
-  doc_trs_ip(doc, path, out) {
-    let file_list = [];
-    let project_name = doc.name;
-    for (let x = 0; x < doc.files.length; x++) {
-      file_list.push(doc.files[x].name);
-    }
+  doc_trs_ip(trs_file, path, out) {
     switch (out) {
       case "html":
-        this.save_doc_html_trs(file_list, path, project_name);
+        this.save_doc_html_trs(trs_file, path);
         break;
       case "md":
-        this.save_doc_md_trs(file_list, path, project_name);
+        this.save_doc_md_trs(trs_file, path);
         break;
       default:
-        console.log("Output format not set or invalid. Saving documentation in Markdown by default.");
-        this.save_doc_md_trs(file_list, path, project_name);
+        console.log(
+          "Output format not set or invalid. Saving documentation in Markdown by default."
+        );
+        this.save_doc_md_trs(trs_file, path);
         break;
     }
   }
 
-  async save_doc_md_trs(files, path, project_name) {
-    let symbol_vhdl = "!";
-    let symbol_verilog = "!";
+  async save_doc_md_trs(trs_file, path) {
+    let config = this.configure_documenter();
+    let symbol_vhdl = this.doc_options.symbol_vhdl;
+    let symbol_verilog = this.doc_options.symbol_verilog;
 
-    let config = {
-      custom_section: undefined,
-      custom_svg_path: undefined,
-      custom_svg_path_in_readme: undefined,
-      fsm: true,
-      signals: "none",
-      constants: "none",
-      process: "none",
-    };
-
-    let with_dependency_graph = true;
     let python3_path = "";
+    let with_dependency_graph = this.doc_options.dependency_graph;
 
-    let dependency_graph = new dependency.Dependency_graph();
-    let svg_dependency_graph = await dependency_graph.get_dependency_graph_svg(
-      gen_names_str(files),
-      python3_path
-    );
-    colibri.Documenter.get_md_doc_from_array(
-      files,
-      path,
-      symbol_vhdl,
-      symbol_verilog,
-      svg_dependency_graph,
-      project_name,
-      with_dependency_graph,
-      config
-    );
+    let doc_inst = new project_edam.Edam_project();
+    doc_inst.load_edam_file(trs_file);
+    doc_inst.save_markdown_doc(path, symbol_vhdl, symbol_verilog, with_dependency_graph = true, python3_path, 
+      config);
   }
 
-  async save_doc_html_trs(files, path, project_name) {
-    let symbol_vhdl = "!";
-    let symbol_verilog = "!";
+  async save_doc_html_trs(trs_file, path) {
+    let config = this.configure_documenter();
+    let symbol_vhdl = this.doc_options.symbol_vhdl;
+    let symbol_verilog = this.doc_options.symbol_verilog;
 
-    let config = {
-      custom_section: undefined,
-      custom_svg_path: undefined,
-      custom_svg_path_in_readme: undefined,
-      fsm: true,
-      signals: "none",
-      constants: "none",
-      process: "none",
-    };
-
-    let with_dependency_graph = true;
     let python3_path = "";
+    let with_dependency_graph = this.doc_options.dependency_graph;
 
-    let dependency_graph = new dependency.Dependency_graph();
-    let svg_dependency_graph = await dependency_graph.get_dependency_graph_svg(
-      gen_names_str(files),
-      python3_path
-    );
-    colibri.Documenter.get_html_doc_from_array(
-      files,
-      path,
-      symbol_vhdl,
-      symbol_verilog,
-      svg_dependency_graph,
-      project_name,
-      with_dependency_graph,
-      config
-    );
+    let doc_inst = new project_edam.Edam_project();
+    doc_inst.load_edam_file(trs_file);
+    doc_inst.save_html_doc(path, symbol_vhdl, symbol_verilog, with_dependency_graph = true, python3_path, 
+      config);
   }
 
-  gen_names_str(files) {
-    let sources = [];
-    for (let i = 0; i < files.length; i++) {
-      sources.push({ name: files[i] });
-    }
-    return sources;
-  }
-
-  configure_documenter(documenter) {
+  configure_documenter() {
     if (this.doc_options !== undefined) {
-      documenter.set_config(this.doc_options);
-      return;
+      let config = {
+        dependency_graph: this.doc_options.dependency_graph,
+        fsm: this.doc_options.fsm,
+        signals: this.doc_options.signals,
+        constants: this.doc_options.constants,
+        process: this.doc_options.process,
+      };
+      return config;
     }
-    let global_config = {
-      dependency_graph: false,
-      fsm: true,
-      signals: "none",
-      constants: "none",
-      process: "none",
-    };
-    documenter.set_config(global_config);
+    else{
+      let global_config = {
+        dependency_graph: false,
+        fsm: true,
+        signals: "none",
+        constants: "none",
+        process: "none"
+      };
+      return global_config;
+    }
   }
 }
-
 module.exports = {
   Doc_edam: Doc_edam,
 };

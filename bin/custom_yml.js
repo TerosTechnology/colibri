@@ -175,17 +175,19 @@ class Custom_yml{
     const path_lib = require('path');
 
     let lang = "vhdl";
-    let symbol = this.doc_options.symbol;
+    let symbol = "!";
 
     let filename = path_lib.basename(path, path_lib.extname(path));
     if (path_lib.extname(path) === '.vhd' || path_lib.extname(path) === '.vho'
       || path_lib.extname(path) === '.vhdl') {
       lang = "vhdl";
+      symbol = this.doc_options.symbol_vhdl;
     }
     else if (path_lib.extname(path) === '.v' || path_lib.extname(path) === '.vh'
       || path_lib.extname(path) === '.vl' || path_lib.extname(path) === '.sv'
       || path_lib.extname(path) === '.SV') {
       lang = "verilog";
+      symbol = this.doc_options.symbol_verilog;
     }
     let custom_svg_path_in_readme = undefined;
     if (readme_name === 'README'){
@@ -214,8 +216,7 @@ class Custom_yml{
       'fsm': true,
       'signals': 'none',
       'constants': 'none',
-      'process': 'none',
-      'symbol': '!'
+      'process': 'none'
     };
     documenter.set_config(global_config);
   }

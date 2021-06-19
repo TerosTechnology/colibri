@@ -33,12 +33,13 @@ program.version(require('../package.json').version)
     .option('-f, --file [path]', 'Path of the YML file for documenter')
     .option('-e, --edam [path]', 'Path of the EDAM yml file for documenter')
     .option('-o, --out [type]', 'Documentation format: md, html')
-    .option('-dep, --dep', `Include dependency graph in the documentation: ${doc_options_choice}`, true)
-    .option('-fsm, --fsm', `Include finite state machines in the documentation: ${doc_options_choice}`, true)
+    .option('--dep, --dep', `Include dependency graph in the documentation: ${doc_options_choice}`, true)
+    .option('--fsm, --fsm', `Include finite state machines in the documentation: ${doc_options_choice}`, true)
     .option('-s, --signals <type>', `Include signals/regs/wires in the documentation: ${doc_options_choice}`, 'none')
     .option('-c, --constants <type>', `Include constants/types in the documentation: ${doc_options_choice}`, 'none')
     .option('-p, --process <type>', `Include process/always in the documentation: ${doc_options_choice}`, 'none')
-    .option('-sym, --symbol <type>', `Special character to parse comments into documentation`,'!')
+    .option('--sym-verilog, --symbol_verilog <type>', `Special character to parse comments into documentation`,'!')
+    .option('--sym-vhdl, --symbol_vhdl <type>', `Special character to parse comments into documentation`,'!')
     .usage('[options] <hdl-documenter>')
     .parse(process.argv);
 
@@ -66,7 +67,8 @@ function get_documentation_config(options){
   let include_process = options.process;
   validate_config('process',include_process);
 
-  let doc_symbol = options.symbol;
+  let doc_symbol_verilog = options.symbol_verilog;
+  let doc_symbol_vhdl = options.symbol_vhdl;
 
   let config = {
     "dependency_graph": include_dependency_graph,
@@ -74,7 +76,8 @@ function get_documentation_config(options){
     "signals": include_signals,
     "constants": include_constants,
     "process": include_process,
-    "symbol": doc_symbol
+    "symbol_verilog": doc_symbol_verilog,
+    "symbol_vhdl": doc_symbol_vhdl
   };
   return config;
 }
