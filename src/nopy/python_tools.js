@@ -41,20 +41,19 @@ async function check_custom_python_path(python_path) {
   // eslint-disable-next-line max-len
   let command = `${python_path} -c "import sys; check_version = sys.version_info > (3,0); exit(0) if check_version == True else exit(-1)"`;
   let result_command = await _exec_command(command);
-  if (result_command.error !== 0) {
+  if (result_command.error === 0) {
     return python_path;
   } else {
     return "";
   }
 }
 
-
 async function _exec_command(command) {
   const exec = require("child_process").exec;
   return new Promise((resolve) => {
     exec(command, (error, stdout, stderr) => {
       let error_code = 0;
-      if (error !== undefined){
+      if (error !== undefined && error !== null){
         error_code = -1;
       }
       let result = { error: error_code, stdout: stdout, stderr: stderr };

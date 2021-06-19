@@ -19,19 +19,36 @@ from os.path import exists, abspath, join, basename, normpath, dirname
 import sys
 from pathlib import Path
 from vunit.vhdl_standard import VHDL, VHDLStandard
+import json
 
 import project as pj
 from source import SourceFile, SourceFileList, simplify_path
 from vunit.vhdl_standard import VHDL, VHDLStandard
 import sys
 
-files_string = sys.argv[1]
-files = files_string.split(',')
+prj = '/home/carlos/workspace/colibri/src/projectManager/json_project_dependencies.json'
+# prj = sys.argv[1]
+f = open(prj,)
+json_prj = json.load(f)
 
+project_sources = json_prj['files']
 project = pj.Project()
-project.add_library("src_lib", "work_path")
-for i in range(0, len(files)):
-    suffix = Path(files[i]).suffix
+libraries = []
+
+for i in range(0, len(project_sources)):
+    file_name = project_sources[i]['name']
+    file_library = 'src_lib_teroshdl'
+
+    if 'logic_name' in project_sources[i]:
+        file_library = project_sources[i]['logic_name']
+
+    if file_library in libraries:
+        pass
+    else:
+        project.add_library(file_library, "work_path")
+        libraries.append(file_library)
+
+    suffix = Path(file_name).suffix
     if (suffix == ".v" or suffix == ".vh" or suffix == ".vl"):
         filetype = "verilog"
     elif (suffix == ".sv" or suffix == ".svh"):
@@ -39,9 +56,12 @@ for i in range(0, len(files)):
     else:
         filetype = "vhdl"
     project.add_source_file(
-        files[i], "src_lib", file_type=filetype, vhdl_standard=VHDL.STD_2008)
+        file_name, file_library, file_type=filetype, vhdl_standard=VHDL.STD_2008)
 
-files, dependencies = project.get_direct_dependencies()
+try:
+    files, dependencies = project.get_direct_dependencies()
+except:
+    pass
 
 nodes = []
 complete_nodes = []
@@ -68,3 +88,4 @@ for i in range(0, len(dependencies)):
                 str(dependencies[i][j]) + '"\n'
 diagram += '}'
 print(diagram)
+exit(0)

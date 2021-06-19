@@ -86,6 +86,29 @@ class Parser extends ts_base_parser.Ts_base_parser {
     return entity_name;
   }
 
+  async get_only_package_name(code){
+    if (this.loaded === false){
+      return undefined;
+    }
+    let package_declaration = this.get_package_declaration(code);
+    let package_name = '';
+    if (package_declaration !== undefined && package_declaration.package !== undefined){
+      package_name = package_declaration.package.name;
+    }
+    return package_name;
+  }
+
+  async get_entity_or_package_name(code){
+    let entity_name = await this.get_only_entity_name(code);
+    if (entity_name === undefined || entity_name === ''){
+      let package_name = await this.get_only_package_name(code);
+      return {name:package_name, type:'package'};
+    }
+    else{
+      return {name:entity_name, type:'entity'};
+    }
+  }
+
   get_entity_file(code) {
     try {
       let code_lines = code.split('\n');

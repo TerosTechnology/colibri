@@ -381,7 +381,8 @@ class Documenter extends markdown_lib.Markdown {
       html += converter.makeHtml(this._get_info_section(code_tree));
       //Diagram
       html += converter.makeHtml("## Diagram\n");
-      html += converter.makeHtml((await this._get_diagram_svg_from_code_tree(code_tree) + "\n").replace(/\*/g, "\\*").replace(/\`/g, "\\`"));
+      html += converter.makeHtml((await this._get_diagram_svg_from_code_tree(code_tree) + 
+          "\n").replace(/\*/g, "\\*").replace(/\`/g, "\\`"));
       //Description
       html += converter.makeHtml("## Description\n");
       let { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
@@ -650,82 +651,6 @@ class Documenter extends markdown_lib.Markdown {
   }
 }
 
-async function get_md_doc_from_array(files, output_dir_doc, symbol_vhdl, symbol_verilog,
-  graph, project_name, with_dependency_graph, config) {
-  //Main doc
-  let main_doc = "# Project documentation: " + project_name + "\n";
-  let lang = "vhdl";
-  let symbol = "!";
-  for (let i = 0; i < files.length; ++i) {
-    let filename = path_lib.basename(files[i], path_lib.extname(files[i]));
-    if (path_lib.extname(files[i]) === '.vhd' || path_lib.extname(files[i]) === '.vho'
-      || path_lib.extname(files[i]) === '.vhdl') {
-      lang = "vhdl";
-      symbol = symbol_vhdl;
-    }
-    else if (path_lib.extname(files[i]) === '.v' || path_lib.extname(files[i]) === '.vh'
-      || path_lib.extname(files[i]) === '.vl' || path_lib.extname(files[i]) === '.sv'
-      || path_lib.extname(files[i]) === '.SV') {
-      lang = "verilog";
-      symbol = symbol_verilog;
-    }
-    else { break; }
-    main_doc += "- [" + filename + "](./" + filename + ".md)\n";
-
-    let contents = fs.readFileSync(files[i], 'utf8');
-
-    let doc_inst = new Documenter(contents, lang, symbol, config);
-    doc_inst.save_markdown(output_dir_doc + path_lib.sep + filename + ".md");
-  }
-  if (with_dependency_graph === true) {
-    main_doc += "# Project dependency graph\n";
-    main_doc += '![system](./dependency_graph.svg "System")';
-    fs.writeFileSync(output_dir_doc + path_lib.sep + "dependency_graph.svg", graph);
-  }
-  fs.writeFileSync(output_dir_doc + path_lib.sep + "README.md", main_doc);
-}
-
-async function get_html_doc_from_array(files, output_dir_doc, symbol_vhdl, symbol_verilog,
-  graph, project_name, with_dependency_graph, config) {
-  //Main doc
-  let main_doc = "<h1>Project documentation</h1>\n";
-  if (with_dependency_graph === true) {
-    main_doc += "<h2>Project dependency graph\n</h2>";
-    main_doc += graph + '\n';
-    main_doc += "<h2>Files\n</h2>";
-  }
-  let lang = "vhdl";
-  let symbol = "!";
-
-  main_doc += '<ul>';
-  for (let i = 0; i < files.length; ++i) {
-    let filename = path_lib.basename(files[i], path_lib.extname(files[i]));
-    if (path_lib.extname(files[i]) === '.vhd' || path_lib.extname(files[i]) === '.vho'
-      || path_lib.extname(files[i]) === '.vhdl') {
-      lang = "vhdl";
-      symbol = symbol_vhdl;
-    }
-    else if (path_lib.extname(files[i]) === '.v' || path_lib.extname(files[i]) === '.vh'
-      || path_lib.extname(files[i]) === '.vl' || path_lib.extname(files[i]) === '.sv'
-      || path_lib.extname(files[i]) === '.SV') {
-      lang = "verilog";
-      symbol = symbol_verilog;
-    }
-    else { break; }
-    // main_doc += "- [" + filename + "](./" + filename + ".md)\n";
-    main_doc += `  <li><a href="${filename}.html">${filename}</a>\n</li>`;
-
-    let contents = fs.readFileSync(files[i], 'utf8');
-
-    let doc_inst = new Documenter(contents, lang, symbol, config);
-    doc_inst.save_html(output_dir_doc + path_lib.sep + filename + ".html");
-  }
-  main_doc += '</ul>';
-  fs.writeFileSync(output_dir_doc + path_lib.sep + "index.html", main_doc);
-}
-
 module.exports = {
-  get_html_doc_from_array: get_html_doc_from_array,
-  get_md_doc_from_array: get_md_doc_from_array,
   Documenter: Documenter
 };
