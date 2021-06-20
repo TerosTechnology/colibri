@@ -26,8 +26,7 @@ from source import SourceFile, SourceFileList, simplify_path
 from vunit.vhdl_standard import VHDL, VHDLStandard
 import sys
 
-prj = '/home/carlos/workspace/colibri/src/projectManager/json_project_dependencies.json'
-# prj = sys.argv[1]
+prj = sys.argv[1]
 f = open(prj,)
 json_prj = json.load(f)
 
