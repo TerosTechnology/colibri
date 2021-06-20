@@ -38,12 +38,13 @@ class Doc_edam {
     try {
       let pypath = options.python_path;
       let doc_path = process.cwd();
+      let final_dir = doc_path;
+      let trs_path = path_lib.dirname(trs_file);
       if (options.outpath !== "") {
         doc_path = `${options.outpath}`;
+        final_dir = (path_lib.resolve(trs_path, process.cwd()));
       }
-      let trs_path = path_lib.dirname(trs_file);
-      let final_dir = path_lib.join(path_lib.relative(trs_path, process.cwd()),doc_path);
-
+      console.log(final_dir)
       let trs_file_content = '';
       if (mode === 'yml'){
         trs_file_content = yaml.load(fs.readFileSync(trs_file, "utf8"));
