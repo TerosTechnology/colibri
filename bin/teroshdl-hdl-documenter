@@ -24,6 +24,7 @@
 let custom_yml = require('./custom_yml');
 let edam_yml = require('./edam');
 let program = require('commander');
+let fs = require('fs');
 const path_lib = require('path');
 const { exit } = require('process');
 
@@ -32,7 +33,7 @@ const output_doc_options_choice = ['html', 'markdown'];
 
 program.version(require('../package.json').version)
     // eslint-disable-next-line max-len
-    .option('-f, --file [path]', 'Path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information', '/home/carlos/workspace/colibri/bin/example/doc/example.csv')
+    .option('-i, --input [path]', 'Directory with the HDL files, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information')
     .option('-o, --out [type]', 'Documentation format: md, html', 'markdown')
     .option('--dep, --dep', `Include dependency graph in the documentation: ${doc_options_choice}`, true)
     .option('--fsm, --fsm', `Include finite state machines in the documentation: ${doc_options_choice}`, true)
@@ -105,14 +106,23 @@ function validate_output_type(options){
 }
 
 function check_file_ext(options, doc_config){
-  let input_file = options.file;
+  let input_file = options.input;
   if (input_file === undefined){
     console.log("Invalid input file: It must be an EDAM '.yml' file ");
     return;
   }
-  let file_ext = path_lib.extname(input_file).toLowerCase();
+  let is_directory = fs.lstatSync(input_file).isDirectory();
 
-  if (file_ext === '.srs') {
+  let file_ext = '';
+  if (is_directory === false){
+    file_ext = path_lib.extname(input_file).toLowerCase();
+  }
+
+  if (is_directory === true){
+    let edam_yml_c = new edam_yml.Doc_edam(doc_config);
+    edam_yml_c.doc_trs(options, 'directory');
+  }
+  else if (file_ext === '.srs') {
     let custom_yml_c = new custom_yml.Custom_yml(doc_config);
     custom_yml_c.doc_yml(options);
   }

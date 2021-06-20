@@ -31,7 +31,7 @@ class Custom_yml{
   }
 
   doc_yml(options){
-    let yml_file = options.file;
+    let yml_file = options.input;
     try {
       const doc = yaml.load(fs.readFileSync(yml_file, 'utf8'));
       for (const x in doc) {

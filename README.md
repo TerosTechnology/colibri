@@ -15,7 +15,7 @@ sudo npm install -g .
 ```
 - Commands
 ```
--f, --file [path], Path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information
+-f, --file [path], Directory with the HDL files, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information
 -o, --out [type], Documentation format: md, html (default: "markdown")
 --dep, --dep', Include dependency graph in the documentation ['none', 'all', 'only_commented']
 --fsm, --fsm', Include finite state machines in the documentation ['none', 'all', 'only_commented']
@@ -36,9 +36,11 @@ sudo npm install -g .
 Check the EDAM format: https://edalize.readthedocs.io/en/latest/edam/api.html
 
 ```
-cd /bin/example
-teroshdl-hdl-documenter -e example_edam.yml 
-teroshdl-hdl-documenter -e example_edam.yml -o html 
+cd /bin/example/doc
+teroshdl-hdl-documenter -i example_edam.yml -o markdown
+teroshdl-hdl-documenter -i example_edam.yml -o html 
+teroshdl-hdl-documenter -i example.csv -o html 
+teroshdl-hdl-documenter -i ../rtl -o html 
 ```
 
 ## Third-party

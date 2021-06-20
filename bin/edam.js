@@ -32,7 +32,8 @@ class Doc_edam {
   }
 
   doc_trs(options, mode) {
-    let trs_file = options.file;
+    let trs_file = options.input;
+    let trs_file_absolute = path_lib.resolve(trs_file);
     let out_type = options.out;
     try {
       let pypath = options.python_path;
@@ -53,13 +54,13 @@ class Doc_edam {
 
       fs.mkdirSync(doc_path,{ recursive: true });
       shell.cd(trs_path);
-      this.save_doc(out_type, trs_file_content, final_dir, pypath, mode);
+      this.save_doc(trs_file_absolute, out_type, trs_file_content, final_dir, pypath, mode);
     } catch (e) {
       console.log(e);
     }
   }
 
-  async save_doc(type, trs_file_content, path, pypath, mode){
+  async save_doc(trs_file_absolute, type, trs_file_content, path, pypath, mode){
     let config = this.configure_documenter();
 
     let doc_inst = new project_edam.Edam_project('');
@@ -68,6 +69,9 @@ class Doc_edam {
     }
     else if(mode === 'csv'){
       this.load_edam_csv(doc_inst, trs_file_content);
+    }
+    else if(mode === 'directory'){
+      this.load_edam_directory(doc_inst, trs_file_absolute);
     }
 
     if (type === 'html'){
@@ -100,6 +104,15 @@ class Doc_edam {
     }
   }
 
+  load_edam_directory(edam, directory_path){
+    let file_list = this.getFilesFromDir(directory_path);
+    for (let i = 0; i < file_list.length; i++) {
+      const element = file_list[i];
+      edam.add_file(element, false, "", "");
+    }
+}
+
+
   configure_documenter() {
     if (this.doc_options !== undefined) {
       return this.doc_options;
@@ -118,7 +131,24 @@ class Doc_edam {
       return global_config;
     }
   }
+
+  getFilesFromDir (dir, filelist = []) {
+    fs.readdirSync(dir).forEach(file => {
+        const dirFile = path_lib.join(dir, file);
+        try {
+            filelist = this.getFilesFromDir(dirFile, filelist);
+        }
+        catch (err) {
+            if (err.code === 'ENOTDIR' || err.code === 'EBUSY') filelist = [...filelist, dirFile];
+            else throw err;
+        }
+    });
+    return filelist;
+  }
+
 }
+
+
 module.exports = {
   Doc_edam: Doc_edam,
 };
