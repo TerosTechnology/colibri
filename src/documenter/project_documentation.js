@@ -14,13 +14,18 @@ async function get_html_doc_from_project(project, output_dir_doc, graph, config)
 }
 
 async function get_doc_from_project(project, output_dir_doc, graph, config, type) {
+  let self_contained = config.self_contained;
+  if (self_contained === undefined){
+    self_contained = false;
+  }
+  
   let symbol_vhdl = config.symbol_vhdl;
   let symbol_verilog = config.symbol_verilog;
   //Internal doc folder
   const INTERNAL_DOC_FOLDER = 'doc_internal';
   const INTERNAL_DOC_FOLDER_COMPLETE = path_lib.join(output_dir_doc,'doc_internal');
-  if (!fs.existsSync(INTERNAL_DOC_FOLDER_COMPLETE)){
-    fs.mkdirSync(INTERNAL_DOC_FOLDER_COMPLETE);
+  if (!fs.existsSync(INTERNAL_DOC_FOLDER_COMPLETE) && self_contained === false){
+    fs.mkdirSync(INTERNAL_DOC_FOLDER_COMPLETE, { recursive: true });
   }
   //Main doc
   let files = get_sources_as_array(project.files);
@@ -33,6 +38,8 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
   let lang = "none";
   let symbol = "!";
   main_doc += get_separation_init(type);
+  let doc_modules = '';
+  let list_modules = '';
   for (let i = 0; i < files.length; ++i) {
     let file_path = files[i];
     let filename = path_lib.basename(file_path, path_lib.extname(file_path));
@@ -47,25 +54,77 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
     // Only save the doc for a HDL file and exists
     if (lang !== 'none' && fs.existsSync(file_path) === true){
       let declaration = await get_declaration_from_file(file_path);
+      let list_modules_inst = '';
       if (declaration.type === 'entity'){
-        main_doc += get_module_str(INTERNAL_DOC_FOLDER, filename, declaration.name, type);
+        list_modules_inst = get_module_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
       }
       else{
-        main_doc += get_package_str(INTERNAL_DOC_FOLDER, filename, declaration.name, type);
+        list_modules_inst = get_package_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
+      }
+      if (self_contained === false){
+        main_doc += list_modules_inst;
+      }
+      else{
+        list_modules += list_modules_inst;
       }
       let contents = fs.readFileSync(files[i], 'utf8');
       let doc_inst = new Documenter_lib.Documenter(contents, lang, symbol, config);
-      if (type === 'html'){
-        doc_inst.save_html(INTERNAL_DOC_FOLDER_COMPLETE + path_lib.sep + filename + get_extension(type));
+      let inst_doc_module = await save_doc(self_contained, type, INTERNAL_DOC_FOLDER_COMPLETE, filename, doc_inst);
+      if (self_contained === false){
+        main_doc += inst_doc_module;
       }
       else{
-        doc_inst.save_markdown(INTERNAL_DOC_FOLDER_COMPLETE + path_lib.sep + filename + get_extension(type));
+        doc_modules += inst_doc_module;
       }
     }
   }
+  if (self_contained === true){
+    main_doc += list_modules;
+    main_doc += '\n\n';
+    main_doc += doc_modules;
+  }
+
   main_doc += get_separation_end(type);
   fs.writeFileSync(output_dir_doc + path_lib.sep + get_index_name(type), main_doc);
 }
+
+async function save_doc(self_contained, type, output, filename, doc_inst){
+  let doc = '';
+  if (self_contained === false){
+    doc = save_doc_separate(type, output, filename, doc_inst);
+  }
+  else{
+    doc = await save_doc_self_contained(type, doc_inst);
+  }
+  return doc;
+}
+
+async function save_doc_self_contained(type, doc_inst){
+  let doc = '';
+  if (type === 'html'){
+    let options = { 'html_style': 'save', 'disable_overflow': true};
+    const extra_top_space = false;
+    let html_value = await doc_inst.get_html(options, extra_top_space);
+    doc = html_value.html;
+  }
+  else{
+    // doc_inst.save_markdown(output_path);
+  }
+  return doc;
+}
+
+function save_doc_separate(type, output, filename, doc_inst){
+  let output_filename =  filename + get_extension(type);
+  let output_path = path_lib.join(output, output_filename);
+  if (type === 'html'){
+    doc_inst.save_html(output_path);
+  }
+  else{
+    doc_inst.save_markdown(output_path);
+  }
+  return '';
+}
+
 
 function get_graph_declaration(type, graph, output_dir_doc, output_dir_doc_relative){
   let declaration = '';
@@ -97,21 +156,28 @@ function get_title_design(type){
   return title;
 }
 
-function get_module_str(folder, filename, name, type){
+function get_module_str(self_contained, folder, filename, name, type){
   let declaration = `- Module: [+ ${name} ](./${folder}/${filename}.md)\n`;
-  if (type === 'html'){
+  if (self_contained === false && type === 'html'){
     declaration = `  <li>Module: <a href="${folder}/${filename}.html">${name}</a>\n</li>`;
+  }
+  else if(self_contained === true && type === 'html'){
+    declaration = `  <li>Module: <a href="#${name}">${name}</a>\n</li>`;
   }
   return declaration;
 }
 
-function get_package_str(folder, filename, name, type){
+function get_package_str(self_contained, folder, filename, name, type){
   let declaration = `- Package: [+ ${name} ](./${folder}/${filename}.md)\n`;
-  if (type === 'html'){
+  if (self_contained === false && type === 'html'){
     declaration = `  <li>Package: <a href="${folder}/${filename}.html">${name}</a>\n</li>`;
+  }
+  else if(self_contained === true && type === 'html'){
+    declaration = `  <li>Package: <a href="#${name}">${name}</a>\n</li>`;
   }
   return declaration;
 }
+
 
 function get_separation_init(type){
   let declaration = '\n';
