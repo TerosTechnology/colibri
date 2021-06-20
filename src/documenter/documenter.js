@@ -45,7 +45,8 @@ class Documenter extends markdown_lib.Markdown {
         'fsm': true,
         'signals': 'all',
         'constants': 'all',
-        'process': 'all'
+        'process': 'all',
+        'self_contained': false
       };
     }
     else {

@@ -6,11 +6,11 @@ const Parser = require('../parser/factory');
 
 
 async function get_md_doc_from_project(project, output_dir_doc, graph, config) {
-  get_doc_from_project(project, output_dir_doc, graph, config, 'markdown');
+  await get_doc_from_project(project, output_dir_doc, graph, config, 'markdown');
 }
 
 async function get_html_doc_from_project(project, output_dir_doc, graph, config) {
-  get_doc_from_project(project, output_dir_doc, graph, config, 'html');
+  await get_doc_from_project(project, output_dir_doc, graph, config, 'html');
 }
 
 async function get_doc_from_project(project, output_dir_doc, graph, config, type) {
@@ -24,7 +24,7 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
   //Internal doc folder
   const INTERNAL_DOC_FOLDER = 'doc_internal';
   const INTERNAL_DOC_FOLDER_COMPLETE = path_lib.join(output_dir_doc,'doc_internal');
-  if (!fs.existsSync(INTERNAL_DOC_FOLDER_COMPLETE) && self_contained === false){
+  if (!fs.existsSync(INTERNAL_DOC_FOLDER_COMPLETE) && (self_contained === false || type === 'markdown')){
     fs.mkdirSync(INTERNAL_DOC_FOLDER_COMPLETE, { recursive: true });
   }
   //Main doc
@@ -90,11 +90,11 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
 
 async function save_doc(self_contained, type, output, filename, doc_inst){
   let doc = '';
-  if (self_contained === false){
-    doc = save_doc_separate(type, output, filename, doc_inst);
+  if (self_contained === true && type === 'html'){
+    doc = await save_doc_self_contained(type, doc_inst);
   }
   else{
-    doc = await save_doc_self_contained(type, doc_inst);
+    doc = await save_doc_separate(type, output, filename, doc_inst);
   }
   return doc;
 }
@@ -107,24 +107,20 @@ async function save_doc_self_contained(type, doc_inst){
     let html_value = await doc_inst.get_html(options, extra_top_space);
     doc = html_value.html;
   }
-  else{
-    // doc_inst.save_markdown(output_path);
-  }
   return doc;
 }
 
-function save_doc_separate(type, output, filename, doc_inst){
+async function save_doc_separate(type, output, filename, doc_inst){
   let output_filename =  filename + get_extension(type);
   let output_path = path_lib.join(output, output_filename);
   if (type === 'html'){
-    doc_inst.save_html(output_path);
+    await doc_inst.save_html(output_path);
   }
   else{
-    doc_inst.save_markdown(output_path);
+    await doc_inst.save_markdown(output_path);
   }
   return '';
 }
-
 
 function get_graph_declaration(type, graph, output_dir_doc, output_dir_doc_relative){
   let declaration = '';
@@ -157,7 +153,7 @@ function get_title_design(type){
 }
 
 function get_module_str(self_contained, folder, filename, name, type){
-  let declaration = `- Module: [+ ${name} ](./${folder}/${filename}.md)\n`;
+  let declaration = `- Module: [${name} ](./${folder}/${filename}.md)\n`;
   if (self_contained === false && type === 'html'){
     declaration = `  <li>Module: <a href="${folder}/${filename}.html">${name}</a>\n</li>`;
   }
@@ -168,7 +164,7 @@ function get_module_str(self_contained, folder, filename, name, type){
 }
 
 function get_package_str(self_contained, folder, filename, name, type){
-  let declaration = `- Package: [+ ${name} ](./${folder}/${filename}.md)\n`;
+  let declaration = `- Package: [${name} ](./${folder}/${filename}.md)\n`;
   if (self_contained === false && type === 'html'){
     declaration = `  <li>Package: <a href="${folder}/${filename}.html">${name}</a>\n</li>`;
   }

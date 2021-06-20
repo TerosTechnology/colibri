@@ -42,10 +42,10 @@ class Project_documenter{
     }
 
     if (type === 'html'){
-      Project_documentation.get_html_doc_from_project(project, output_dir_doc, svg_dependency_graph, config);
+      await Project_documentation.get_html_doc_from_project(project, output_dir_doc, svg_dependency_graph, config);
     }
     else if(type === 'markdown'){
-      Project_documentation.get_md_doc_from_project(project, output_dir_doc, svg_dependency_graph, config); 
+      await Project_documentation.get_md_doc_from_project(project, output_dir_doc, svg_dependency_graph, config); 
     }
   }
 
