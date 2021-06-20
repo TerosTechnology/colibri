@@ -19,13 +19,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-
-// exports.VhdlEditor    = require('./editor/vhdleditor')
-// exports.VerilogEditor = require('./editor/verilogeditor')
-// exports.VhdlParser     = require('./parser/vhdlparser');
-// exports.VerilogParser     = require('./parser/verilogparser');
-// exports.Simulators = require('./simulators/simulators');
-
 //******************************************************************************
 //General
 //******************************************************************************

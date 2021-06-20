@@ -904,6 +904,11 @@ class Parser extends ts_base_parser.Ts_base_parser {
     }
   }
 
+  async get_entity_or_package_name(code){
+    let entity_name = await this.get_only_entity_name(code);
+    return {name:entity_name, type:'entity'};
+  }
+
   get_entityName(tree, lines) {
     let element = tree;
     let arr = this.search_multiple_in_tree(element, 'module_header');

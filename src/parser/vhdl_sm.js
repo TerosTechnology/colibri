@@ -41,7 +41,7 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
         Parser.Language.load(Path.join(__dirname, Path.sep + "parsers" + Path.sep + "tree-sitter-vhdl.wasm"));
       this.parser.setLanguage(Lang);
     }
-    catch(e){console.log(e);}
+    catch(e){console.log('');}
 
     let process;
     let tree;
@@ -50,8 +50,6 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
       process = this.get_process(tree);
     }
     catch (e) {
-      // eslint-disable-next-line no-console
-      console.log(e);
       return { 'svg': [], 'stm': [] };
     }
     let stm = [];
@@ -62,8 +60,6 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
         states = this.get_process_info(process[i]);
       }
       catch (e) {
-        // eslint-disable-next-line no-console
-        console.log(e);
         states = undefined;
       }
       if (states !== undefined) {

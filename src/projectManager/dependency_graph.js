@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Copyright 2019
 // Carlos Alberto Ruiz Naranjo, Ismael Pérez Rojo,
 // Alfredo Enrique Sáez Pérez de la Lastra
@@ -19,39 +20,43 @@
 
 const python_tools = require("../nopy/python_tools");
 const path_lib = require("path");
-const Viz = require("./viz/viz");
-const worker = require("./viz/full.render");
+const fs = require("fs");
 
 class Dependency_graph {
   constructor() {
     this.dependency_graph_svg = "";
   }
 
-  async create_dependency_graph(sources, python3_path) {
-    let str = "";
-    if (sources.length !== 0) {
-      for (let i = 0; i < sources.length - 1; ++i) {
-        str += sources[i] + ",";
-      }
-      str += sources[sources.length - 1];
-    }
+  async create_dependency_graph(project, python3_path) {
+    const project_files_path = path_lib.join(__dirname, 'json_project_dependencies.json');
+    let project_files_json = JSON.stringify(project);
+    fs.writeFileSync(project_files_path, project_files_json);
 
-    let python_script_path = `${__dirname}${path_lib.sep}vunit_dependency.py ${str}`;
+    let python_script_path = `${__dirname}${path_lib.sep}vunit_dependency.py ${project_files_path}`;
     let result = await python_tools.exec_python_script(
       python3_path,
       python_script_path
     );
-    return result.stdout;
+    let dep_graph = '';
+    if (result.error === 0){
+      dep_graph = result.stdout;
+    }
+    return dep_graph;
   }
 
-  async get_dependency_graph_svg(sources, python3_path) {
-    let dependencies = await this.create_dependency_graph(sources, python3_path);
-    var viz = new Viz(worker);
-    return new Promise(function (resolve) {
-      viz.renderString(dependencies).then(function (string) {
-        resolve(string);
+  async get_dependency_graph_svg(project, python3_path) {
+    let dependencies = await this.create_dependency_graph(project, python3_path);
+    try{
+      const Viz = require("./viz/viz");
+      const worker = require("./viz/full.render");
+      var viz = new Viz(worker);
+      return new Promise(function (resolve) {
+        viz.renderString(dependencies).then(function (string) {
+          resolve(string);
+        });
       });
-    });
+    }
+    catch(e){console.log('');}
   }
 }
 
