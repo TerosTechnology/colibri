@@ -330,7 +330,11 @@ class Documenter extends markdown_lib.Markdown {
   }
 
   async _get_html_from_code(options, extra_top_space) {
-    let html_style = `<div class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%">\n`;
+    
+    let html_style = `<div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%">\n`;
+    if (options.disable_overflow === true){
+      html_style = `<div id="teroshdl" class='templateTerosHDL'>\n`;
+    }
 
     if (options !== undefined && options.html_style !== undefined
       && options.html_style === "save") {
@@ -346,7 +350,6 @@ class Documenter extends markdown_lib.Markdown {
       try {
         let custom_css_str = fs.readFileSync(options.custom_css_path, { encoding: 'utf8' });
         html = `<style>\n${custom_css_str}</style>\n`;
-        html += `<div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%">\n`;
       }
       catch (e) {
         // eslint-disable-next-line no-console
@@ -372,12 +375,15 @@ class Documenter extends markdown_lib.Markdown {
     if (code_tree['entity'] !== undefined) {
       //Title
       let doc_title;
+      let name = '';
       if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
-        doc_title = "# " + code_tree['info']['title'] + "\n";
+        name = code_tree['info']['title'];
+        doc_title = "# " + name + "\n";
       }else{
-        doc_title = "# Entity: " + code_tree['entity']['name'] + "\n";
+        name = code_tree['entity']['name'];
+        doc_title = "# Entity: " + name + "\n";
       }
-      html += converter.makeHtml(doc_title);
+      html += `<a id=${name}>` + converter.makeHtml(doc_title) + '</a>';
       html += converter.makeHtml(this._get_info_section(code_tree));
       //Diagram
       html += converter.makeHtml("## Diagram\n");
@@ -403,12 +409,15 @@ class Documenter extends markdown_lib.Markdown {
     if (code_tree.package !== undefined) {
       //Title
       let doc_title;
+      let name = '';
       if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
+        name = code_tree['info']['title'];
         doc_title = "# " + code_tree['info']['title'] + "\n";
       }else{
+        name =  code_tree['package']['name'];
         doc_title = "# Package: " + code_tree['package']['name'] + "\n";
       }
-      html += converter.makeHtml(doc_title);
+      html += `<a id=${name}>` + converter.makeHtml(doc_title) + '</a>';
       html += converter.makeHtml(this._get_info_section(code_tree));
       html += converter.makeHtml("## Description\n");
       html += converter.makeHtml(code_tree['package']['description'] + "\n");
