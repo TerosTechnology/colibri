@@ -216,7 +216,9 @@ class Custom_yml{
       'fsm': true,
       'signals': 'none',
       'constants': 'none',
-      'process': 'none'
+      'process': 'none',
+      'symbol_vhdl': "!",
+      'symbol_verilog': "!"
     };
     documenter.set_config(global_config);
   }

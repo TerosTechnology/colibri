@@ -36,61 +36,53 @@ class Doc_edam {
     let trs_file = options.edam;
     let out = options.out;
     try {
+      let pypath = options.python_path;
       let doc_path = "built_doc";
+      if (options.outpath !== "") {
+        doc_path = `${options.outpath}/built_doc`;
+      }
       let trs_path = path_lib.dirname(trs_file);
       let out_dir = `${trs_path}/${doc_path}`;
-      fs.mkdirSync(out_dir);
+      fs.mkdirSync(out_dir,{ recursive: true });
       trs_file = yaml.load(fs.readFileSync(trs_file, "utf8"));
       shell.cd(trs_path);
-      this.doc_trs_ip(trs_file, doc_path, out);
+      this.doc_trs_ip(trs_file, doc_path, out, pypath);
     } catch (e) {
       console.log(e);
     }
   }
 
-  doc_trs_ip(trs_file, path, out) {
+  doc_trs_ip(trs_file, path, out, pypath) {
     switch (out) {
       case "html":
-        this.save_doc_html_trs(trs_file, path);
+        this.save_doc_html_trs(trs_file, path, pypath);
         break;
       case "md":
-        this.save_doc_md_trs(trs_file, path);
+        this.save_doc_md_trs(trs_file, path, pypath);
         break;
       default:
         console.log(
           "Output format not set or invalid. Saving documentation in Markdown by default."
         );
-        this.save_doc_md_trs(trs_file, path);
+        this.save_doc_md_trs(trs_file, path, pypath);
         break;
     }
   }
 
-  async save_doc_md_trs(trs_file, path) {
+  async save_doc_md_trs(trs_file, path, pypath) {
     let config = this.configure_documenter();
-    let symbol_vhdl = this.doc_options.symbol_vhdl;
-    let symbol_verilog = this.doc_options.symbol_verilog;
-
-    let python3_path = "";
-    let with_dependency_graph = this.doc_options.dependency_graph;
 
     let doc_inst = new project_edam.Edam_project();
     doc_inst.load_edam_file(trs_file);
-    doc_inst.save_markdown_doc(path, symbol_vhdl, symbol_verilog, with_dependency_graph = true, python3_path, 
-      config);
+    doc_inst.save_markdown_doc(path, pypath, config);
   }
 
-  async save_doc_html_trs(trs_file, path) {
+  async save_doc_html_trs(trs_file, path, pypath) {
     let config = this.configure_documenter();
-    let symbol_vhdl = this.doc_options.symbol_vhdl;
-    let symbol_verilog = this.doc_options.symbol_verilog;
-
-    let python3_path = "";
-    let with_dependency_graph = this.doc_options.dependency_graph;
 
     let doc_inst = new project_edam.Edam_project();
     doc_inst.load_edam_file(trs_file);
-    doc_inst.save_html_doc(path, symbol_vhdl, symbol_verilog, with_dependency_graph = true, python3_path, 
-      config);
+    doc_inst.save_html_doc(path, pypath, config);
   }
 
   configure_documenter() {
@@ -101,6 +93,8 @@ class Doc_edam {
         signals: this.doc_options.signals,
         constants: this.doc_options.constants,
         process: this.doc_options.process,
+        symbol_vhdl: this.doc_options.symbol_vhdl,
+        symbol_verilog: this.doc_options.symbol_verilog
       };
       return config;
     }
@@ -110,7 +104,9 @@ class Doc_edam {
         fsm: true,
         signals: "none",
         constants: "none",
-        process: "none"
+        process: "none",
+        symbol_vhdl: "!",
+        symbol_verilog: "!"
       };
       return global_config;
     }

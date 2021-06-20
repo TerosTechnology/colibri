@@ -40,6 +40,8 @@ program.version(require('../package.json').version)
     .option('-p, --process <type>', `Include process/always in the documentation: ${doc_options_choice}`, 'none')
     .option('--sym-verilog, --symbol_verilog <type>', `Special character to parse comments into documentation`,'!')
     .option('--sym-vhdl, --symbol_vhdl <type>', `Special character to parse comments into documentation`,'!')
+    .option('--pypath, --python_path <type>', `Explicit python path`,"")
+    .option('--outpath, --outpath <type>', `Explicit outputh documentation path`,"")
     .usage('[options] <hdl-documenter>')
     .parse(process.argv);
 
