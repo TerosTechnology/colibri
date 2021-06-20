@@ -42,6 +42,7 @@ program.version(require('../package.json').version)
     .option('--sym-vhdl, --symbol_vhdl <type>', `Special character to parse comments into documentation`,'!')
     .option('--pypath, --python_path <type>', `Explicit python path`,"")
     .option('--outpath, --outpath <type>', `Explicit outputh documentation path`,"")
+    .option('--self, --self_contained <type>', `Documentation generated in a single file for html output`,false)
     .usage('[options] <hdl-documenter>')
     .parse(process.argv);
 
@@ -71,6 +72,7 @@ function get_documentation_config(options){
 
   let doc_symbol_verilog = options.symbol_verilog;
   let doc_symbol_vhdl = options.symbol_vhdl;
+  let doc_self_contained = options.self_contained;
 
   let config = {
     "dependency_graph": include_dependency_graph,
@@ -79,7 +81,8 @@ function get_documentation_config(options){
     "constants": include_constants,
     "process": include_process,
     "symbol_verilog": doc_symbol_verilog,
-    "symbol_vhdl": doc_symbol_vhdl
+    "symbol_vhdl": doc_symbol_vhdl,
+    "self_contained": doc_self_contained
   };
   return config;
 }

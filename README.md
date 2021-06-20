@@ -15,18 +15,19 @@ sudo npm install -g .
 ```
 - Commands
 ```
-'-f, --file [path]', Path of the YML file for documenter
-'-e, --edam [path]', Path of the EDAM yml file for documenter
-'-o, --out [type]', Documentation format: md, html
-'--dep, --dep', Include dependency graph in the documentation ['none', 'all', 'only_commented']
-'--fsm, --fsm', Include finite state machines in the documentation ['none', 'all', 'only_commented']
-'-s, --signals , Include signals/regs/wires in the documentation ['none', 'all', 'only_commented']
-'-c, --constants , Include constants/types in the documentation ['none', 'all', 'only_commented']
-'-p, --process , Include process/always in the documentation ['none', 'all', 'only_commented']
-'--sym-verilog, --symbol_verilog , Special character to parse comments into documentation
-'--sym-vhdl, --symbol_vhdl , Special character to parse comments into documentation
-'--pypath, --python_path , Explicit python path
-'--outpath, --outpath , Explicit outputh documentation path
+-f, --file [path]', Path of the YML file for documenter
+-e, --edam [path]', Path of the EDAM yml file for documenter
+-o, --out [type]', Documentation format: md, html
+--dep, --dep', Include dependency graph in the documentation ['none', 'all', 'only_commented']
+--fsm, --fsm', Include finite state machines in the documentation ['none', 'all', 'only_commented']
+-s, --signals , Include signals/regs/wires in the documentation ['none', 'all', 'only_commented']
+-c, --constants , Include constants/types in the documentation ['none', 'all', 'only_commented']
+-p, --process , Include process/always in the documentation ['none', 'all', 'only_commented']
+--sym-verilog, --symbol_verilog , Special character to parse comments into documentation
+--sym-vhdl, --symbol_vhdl , Special character to parse comments into documentation
+--pypath, --python_path , Explicit python path
+--outpath, --outpath , Explicit outputh documentation path
+--self, --self_contained , Documentation generated in a single file for html output
 ```
 
 ### Documenter examples:

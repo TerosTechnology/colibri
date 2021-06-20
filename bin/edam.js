@@ -24,7 +24,6 @@ const fs = require("fs");
 const shell = require("shelljs");
 const path_lib = require("path");
 const yaml = require("js-yaml");
-// let colibri = require("../src/main.js");
 let project_edam = require("../src/projectManager/edam.js");
 
 class Doc_edam {
@@ -42,11 +41,11 @@ class Doc_edam {
         doc_path = `${options.outpath}/built_doc`;
       }
       let trs_path = path_lib.dirname(trs_file);
-      let out_dir = `${trs_path}/${doc_path}`;
-      fs.mkdirSync(out_dir,{ recursive: true });
+      let final_dir = path_lib.join(path_lib.relative(trs_path, process.cwd()),doc_path);
       trs_file = yaml.load(fs.readFileSync(trs_file, "utf8"));
+      fs.mkdirSync(doc_path,{ recursive: true });
       shell.cd(trs_path);
-      this.doc_trs_ip(trs_file, doc_path, out, pypath);
+      this.doc_trs_ip(trs_file, final_dir, out, pypath);
     } catch (e) {
       console.log(e);
     }
@@ -87,16 +86,7 @@ class Doc_edam {
 
   configure_documenter() {
     if (this.doc_options !== undefined) {
-      let config = {
-        dependency_graph: this.doc_options.dependency_graph,
-        fsm: this.doc_options.fsm,
-        signals: this.doc_options.signals,
-        constants: this.doc_options.constants,
-        process: this.doc_options.process,
-        symbol_vhdl: this.doc_options.symbol_vhdl,
-        symbol_verilog: this.doc_options.symbol_verilog
-      };
-      return config;
+      return this.doc_options;
     }
     else{
       let global_config = {
@@ -106,7 +96,8 @@ class Doc_edam {
         constants: "none",
         process: "none",
         symbol_vhdl: "!",
-        symbol_verilog: "!"
+        symbol_verilog: "!",
+        self_contained: false
       };
       return global_config;
     }

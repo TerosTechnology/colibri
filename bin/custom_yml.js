@@ -218,7 +218,8 @@ class Custom_yml{
       'constants': 'none',
       'process': 'none',
       'symbol_vhdl': "!",
-      'symbol_verilog': "!"
+      'symbol_verilog': "!",
+      'self_contained': false
     };
     documenter.set_config(global_config);
   }
