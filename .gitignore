@@ -28,3 +28,4 @@ xsim.dir
 /bin/example/*.md
 /bin/example/doc/*md
 /bin/example/doc/*svg
+/src/projectManager/*.json
