@@ -31,57 +31,73 @@ class Doc_edam {
     this.doc_options = doc_options;
   }
 
-  doc_trs(options) {
-    let trs_file = options.edam;
-    let out = options.out;
+  doc_trs(options, mode) {
+    let trs_file = options.file;
+    let out_type = options.out;
     try {
       let pypath = options.python_path;
-      let doc_path = "built_doc";
+      let doc_path = process.cwd();
       if (options.outpath !== "") {
-        doc_path = `${options.outpath}/built_doc`;
+        doc_path = `${options.outpath}`;
       }
       let trs_path = path_lib.dirname(trs_file);
       let final_dir = path_lib.join(path_lib.relative(trs_path, process.cwd()),doc_path);
-      trs_file = yaml.load(fs.readFileSync(trs_file, "utf8"));
+
+      let trs_file_content = '';
+      if (mode === 'yml'){
+        trs_file_content = yaml.load(fs.readFileSync(trs_file, "utf8"));
+      }
+      else if (mode === 'csv'){
+        trs_file_content = fs.readFileSync(trs_file, "utf8");
+      }
+
       fs.mkdirSync(doc_path,{ recursive: true });
       shell.cd(trs_path);
-      this.doc_trs_ip(trs_file, final_dir, out, pypath);
+      this.save_doc(out_type, trs_file_content, final_dir, pypath, mode);
     } catch (e) {
       console.log(e);
     }
   }
 
-  doc_trs_ip(trs_file, path, out, pypath) {
-    switch (out) {
-      case "html":
-        this.save_doc_html_trs(trs_file, path, pypath);
-        break;
-      case "md":
-        this.save_doc_md_trs(trs_file, path, pypath);
-        break;
-      default:
-        console.log(
-          "Output format not set or invalid. Saving documentation in Markdown by default."
-        );
-        this.save_doc_md_trs(trs_file, path, pypath);
-        break;
+  async save_doc(type, trs_file_content, path, pypath, mode){
+    let config = this.configure_documenter();
+
+    let doc_inst = new project_edam.Edam_project('');
+    if (mode === 'yml'){
+      doc_inst.load_edam_file(trs_file_content);
+    }
+    else if(mode === 'csv'){
+      this.load_edam_csv(doc_inst, trs_file_content);
+    }
+
+    if (type === 'html'){
+      await doc_inst.save_html_doc(path, pypath, config);
+    }
+    if (type === 'markdown'){
+      await doc_inst.save_markdown_doc(path, pypath, config);
     }
   }
 
-  async save_doc_md_trs(trs_file, path, pypath) {
-    let config = this.configure_documenter();
+  load_edam_csv(edam, content){
+    let file_list_array = content.split(/\r?\n/);
 
-    let doc_inst = new project_edam.Edam_project();
-    doc_inst.load_edam_file(trs_file);
-    doc_inst.save_markdown_doc(path, pypath, config);
-  }
-
-  async save_doc_html_trs(trs_file, path, pypath) {
-    let config = this.configure_documenter();
-
-    let doc_inst = new project_edam.Edam_project();
-    doc_inst.load_edam_file(trs_file);
-    doc_inst.save_html_doc(path, pypath, config);
+    for (let i = 0; i < file_list_array.length; ++i) {
+      let element = file_list_array[i];
+      if (element.trim() !== ''){
+        try{
+          let lib_inst = element.split(',')[0].trim();
+          let file_inst = element.split(',')[1].trim();
+          if (lib_inst === ""){
+            lib_inst = "";
+          }
+          edam.add_file(file_inst, false, "", lib_inst);
+        }
+        catch(e){
+          console.log(e);
+          return;
+        }
+      }
+    }
   }
 
   configure_documenter() {

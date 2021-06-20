@@ -15,9 +15,8 @@ sudo npm install -g .
 ```
 - Commands
 ```
--f, --file [path]', Path of the YML file for documenter
--e, --edam [path]', Path of the EDAM yml file for documenter
--o, --out [type]', Documentation format: md, html
+-f, --file [path], Path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information
+-o, --out [type], Documentation format: md, html (default: "markdown")
 --dep, --dep', Include dependency graph in the documentation ['none', 'all', 'only_commented']
 --fsm, --fsm', Include finite state machines in the documentation ['none', 'all', 'only_commented']
 -s, --signals , Include signals/regs/wires in the documentation ['none', 'all', 'only_commented']
@@ -32,21 +31,15 @@ sudo npm install -g .
 
 ### Documenter examples:
 
-**Documenter with yml file**
-```
-cd /bin/example
-teroshdl-hdl-documenter -f example.yml
-```
-
 **Documenter with teros project manager file or EDAM file**
 
-Documentation will be generated in `./built_doc`
+Check the EDAM format: https://edalize.readthedocs.io/en/latest/edam/api.html
+
 ```
 cd /bin/example
 teroshdl-hdl-documenter -e example_edam.yml 
 teroshdl-hdl-documenter -e example_edam.yml -o html 
 ```
-
 
 ## Third-party
 

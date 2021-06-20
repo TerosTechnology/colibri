@@ -28,11 +28,12 @@ const path_lib = require('path');
 const { exit } = require('process');
 
 const doc_options_choice = ['none', 'all', 'only_commented'];
+const output_doc_options_choice = ['html', 'markdown'];
 
 program.version(require('../package.json').version)
-    .option('-f, --file [path]', 'Path of the YML file for documenter')
-    .option('-e, --edam [path]', 'Path of the EDAM yml file for documenter')
-    .option('-o, --out [type]', 'Documentation format: md, html')
+    // eslint-disable-next-line max-len
+    .option('-f, --file [path]', 'Path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information', '/home/carlos/workspace/colibri/bin/example/doc/example.csv')
+    .option('-o, --out [type]', 'Documentation format: md, html', 'markdown')
     .option('--dep, --dep', `Include dependency graph in the documentation: ${doc_options_choice}`, true)
     .option('--fsm, --fsm', `Include finite state machines in the documentation: ${doc_options_choice}`, true)
     .option('-s, --signals <type>', `Include signals/regs/wires in the documentation: ${doc_options_choice}`, 'none')
@@ -50,6 +51,7 @@ program.parse(process.argv);
 const options = program.opts();
 
 let doc_config = get_documentation_config(options);
+validate_output_type(options);
 check_file_ext(options, doc_config);
 
 function get_documentation_config(options){
@@ -94,33 +96,33 @@ function validate_config(name, config_data){
   }
 }
 
+function validate_output_type(options){
+  let output_type = options.out;
+  if (output_doc_options_choice.includes(output_type) === false){
+    console.log(`Error in config --out. Possible values: ${output_doc_options_choice}`);
+    exit();
+  }
+}
+
 function check_file_ext(options, doc_config){
-  let file_custom = options.file;
-  if (file_custom !== undefined) {
-    let file_ext = path_lib.extname(file_custom);
-    if (file_ext === ".yml" || file_ext === ".YML" ) {
-      let custom_yml_c = new custom_yml.Custom_yml(doc_config);
-      custom_yml_c.doc_yml(options);
-    }
-    else{
-      // eslint-disable-next-line no-console
-      console.log("Invalid input custom file: It must be an'.yml' file ");
-    }
-  }
-  let file = options.edam;
-  if (file !== undefined) {
-    let file_ext = path_lib.extname(file);
-    if (file_ext === ".yml" || file_ext === ".YML" ){
-      let edam_yml_c = new edam_yml.Doc_edam(doc_config);
-      edam_yml_c.doc_trs(options);
-    }
-    else{
-      // eslint-disable-next-line no-console
-      console.log("Invalid input file: It must be an EDAM '.yml' file ");
-    }
-  }
-  if (file_custom === undefined && file === undefined) {
+  let input_file = options.file;
+  if (input_file === undefined){
     console.log("Invalid input file: It must be an EDAM '.yml' file ");
+    return;
+  }
+  let file_ext = path_lib.extname(input_file).toLowerCase();
+
+  if (file_ext === '.srs') {
+    let custom_yml_c = new custom_yml.Custom_yml(doc_config);
+    custom_yml_c.doc_yml(options);
+  }
+  else if (file_ext === '.yml') {
+    let edam_yml_c = new edam_yml.Doc_edam(doc_config);
+    edam_yml_c.doc_trs(options, 'yml');
+  }
+  else if (file_ext === '.csv') {
+    let edam_yml_c = new edam_yml.Doc_edam(doc_config);
+    edam_yml_c.doc_trs(options, 'csv');
   }
 }
 
