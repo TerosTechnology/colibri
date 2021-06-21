@@ -146,15 +146,26 @@ class Markdown {
 
   _get_functions_section(functions) {
     let md = "";
-    if (this.config.process === 'none') {
+    if (this.config.functions === 'none') {
       return '';
     }
     if (functions.length !== 0) {
       //Title
       md += "## Functions\n";
       for (let i = 0; i < functions.length; ++i) {
-        md += `- **${functions[i].name}**\n`;
-        md += `${functions[i].description}\n`;
+        if (functions[i].name !== ''){
+          let arguments_str = functions[i].arguments;
+          if (arguments_str === ''){
+            arguments_str = '()';
+          }
+          let return_str = functions[i].return;
+          if (return_str === ''){
+            return_str = 'return ()';
+          }
+          // eslint-disable-next-line max-len
+          md += `- **${functions[i].name}** _<font id="function_arguments">${arguments_str}</font>_ <font id="function_return">${return_str}</font>\n`;
+          md += `${functions[i].description}\n`;
+        }
       }
     }
     return md;

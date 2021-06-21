@@ -36,45 +36,61 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
   }
   main_doc += get_title_design(type);
   let lang = "none";
-  let symbol = "!";
   main_doc += get_separation_init(type);
   let doc_modules = '';
   let list_modules = '';
+
+  let doc_inst_vhdl = new Documenter_lib.Documenter('', 'vhdl', symbol_vhdl, config);
+  let doc_inst_verilog = new Documenter_lib.Documenter('', 'vhdl', symbol_verilog, config);
+
+  let declaration_finder = new Declaration_finder();
+
   for (let i = 0; i < files.length; ++i) {
     let file_path = files[i];
     let filename = path_lib.basename(file_path, path_lib.extname(file_path));
     lang = utils.get_lang_from_path(file_path);
-    if (lang === 'vhdl'){
-      symbol = symbol_vhdl;
-    }
-    else if(lang === 'verilog' || lang === 'systemverilog'){
-      symbol = symbol_verilog;
+   if( lang === 'systemverilog'){
+      lang = 'verilog';
     }
 
     // Only save the doc for a HDL file and exists
     if (lang !== 'none' && fs.existsSync(file_path) === true){
-      let declaration = await get_declaration_from_file(file_path);
-      let list_modules_inst = '';
-      if (declaration.type === 'entity'){
-        list_modules_inst = get_module_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
+      try{
+        console.log(file_path);
+        let declaration = await declaration_finder.get_declaration_from_file(file_path);
+
+        let list_modules_inst = '';
+        if (declaration.type === 'entity'){
+          list_modules_inst = get_module_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
+        }
+        else{
+          list_modules_inst = get_package_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
+        }
+        if (self_contained === false){
+          main_doc += list_modules_inst;
+        }
+        else{
+          list_modules += list_modules_inst;
+        }
+        let contents = fs.readFileSync(files[i], 'utf8');
+        let doc_current;
+        if (lang === 'vhdl'){
+          doc_current = doc_inst_vhdl;
+        }
+        else{
+          doc_current = doc_inst_verilog;
+        }
+        doc_current.set_code(contents);
+        let inst_doc_module = await save_doc(self_contained, type, INTERNAL_DOC_FOLDER_COMPLETE, filename, doc_current);
+        if (self_contained === false){
+          main_doc += inst_doc_module;
+        }
+        else{
+          doc_modules += inst_doc_module;
+        }
       }
-      else{
-        list_modules_inst = get_package_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
-      }
-      if (self_contained === false){
-        main_doc += list_modules_inst;
-      }
-      else{
-        list_modules += list_modules_inst;
-      }
-      let contents = fs.readFileSync(files[i], 'utf8');
-      let doc_inst = new Documenter_lib.Documenter(contents, lang, symbol, config);
-      let inst_doc_module = await save_doc(self_contained, type, INTERNAL_DOC_FOLDER_COMPLETE, filename, doc_inst);
-      if (self_contained === false){
-        main_doc += inst_doc_module;
-      }
-      else{
-        doc_modules += inst_doc_module;
+      catch(e){
+        console.log(e)
       }
     }
   }
@@ -174,7 +190,6 @@ function get_package_str(self_contained, folder, filename, name, type){
   return declaration;
 }
 
-
 function get_separation_init(type){
   let declaration = '\n';
   if (type === 'html'){
@@ -207,11 +222,50 @@ function get_extension(type){
   return declaration;
 }
 
+class Declaration_finder{
+  constructor(){
+    this.init = false;
+  }
+
+  async get_parser(lang){
+    if (this.init === false){
+      let parser_factory = new Parser.ParserFactory();
+      this.vhdl_parser = await parser_factory.getParser('vhdl');
+      this.verilog_parser = await parser_factory.getParser('verilog');
+      this.init = true;
+    }
+    if (lang === 'vhdl'){
+      return this.vhdl_parser;
+    }
+    else{
+      return this.verilog_parser;
+    }
+  }
+
+  async get_declaration_from_file(filename){
+    let lang = utils.get_lang_from_path(filename);
+    if (lang === 'systemverilog'){
+      lang = 'verilog';
+    }
+    let parser = await this.get_parser(lang);
+    let code = fs.readFileSync(filename, "utf8");
+    let entity_name = await parser.get_entity_or_package_name(code);
+    if (entity_name === undefined){
+      return '';
+    }
+    return entity_name;
+  }
+
+}
+
+
 async function get_declaration_from_file(filename){
   let lang = utils.get_lang_from_path(filename);
+  if (lang === 'systemverilog'){
+    lang = 'verilog';
+  }
   let parser_factory = new Parser.ParserFactory();
   let parser = await parser_factory.getParser(lang);
-
   let code = fs.readFileSync(filename, "utf8");
   let entity_name = await parser.get_entity_or_package_name(code);
   if (entity_name === undefined){

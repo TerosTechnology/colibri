@@ -191,16 +191,24 @@ class Parser extends ts_base_parser.Ts_base_parser {
           else {
             description = '';
           }
+        }
+        while (cursor.gotoNextSibling() === true && break_p === false);
       }
-      while (cursor.gotoNextSibling() === true && break_p === false);
-    }
+      else if (cursor.nodeType === 'package_declaration'){
+        cursor.gotoFirstChild();
+        do {
+          if (cursor.nodeType === 'identifier') {
+            name = cursor.nodeText;
+            break_p = true;
+          }
+        }
+        while (cursor.gotoNextSibling() === true && break_p === false);
+      }
     }
     while (cursor.gotoNextSibling() === true && break_p === false);
     let package_t = { 'name': name, 'description': description };
     return { 'package': package_t, };
   }
-
-
 
   get_entity_declaration(code) {
     let comment_symbol = this.comment_symbol;
@@ -306,10 +314,6 @@ class Parser extends ts_base_parser.Ts_base_parser {
     while (cursor.gotoNextSibling() === true && break_p === false);
     return entity_description;
   }
-
-
-
-
 
   get_generics_and_ports(p) {
     let generics = [];
@@ -676,15 +680,23 @@ class Parser extends ts_base_parser.Ts_base_parser {
             }
             while (cursor.gotoNextSibling() === true && break_p === false);
           }
+        }
+        while (cursor.gotoNextSibling() === true && break_p === false);
       }
-      while (cursor.gotoNextSibling() === true && break_p === false);
-    }
+      else if (cursor.nodeType === 'package_declaration'){
+        cursor.gotoFirstChild();
+        do {
+          if (cursor.nodeType === 'declarative_part') {
+            declaration = cursor.currentNode();
+            break_p = true;
+          }
+        }
+        while (cursor.gotoNextSibling() === true && break_p === false);
+      }
     }
     while (cursor.gotoNextSibling() === true && break_p === false);
     return declaration;
   }
-
-
 
   get_declaration_elements(type, code) {
     let top_declaration;
@@ -732,7 +744,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
         }
         comments = '';
       }
-      else if (cursor.nodeType === 'subprogram_body') {
+      else if (cursor.nodeType === 'subprogram_body' || cursor.nodeType === 'subprogram_declaration') {
         let elements = this.get_function_body(cursor.currentNode());
         for (let i = 0; i < elements.length; ++i) {
           elements[i].description = comments;
@@ -808,7 +820,10 @@ class Parser extends ts_base_parser.Ts_base_parser {
   get_function_body(p) {
     let element = {
       'name': '',
-      'line': 0
+      'line': 0,
+      'type': '',
+      'arguments': '',
+      'return': ''
     };
     let break_p = false;
     let cursor = p.walk();
@@ -820,7 +835,13 @@ class Parser extends ts_base_parser.Ts_base_parser {
         do {
           if (cursor.nodeType === 'identifier') {
             element.name = cursor.nodeText;
-            break_p = true;
+          }
+          else if (cursor.nodeType === 'formal_procedure_parameter_clause' || 
+                cursor.nodeType === 'formal_function_parameter_clause'){
+            element.arguments = cursor.nodeText;
+          }
+          else if (cursor.nodeType === 'return'){
+            element.return = cursor.nodeText;
           }
         }
         while (cursor.gotoNextSibling() === true && break_p === false);

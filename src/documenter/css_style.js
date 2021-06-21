@@ -27,6 +27,13 @@ const html_style_preview = `
   * {
     color:black;
   }
+  #function_return{
+    font-weight: bold;
+    color:green;
+  }
+  #function_arguments{
+    color:blue;
+  }
   td, th {
     border: 1px solid grey 
   }
@@ -62,6 +69,13 @@ const html_style_save = `
   }
   * {
     color:black;
+  }
+  #function_return{
+    font-weight: bold;
+    color:green;
+  }
+  #function_arguments{
+    color:blue;
   }
   div.templateTerosHDL {
     background-color: white;
