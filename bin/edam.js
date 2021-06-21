@@ -45,9 +45,7 @@ class Doc {
       else if (mode === 'csv'){
         trs_file_content = fs.readFileSync(input_path, "utf8");
       }
-      //Create output directory
-      fs.mkdirSync(output_path,{ recursive: true });
-
+ 
       // cd to input_path
       let input_path_dir = path_lib.dirname(input_path);
       shell.cd(input_path_dir);
@@ -70,6 +68,9 @@ class Doc {
     else if(mode === 'directory'){
       this.load_edam_directory(doc_inst, trs_file_absolute);
     }
+
+     //Create output directory
+     fs.mkdirSync(path,{ recursive: true });
 
     if (type === 'html'){
       await doc_inst.save_html_doc(path, pypath, config);
