@@ -33,8 +33,8 @@ const output_doc_options_choice = ['html', 'markdown'];
 
 program.version(require('../package.json').version)
     // eslint-disable-next-line max-len
-    .option('-i, --input [path]', 'Directory with the HDL files, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information', '/home/carlos/workspace/vunit/vunit/vhdl/check/src/tt')
-    .option('-o, --out [type]', 'Documentation format: markdown, html', 'markdown')
+    .option('-i, --input [path]', 'Directory with the HDL files, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information', '')
+    .option('-o, --out [type]', 'Documentation format: markdown, html', 'html')
     .option('--dep, --dep', `Include dependency graph in the documentation.`, true)
     .option('--fsm, --fsm', `Include finite state machines in the documentation.`, true)
     .option('-s, --signals <type>', `Include signals/regs/wires in the documentation: ${doc_options_choice}`, 'none')
@@ -43,7 +43,7 @@ program.version(require('../package.json').version)
     .option('--sym-verilog, --symbol_verilog <type>', `Special character to parse comments into documentation`,'')
     .option('--sym-vhdl, --symbol_vhdl <type>', `Special character to parse comments into documentation`,'')
     .option('--pypath, --python_path <type>', `Explicit python path`,"")
-    .option('--outpath, --outpath <type>', `Explicit outputh documentation path`,"/home/carlos/workspace/vunit/vunit/doc")
+    .option('--outpath, --outpath <type>', `Explicit outputh documentation path`,'')
     .option('--self, --self_contained <type>', `Documentation generated in a single file for html output`,false)
     .usage('[options] <hdl-documenter>')
     .parse(process.argv);
