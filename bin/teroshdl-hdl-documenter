@@ -34,7 +34,7 @@ const output_doc_options_choice = ['html', 'markdown'];
 program.version(require('../package.json').version)
     // eslint-disable-next-line max-len
     .option('-i, --input [path]', 'Directory with the HDL files, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information', '/home/carlos/workspace/vunit/vunit/vhdl/check/src/tt')
-    .option('-o, --out [type]', 'Documentation format: md, html', 'html')
+    .option('-o, --out [type]', 'Documentation format: markdown, html', 'markdown')
     .option('--dep, --dep', `Include dependency graph in the documentation.`, true)
     .option('--fsm, --fsm', `Include finite state machines in the documentation.`, true)
     .option('-s, --signals <type>', `Include signals/regs/wires in the documentation: ${doc_options_choice}`, 'none')
