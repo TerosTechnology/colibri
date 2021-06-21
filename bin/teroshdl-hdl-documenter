@@ -33,10 +33,10 @@ const output_doc_options_choice = ['html', 'markdown'];
 
 program.version(require('../package.json').version)
     // eslint-disable-next-line max-len
-    .option('-i, --input [path]', 'Directory with the HDL files, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information')
+    .option('-i, --input [path]', 'Directory with the HDL files, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information', './')
     .option('-o, --out [type]', 'Documentation format: md, html', 'markdown')
-    .option('--dep, --dep', `Include dependency graph in the documentation: ${doc_options_choice}`, true)
-    .option('--fsm, --fsm', `Include finite state machines in the documentation: ${doc_options_choice}`, true)
+    .option('--dep, --dep', `Include dependency graph in the documentation.`, true)
+    .option('--fsm, --fsm', `Include finite state machines in the documentation.`, true)
     .option('-s, --signals <type>', `Include signals/regs/wires in the documentation: ${doc_options_choice}`, 'none')
     .option('-c, --constants <type>', `Include constants/types in the documentation: ${doc_options_choice}`, 'none')
     .option('-p, --process <type>', `Include process/always in the documentation: ${doc_options_choice}`, 'none')
@@ -53,8 +53,32 @@ const options = program.opts();
 
 let doc_config = get_documentation_config(options);
 validate_output_type(options);
-check_file_ext(options, doc_config);
 
+//Absolute path output directory
+let cmd_output_path = options.outpath;
+let absolute_output_path = process.cwd();
+if (cmd_output_path !== ''){
+  absolute_output_path = cmd_output_path;
+  if (path_lib.isAbsolute(cmd_output_path) === false){
+    absolute_output_path = path_lib.resolve(process.cwd(), cmd_output_path);
+  }
+}
+
+//Absolute input
+let cmd_input_path = options.input;
+let absolute_input_path = process.cwd();
+if (cmd_input_path !== ''){
+  absolute_input_path = cmd_input_path;
+  if (path_lib.isAbsolute(cmd_input_path) === false){
+    absolute_input_path = path_lib.resolve(process.cwd(), cmd_input_path);
+  }
+}
+print_configuration(options, doc_config, absolute_input_path, absolute_output_path);
+gen_doc(options, doc_config, absolute_input_path, absolute_output_path);
+
+////////////////////////////////////////////////////////////////////////////////
+// Get dodumenter configuration
+////////////////////////////////////////////////////////////////////////////////
 function get_documentation_config(options){
   let include_dependency_graph = options.dep;
   if (include_dependency_graph === undefined){
@@ -90,6 +114,9 @@ function get_documentation_config(options){
   return config;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Validate configuration
+////////////////////////////////////////////////////////////////////////////////
 function validate_config(name, config_data){
   if (doc_options_choice.includes(config_data) === false){
     console.log(`Error in config ${name}. Possible values: ${doc_options_choice}`);
@@ -97,6 +124,9 @@ function validate_config(name, config_data){
   }
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Validate output type
+////////////////////////////////////////////////////////////////////////////////
 function validate_output_type(options){
   let output_type = options.out;
   if (output_doc_options_choice.includes(output_type) === false){
@@ -105,36 +135,63 @@ function validate_output_type(options){
   }
 }
 
-function check_file_ext(options, doc_config){
-  let input_file = options.input;
-  if (input_file === undefined){
-    console.log("Invalid input file: It must be an EDAM '.yml' file ");
-    return;
-  }
-  let is_directory = fs.lstatSync(input_file).isDirectory();
+////////////////////////////////////////////////////////////////////////////////
+// Generate documentation
+////////////////////////////////////////////////////////////////////////////////
+function gen_doc(options, doc_config, input_path, output_path){
+  let is_directory = fs.lstatSync(input_path).isDirectory();
 
   let file_ext = '';
   if (is_directory === false){
-    file_ext = path_lib.extname(input_file).toLowerCase();
+    file_ext = path_lib.extname(input_path).toLowerCase();
   }
 
   if (is_directory === true){
-    let edam_yml_c = new edam_yml.Doc_edam(doc_config);
-    edam_yml_c.doc_trs(options, 'directory');
+    let edam_yml_c = new edam_yml.Doc(doc_config);
+    edam_yml_c.gen_doc(options, 'directory', input_path, output_path);
   }
   else if (file_ext === '.srs') {
-    let custom_yml_c = new custom_yml.Custom_yml(doc_config);
-    custom_yml_c.doc_yml(options);
+    let custom_yml_c = new custom_yml.Doc(doc_config);
+    custom_yml_c.gen_doc(options);
   }
   else if (file_ext === '.yml') {
-    let edam_yml_c = new edam_yml.Doc_edam(doc_config);
-    edam_yml_c.doc_trs(options, 'yml');
+    let edam_yml_c = new edam_yml.Doc(doc_config);
+    edam_yml_c.gen_doc(options, 'yml', input_path, output_path);
   }
   else if (file_ext === '.csv') {
-    let edam_yml_c = new edam_yml.Doc_edam(doc_config);
-    edam_yml_c.doc_trs(options, 'csv');
+    let edam_yml_c = new edam_yml.Doc(doc_config);
+    edam_yml_c.gen_doc(options, 'csv', input_path, output_path);
   }
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Print configuration
+////////////////////////////////////////////////////////////////////////////////
+function print_configuration(options, doc_config, absolute_input_path, absolute_output_path){
+  let msg = `
+****************************************************************************************************************
+--> Input file: ${absolute_input_path}
+--> Output directory: ${absolute_output_path}
+--> Python3 path: ${options.pypath}
+--> Documenter configuartion:
+-----> Include dependency graph: ${doc_config.dependency_graph}
+-----> Include FSM: ${doc_config.fsm}
+-----> Include signals: ${doc_config.signals}
+-----> Include process/always: ${doc_config.process}
+-----> HTML self contained (only 1 file): ${doc_config.self_contained}
+-----> Verilog symbol to parse the comments: ${doc_config.symbol_verilog}
+-----> VHDL symbol to parse the comments: ${doc_config.symbol_vhdl}
+****************************************************************************************************************
+`;
+
+  print_warning(msg);
+}
+
+function print_warning(msg){
+  console.log('\x1b[33m%s\x1b[0m', msg); //yellow
+}
+
+
 
 
 

@@ -26,36 +26,32 @@ const path_lib = require("path");
 const yaml = require("js-yaml");
 let project_edam = require("../src/projectManager/edam.js");
 
-class Doc_edam {
+class Doc {
   constructor(doc_options) {
     this.doc_options = doc_options;
   }
 
-  doc_trs(options, mode) {
-    let trs_file = options.input;
-    let trs_file_absolute = path_lib.resolve(trs_file);
+  gen_doc(options, mode, input_path, output_path) {
     let out_type = options.out;
     try {
+      // Python3 path
       let pypath = options.python_path;
-      let doc_path = process.cwd();
-      let final_dir = doc_path;
-      let trs_path = path_lib.dirname(trs_file);
-      if (options.outpath !== "") {
-        doc_path = `${options.outpath}`;
-        final_dir = (path_lib.resolve(trs_path, process.cwd()));
-      }
-      console.log(final_dir)
+
+      //Read content input
       let trs_file_content = '';
       if (mode === 'yml'){
-        trs_file_content = yaml.load(fs.readFileSync(trs_file, "utf8"));
+        trs_file_content = yaml.load(fs.readFileSync(input_path, "utf8"));
       }
       else if (mode === 'csv'){
-        trs_file_content = fs.readFileSync(trs_file, "utf8");
+        trs_file_content = fs.readFileSync(input_path, "utf8");
       }
+      //Create output directory
+      fs.mkdirSync(output_path,{ recursive: true });
 
-      fs.mkdirSync(doc_path,{ recursive: true });
-      shell.cd(trs_path);
-      this.save_doc(trs_file_absolute, out_type, trs_file_content, final_dir, pypath, mode);
+      // cd to input_path
+      let input_path_dir = path_lib.dirname(input_path);
+      shell.cd(input_path_dir);
+      this.save_doc(input_path, out_type, trs_file_content, output_path, pypath, mode);
     } catch (e) {
       console.log(e);
     }
@@ -111,7 +107,7 @@ class Doc_edam {
       const element = file_list[i];
       edam.add_file(element, false, "", "");
     }
-}
+  }
 
 
   configure_documenter() {
@@ -151,5 +147,5 @@ class Doc_edam {
 
 
 module.exports = {
-  Doc_edam: Doc_edam,
+  Doc: Doc,
 };
