@@ -1,8 +1,5 @@
 {
-  "entity": {
-    "name": "axi_dma_regs",
-    "description": ""
-  },
+  "entity": { "name": "axi_dma_regs", "description": "" },
   "generics": [],
   "ports": [
     {
@@ -79,31 +76,20 @@
     }
   ],
   "body": {
-    "processes": [
-      {
-        "name": "main",
-        "sens_list": "",
-        "description": ""
-      }
-    ],
+    "processes": [{ "name": "main", "sens_list": "", "description": "" }],
     "instantiations": []
   },
   "declarations": {
     "types": [
       {
         "name": "state_t",
-        "type": "(idle,\r\n    writing,\r\n    write_response,\r\n    reading)",
+        "type": "(idle,\n    writing,\n    write_response,\n    reading)",
         "line": 33,
         "description": ""
       }
     ],
     "signals": [
-      {
-        "name": "state",
-        "type": "state_t",
-        "line": 37,
-        "description": ""
-      },
+      { "name": "state", "type": "state_t", "line": 37, "description": "" },
       {
         "name": "addr",
         "type": "std_logic_vector(axils_m2s.ar.addr'range)",
@@ -116,6 +102,9 @@
       {
         "name": "cmp_word_address",
         "line": 42,
+        "type": "",
+        "arguments": "(byte_addr : std_logic_vector;\n    word_addr                           : natural)",
+        "return": "return boolean",
         "description": ""
       }
     ]

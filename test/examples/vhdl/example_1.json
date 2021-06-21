@@ -1,8 +1,5 @@
 {
-  "entity": {
-    "name": "arith_counter_gray",
-    "description": ""
-  },
+  "entity": { "name": "arith_counter_gray", "description": "" },
   "generics": [
     {
       "name": "BITS",
@@ -10,7 +7,7 @@
       "line": 37,
       "direction": "",
       "default_value": "",
-      "description": " Bit width of the counter\r"
+      "description": " Bit width of the counter"
     },
     {
       "name": "INIT",
@@ -18,7 +15,7 @@
       "line": 38,
       "direction": "",
       "default_value": "0",
-      "description": " Initial/reset counter value\r"
+      "description": " Initial/reset counter value"
     }
   ],
   "ports": [
@@ -37,7 +34,7 @@
       "line": 42,
       "direction": "in",
       "default_value": "",
-      "description": " Reset to INIT value\r",
+      "description": " Reset to INIT value",
       "group": ""
     },
     {
@@ -46,7 +43,7 @@
       "line": 43,
       "direction": "in",
       "default_value": "",
-      "description": " Increment\r",
+      "description": " Increment",
       "group": ""
     },
     {
@@ -55,7 +52,7 @@
       "line": 44,
       "direction": "in",
       "default_value": "'0'",
-      "description": " Decrement\r",
+      "description": " Decrement",
       "group": ""
     },
     {
@@ -64,7 +61,7 @@
       "line": 45,
       "direction": "out",
       "default_value": "",
-      "description": " Value output\r",
+      "description": " Value output",
       "group": ""
     },
     {
@@ -73,18 +70,12 @@
       "line": 46,
       "direction": "out",
       "default_value": "",
-      "description": " Carry output\r",
+      "description": " Carry output",
       "group": ""
     }
   ],
   "body": {
-    "processes": [
-      {
-        "name": "unnamed",
-        "sens_list": "clk",
-        "description": ""
-      }
-    ],
+    "processes": [{ "name": "unnamed", "sens_list": "clk", "description": "" }],
     "instantiations": []
   },
   "declarations": {
@@ -102,12 +93,7 @@
         "line": 74,
         "description": ""
       },
-      {
-        "name": "en",
-        "type": "std_logic",
-        "line": 76,
-        "description": ""
-      }
+      { "name": "en", "type": "std_logic", "line": 76, "description": "" }
     ],
     "constants": [
       {
@@ -122,11 +108,17 @@
       {
         "name": "gray_encode",
         "line": 52,
+        "type": "",
+        "arguments": "(val : natural; len : positive)",
+        "return": "return unsigned",
         "description": ""
       },
       {
         "name": "parity",
         "line": 62,
+        "type": "",
+        "arguments": "(val : unsigned)",
+        "return": "return std_logic",
         "description": ""
       }
     ]
