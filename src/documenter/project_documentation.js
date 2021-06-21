@@ -41,7 +41,7 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
   let list_modules = '';
 
   let doc_inst_vhdl = new Documenter_lib.Documenter('', 'vhdl', symbol_vhdl, config);
-  let doc_inst_verilog = new Documenter_lib.Documenter('', 'vhdl', symbol_verilog, config);
+  let doc_inst_verilog = new Documenter_lib.Documenter('', 'verilog', symbol_verilog, config);
 
   let declaration_finder = new Declaration_finder();
 
