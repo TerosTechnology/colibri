@@ -4,66 +4,42 @@ const fs = require('fs');
 const Documenter_lib = require('./documenter');
 const Parser = require('../parser/factory');
 
+
 async function get_md_doc_from_project(project, output_dir_doc, graph, config) {
-  let symbol_vhdl = config.symbol_vhdl;
-  let symbol_verilog = config.symbol_verilog;
-
-  //Main doc
-  let files = get_sources_as_array(project.files);
-  let project_name = project.name;
-  let main_doc = `# Project documentation: : ${project_name}\n`;
-  if (config.dependency_graph === true && graph !== undefined) {
-    main_doc += "# Project dependency graph\n";
-    main_doc += '![system](./dependency_graph.svg "System")';
-    fs.writeFileSync(output_dir_doc + path_lib.sep + "dependency_graph.svg", graph);
-  }
-  let lang = "none";
-  let symbol = "!";
-  main_doc += '\n';
-  for (let i = 0; i < files.length; ++i) {
-    let file_path = files[i];
-    let filename = path_lib.basename(file_path, path_lib.extname(file_path));
-    lang = utils.get_lang_from_path(file_path);
-    if (lang === 'vhdl'){
-      symbol = symbol_vhdl;
-    }
-    else if(lang === 'verilog' || lang === 'systemverilog'){
-      symbol = symbol_verilog;
-    }
-
-    // Only save the doc for a HDL file and exists
-    if (lang !== 'none' && fs.existsSync(file_path) === true){
-      let declaration = await get_declaration_from_file(file_path);
-      if (declaration.type === 'entity'){
-        main_doc += "- Module: [" + declaration.name + "](./" + filename + ".md)\n";
-      }
-      else{
-        main_doc += "- Package: [" + declaration.name + "](./" + filename + ".md)\n";
-      }
-      let contents = fs.readFileSync(files[i], 'utf8');
-      let doc_inst = new Documenter_lib.Documenter(contents, lang, symbol, config);
-      doc_inst.save_markdown(output_dir_doc + path_lib.sep + filename + ".md");
-    }
-  }
-  fs.writeFileSync(output_dir_doc + path_lib.sep + "README.md", main_doc);
+  await get_doc_from_project(project, output_dir_doc, graph, config, 'markdown');
 }
 
 async function get_html_doc_from_project(project, output_dir_doc, graph, config) {
+  await get_doc_from_project(project, output_dir_doc, graph, config, 'html');
+}
+
+async function get_doc_from_project(project, output_dir_doc, graph, config, type) {
+  let self_contained = config.self_contained;
+  if (self_contained === undefined){
+    self_contained = false;
+  }
+  
   let symbol_vhdl = config.symbol_vhdl;
   let symbol_verilog = config.symbol_verilog;
-
+  //Internal doc folder
+  const INTERNAL_DOC_FOLDER = 'doc_internal';
+  const INTERNAL_DOC_FOLDER_COMPLETE = path_lib.join(output_dir_doc,'doc_internal');
+  if (!fs.existsSync(INTERNAL_DOC_FOLDER_COMPLETE) && (self_contained === false || type === 'markdown')){
+    fs.mkdirSync(INTERNAL_DOC_FOLDER_COMPLETE, { recursive: true });
+  }
   //Main doc
   let files = get_sources_as_array(project.files);
   let project_name = project.name;
-  let main_doc = `<h1>Project documentation: ${project_name}</h1>\n`;
+  let main_doc = get_title_project(type, project_name);
   if (config.dependency_graph === true && graph !== undefined) {
-    main_doc += "<h2>Project dependency graph\n</h2>";
-    main_doc += graph + '\n';
-    main_doc += "<h2>Files\n</h2>";
+    main_doc += get_graph_declaration(type, graph, INTERNAL_DOC_FOLDER_COMPLETE, INTERNAL_DOC_FOLDER);
   }
+  main_doc += get_title_design(type);
   let lang = "none";
   let symbol = "!";
-  main_doc += '<ul>';
+  main_doc += get_separation_init(type);
+  let doc_modules = '';
+  let list_modules = '';
   for (let i = 0; i < files.length; ++i) {
     let file_path = files[i];
     let filename = path_lib.basename(file_path, path_lib.extname(file_path));
@@ -78,19 +54,157 @@ async function get_html_doc_from_project(project, output_dir_doc, graph, config)
     // Only save the doc for a HDL file and exists
     if (lang !== 'none' && fs.existsSync(file_path) === true){
       let declaration = await get_declaration_from_file(file_path);
+      let list_modules_inst = '';
       if (declaration.type === 'entity'){
-        main_doc += `  <li>Module: <a href="${filename}.html">${declaration.name}</a>\n</li>`;
+        list_modules_inst = get_module_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
       }
       else{
-        main_doc += `  <li>Package: <a href="${filename}.html">${declaration.name}</a>\n</li>`;
+        list_modules_inst = get_package_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
+      }
+      if (self_contained === false){
+        main_doc += list_modules_inst;
+      }
+      else{
+        list_modules += list_modules_inst;
       }
       let contents = fs.readFileSync(files[i], 'utf8');
       let doc_inst = new Documenter_lib.Documenter(contents, lang, symbol, config);
-      doc_inst.save_html(output_dir_doc + path_lib.sep + filename + ".html");
+      let inst_doc_module = await save_doc(self_contained, type, INTERNAL_DOC_FOLDER_COMPLETE, filename, doc_inst);
+      if (self_contained === false){
+        main_doc += inst_doc_module;
+      }
+      else{
+        doc_modules += inst_doc_module;
+      }
     }
   }
-  main_doc += '</ul>';
-  fs.writeFileSync(output_dir_doc + path_lib.sep + "index.html", main_doc);
+  if (self_contained === true){
+    main_doc += list_modules;
+    main_doc += '\n\n';
+    main_doc += doc_modules;
+  }
+
+  main_doc += get_separation_end(type);
+  fs.writeFileSync(output_dir_doc + path_lib.sep + get_index_name(type), main_doc);
+}
+
+async function save_doc(self_contained, type, output, filename, doc_inst){
+  let doc = '';
+  if (self_contained === true && type === 'html'){
+    doc = await save_doc_self_contained(type, doc_inst);
+  }
+  else{
+    doc = await save_doc_separate(type, output, filename, doc_inst);
+  }
+  return doc;
+}
+
+async function save_doc_self_contained(type, doc_inst){
+  let doc = '';
+  if (type === 'html'){
+    let options = { 'html_style': 'save', 'disable_overflow': true};
+    const extra_top_space = false;
+    let html_value = await doc_inst.get_html(options, extra_top_space);
+    doc = html_value.html;
+  }
+  return doc;
+}
+
+async function save_doc_separate(type, output, filename, doc_inst){
+  let output_filename =  filename + get_extension(type);
+  let output_path = path_lib.join(output, output_filename);
+  if (type === 'html'){
+    await doc_inst.save_html(output_path);
+  }
+  else{
+    await doc_inst.save_markdown(output_path);
+  }
+  return '';
+}
+
+function get_graph_declaration(type, graph, output_dir_doc, output_dir_doc_relative){
+  let declaration = '';
+  if (type === 'html'){
+    declaration += "<h2>Project dependency graph\n</h2>";
+    declaration += graph + '\n';
+  }
+  else{
+    declaration += "## Project dependency graph\n";
+    declaration += `![system](./${output_dir_doc_relative}/dependency_graph.svg "System")\n`;
+    fs.writeFileSync(output_dir_doc + path_lib.sep + "dependency_graph.svg", graph);
+  }
+  return declaration;
+}
+
+function get_title_project(type, project_name){
+  let title = `# Project documentation: : ${project_name}\n`;
+  if (type === 'html'){
+    title = `<h1>Project documentation: ${project_name}</h1>\n`;
+  }
+  return title;
+}
+
+function get_title_design(type){
+  let title = `## Designs\n`;
+  if (type === 'html'){
+    title = "<h2>Designs\n</h2>";
+  }
+  return title;
+}
+
+function get_module_str(self_contained, folder, filename, name, type){
+  let declaration = `- Module: [${name} ](./${folder}/${filename}.md)\n`;
+  if (self_contained === false && type === 'html'){
+    declaration = `  <li>Module: <a href="${folder}/${filename}.html">${name}</a>\n</li>`;
+  }
+  else if(self_contained === true && type === 'html'){
+    declaration = `  <li>Module: <a href="#${name}">${name}</a>\n</li>`;
+  }
+  return declaration;
+}
+
+function get_package_str(self_contained, folder, filename, name, type){
+  let declaration = `- Package: [${name} ](./${folder}/${filename}.md)\n`;
+  if (self_contained === false && type === 'html'){
+    declaration = `  <li>Package: <a href="${folder}/${filename}.html">${name}</a>\n</li>`;
+  }
+  else if(self_contained === true && type === 'html'){
+    declaration = `  <li>Package: <a href="#${name}">${name}</a>\n</li>`;
+  }
+  return declaration;
+}
+
+
+function get_separation_init(type){
+  let declaration = '\n';
+  if (type === 'html'){
+    declaration = '<ul>';
+  }
+  return declaration;
+}
+
+function get_separation_end(type){
+  let declaration = '\n';
+  if (type === 'html'){
+    declaration = '</ul>';
+  }
+  return declaration;
+}
+
+function get_index_name(type){
+  let declaration = 'README.md';
+  if (type === 'html'){
+    declaration = 'index.html';
+  }
+  return declaration;
+}
+
+function get_extension(type){
+  let declaration = '.md';
+  if (type === 'html'){
+    declaration = '.html';
+  }
+  return declaration;
 }
 
 async function get_declaration_from_file(filename){
