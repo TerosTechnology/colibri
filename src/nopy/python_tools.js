@@ -48,6 +48,7 @@ async function check_custom_python_path(python_path) {
   }
 }
 
+
 async function _exec_command(command) {
   const exec = require("child_process").exec;
   return new Promise((resolve) => {

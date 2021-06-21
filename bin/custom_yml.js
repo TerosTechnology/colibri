@@ -31,7 +31,7 @@ class Custom_yml{
   }
 
   doc_yml(options){
-    let yml_file = options.file;
+    let yml_file = options.input;
     try {
       const doc = yaml.load(fs.readFileSync(yml_file, 'utf8'));
       for (const x in doc) {
@@ -173,8 +173,6 @@ class Custom_yml{
   async save_md_ip(output_path, path, internal_ips_section, output_svg_path, readme_name, 
         lib_output_from_readme_path){
     const path_lib = require('path');
-    let symbol_vhdl = '!';
-    let symbol_verilog = '!';
 
     let lang = "vhdl";
     let symbol = "!";
@@ -183,13 +181,13 @@ class Custom_yml{
     if (path_lib.extname(path) === '.vhd' || path_lib.extname(path) === '.vho'
       || path_lib.extname(path) === '.vhdl') {
       lang = "vhdl";
-      symbol = symbol_vhdl;
+      symbol = this.doc_options.symbol_vhdl;
     }
     else if (path_lib.extname(path) === '.v' || path_lib.extname(path) === '.vh'
       || path_lib.extname(path) === '.vl' || path_lib.extname(path) === '.sv'
       || path_lib.extname(path) === '.SV') {
       lang = "verilog";
-      symbol = symbol_verilog;
+      symbol = this.doc_options.symbol_verilog;
     }
     let custom_svg_path_in_readme = undefined;
     if (readme_name === 'README'){
@@ -218,7 +216,10 @@ class Custom_yml{
       'fsm': true,
       'signals': 'none',
       'constants': 'none',
-      'process': 'none'
+      'process': 'none',
+      'symbol_vhdl': "!",
+      'symbol_verilog': "!",
+      'self_contained': false
     };
     documenter.set_config(global_config);
   }

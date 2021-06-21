@@ -22,21 +22,29 @@
 /* eslint-disable no-console */
 
 let custom_yml = require('./custom_yml');
-let edam = require('./edam');
+let edam_yml = require('./edam');
 let program = require('commander');
+let fs = require('fs');
 const path_lib = require('path');
 const { exit } = require('process');
 
 const doc_options_choice = ['none', 'all', 'only_commented'];
+const output_doc_options_choice = ['html', 'markdown'];
 
 program.version(require('../package.json').version)
-    .option('-f, --file [path]', 'Path of the YML, TRS or EDAM file to documenter')
-    .option('-o, --out [type]', 'Documentation format: md, html')
-    .option('-dep, --dep', `Include dependency graph in the documentation: ${doc_options_choice}`, true)
-    .option('-fsm, --fsm', `Include finite state machines in the documentation: ${doc_options_choice}`, true)
+    // eslint-disable-next-line max-len
+    .option('-i, --input [path]', 'Directory with the HDL files, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information', '')
+    .option('-o, --out [type]', 'Documentation format: markdown, html', 'html')
+    .option('--dep, --dep', `Include dependency graph in the documentation.`, true)
+    .option('--fsm, --fsm', `Include finite state machines in the documentation.`, true)
     .option('-s, --signals <type>', `Include signals/regs/wires in the documentation: ${doc_options_choice}`, 'none')
     .option('-c, --constants <type>', `Include constants/types in the documentation: ${doc_options_choice}`, 'none')
     .option('-p, --process <type>', `Include process/always in the documentation: ${doc_options_choice}`, 'none')
+    .option('--sym-verilog, --symbol_verilog <type>', `Special character to parse comments into documentation`,'')
+    .option('--sym-vhdl, --symbol_vhdl <type>', `Special character to parse comments into documentation`,'')
+    .option('--pypath, --python_path <type>', `Explicit python path`,"")
+    .option('--outpath, --outpath <type>', `Explicit outputh documentation path`,'')
+    .option('--self, --self_contained <type>', `Documentation generated in a single file for html output`,false)
     .usage('[options] <hdl-documenter>')
     .parse(process.argv);
 
@@ -44,8 +52,33 @@ program.parse(process.argv);
 const options = program.opts();
 
 let doc_config = get_documentation_config(options);
-check_file_ext(options, doc_config);
+validate_output_type(options);
 
+//Absolute path output directory
+let cmd_output_path = options.outpath;
+let absolute_output_path = process.cwd();
+if (cmd_output_path !== ''){
+  absolute_output_path = cmd_output_path;
+  if (path_lib.isAbsolute(cmd_output_path) === false){
+    absolute_output_path = path_lib.resolve(process.cwd(), cmd_output_path);
+  }
+}
+
+//Absolute input
+let cmd_input_path = options.input;
+let absolute_input_path = process.cwd();
+if (cmd_input_path !== ''){
+  absolute_input_path = cmd_input_path;
+  if (path_lib.isAbsolute(cmd_input_path) === false){
+    absolute_input_path = path_lib.resolve(process.cwd(), cmd_input_path);
+  }
+}
+print_configuration(options, doc_config, absolute_input_path, absolute_output_path);
+gen_doc(options, doc_config, absolute_input_path, absolute_output_path);
+
+////////////////////////////////////////////////////////////////////////////////
+// Get dodumenter configuration
+////////////////////////////////////////////////////////////////////////////////
 function get_documentation_config(options){
   let include_dependency_graph = options.dep;
   if (include_dependency_graph === undefined){
@@ -64,16 +97,26 @@ function get_documentation_config(options){
   let include_process = options.process;
   validate_config('process',include_process);
 
+  let doc_symbol_verilog = options.symbol_verilog;
+  let doc_symbol_vhdl = options.symbol_vhdl;
+  let doc_self_contained = options.self_contained;
+
   let config = {
     "dependency_graph": include_dependency_graph,
     "fsm": include_fsm,
     "signals": include_signals,
     "constants": include_constants,
-    "process": include_process
+    "process": include_process,
+    "symbol_verilog": doc_symbol_verilog,
+    "symbol_vhdl": doc_symbol_vhdl,
+    "self_contained": doc_self_contained
   };
   return config;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Validate configuration
+////////////////////////////////////////////////////////////////////////////////
 function validate_config(name, config_data){
   if (doc_options_choice.includes(config_data) === false){
     console.log(`Error in config ${name}. Possible values: ${doc_options_choice}`);
@@ -81,21 +124,74 @@ function validate_config(name, config_data){
   }
 }
 
-function check_file_ext(options, doc_config){
-  let file = options.file;
-  let file_ext = path_lib.extname(file);
-  if (file_ext === ".yml" || file_ext === ".YML" ) {
-    let customo_yml_c = custom_yml.Custom_yml(doc_config);
-    customo_yml_c.doc_yml(options);
-  }
-  else if ((file_ext === ".trs") || (file_ext === ".TRS") || (file_ext === ".edam") || (file_ext === ".EDAM") ){
-    edam.doc_trs(options);
-  }
-  else{
-    // eslint-disable-next-line no-console
-    console.log("Invalid input file: It must be '.yml', '.trs' or '.edam'");
+////////////////////////////////////////////////////////////////////////////////
+// Validate output type
+////////////////////////////////////////////////////////////////////////////////
+function validate_output_type(options){
+  let output_type = options.out;
+  if (output_doc_options_choice.includes(output_type) === false){
+    console.log(`Error in config --out. Possible values: ${output_doc_options_choice}`);
+    exit();
   }
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Generate documentation
+////////////////////////////////////////////////////////////////////////////////
+function gen_doc(options, doc_config, input_path, output_path){
+  let is_directory = fs.lstatSync(input_path).isDirectory();
+
+  let file_ext = '';
+  if (is_directory === false){
+    file_ext = path_lib.extname(input_path).toLowerCase();
+  }
+
+  if (is_directory === true){
+    let edam_yml_c = new edam_yml.Doc(doc_config);
+    edam_yml_c.gen_doc(options, 'directory', input_path, output_path);
+  }
+  else if (file_ext === '.srs') {
+    let custom_yml_c = new custom_yml.Doc(doc_config);
+    custom_yml_c.gen_doc(options);
+  }
+  else if (file_ext === '.yml') {
+    let edam_yml_c = new edam_yml.Doc(doc_config);
+    edam_yml_c.gen_doc(options, 'yml', input_path, output_path);
+  }
+  else if (file_ext === '.csv') {
+    let edam_yml_c = new edam_yml.Doc(doc_config);
+    edam_yml_c.gen_doc(options, 'csv', input_path, output_path);
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Print configuration
+////////////////////////////////////////////////////////////////////////////////
+function print_configuration(options, doc_config, absolute_input_path, absolute_output_path){
+  let msg = `
+****************************************************************************************************************
+--> Input file: ${absolute_input_path}
+--> Output directory: ${absolute_output_path}
+--> Python3 path: ${options.pypath}
+--> Documenter configuartion:
+-----> Include dependency graph: ${doc_config.dependency_graph}
+-----> Include FSM: ${doc_config.fsm}
+-----> Include signals: ${doc_config.signals}
+-----> Include process/always: ${doc_config.process}
+-----> HTML self contained (only 1 file): ${doc_config.self_contained}
+-----> Verilog symbol to parse the comments: ${doc_config.symbol_verilog}
+-----> VHDL symbol to parse the comments: ${doc_config.symbol_vhdl}
+****************************************************************************************************************
+`;
+
+  print_warning(msg);
+}
+
+function print_warning(msg){
+  console.log('\x1b[33m%s\x1b[0m', msg); //yellow
+}
+
+
 
 
 

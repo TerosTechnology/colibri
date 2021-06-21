@@ -15,28 +15,33 @@ sudo npm install -g .
 ```
 - Commands
 ```
-'-f, --file [path]', Path of the YML file to documenter
-'-o, --out  [type]', Documentation format: md, html
+-f, --file [path], Directory with the HDL files, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information
+-o, --out [type], Documentation format: md, html (default: "markdown")
+--dep, --dep', Include dependency graph in the documentation ['none', 'all', 'only_commented']
+--fsm, --fsm', Include finite state machines in the documentation ['none', 'all', 'only_commented']
+-s, --signals , Include signals/regs/wires in the documentation ['none', 'all', 'only_commented']
+-c, --constants , Include constants/types in the documentation ['none', 'all', 'only_commented']
+-p, --process , Include process/always in the documentation ['none', 'all', 'only_commented']
+--sym-verilog, --symbol_verilog , Special character to parse comments into documentation
+--sym-vhdl, --symbol_vhdl , Special character to parse comments into documentation
+--pypath, --python_path , Explicit python path
+--outpath, --outpath , Explicit outputh documentation path
+--self, --self_contained , Documentation generated in a single file for html output
 ```
 
 ### Documenter examples:
 
-**Documenter with yml file**
-```
-cd /bin/example
-teroshdl-hdl-documenter -f example.yml
-```
-
 **Documenter with teros project manager file or EDAM file**
 
-Documentation will be generated in `./built_doc` folder for EDAM/TRS files
-```
-cd /bin/example
-teroshdl-hdl-documenter -f trs_example.trs 
-teroshdl-hdl-documenter -f edam_example.edam -o html 
-```
+Check the EDAM format: https://edalize.readthedocs.io/en/latest/edam/api.html
 
-
+```
+cd /bin/example/doc
+teroshdl-hdl-documenter -i example_edam.yml -o markdown
+teroshdl-hdl-documenter -i example_edam.yml -o html 
+teroshdl-hdl-documenter -i example.csv -o html 
+teroshdl-hdl-documenter -i ../rtl -o html 
+```
 
 ## Third-party
 
