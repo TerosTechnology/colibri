@@ -57,7 +57,7 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
     if (lang !== 'none' && fs.existsSync(file_path) === true){
       try{
         let declaration = await declaration_finder.get_declaration_from_file(file_path);
-        if (declaration !== ''){
+        if (declaration.name !== ''){
           let list_modules_inst = '';
           if (declaration.type === 'entity'){
             list_modules_inst = get_module_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
@@ -65,12 +65,12 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
           else{
             list_modules_inst = get_package_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
           }
-          if (self_contained === false){
-            main_doc += list_modules_inst;
-          }
-          else{
-            list_modules += list_modules_inst;
-          }
+          // if (self_contained === false){
+          //   main_doc += list_modules_inst;
+          // }
+          // else{
+          //   list_modules += list_modules_inst;
+          // }
           let contents = fs.readFileSync(files[i], 'utf8');
           let doc_current;
           if (lang === 'vhdl'){
@@ -82,11 +82,13 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
           doc_current.set_code(contents);
           let inst_doc_module = await save_doc(self_contained, type, INTERNAL_DOC_FOLDER_COMPLETE, 
                   filename, doc_current);
-          if (self_contained === false){
-            main_doc += inst_doc_module;
+          if (self_contained === false && inst_doc_module.error === false){
+            main_doc += list_modules_inst;
+            main_doc += inst_doc_module.doc;
           }
-          else{
-            doc_modules += inst_doc_module;
+          else if(inst_doc_module.error === false){
+            list_modules += list_modules_inst;
+            doc_modules += inst_doc_module.doc;
           }
         }
       }
@@ -106,37 +108,37 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
 }
 
 async function save_doc(self_contained, type, output, filename, doc_inst){
-  let doc = '';
+  let result;
   if (self_contained === true && type === 'html'){
-    doc = await save_doc_self_contained(type, doc_inst);
+    result = await save_doc_self_contained(type, doc_inst);
   }
   else{
-    doc = await save_doc_separate(type, output, filename, doc_inst);
+    result = await save_doc_separate(type, output, filename, doc_inst);
   }
-  return doc;
+  return result;
 }
 
 async function save_doc_self_contained(type, doc_inst){
-  let doc = '';
+  let html_value = '';
   if (type === 'html'){
     let options = { 'html_style': 'save', 'disable_overflow': true};
     const extra_top_space = false;
-    let html_value = await doc_inst.get_html(options, extra_top_space);
-    doc = html_value.html;
+    html_value = await doc_inst.get_html(options, extra_top_space);
   }
-  return doc;
+  return {error:html_value.error, doc:html_value.html};
 }
 
 async function save_doc_separate(type, output, filename, doc_inst){
   let output_filename =  filename + get_extension(type);
   let output_path = path_lib.join(output, output_filename);
+  let error;
   if (type === 'html'){
-    await doc_inst.save_html(output_path);
+    error = await doc_inst.save_html(output_path);
   }
   else{
-    await doc_inst.save_markdown(output_path);
+    error = await doc_inst.save_markdown(output_path);
   }
-  return '';
+  return {error:error, doc:''};
 }
 
 function get_graph_declaration(type, graph, output_dir_doc, output_dir_doc_relative){

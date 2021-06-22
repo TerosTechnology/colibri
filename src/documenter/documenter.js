@@ -82,7 +82,10 @@ class Documenter extends markdown_lib.Markdown {
     const extra_top_space = false;
     let html_value = await this.get_html(options, extra_top_space);
     let html_doc = html_value.html;
-    fs.writeFileSync(path, html_doc);
+    if (html_value.error === false){
+      fs.writeFileSync(path, html_doc);
+    }
+    return html_value.error;
   }
   // options = {"custom_css_path":"/custom_css/path"}
   async save_pdf(path, options) {
