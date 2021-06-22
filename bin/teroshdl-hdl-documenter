@@ -44,7 +44,7 @@ program.version(require('../package.json').version)
     .option('--sym-vhdl, --symbol_vhdl <type>', `Special character to parse comments into documentation`,'')
     .option('--pypath, --python_path <type>', `Explicit python path`,"")
     .option('--outpath, --outpath <type>', `Explicit outputh documentation path`,'')
-    .option('--self, --self_contained <type>', `Documentation generated in a single file for html output`,false)
+    .option('--self, --self_contained', `Documentation generated in a single file for html output`, false)
     .usage('[options] <hdl-documenter>')
     .parse(process.argv);
 

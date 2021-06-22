@@ -15,10 +15,10 @@ sudo npm install -g .
 ```
 - Commands
 ```
--f, --file [path], Directory with the HDL files, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information
+-i, --input [path], Directory with the HDL files, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information
 -o, --out [type], Documentation format: md, html (default: "markdown")
---dep, --dep', Include dependency graph in the documentation ['none', 'all', 'only_commented']
---fsm, --fsm', Include finite state machines in the documentation ['none', 'all', 'only_commented']
+--dep, --dep', Include dependency graph in the documentation
+--fsm, --fsm', Include finite state machines in the documentation
 -s, --signals , Include signals/regs/wires in the documentation ['none', 'all', 'only_commented']
 -c, --constants , Include constants/types in the documentation ['none', 'all', 'only_commented']
 -p, --process , Include process/always in the documentation ['none', 'all', 'only_commented']
