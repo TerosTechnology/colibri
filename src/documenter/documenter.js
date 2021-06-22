@@ -621,6 +621,8 @@ class Documenter extends markdown_lib.Markdown {
   async init() {
     await this.create_parser('vhdl');
     await this.create_parser('verilog');
+    await this.create_parser_stm('vhdl');
+    await this.create_parser_stm('verilog');
   }
 
   async get_parser(lang) {
@@ -639,6 +641,22 @@ class Documenter extends markdown_lib.Markdown {
     }
   }
 
+  async get_parser_stm(lang) {
+    if (this.vhdl_parser_stm === undefined || this.verilog_parser_stm === undefined) {
+      await this.init();
+    }
+
+    if (lang === 'vhdl') {
+      return this.vhdl_parser_stm;
+    }
+    else if (lang === 'verilog') {
+      return this.verilog_parser_stm;
+    }
+    else {
+      return undefined;
+    }
+  }
+
   async create_parser(lang) {
     let parser = new ParserLib.ParserFactory;
     if (lang === 'vhdl') {
@@ -651,8 +669,21 @@ class Documenter extends markdown_lib.Markdown {
     }
   }
 
+  async create_parser_stm(lang) {
+    let parser = new ParserLib.ParserFactory;
+    if (lang === 'vhdl') {
+      //VHDL parser
+      this.vhdl_parser_stm = await parser.get_parser_stm(this.lang, this.comment_symbol);
+    }
+    else if (lang === 'verilog') {
+      //Verilog parser
+      this.verilog_parser_stm = await parser.get_parser_stm(this.lang, this.comment_symbol);
+    }
+  }
+
   async _get_stm() {
-    let stm_array = await Stm.get_svg_sm(this.lang, this.code, this.comment_symbol);
+    let parser = await this.get_parser_stm(this.lang);
+    let stm_array = await parser.get_svg_sm(this.code, this.comment_symbol);
     return stm_array.svg;
   }
 

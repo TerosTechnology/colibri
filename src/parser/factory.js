@@ -21,6 +21,8 @@
 
 const ts_verilog_parser = require('./ts_verilog_parser');
 const ts_vhdl_parser = require('./ts_vhdl_parser');
+const ts_verilog_parser_stm = require('./verilog_sm');
+const ts_vhdl_parser_stm = require('./vhdl_sm');
 
 class ParserFactory {
   constructor() { }
@@ -41,6 +43,26 @@ class ParserFactory {
 
   async getVerilogParser(comment_symbol) {
     let parser = new ts_verilog_parser(comment_symbol);
+    await parser.init();
+    return parser;
+  }
+
+  async get_parser_stm(lang, comment_symbol) {
+    if (lang === 'vhdl') {
+      return await this.get_vhdl_parser_stm(comment_symbol);
+    } else if (lang === 'verilog') {
+      return await this.get_verilog_parser_stm(comment_symbol);
+    }
+  }
+
+  async get_vhdl_parser_stm(comment_symbol) {
+    let parser = new ts_vhdl_parser_stm.Paser_stm_vhdl(comment_symbol);
+    await parser.init();
+    return parser;
+  }
+
+  async get_verilog_parser_stm(comment_symbol) {
+    let parser = new ts_verilog_parser_stm.Paser_stm_verilog(comment_symbol);
     await parser.init();
     return parser;
   }

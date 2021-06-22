@@ -28,6 +28,21 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
     this.comment_symbol = comment_symbol;
   }
   
+  async init() {
+    if (this.loaded_wasm !== true){
+        try{
+        const Parser = require('web-tree-sitter');
+        await Parser.init();
+        this.parser = new Parser();
+        let Lang = await
+        Parser.Language.load(Path.join(__dirname, Path.sep + "parsers" + Path.sep + "tree-sitter-vhdl.wasm"));
+        this.parser.setLanguage(Lang);
+        this.loaded_wasm = true;
+      }
+      catch(e){console.log('');}
+    }
+  }
+
   set_comment_symbol(comment_symbol) {
     this.comment_symbol = comment_symbol;
   }

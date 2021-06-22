@@ -31,7 +31,7 @@ class Doc {
     this.doc_options = doc_options;
   }
 
-  gen_doc(options, mode, input_path, output_path) {
+  async gen_doc(options, mode, input_path, output_path) {
     let out_type = options.out;
     try {
       // Python3 path
@@ -49,7 +49,7 @@ class Doc {
       // cd to input_path
       let input_path_dir = path_lib.dirname(input_path);
       shell.cd(input_path_dir);
-      this.save_doc(input_path, out_type, trs_file_content, output_path, pypath, mode);
+      await this.save_doc(input_path, out_type, trs_file_content, output_path, pypath, mode);
     } catch (e) {
       console.log(e);
     }

@@ -33,19 +33,24 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
   }
   
   async init() {
-    try{
-      const Parser = require('web-tree-sitter');
-      await Parser.init();
-      this.parser = new Parser();
-      let Lang = await Parser.Language.load(Path.join(__dirname, Path.sep + 
-          "parsers" + Path.sep + "tree-sitter-verilog.wasm"));
-      this.parser.setLanguage(Lang);
-      this.loaded_wasm = true;
+    if (this.loaded_wasm !== true){
+        try{
+        const Parser = require('web-tree-sitter');
+        await Parser.init();
+        this.parser = new Parser();
+        let Lang = await Parser.Language.load(Path.join(__dirname, Path.sep + 
+            "parsers" + Path.sep + "tree-sitter-verilog.wasm"));
+        this.parser.setLanguage(Lang);
+        this.loaded_wasm = true;
+      }
+      catch(e){console.log('');}
     }
-    catch(e){console.log('');}
   }
 
-  async get_svg_sm(code) {
+  async get_svg_sm(code, comment_symbol) {
+    if (comment_symbol !== undefined){
+      this.comment_symbol;
+    }
     let process;
     try {
       const tree = this.parser.parse(code);
