@@ -25,6 +25,7 @@ const shell = require("shelljs");
 const path_lib = require("path");
 const yaml = require("js-yaml");
 let project_edam = require("../src/projectManager/edam.js");
+const utils = require('../src/utils/utils');
 
 class Doc {
   constructor(doc_options) {
@@ -106,10 +107,12 @@ class Doc {
     let file_list = this.getFilesFromDir(directory_path);
     for (let i = 0; i < file_list.length; i++) {
       const element = file_list[i];
-      edam.add_file(element, false, "", "");
+      const lang = utils.get_lang_from_path(element);
+      if (lang !== 'none'){
+        edam.add_file(element, false, "", "");
+      }
     }
   }
-
 
   configure_documenter() {
     if (this.doc_options !== undefined) {

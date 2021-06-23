@@ -4,7 +4,6 @@ const fs = require('fs');
 const Documenter_lib = require('./documenter');
 const Parser = require('../parser/factory');
 
-
 async function get_md_doc_from_project(project, output_dir_doc, graph, config) {
   await get_doc_from_project(project, output_dir_doc, graph, config, 'markdown');
 }
@@ -14,6 +13,9 @@ async function get_html_doc_from_project(project, output_dir_doc, graph, config)
 }
 
 async function get_doc_from_project(project, output_dir_doc, graph, config, type) {
+  const cliProgress = require('cli-progress');
+  const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+
   let self_contained = config.self_contained;
   if (self_contained === undefined){
     self_contained = false;
@@ -29,6 +31,10 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
   }
   //Main doc
   let files = get_sources_as_array(project.files);
+
+  // start the progress bar with a total value of 200 and start value of 0
+  bar1.start(files.length, 0);
+
   let project_name = project.name;
   let main_doc = get_title_project(type, project_name);
   if (config.dependency_graph === true && graph !== undefined) {
@@ -46,6 +52,9 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
   let declaration_finder = new Declaration_finder();
 
   for (let i = 0; i < files.length; ++i) {
+    // update the current value in your application..
+    bar1.update(i);
+    
     let file_path = files[i];
     let filename = path_lib.basename(file_path, path_lib.extname(file_path));
     lang = utils.get_lang_from_path(file_path);
@@ -93,7 +102,7 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
         }
       }
       catch(e){
-        console.log(e);
+        console.log('');
       }
     }
   }
@@ -105,6 +114,9 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
 
   main_doc += get_separation_end(type);
   fs.writeFileSync(output_dir_doc + path_lib.sep + get_index_name(type), main_doc);
+  // Stop the progress bar
+  bar1.update(100);
+  bar1.stop();
 }
 
 async function save_doc(self_contained, type, output, filename, doc_inst){

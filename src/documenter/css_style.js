@@ -64,7 +64,6 @@ const html_style_save = `
   p {
     color:black;
     margin-top:5px;
-    margin-left:2.5%;
     margin-bottom:5px 
   }
   * {
@@ -73,6 +72,9 @@ const html_style_save = `
   #function_return{
     font-weight: bold;
     color:green;
+  }
+  #teroshdl_description, li {
+    margin-left:2.5%;
   }
   #function_arguments{
     color:blue;

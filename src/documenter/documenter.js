@@ -336,7 +336,7 @@ class Documenter extends markdown_lib.Markdown {
   async _get_html_from_code(options, extra_top_space) {
     
     let html_style = `<div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%">\n`;
-    if (options.disable_overflow === true){
+    if (options.disable_overflow === true || options.html_style === "save"){
       html_style = `<div id="teroshdl" class='templateTerosHDL'>\n`;
     }
 
@@ -404,7 +404,7 @@ class Documenter extends markdown_lib.Markdown {
         html_description = html_description.replace("$cholosimeone$" + i, wavedrom[i]);
       }
       html_description = this.normalize_description(html_description);
-      html += html_description;
+      html += '<div id="teroshdl_description">' + html_description + '</div>';
       //Generics and ports
       html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], 
             code_tree['generics'],code_tree['virtual_buses']));

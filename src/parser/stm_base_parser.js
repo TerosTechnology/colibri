@@ -55,7 +55,7 @@ class Parser_stm_base extends ts_base_parser.Ts_base_parser {
       svg = smcat.render(stmcat, { outputType: "svg" });
     }
     // eslint-disable-next-line no-console
-    catch (e) { console.log(e); }
+    catch (e) { console.log(''); }
     return svg;
   }
 
