@@ -36,8 +36,8 @@ function yml_edam_str_to_json_edam(yml_str){
 
 class Edam_project extends prj_documenter.Project_documenter{
 
-  constructor(name, tool_options = {}) {
-    super();
+  constructor(name, tool_options = {}, cli_bar) {
+    super(cli_bar);
     this.name = name;
     this.toplevel = '';
     this.files = [];

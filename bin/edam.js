@@ -60,7 +60,16 @@ class Doc {
   async save_doc(trs_file_absolute, type, trs_file_content, path, pypath, mode){
     let config = this.configure_documenter();
 
-    let doc_inst = new project_edam.Edam_project('');
+    const cliProgress = require('cli-progress');
+    const cli_bar = new cliProgress.SingleBar({
+      format: 'Progress |' + '{bar}' + '| {percentage}% || {value}/{total} || {filename}',
+      barCompleteChar: '\u2588',
+      barIncompleteChar: '\u2591',
+      hideCursor: true,
+      clearOnComplete: true
+    });
+
+    let doc_inst = new project_edam.Edam_project('', {}, cli_bar);
     if (mode === 'yml'){
       doc_inst.load_edam_file(trs_file_content);
     }

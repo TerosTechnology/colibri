@@ -118,8 +118,11 @@ class Documenter extends markdown_lib.Markdown {
         custom_svg_path_in_readme = config.custom_svg_path_in_readme;
       }
     }
-    let md = await this._get_markdown(file, null, custom_section, custom_svg_path_in_readme);
-    fs.writeFileSync(path, md);
+    let result = await this._get_markdown(file, null, custom_section, custom_svg_path_in_readme);
+    if (result.error !== true){
+      fs.writeFileSync(path, result.markdown);
+    }
+    return result.error;
   }
   // ***************************************************************************
   async get_html(options, extra_top_space) {
@@ -134,7 +137,7 @@ class Documenter extends markdown_lib.Markdown {
     }
     let code_tree = await this._get_code_tree();
     if (code_tree === undefined) {
-      return "";
+      return { 'html': '', error: true };
     }
     let markdown_doc = extra_top_space_l;
 
@@ -159,18 +162,20 @@ class Documenter extends markdown_lib.Markdown {
       }
       markdown_doc += "\n";
       //Description
-      markdown_doc += "## Description\n";
-
-      const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
-      let wavedrom_description = description;
-      for (let i = 0; i < wavedrom.length; ++i) {
-        let random_id = this._makeid(4);
-        let img = `![alt text](wavedrom_${random_id}${i}.svg "title")`;
-        let path_img = path_lib.dirname(path) + path_lib.sep + `wavedrom_${random_id}${i}.svg`;
-        fs.writeFileSync(path_img, wavedrom[i]);
-        wavedrom_description = wavedrom_description.replace("$cholosimeone$" + i, img);
+      let description_inst = code_tree['entity']['description'];
+      if (description_inst.replace('\n','') !== '') {
+        markdown_doc += "## Description\n";
+        const { description, wavedrom } = this._get_wavedrom_svg(description_inst);
+        let wavedrom_description = description;
+        for (let i = 0; i < wavedrom.length; ++i) {
+          let random_id = this._makeid(4);
+          let img = `![alt text](wavedrom_${random_id}${i}.svg "title")`;
+          let path_img = path_lib.dirname(path) + path_lib.sep + `wavedrom_${random_id}${i}.svg`;
+          fs.writeFileSync(path_img, wavedrom[i]);
+          wavedrom_description = wavedrom_description.replace("$cholosimeone$" + i, img);
+        }
+        markdown_doc += wavedrom_description;
       }
-      markdown_doc += wavedrom_description;
       //Custom section
       if (custom_section !== undefined){
         markdown_doc += `\n${custom_section}\n`;
@@ -189,8 +194,11 @@ class Documenter extends markdown_lib.Markdown {
       //Optional info section
       markdown_doc += this._get_info_section(code_tree);
       //Description
-      markdown_doc += "## Description\n";
-      markdown_doc += code_tree['package']['description'] + "\n";
+      let description_inst = code_tree['package']['description'];
+      if (description_inst.replace('\n','') !== '') {
+        markdown_doc += "## Description\n";
+        markdown_doc += code_tree['package']['description'] + "\n";
+      }
 
       //Custom section
       if (custom_section !== undefined){
@@ -227,8 +235,7 @@ class Documenter extends markdown_lib.Markdown {
         markdown_doc += `![Diagram_state_machine_${i}]( stm_${entity_name}_${i}${i}.svg "Diagram")`;
       }
     }
-
-    return markdown_doc;
+    return { 'markdown': markdown_doc, error: false };
   }
 
   _makeid(length) {
@@ -395,7 +402,7 @@ class Documenter extends markdown_lib.Markdown {
           "\n").replace(/\*/g, "\\*").replace(/\`/g, "\\`"));
       //Description
       let inst_description = code_tree['entity']['description'];
-      if (inst_description !== ''){
+      if (inst_description.replace('\n','') !== ''){
         html += converter.makeHtml("## Description\n");
         let { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
 
@@ -428,7 +435,7 @@ class Documenter extends markdown_lib.Markdown {
       html += converter.makeHtml(this._get_info_section(code_tree));
 
       let inst_description = code_tree['package']['description'];
-      if (inst_description !== ''){
+      if (inst_description.replace('\n','') !== ''){
         html += converter.makeHtml("## Description\n");
         html += '<div id="teroshdl_description">' 
               + converter.makeHtml(code_tree['package']['description'] + "</div>\n");

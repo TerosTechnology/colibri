@@ -5,28 +5,19 @@ const fs = require('fs');
 const Documenter_lib = require('./documenter');
 const Parser = require('../parser/factory');
 
-async function get_md_doc_from_project(project, output_dir_doc, graph, config) {
-  let result = await get_doc_from_project(project, output_dir_doc, graph, config, 'markdown');
+async function get_md_doc_from_project(project, output_dir_doc, graph, config, cli_bar) {
+  let result = await get_doc_from_project(project, output_dir_doc, graph, config, 'markdown', cli_bar);
   return result;
 }
 
-async function get_html_doc_from_project(project, output_dir_doc, graph, config) {
-  let result = await get_doc_from_project(project, output_dir_doc, graph, config, 'html');
+async function get_html_doc_from_project(project, output_dir_doc, graph, config, cli_bar) {
+  let result = await get_doc_from_project(project, output_dir_doc, graph, config, 'html', cli_bar);
   return result;
 }
 
-async function get_doc_from_project(project, output_dir_doc, graph, config, type) {
+async function get_doc_from_project(project, output_dir_doc, graph, config, type, cli_bar=undefined) {
   let ok_files = 0;
   let fail_files = 0;
-
-  const cliProgress = require('cli-progress');
-  const bar1 = new cliProgress.SingleBar({
-    format: 'Progress |' + '{bar}' + '| {percentage}% || {value}/{total} || {filename}',
-    barCompleteChar: '\u2588',
-    barIncompleteChar: '\u2591',
-    hideCursor: true,
-    clearOnComplete: true
-  });
 
   let self_contained = config.self_contained;
   if (self_contained === undefined){
@@ -43,7 +34,7 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
   }
   //Main doc
   let files = get_sources_as_array(project.files);
-  bar1.start(files.length, 0);
+  cli_bar.start(files.length, 0);
 
   let project_name = project.name;
   let main_doc = get_title_project(type, project_name);
@@ -65,7 +56,7 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
     let file_path = files[i];
     let file_path_name = path_lib.basename(file_path);
     
-    bar1.update(i, {filename: file_path_name});
+    cli_bar.update(i, {filename: file_path_name});
 
     let filename = path_lib.basename(file_path, path_lib.extname(file_path));
     lang = utils.get_lang_from_path(file_path);
@@ -123,8 +114,8 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
   main_doc += get_separation_end(type);
   fs.writeFileSync(output_dir_doc + path_lib.sep + get_index_name(type), main_doc);
   // Stop the progress bar
-  bar1.update(files.length);
-  bar1.stop();
+  cli_bar.update(files.length);
+  cli_bar.stop();
   return {'fail_files':fail_files, 'ok_files':ok_files};
 }
 

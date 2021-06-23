@@ -32,7 +32,8 @@
     "svgdom": "^0.0.21",
     "temp": "0.9.4",
     "wavedrom": "2.6.8",
-    "web-tree-sitter": "^0.16.2"
+    "web-tree-sitter": "^0.16.2",
+    "cli-progress": "3.9.0"
   },
   "devDependencies": {
     "colors": "1.4.0",
