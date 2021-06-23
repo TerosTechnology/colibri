@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 // Copyright 2020 Teros Technology
 //
 // Ismael Perez Rojo
@@ -41,7 +42,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
         this.loaded = true;
       }
     }
-    catch(e){console.log('');}
+    catch(e){}
   }
 
   async get_all(sourceCode, comment_symbol) {

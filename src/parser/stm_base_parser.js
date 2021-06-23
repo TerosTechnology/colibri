@@ -52,10 +52,11 @@ class Parser_stm_base extends ts_base_parser.Ts_base_parser {
     const smcat = require("state-machine-cat");
     let svg;
     try {
+      console.error = function() {};
       svg = smcat.render(stmcat, { outputType: "svg" });
     }
-    // eslint-disable-next-line no-console
-    catch (e) { console.log(''); }
+    // eslint-disable-next-line no-empty
+    catch (e) {  }
     return svg;
   }
 

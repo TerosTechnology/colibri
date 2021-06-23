@@ -27,11 +27,13 @@ class Project_documenter{
   }
 
   async save_markdown_doc(output_dir_doc, python3_path, config) {
-    await this.save_doc('markdown', output_dir_doc, python3_path, config);
+    let result = await this.save_doc('markdown', output_dir_doc, python3_path, config);
+    return result;
   }
 
   async save_html_doc(output_dir_doc, python3_path, config) {
-      await this.save_doc('html', output_dir_doc, python3_path, config);
+      let result = await this.save_doc('html', output_dir_doc, python3_path, config);
+      return result;
   }
   
   async save_doc(type, output_dir_doc, python3_path, config) {
@@ -40,13 +42,16 @@ class Project_documenter{
     if (config.dependency_graph === true) {
       svg_dependency_graph = await this.dependency_graph.get_dependency_graph_svg(project, python3_path);
     }
-
+    let result;
     if (type === 'html'){
-      await Project_documentation.get_html_doc_from_project(project, output_dir_doc, svg_dependency_graph, config);
+      result = await Project_documentation.get_html_doc_from_project(project, output_dir_doc, 
+            svg_dependency_graph, config);
     }
     else if(type === 'markdown'){
-      await Project_documentation.get_md_doc_from_project(project, output_dir_doc, svg_dependency_graph, config); 
+      result = await Project_documentation.get_md_doc_from_project(project, output_dir_doc, 
+            svg_dependency_graph, config); 
     }
+    return result;
   }
 
   async get_dependency_graph_dot(python3_path) {

@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 // Copyright 2020 Teros Technology
 //
 // Ismael Perez Rojo
@@ -43,7 +44,7 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
         this.parser.setLanguage(Lang);
         this.loaded_wasm = true;
       }
-      catch(e){console.log('');}
+      catch(e){}
     }
   }
 

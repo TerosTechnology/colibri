@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 const path_lib = require('path');
 const utils = require('../utils/utils');
 const fs = require('fs');
@@ -5,16 +6,27 @@ const Documenter_lib = require('./documenter');
 const Parser = require('../parser/factory');
 
 async function get_md_doc_from_project(project, output_dir_doc, graph, config) {
-  await get_doc_from_project(project, output_dir_doc, graph, config, 'markdown');
+  let result = await get_doc_from_project(project, output_dir_doc, graph, config, 'markdown');
+  return result;
 }
 
 async function get_html_doc_from_project(project, output_dir_doc, graph, config) {
-  await get_doc_from_project(project, output_dir_doc, graph, config, 'html');
+  let result = await get_doc_from_project(project, output_dir_doc, graph, config, 'html');
+  return result;
 }
 
 async function get_doc_from_project(project, output_dir_doc, graph, config, type) {
+  let ok_files = 0;
+  let fail_files = 0;
+
   const cliProgress = require('cli-progress');
-  const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+  const bar1 = new cliProgress.SingleBar({
+    format: 'Progress |' + '{bar}' + '| {percentage}% || {value}/{total} || {filename}',
+    barCompleteChar: '\u2588',
+    barIncompleteChar: '\u2591',
+    hideCursor: true,
+    clearOnComplete: true
+  });
 
   let self_contained = config.self_contained;
   if (self_contained === undefined){
@@ -31,8 +43,6 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
   }
   //Main doc
   let files = get_sources_as_array(project.files);
-
-  // start the progress bar with a total value of 200 and start value of 0
   bar1.start(files.length, 0);
 
   let project_name = project.name;
@@ -51,11 +61,12 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
 
   let declaration_finder = new Declaration_finder();
 
-  for (let i = 0; i < files.length; ++i) {
-    // update the current value in your application..
-    bar1.update(i);
-    
+  for (let i = 0; i < files.length; ++i) {    
     let file_path = files[i];
+    let file_path_name = path_lib.basename(file_path);
+    
+    bar1.update(i, {filename: file_path_name});
+
     let filename = path_lib.basename(file_path, path_lib.extname(file_path));
     lang = utils.get_lang_from_path(file_path);
     if( lang === 'systemverilog'){
@@ -67,6 +78,7 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
       try{
         let declaration = await declaration_finder.get_declaration_from_file(file_path);
         if (declaration.name !== ''){
+          ok_files += 1;
           let list_modules_inst = '';
           if (declaration.type === 'entity'){
             list_modules_inst = get_module_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
@@ -74,12 +86,6 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
           else{
             list_modules_inst = get_package_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
           }
-          // if (self_contained === false){
-          //   main_doc += list_modules_inst;
-          // }
-          // else{
-          //   list_modules += list_modules_inst;
-          // }
           let contents = fs.readFileSync(files[i], 'utf8');
           let doc_current;
           if (lang === 'vhdl'){
@@ -100,9 +106,11 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
             doc_modules += inst_doc_module.doc;
           }
         }
+        else{
+          fail_files += 1;
+        }
       }
       catch(e){
-        console.log('');
       }
     }
   }
@@ -115,8 +123,9 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
   main_doc += get_separation_end(type);
   fs.writeFileSync(output_dir_doc + path_lib.sep + get_index_name(type), main_doc);
   // Stop the progress bar
-  bar1.update(100);
+  bar1.update(files.length);
   bar1.stop();
+  return {'fail_files':fail_files, 'ok_files':ok_files};
 }
 
 async function save_doc(self_contained, type, output, filename, doc_inst){
@@ -168,7 +177,7 @@ function get_graph_declaration(type, graph, output_dir_doc, output_dir_doc_relat
 }
 
 function get_title_project(type, project_name){
-  let title = `# Project documentation: : ${project_name}\n`;
+  let title = `# Project documentation: ${project_name}\n`;
   if (type === 'html'){
     title = `<h1>Project documentation: ${project_name}</h1>\n`;
   }

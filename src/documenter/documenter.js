@@ -394,17 +394,20 @@ class Documenter extends markdown_lib.Markdown {
       html += converter.makeHtml((await this._get_diagram_svg_from_code_tree(code_tree) + 
           "\n").replace(/\*/g, "\\*").replace(/\`/g, "\\`"));
       //Description
-      html += converter.makeHtml("## Description\n");
-      let { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
+      let inst_description = code_tree['entity']['description'];
+      if (inst_description !== ''){
+        html += converter.makeHtml("## Description\n");
+        let { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
 
-      description = this.remove_description_spaces(description);
-      let html_description = converter.makeHtml(description);
+        description = this.remove_description_spaces(description);
+        let html_description = converter.makeHtml(description);
 
-      for (let i = 0; i < wavedrom.length; ++i) {
-        html_description = html_description.replace("$cholosimeone$" + i, wavedrom[i]);
+        for (let i = 0; i < wavedrom.length; ++i) {
+          html_description = html_description.replace("$cholosimeone$" + i, wavedrom[i]);
+        }
+        html_description = this.normalize_description(html_description);
+        html += '<div id="teroshdl_description">' + html_description + '</div>';
       }
-      html_description = this.normalize_description(html_description);
-      html += '<div id="teroshdl_description">' + html_description + '</div>';
       //Generics and ports
       html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], 
             code_tree['generics'],code_tree['virtual_buses']));
@@ -423,8 +426,13 @@ class Documenter extends markdown_lib.Markdown {
       }
       html += `<a id=${name}>` + converter.makeHtml(doc_title) + '</a>';
       html += converter.makeHtml(this._get_info_section(code_tree));
-      html += converter.makeHtml("## Description\n");
-      html += converter.makeHtml(code_tree['package']['description'] + "\n");
+
+      let inst_description = code_tree['package']['description'];
+      if (inst_description !== ''){
+        html += converter.makeHtml("## Description\n");
+        html += '<div id="teroshdl_description">' 
+              + converter.makeHtml(code_tree['package']['description'] + "</div>\n");
+      }
     }
     if (code_tree['declarations'] !== undefined) {
       //Signals and constants

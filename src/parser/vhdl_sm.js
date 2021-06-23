@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 // Copyright 2020 Teros Technology
 //
 // Ismael Perez Rojo
@@ -39,7 +40,7 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
         this.parser.setLanguage(Lang);
         this.loaded_wasm = true;
       }
-      catch(e){console.log('');}
+      catch(e){}
     }
   }
 
@@ -56,7 +57,7 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
         Parser.Language.load(Path.join(__dirname, Path.sep + "parsers" + Path.sep + "tree-sitter-vhdl.wasm"));
       this.parser.setLanguage(Lang);
     }
-    catch(e){console.log('');}
+    catch(e){}
 
     let process;
     let tree;

@@ -36,7 +36,7 @@ class Doc {
     let out_type = options.out;
     try {
       // Python3 path
-      let pypath = options.python_path;
+      let pypath = options.pypath;
 
       //Read content input
       let trs_file_content = '';
@@ -50,7 +50,8 @@ class Doc {
       // cd to input_path
       let input_path_dir = path_lib.dirname(input_path);
       shell.cd(input_path_dir);
-      await this.save_doc(input_path, out_type, trs_file_content, output_path, pypath, mode);
+      let result = await this.save_doc(input_path, out_type, trs_file_content, output_path, pypath, mode);
+      return result;
     } catch (e) {
       console.log(e);
     }
@@ -73,12 +74,14 @@ class Doc {
      //Create output directory
      fs.mkdirSync(path,{ recursive: true });
 
+    let result;
     if (type === 'html'){
-      await doc_inst.save_html_doc(path, pypath, config);
+      result = await doc_inst.save_html_doc(path, pypath, config);
     }
     if (type === 'markdown'){
-      await doc_inst.save_markdown_doc(path, pypath, config);
+      result = await doc_inst.save_markdown_doc(path, pypath, config);
     }
+    return result;
   }
 
   load_edam_csv(edam, content){
