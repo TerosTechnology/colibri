@@ -22,7 +22,8 @@ const Project_documentation = require('../documenter/project_documentation');
 const dependency = require('./dependency_graph');
 
 class Project_documenter{ 
-  constructor(){
+  constructor(cli_bar){
+    this.cli_bar = cli_bar;
     this.dependency_graph = new dependency.Dependency_graph();
   }
 
@@ -45,11 +46,11 @@ class Project_documenter{
     let result;
     if (type === 'html'){
       result = await Project_documentation.get_html_doc_from_project(project, output_dir_doc, 
-            svg_dependency_graph, config);
+            svg_dependency_graph, config, this.cli_bar);
     }
     else if(type === 'markdown'){
       result = await Project_documentation.get_md_doc_from_project(project, output_dir_doc, 
-            svg_dependency_graph, config); 
+            svg_dependency_graph, config, this.cli_bar); 
     }
     return result;
   }

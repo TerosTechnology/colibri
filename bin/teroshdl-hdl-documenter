@@ -31,12 +31,14 @@ const { exit } = require('process');
 const doc_options_choice = ['none', 'all', 'only_commented'];
 const output_doc_options_choice = ['html', 'markdown'];
 
-const default_dir = '/home/carlos/Downloads/vunit';
+const default_dir = '';
+const default_out = 'html';
+const default_out_path = '';
 
 program.version(require('../package.json').version)
     // eslint-disable-next-line max-len
     .option('-i, --input [path]', 'Directory with the HDL files, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information', default_dir)
-    .option('-o, --out [type]', 'Documentation format: markdown, html', 'html')
+    .option('-o, --out [type]', 'Documentation format: markdown, html', default_out)
     .option('--dep', `Include dependency graph in the documentation.`)
     .option('--fsm', `Include finite state machines in the documentation.`)
     .option('-s, --signals <type>', `Include signals/regs/wires in the documentation: ${doc_options_choice}`, 'all')
@@ -45,7 +47,7 @@ program.version(require('../package.json').version)
     .option('--symbol_verilog, <type>', `Special character to parse comments into documentation`,'')
     .option('--symbol_vhdl <type>', `Special character to parse comments into documentation`,'')
     .option('--pypath, <type>', `Explicit python path`,"")
-    .option('--outpath, <type>', `Explicit outputh documentation path`,'/home/carlos/Downloads/opentitan/teroshdl_doc')
+    .option('--outpath, <type>', `Explicit outputh documentation path`,default_out_path)
     .option('--self_contained', `Documentation generated in a single file for html output`)
     .usage('[options] <hdl-documenter>')
     .parse(process.argv);
@@ -53,6 +55,7 @@ program.version(require('../package.json').version)
 program.parse(process.argv);
 let options = program.opts();
 
+print_license();
 if (!options.dep){
   options.dep = false;
 }
@@ -62,6 +65,11 @@ if (!options.fsm){
 if (!options.self_contained){
   options.self_contained = false;
 }
+
+if (options.out === 'markdown'){
+  options.self_contained = false;
+}
+
 
 let doc_config = get_documentation_config(options);
 validate_output_type(options);
@@ -196,7 +204,7 @@ async function print_configuration(options, doc_config, absolute_input_path, abs
 --> Input: ${absolute_input_path}
 --> Output directory: ${absolute_output_path}
 --> Python3 path: ${python_path_found}
---> Documenter configuartion:
+--> Documenter configuration:
 -----> Include dependency graph: ${doc_config.dependency_graph}
 -----> Include FSM: ${doc_config.fsm}
 -----> Include signals: ${doc_config.signals}
@@ -226,6 +234,27 @@ function print_result(result){
 `;
   print_ok(msg);
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Print license
+////////////////////////////////////////////////////////////////////////////////
+function print_license(){
+  let msg = `
+****************************************************************************************************************
+Copyright 2020-2021
+Ismael Perez Rojo
+Carlos Alberto Ruiz Naranjo: carlosruiznaranjo@gmail.com
+Alfredo Saez
+
+Colibri is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+****************************************************************************************************************
+`;
+  console.log(msg);
+}
+
 
 function print_warning(msg){
   console.log('\x1b[33m%s\x1b[0m', msg); //yellow

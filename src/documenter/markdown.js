@@ -138,7 +138,7 @@ class Markdown {
       for (let i = 0; i < process.length; ++i) {
         md += `- ${process[i].name}: _( ${process[i].sens_list} )_\n`;
         md += `${process[i].description}\n`;
-        let description = process[i].description;
+        let description = process[i].description.replace('\n','');
         if (description !== ''){
           md += '**Description**\n';
           md += `${process[i].description}\n`;
