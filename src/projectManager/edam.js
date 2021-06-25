@@ -57,7 +57,9 @@ class Edam_project extends prj_documenter.Project_documenter{
     let files = [];
     for (let i = 0; i < this.files.length; i++) {
       const element = this.files[i];
-      files.push(element.get_info(relative_path));
+      if (element.name !== ''){
+        files.push(element.get_info(relative_path));
+      }
     }
 
     let edam_json = {

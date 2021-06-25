@@ -134,12 +134,16 @@ class Documenter extends markdown_lib.Markdown {
     }
     let code_tree = await this._get_code_tree();
     if (code_tree === undefined) {
-      return { 'html': '', error: true };
+      return { 'markdown': '', error: true };
     }
     let markdown_doc = extra_top_space_l;
 
     //Entity
     if (code_tree['entity'] !== undefined) {
+      if (code_tree['entity']['name'] === ''){
+        return { 'markdown': '', error: true };
+      }
+
       //Title
       if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
         markdown_doc += "# " + code_tree['info']['title'] + "\n";
@@ -182,6 +186,10 @@ class Documenter extends markdown_lib.Markdown {
     }
     //Package
     if (code_tree.package !== undefined) {
+      if (code_tree['package']['name'] === ''){
+        return { 'markdown': '', error: true };
+      }
+
       //Title
       if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
         markdown_doc += "# " + code_tree['info']['title'] + "\n";
@@ -296,6 +304,9 @@ class Documenter extends markdown_lib.Markdown {
     }
     //Entity
     if (code_tree['entity'] !== undefined) {
+      if (code_tree['entity']['name'] === ''){
+        return { 'html': '', error: true };
+      }
       //Title
       let doc_title;
       let name = '';
@@ -333,6 +344,9 @@ class Documenter extends markdown_lib.Markdown {
     }
     //Package
     if (code_tree.package !== undefined) {
+      if (code_tree['package']['name'] === ''){
+        return { 'html': '', error: true };
+      }
       //Title
       let doc_title;
       let name = '';

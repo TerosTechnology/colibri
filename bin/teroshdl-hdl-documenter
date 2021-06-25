@@ -25,6 +25,7 @@ let custom_yml = require('./custom_yml');
 let edam_yml = require('./edam');
 let program = require('commander');
 let fs = require('fs');
+const utils = require('../src/utils/utils');
 const path_lib = require('path');
 const { exit } = require('process');
 
@@ -37,7 +38,7 @@ const default_out_path = '';
 
 program.version(require('../package.json').version)
     // eslint-disable-next-line max-len
-    .option('-i, --input [path]', 'Directory with the HDL files, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information', default_dir)
+    .option('-i, --input [path]', 'Directory with the HDL files, HDL, file, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information', default_dir)
     .option('-o, --out [type]', 'Documentation format: markdown, html', default_out)
     .option('--dep', `Include dependency graph in the documentation.`)
     .option('--fsm', `Include finite state machines in the documentation.`)
@@ -168,13 +169,19 @@ function gen_doc(options, doc_config, input_path, output_path){
   let is_directory = fs.lstatSync(input_path).isDirectory();
 
   let file_ext = '';
+  let check_hdl_lang = false;
   if (is_directory === false){
     file_ext = path_lib.extname(input_path).toLowerCase();
+    check_hdl_lang = utils.check_if_hdl_file(input_path);
   }
   let result = {};
   if (is_directory === true){
     let edam_yml_c = new edam_yml.Doc(doc_config);
     result = edam_yml_c.gen_doc(options, 'directory', input_path, output_path);
+  }
+  else if(check_hdl_lang === true){
+    let edam_yml_c = new edam_yml.Doc(doc_config);
+    result = edam_yml_c.gen_doc(options, 'file', input_path, output_path);
   }
   else if (file_ext === '.srs') {
     let custom_yml_c = new custom_yml.Doc(doc_config);

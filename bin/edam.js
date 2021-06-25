@@ -26,6 +26,7 @@ const path_lib = require("path");
 const yaml = require("js-yaml");
 let project_edam = require("../src/projectManager/edam.js");
 const utils = require('../src/utils/utils');
+const documenter_lib = require('../src/documenter/documenter');
 
 class Doc {
   constructor(doc_options) {
@@ -69,15 +70,25 @@ class Doc {
       clearOnComplete: true
     });
 
-    let doc_inst = new project_edam.Edam_project('', {}, cli_bar);
+    let edam_project = new project_edam.Edam_project('', {}, cli_bar);
     if (mode === 'yml'){
-      doc_inst.load_edam_file(trs_file_content);
+      edam_project.load_edam_file(trs_file_content);
+    }
+    else if(mode === 'file'){
+      let result_error = await save_one_file(trs_file_absolute, config, type, path);
+      let ok_file = 1;
+      let fail_files = 0;
+      if (result_error === true){
+        fail_files = 1;
+        ok_file = 0;
+      }
+      return {fail_files: fail_files, ok_files: ok_file};
     }
     else if(mode === 'csv'){
-      this.load_edam_csv(doc_inst, trs_file_content);
+      this.load_edam_csv(edam_project, trs_file_content);
     }
     else if(mode === 'directory'){
-      this.load_edam_directory(doc_inst, trs_file_absolute);
+      this.load_edam_directory(edam_project, trs_file_absolute);
     }
 
      //Create output directory
@@ -85,10 +96,10 @@ class Doc {
 
     let result;
     if (type === 'html'){
-      result = await doc_inst.save_html_doc(path, pypath, config);
+      result = await edam_project.save_html_doc(path, pypath, config);
     }
     if (type === 'markdown'){
-      result = await doc_inst.save_markdown_doc(path, pypath, config);
+      result = await edam_project.save_markdown_doc(path, pypath, config);
     }
     return result;
   }
@@ -161,6 +172,42 @@ class Doc {
 
 }
 
+async function save_one_file(input_file, config, type, output_path){
+  let complete_output_path = output_path;
+  let is_directory = fs.lstatSync(output_path).isDirectory();
+  if (is_directory === true){
+    if (type === 'html'){
+      complete_output_path = path_lib.join(complete_output_path, 'README.html');
+    }
+    else{
+      complete_output_path = path_lib.join(complete_output_path, 'README.md');
+
+    }
+  }
+
+  let lang = utils.get_lang_from_path(input_file);
+  let code = fs.readFileSync(input_file, "utf8");
+  let symbol;
+  if (lang === 'vhdl'){
+    symbol = config.symbol_vhdl;
+  }
+  else{
+    symbol = config.symbol_verilog;
+  }
+  let documenter = new documenter_lib.Documenter(code, lang, symbol, config);
+  documenter.set_symbol(symbol);
+  documenter.set_code(code);
+  documenter.set_config(config);
+
+  let result;
+  if (type === 'html'){
+    result = await documenter.save_html(complete_output_path);
+  }
+  else if (type === 'markdown'){
+    result = await documenter.save_markdown(complete_output_path);
+  }
+  return result;
+}
 
 module.exports = {
   Doc: Doc,

@@ -50,7 +50,7 @@ class ParserFactory {
   async get_parser_stm(lang, comment_symbol) {
     if (lang === 'vhdl') {
       return await this.get_vhdl_parser_stm(comment_symbol);
-    } else if (lang === 'verilog') {
+    } else if (lang === 'verilog' || lang === 'systemverilog') {
       return await this.get_verilog_parser_stm(comment_symbol);
     }
   }

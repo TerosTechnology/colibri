@@ -19,6 +19,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
+const { start } = require('repl');
+
 function get_lang_from_extension(extension){
   const vhdl_type = ['.vhd', '.vho', '.vhdl'];
   const verilog_type = ['.v', '.vh', '.vl'];
@@ -45,7 +47,17 @@ function get_lang_from_path(file_path){
   return lang;
 }
 
+function check_if_hdl_file(file_path){
+  let lang = get_lang_from_path(file_path);
+  let check = false;
+  if (lang === 'verilog' || lang === 'vhdl' || lang === 'systemverilog'){
+    check = true;
+  }
+  return check;
+}
+
 module.exports = {
+  check_if_hdl_file : check_if_hdl_file,
   get_lang_from_path : get_lang_from_path,
   get_lang_from_extension: get_lang_from_extension
 };
