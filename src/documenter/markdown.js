@@ -44,16 +44,16 @@ class Markdown {
     return markdown_doc;
   }
   _get_in_out_section(ports, generics,virtual_buses) {
+    if (generics.length === 0 && ports.length === 0){
+      return '';
+    }
     let md = "";
-    //Title
-    md += "## Generics and ports\n";
-    //Tables
-    md += "### Table 1.1 Generics\n";
     if (generics.length !== 0) {
+      md += "## Generics\n";
       md += this._get_doc_generics(generics);
     }
-    md += "### Table 1.2 Ports\n";
     if (ports.length !== 0) {
+      md += `## Ports\n`;
       if (virtual_buses !== undefined) {
         let virtual_buses_to_add = virtual_buses.filter(obj => obj.keep_ports === true);
         if (virtual_buses_to_add.length > 0) {
@@ -62,7 +62,7 @@ class Markdown {
             ports = ports.filter(function(value, index, arr){ 
               return value.name !== element.name;
           });
-          ports = ports.concat(element.ports)
+          ports = ports.concat(element.ports);
           }
         }
       }
@@ -105,20 +105,19 @@ class Markdown {
     }
 
     if ((signals.length !== 0 && this.config.signals !== 'none') ||
-      (constants.length !== 0 && this.config.constants !== 'none') && types.length !== 0) {
-      //Title
-      md += "## Signals, constants and types\n";
+      (constants.length !== 0 && this.config.constants !== 'none') || 
+      (types.length !== 0 && this.config.constants !== 'none')) {
       //Tables
       if (signals.length !== 0 && this.config.signals !== 'none') {
-        md += "### Signals\n";
+        md += "## Signals\n";
         md += this._get_doc_signals(signals);
       }
       if (constants.length !== 0 && this.config.constants !== 'none') {
-        md += "### Constants\n";
+        md += "## Constants\n";
         md += this._get_doc_constants(constants);
       }
       if (types.length !== 0 && this.config.constants !== 'none') {
-        md += "### Types\n";
+        md += "## Types\n";
         md += this._get_doc_types(types);
       }
     }
@@ -137,8 +136,13 @@ class Markdown {
       //Title
       md += "## Processes\n";
       for (let i = 0; i < process.length; ++i) {
-        md += `- **${process[i].name}**: ***( ${process[i].sens_list} )***\n`;
+        md += `- ${process[i].name}: _( ${process[i].sens_list} )_\n`;
         md += `${process[i].description}\n`;
+        let description = process[i].description.replace('\n','');
+        if (description !== ''){
+          md += '**Description**\n';
+          md += `${process[i].description}\n`;
+        }
       }
     }
     return md;
@@ -163,8 +167,12 @@ class Markdown {
             return_str = 'return ()';
           }
           // eslint-disable-next-line max-len
-          md += `- **${functions[i].name}** _<font id="function_arguments">${arguments_str}</font>_ <font id="function_return">${return_str}</font>\n`;
-          md += `${functions[i].description}\n`;
+          md += `- ${functions[i].name} <font id="function_arguments">${arguments_str}</font> <font id="function_return">${return_str}</font>\n`;
+          let description = functions[i].description;
+          if (description !== ''){
+            md += '**Description**\n';
+            md += `${functions[i].description}\n`;
+          }
         }
       }
     }
@@ -177,8 +185,12 @@ class Markdown {
       //Title
       md += "## Instantiations\n";
       for (let i = 0; i < instantiations.length; ++i) {
-        md += `- **${instantiations[i].name}**: ${instantiations[i].type}\n`;
-        md += `${instantiations[i].description}\n`;
+        md += `- ${instantiations[i].name}: ${instantiations[i].type}\n`;
+        let description = instantiations[i].description;
+        if (description !== ''){
+          md += '**Description**\n';
+          md += `${instantiations[i].description}\n`;
+        }
       }
     }
     return md;

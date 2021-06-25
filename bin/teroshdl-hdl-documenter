@@ -25,31 +25,52 @@ let custom_yml = require('./custom_yml');
 let edam_yml = require('./edam');
 let program = require('commander');
 let fs = require('fs');
+const utils = require('../src/utils/utils');
 const path_lib = require('path');
 const { exit } = require('process');
 
 const doc_options_choice = ['none', 'all', 'only_commented'];
 const output_doc_options_choice = ['html', 'markdown'];
 
+const default_dir = '';
+const default_out = 'html';
+const default_out_path = '';
+
 program.version(require('../package.json').version)
     // eslint-disable-next-line max-len
-    .option('-i, --input [path]', 'Directory with the HDL files, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information', '')
-    .option('-o, --out [type]', 'Documentation format: markdown, html', 'html')
-    .option('--dep, --dep', `Include dependency graph in the documentation.`, true)
-    .option('--fsm, --fsm', `Include finite state machines in the documentation.`, true)
-    .option('-s, --signals <type>', `Include signals/regs/wires in the documentation: ${doc_options_choice}`, 'none')
-    .option('-c, --constants <type>', `Include constants/types in the documentation: ${doc_options_choice}`, 'none')
-    .option('-p, --process <type>', `Include process/always in the documentation: ${doc_options_choice}`, 'none')
-    .option('--sym-verilog, --symbol_verilog <type>', `Special character to parse comments into documentation`,'')
-    .option('--sym-vhdl, --symbol_vhdl <type>', `Special character to parse comments into documentation`,'')
-    .option('--pypath, --python_path <type>', `Explicit python path`,"")
-    .option('--outpath, --outpath <type>', `Explicit outputh documentation path`,'')
-    .option('--self, --self_contained', `Documentation generated in a single file for html output`, false)
+    .option('-i, --input [path]', 'Directory with the HDL files, HDL, file, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information', default_dir)
+    .option('-o, --out [type]', 'Documentation format: markdown, html', default_out)
+    .option('--dep', `Include dependency graph in the documentation.`)
+    .option('--fsm', `Include finite state machines in the documentation.`)
+    .option('-s, --signals <type>', `Include signals/regs/wires in the documentation: ${doc_options_choice}`, 'all')
+    .option('-c, --constants <type>', `Include constants/types in the documentation: ${doc_options_choice}`, 'all')
+    .option('-p, --process <type>', `Include process/always in the documentation: ${doc_options_choice}`, 'all')
+    .option('--symbol_verilog, <type>', `Special character to parse comments into documentation`,'')
+    .option('--symbol_vhdl <type>', `Special character to parse comments into documentation`,'')
+    .option('--pypath, <type>', `Explicit python path`,"")
+    .option('--outpath, <type>', `Explicit outputh documentation path`,default_out_path)
+    .option('--self_contained', `Documentation generated in a single file for html output`)
     .usage('[options] <hdl-documenter>')
     .parse(process.argv);
 
 program.parse(process.argv);
-const options = program.opts();
+let options = program.opts();
+
+print_license();
+if (!options.dep){
+  options.dep = false;
+}
+if (!options.fsm){
+  options.fsm = false;
+}
+if (!options.self_contained){
+  options.self_contained = false;
+}
+
+if (options.out === 'markdown'){
+  options.self_contained = false;
+}
+
 
 let doc_config = get_documentation_config(options);
 validate_output_type(options);
@@ -73,8 +94,14 @@ if (cmd_input_path !== ''){
     absolute_input_path = path_lib.resolve(process.cwd(), cmd_input_path);
   }
 }
-print_configuration(options, doc_config, absolute_input_path, absolute_output_path);
-gen_doc(options, doc_config, absolute_input_path, absolute_output_path);
+(async () => {
+  print_configuration(options, doc_config, absolute_input_path, absolute_output_path).then(function() {
+    gen_doc(options, doc_config, absolute_input_path, absolute_output_path).then(function(result) {
+      print_result(result);
+    });
+  });
+})();
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Get dodumenter configuration
@@ -142,13 +169,19 @@ function gen_doc(options, doc_config, input_path, output_path){
   let is_directory = fs.lstatSync(input_path).isDirectory();
 
   let file_ext = '';
+  let check_hdl_lang = false;
   if (is_directory === false){
     file_ext = path_lib.extname(input_path).toLowerCase();
+    check_hdl_lang = utils.check_if_hdl_file(input_path);
   }
-
+  let result = {};
   if (is_directory === true){
     let edam_yml_c = new edam_yml.Doc(doc_config);
-    edam_yml_c.gen_doc(options, 'directory', input_path, output_path);
+    result = edam_yml_c.gen_doc(options, 'directory', input_path, output_path);
+  }
+  else if(check_hdl_lang === true){
+    let edam_yml_c = new edam_yml.Doc(doc_config);
+    result = edam_yml_c.gen_doc(options, 'file', input_path, output_path);
   }
   else if (file_ext === '.srs') {
     let custom_yml_c = new custom_yml.Doc(doc_config);
@@ -156,24 +189,29 @@ function gen_doc(options, doc_config, input_path, output_path){
   }
   else if (file_ext === '.yml') {
     let edam_yml_c = new edam_yml.Doc(doc_config);
-    edam_yml_c.gen_doc(options, 'yml', input_path, output_path);
+    result = edam_yml_c.gen_doc(options, 'yml', input_path, output_path);
   }
   else if (file_ext === '.csv') {
     let edam_yml_c = new edam_yml.Doc(doc_config);
-    edam_yml_c.gen_doc(options, 'csv', input_path, output_path);
+    result = edam_yml_c.gen_doc(options, 'csv', input_path, output_path);
   }
-}
+  return result;
+} 
 
 ////////////////////////////////////////////////////////////////////////////////
 // Print configuration
 ////////////////////////////////////////////////////////////////////////////////
-function print_configuration(options, doc_config, absolute_input_path, absolute_output_path){
+async function print_configuration(options, doc_config, absolute_input_path, absolute_output_path){
+  let python_path = options.pypath;
+  const nopy = require('../src/nopy/python_tools');
+  let python_path_found = await nopy.get_python_exec(python_path);
+
   let msg = `
 ****************************************************************************************************************
---> Input file: ${absolute_input_path}
+--> Input: ${absolute_input_path}
 --> Output directory: ${absolute_output_path}
---> Python3 path: ${options.pypath}
---> Documenter configuartion:
+--> Python3 path: ${python_path_found}
+--> Documenter configuration:
 -----> Include dependency graph: ${doc_config.dependency_graph}
 -----> Include FSM: ${doc_config.fsm}
 -----> Include signals: ${doc_config.signals}
@@ -187,9 +225,52 @@ function print_configuration(options, doc_config, absolute_input_path, absolute_
   print_warning(msg);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Print result
+////////////////////////////////////////////////////////////////////////////////
+function print_result(result){
+  let fail_files = result.fail_files;
+  let ok_files = result.ok_files;
+  let total_files = fail_files + ok_files;
+  let msg = `
+****************************************************************************************************************
+--> Files found: ${total_files}
+--> Files processed successfully: ${ok_files}
+--> Unprocessed files: ${fail_files}
+****************************************************************************************************************
+`;
+  print_ok(msg);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Print license
+////////////////////////////////////////////////////////////////////////////////
+function print_license(){
+  let msg = `
+****************************************************************************************************************
+Copyright 2020-2021 Teros Technology terostechnology@gmail.com 
+Ismael Perez Rojo ismaelprojo@gmail.com
+Carlos Alberto Ruiz Naranjo: carlosruiznaranjo@gmail.com
+Alfredo Saez
+
+Colibri is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+****************************************************************************************************************
+`;
+  console.log(msg);
+}
+
+
 function print_warning(msg){
   console.log('\x1b[33m%s\x1b[0m', msg); //yellow
 }
+
+function print_ok(msg){
+  console.log('\x1b[32m%s\x1b[0m', msg); //green
+}
+
 
 
 

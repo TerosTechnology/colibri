@@ -36,8 +36,8 @@ function yml_edam_str_to_json_edam(yml_str){
 
 class Edam_project extends prj_documenter.Project_documenter{
 
-  constructor(name, tool_options = {}) {
-    super();
+  constructor(name, tool_options = {}, cli_bar) {
+    super(cli_bar);
     this.name = name;
     this.toplevel = '';
     this.files = [];
@@ -57,7 +57,9 @@ class Edam_project extends prj_documenter.Project_documenter{
     let files = [];
     for (let i = 0; i < this.files.length; i++) {
       const element = this.files[i];
-      files.push(element.get_info(relative_path));
+      if (element.name !== ''){
+        files.push(element.get_info(relative_path));
+      }
     }
 
     let edam_json = {

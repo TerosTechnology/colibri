@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 /* eslint-disable no-console */
 // Copyright 2019
 // Carlos Alberto Ruiz Naranjo, Ismael Pérez Rojo,
@@ -56,7 +57,7 @@ class Dependency_graph {
         });
       });
     }
-    catch(e){console.log('');}
+    catch(e){}
   }
 }
 

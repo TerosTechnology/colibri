@@ -58,9 +58,6 @@ function diagramGenerator(structure, bn) {
   outPorts = getPortsOut(structure, name, kind);
   locx = (size / 2) * maxString(generics, inPorts, [0, 0], kind) + 2 * offset;
   width = (size / 2) * (maxString(generics, inPorts, [0, 0], name) + maxString([0, 0], [0, 0], outPorts, name));
-  // console.log(inPorts);
-  // console.log(outPorts);
-  // console.log(structure);
 
   let min_x = 0;
   let max_x = 0;

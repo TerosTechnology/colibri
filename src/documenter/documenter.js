@@ -82,12 +82,12 @@ class Documenter extends markdown_lib.Markdown {
     const extra_top_space = false;
     let html_value = await this.get_html(options, extra_top_space);
     let html_doc = html_value.html;
-    fs.writeFileSync(path, html_doc);
+    if (html_value.error === false){
+      fs.writeFileSync(path, html_doc);
+    }
+    return html_value.error;
   }
-  // options = {"custom_css_path":"/custom_css/path"}
-  async save_pdf(path, options) {
-    await this._get_pdf(path, options);
-  }
+
   async save_svg(path) {
     let svg_diagram_str = await this._get_diagram_svg();
     await fs.writeFileSync(path, svg_diagram_str);
@@ -115,8 +115,11 @@ class Documenter extends markdown_lib.Markdown {
         custom_svg_path_in_readme = config.custom_svg_path_in_readme;
       }
     }
-    let md = await this._get_markdown(file, null, custom_section, custom_svg_path_in_readme);
-    fs.writeFileSync(path, md);
+    let result = await this._get_markdown(file, null, custom_section, custom_svg_path_in_readme);
+    if (result.error !== true){
+      fs.writeFileSync(path, result.markdown);
+    }
+    return result.error;
   }
   // ***************************************************************************
   async get_html(options, extra_top_space) {
@@ -131,12 +134,16 @@ class Documenter extends markdown_lib.Markdown {
     }
     let code_tree = await this._get_code_tree();
     if (code_tree === undefined) {
-      return "";
+      return { 'markdown': '', error: true };
     }
     let markdown_doc = extra_top_space_l;
 
     //Entity
     if (code_tree['entity'] !== undefined) {
+      if (code_tree['entity']['name'] === ''){
+        return { 'markdown': '', error: true };
+      }
+
       //Title
       if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
         markdown_doc += "# " + code_tree['info']['title'] + "\n";
@@ -156,18 +163,20 @@ class Documenter extends markdown_lib.Markdown {
       }
       markdown_doc += "\n";
       //Description
-      markdown_doc += "## Description\n";
-
-      const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
-      let wavedrom_description = description;
-      for (let i = 0; i < wavedrom.length; ++i) {
-        let random_id = this._makeid(4);
-        let img = `![alt text](wavedrom_${random_id}${i}.svg "title")`;
-        let path_img = path_lib.dirname(path) + path_lib.sep + `wavedrom_${random_id}${i}.svg`;
-        fs.writeFileSync(path_img, wavedrom[i]);
-        wavedrom_description = wavedrom_description.replace("$cholosimeone$" + i, img);
+      let description_inst = code_tree['entity']['description'];
+      if (description_inst.replace('\n','') !== '') {
+        markdown_doc += "## Description\n";
+        const { description, wavedrom } = this._get_wavedrom_svg(description_inst);
+        let wavedrom_description = description;
+        for (let i = 0; i < wavedrom.length; ++i) {
+          let random_id = this._makeid(4);
+          let img = `![alt text](wavedrom_${random_id}${i}.svg "title")`;
+          let path_img = path_lib.dirname(path) + path_lib.sep + `wavedrom_${random_id}${i}.svg`;
+          fs.writeFileSync(path_img, wavedrom[i]);
+          wavedrom_description = wavedrom_description.replace("$cholosimeone$" + i, img);
+        }
+        markdown_doc += wavedrom_description;
       }
-      markdown_doc += wavedrom_description;
       //Custom section
       if (custom_section !== undefined){
         markdown_doc += `\n${custom_section}\n`;
@@ -177,6 +186,10 @@ class Documenter extends markdown_lib.Markdown {
     }
     //Package
     if (code_tree.package !== undefined) {
+      if (code_tree['package']['name'] === ''){
+        return { 'markdown': '', error: true };
+      }
+
       //Title
       if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
         markdown_doc += "# " + code_tree['info']['title'] + "\n";
@@ -186,8 +199,11 @@ class Documenter extends markdown_lib.Markdown {
       //Optional info section
       markdown_doc += this._get_info_section(code_tree);
       //Description
-      markdown_doc += "## Description\n";
-      markdown_doc += code_tree['package']['description'] + "\n";
+      let description_inst = code_tree['package']['description'];
+      if (description_inst.replace('\n','') !== '') {
+        markdown_doc += "## Description\n";
+        markdown_doc += code_tree['package']['description'] + "\n";
+      }
 
       //Custom section
       if (custom_section !== undefined){
@@ -224,8 +240,7 @@ class Documenter extends markdown_lib.Markdown {
         markdown_doc += `![Diagram_state_machine_${i}]( stm_${entity_name}_${i}${i}.svg "Diagram")`;
       }
     }
-
-    return markdown_doc;
+    return { 'markdown': markdown_doc, error: false };
   }
 
   _makeid(length) {
@@ -238,91 +253,6 @@ class Documenter extends markdown_lib.Markdown {
     return result;
   }
 
-  async _get_markdown_for_pdf() {
-    let code_tree = await this._get_code_tree();
-    if (code_tree === undefined) {
-      return "";
-    }
-    let markdown_doc = "";
-    //Entity
-    if (code_tree['entity'] !== undefined) {
-      //Title
-      if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
-        markdown_doc += "# " + code_tree['info']['title'] + "\n";
-      }else{
-        markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
-      }
-      //Optional info section
-      markdown_doc += this._get_info_section(code_tree);
-      //Diagram
-      markdown_doc += "## Diagram\n";
-      let path_diagram = temp.openSync().path;
-
-      await this._save_svg_from_code_tree(path_diagram + ".svg", code_tree);
-      markdown_doc += '![Diagram](' + path_diagram + '.svg "Diagram")';
-      markdown_doc += "\n";
-      //Description
-      markdown_doc += "## Description\n";
-
-      const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
-      let wavedrom_description = description;
-      for (let i = 0; i < wavedrom.length; ++i) {
-        let path_img = path_lib.dirname(path_diagram) + path_lib.sep + `wavedrom_${i}.svg`;
-        fs.writeFileSync(path_img, wavedrom[i]);
-        let img = `![alt text](${path_img} "title")`;
-        wavedrom_description = wavedrom_description.replace("$cholosimeone$" + i, img);
-      }
-      markdown_doc += wavedrom_description;
-
-      //Generics and ports
-      markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics'],code_tree['virtual_buses']);
-    }
-    //Package
-    if (code_tree.package !== undefined) {
-      //Title
-      if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
-        markdown_doc += "# " + code_tree['info']['title'] + "\n";
-      }else{
-        markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
-      }
-      //Optional info section
-      markdown_doc += this._get_info_section(code_tree);
-      //Description
-      markdown_doc += "## Description\n";
-      markdown_doc += code_tree['package']['description'] + "\n";
-    }
-    if (code_tree['declarations'] !== undefined) {
-      //Signals and constants
-      markdown_doc += this._get_signals_constants_section(
-        code_tree['declarations']['signals'], code_tree['declarations']['constants'],
-        code_tree['declarations']['types']);
-      //Functions
-      markdown_doc += this._get_functions_section(code_tree['declarations']['functions']);
-    }
-    if (code_tree['body'] !== undefined) {
-      //Processes
-      markdown_doc += this._get_process_section(code_tree['body']['processes']);
-      //Instantiations
-      markdown_doc += this._get_instantiations_section(code_tree['body']['instantiations']);
-    }
-
-    // State machine diagrams
-    let stm_array = await this._get_stm();
-    if (this.config.fsm === true && stm_array !== undefined && stm_array.length !== 0) {
-      markdown_doc += "## State machines\n";
-      for (let i = 0; i < stm_array.length; ++i) {
-        let path_diagram_tmp = temp.openSync().path + '.svg';
-        if (stm_array[i].description !== '') {
-          markdown_doc += '\n- ' + stm_array[i].description;
-        }
-        fs.writeFileSync(path_diagram_tmp, stm_array[i].svg);
-        markdown_doc += `![Diagram_state_machine_${i}]( ${path_diagram_tmp} "Diagram")`;
-      }
-    }
-
-    return markdown_doc;
-  }
-
   normalize_description(description){
     let desc_inst = description.replace(/\n\s*\n/g, '<br>');
     desc_inst = desc_inst.replace(/\n/g, '');
@@ -333,7 +263,7 @@ class Documenter extends markdown_lib.Markdown {
   async _get_html_from_code(options, extra_top_space) {
     
     let html_style = `<div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%">\n`;
-    if (options.disable_overflow === true){
+    if (options.disable_overflow === true || options.html_style === "save"){
       html_style = `<div id="teroshdl" class='templateTerosHDL'>\n`;
     }
 
@@ -374,6 +304,9 @@ class Documenter extends markdown_lib.Markdown {
     }
     //Entity
     if (code_tree['entity'] !== undefined) {
+      if (code_tree['entity']['name'] === ''){
+        return { 'html': '', error: true };
+      }
       //Title
       let doc_title;
       let name = '';
@@ -391,23 +324,29 @@ class Documenter extends markdown_lib.Markdown {
       html += converter.makeHtml((await this._get_diagram_svg_from_code_tree(code_tree) + 
           "\n").replace(/\*/g, "\\*").replace(/\`/g, "\\`"));
       //Description
-      html += converter.makeHtml("## Description\n");
-      let { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
+      let inst_description = code_tree['entity']['description'];
+      if (inst_description.replace('\n','') !== ''){
+        html += converter.makeHtml("## Description\n");
+        let { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
 
-      description = this.remove_description_spaces(description);
-      let html_description = converter.makeHtml(description);
+        description = this.remove_description_spaces(description);
+        let html_description = converter.makeHtml(description);
 
-      for (let i = 0; i < wavedrom.length; ++i) {
-        html_description = html_description.replace("$cholosimeone$" + i, wavedrom[i]);
+        for (let i = 0; i < wavedrom.length; ++i) {
+          html_description = html_description.replace("$cholosimeone$" + i, wavedrom[i]);
+        }
+        html_description = this.normalize_description(html_description);
+        html += '<div id="teroshdl_description">' + html_description + '</div>';
       }
-      html_description = this.normalize_description(html_description);
-      html += html_description;
       //Generics and ports
       html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], 
             code_tree['generics'],code_tree['virtual_buses']));
     }
     //Package
     if (code_tree.package !== undefined) {
+      if (code_tree['package']['name'] === ''){
+        return { 'html': '', error: true };
+      }
       //Title
       let doc_title;
       let name = '';
@@ -420,8 +359,13 @@ class Documenter extends markdown_lib.Markdown {
       }
       html += `<a id=${name}>` + converter.makeHtml(doc_title) + '</a>';
       html += converter.makeHtml(this._get_info_section(code_tree));
-      html += converter.makeHtml("## Description\n");
-      html += converter.makeHtml(code_tree['package']['description'] + "\n");
+
+      let inst_description = code_tree['package']['description'];
+      if (inst_description.replace('\n','') !== ''){
+        html += converter.makeHtml("## Description\n");
+        html += '<div id="teroshdl_description">' 
+              + converter.makeHtml(code_tree['package']['description'] + "</div>\n");
+      }
     }
     if (code_tree['declarations'] !== undefined) {
       //Signals and constants
@@ -464,25 +408,6 @@ class Documenter extends markdown_lib.Markdown {
       description_trail += ' ' + element.trim() + '\n';
     }
     return description_trail;
-  }
-
-  async _get_pdf(path, options) {
-    let markdownpdf = require("markdown-pdf");
-    let code_tree = await this._get_code_tree();
-    if (code_tree === undefined) {
-      return;
-    }
-
-    let markdown_doc = await this._get_markdown_for_pdf();
-
-    let options_md_pdf = {
-      cssPath: __dirname + path_lib.sep + 'custom.css'
-    };
-    if (options !== undefined && options.custom_css_path !== undefined) {
-      options_md_pdf.cssPath = options.custom_css_path;
-    }
-
-    await markdownpdf(options_md_pdf).from.string(markdown_doc).to(path);
   }
 
   _get_wavedrom_svg(text) {
@@ -621,6 +546,8 @@ class Documenter extends markdown_lib.Markdown {
   async init() {
     await this.create_parser('vhdl');
     await this.create_parser('verilog');
+    await this.create_parser_stm('vhdl');
+    await this.create_parser_stm('verilog');
   }
 
   async get_parser(lang) {
@@ -639,6 +566,22 @@ class Documenter extends markdown_lib.Markdown {
     }
   }
 
+  async get_parser_stm(lang) {
+    if (this.vhdl_parser_stm === undefined || this.verilog_parser_stm === undefined) {
+      await this.init();
+    }
+
+    if (lang === 'vhdl') {
+      return this.vhdl_parser_stm;
+    }
+    else if (lang === 'verilog') {
+      return this.verilog_parser_stm;
+    }
+    else {
+      return undefined;
+    }
+  }
+
   async create_parser(lang) {
     let parser = new ParserLib.ParserFactory;
     if (lang === 'vhdl') {
@@ -651,8 +594,21 @@ class Documenter extends markdown_lib.Markdown {
     }
   }
 
+  async create_parser_stm(lang) {
+    let parser = new ParserLib.ParserFactory;
+    if (lang === 'vhdl') {
+      //VHDL parser
+      this.vhdl_parser_stm = await parser.get_parser_stm(this.lang, this.comment_symbol);
+    }
+    else if (lang === 'verilog') {
+      //Verilog parser
+      this.verilog_parser_stm = await parser.get_parser_stm(this.lang, this.comment_symbol);
+    }
+  }
+
   async _get_stm() {
-    let stm_array = await Stm.get_svg_sm(this.lang, this.code, this.comment_symbol);
+    let parser = await this.get_parser_stm(this.lang);
+    let stm_array = await parser.get_svg_sm(this.code, this.comment_symbol);
     return stm_array.svg;
   }
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 // Copyright 2020 Teros Technology
 //
 // Ismael Perez Rojo
@@ -31,16 +32,18 @@ class Parser extends ts_base_parser.Ts_base_parser {
 
   async init() {
     try{
-      this.code = '';
-      const Parser = require('web-tree-sitter');
-      await Parser.init();
-      this.parser = new Parser();
-      let Lang = await
-        Parser.Language.load(path.join(__dirname, path.sep + "parsers" + path.sep + "tree-sitter-vhdl.wasm"));
-      this.parser.setLanguage(Lang);
-      this.loaded = true;
+      if (this.loaded !== true){
+        this.code = '';
+        const Parser = require('web-tree-sitter');
+        await Parser.init();
+        this.parser = new Parser();
+        let Lang = await
+          Parser.Language.load(path.join(__dirname, path.sep + "parsers" + path.sep + "tree-sitter-vhdl.wasm"));
+        this.parser.setLanguage(Lang);
+        this.loaded = true;
+      }
     }
-    catch(e){console.log(e);}
+    catch(e){}
   }
 
   parse(code) {
@@ -838,10 +841,14 @@ class Parser extends ts_base_parser.Ts_base_parser {
           }
           else if (cursor.nodeType === 'formal_procedure_parameter_clause' || 
                 cursor.nodeType === 'formal_function_parameter_clause'){
-            element.arguments = cursor.nodeText;
+            const regex = /--/gm;
+            let return_arguments = cursor.nodeText;
+            element.arguments = return_arguments.replace(regex, '').replace('\n','');
           }
           else if (cursor.nodeType === 'return'){
-            element.return = cursor.nodeText;
+            const regex = /--/gm;
+            let return_definitions = cursor.nodeText;
+            element.return = return_definitions.replace(regex, '').replace('\n','');
           }
         }
         while (cursor.gotoNextSibling() === true && break_p === false);
@@ -868,7 +875,9 @@ class Parser extends ts_base_parser.Ts_base_parser {
         element.name = cursor.nodeText;
       }
       else if (cursor.nodeType === 'enumeration_type_definition') {
-        element.type = cursor.nodeText;
+        const regex = /--/gm;
+        let type_definition = cursor.nodeText;
+        element.type = type_definition.replace(regex, '');
       }
     }
     while (cursor.gotoNextSibling() === true && break_p === false);

@@ -1,19 +1,24 @@
+/* eslint-disable no-empty */
 const path_lib = require('path');
 const utils = require('../utils/utils');
 const fs = require('fs');
 const Documenter_lib = require('./documenter');
 const Parser = require('../parser/factory');
 
-
-async function get_md_doc_from_project(project, output_dir_doc, graph, config) {
-  await get_doc_from_project(project, output_dir_doc, graph, config, 'markdown');
+async function get_md_doc_from_project(project, output_dir_doc, graph, config, cli_bar) {
+  let result = await get_doc_from_project(project, output_dir_doc, graph, config, 'markdown', cli_bar);
+  return result;
 }
 
-async function get_html_doc_from_project(project, output_dir_doc, graph, config) {
-  await get_doc_from_project(project, output_dir_doc, graph, config, 'html');
+async function get_html_doc_from_project(project, output_dir_doc, graph, config, cli_bar) {
+  let result = await get_doc_from_project(project, output_dir_doc, graph, config, 'html', cli_bar);
+  return result;
 }
 
-async function get_doc_from_project(project, output_dir_doc, graph, config, type) {
+async function get_doc_from_project(project, output_dir_doc, graph, config, type, cli_bar=undefined) {
+  let ok_files = 0;
+  let fail_files = 0;
+
   let self_contained = config.self_contained;
   if (self_contained === undefined){
     self_contained = false;
@@ -29,6 +34,8 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
   }
   //Main doc
   let files = get_sources_as_array(project.files);
+  cli_bar.start(files.length, 0);
+
   let project_name = project.name;
   let main_doc = get_title_project(type, project_name);
   if (config.dependency_graph === true && graph !== undefined) {
@@ -45,52 +52,56 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
 
   let declaration_finder = new Declaration_finder();
 
-  for (let i = 0; i < files.length; ++i) {
+  for (let i = 0; i < files.length; ++i) {    
     let file_path = files[i];
+    let file_path_name = path_lib.basename(file_path);
+    
+    cli_bar.update(i, {filename: file_path_name});
+
     let filename = path_lib.basename(file_path, path_lib.extname(file_path));
     lang = utils.get_lang_from_path(file_path);
-   if( lang === 'systemverilog'){
+    if( lang === 'systemverilog'){
       lang = 'verilog';
     }
 
     // Only save the doc for a HDL file and exists
     if (lang !== 'none' && fs.existsSync(file_path) === true){
       try{
-        console.log(file_path);
         let declaration = await declaration_finder.get_declaration_from_file(file_path);
-
-        let list_modules_inst = '';
-        if (declaration.type === 'entity'){
-          list_modules_inst = get_module_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
+        if (declaration.name !== ''){
+          ok_files += 1;
+          let list_modules_inst = '';
+          if (declaration.type === 'entity'){
+            list_modules_inst = get_module_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
+          }
+          else{
+            list_modules_inst = get_package_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
+          }
+          let contents = fs.readFileSync(files[i], 'utf8');
+          let doc_current;
+          if (lang === 'vhdl'){
+            doc_current = doc_inst_vhdl;
+          }
+          else{
+            doc_current = doc_inst_verilog;
+          }
+          doc_current.set_code(contents);
+          let inst_doc_module = await save_doc(self_contained, type, INTERNAL_DOC_FOLDER_COMPLETE, 
+                  filename, doc_current);
+          if (self_contained === false && inst_doc_module.error === false){
+            main_doc += list_modules_inst;
+            main_doc += inst_doc_module.doc;
+          }
+          else if(inst_doc_module.error === false){
+            list_modules += list_modules_inst;
+            doc_modules += inst_doc_module.doc;
+          }
         }
         else{
-          list_modules_inst = get_package_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
-        }
-        if (self_contained === false){
-          main_doc += list_modules_inst;
-        }
-        else{
-          list_modules += list_modules_inst;
-        }
-        let contents = fs.readFileSync(files[i], 'utf8');
-        let doc_current;
-        if (lang === 'vhdl'){
-          doc_current = doc_inst_vhdl;
-        }
-        else{
-          doc_current = doc_inst_verilog;
-        }
-        doc_current.set_code(contents);
-        let inst_doc_module = await save_doc(self_contained, type, INTERNAL_DOC_FOLDER_COMPLETE, filename, doc_current);
-        if (self_contained === false){
-          main_doc += inst_doc_module;
-        }
-        else{
-          doc_modules += inst_doc_module;
+          fail_files += 1;
         }
       }
       catch(e){
-        console.log(e)
       }
     }
   }
@@ -102,40 +113,44 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
 
   main_doc += get_separation_end(type);
   fs.writeFileSync(output_dir_doc + path_lib.sep + get_index_name(type), main_doc);
+  // Stop the progress bar
+  cli_bar.update(files.length);
+  cli_bar.stop();
+  return {'fail_files':fail_files, 'ok_files':ok_files};
 }
 
 async function save_doc(self_contained, type, output, filename, doc_inst){
-  let doc = '';
+  let result;
   if (self_contained === true && type === 'html'){
-    doc = await save_doc_self_contained(type, doc_inst);
+    result = await save_doc_self_contained(type, doc_inst);
   }
   else{
-    doc = await save_doc_separate(type, output, filename, doc_inst);
+    result = await save_doc_separate(type, output, filename, doc_inst);
   }
-  return doc;
+  return result;
 }
 
 async function save_doc_self_contained(type, doc_inst){
-  let doc = '';
+  let html_value = '';
   if (type === 'html'){
     let options = { 'html_style': 'save', 'disable_overflow': true};
     const extra_top_space = false;
-    let html_value = await doc_inst.get_html(options, extra_top_space);
-    doc = html_value.html;
+    html_value = await doc_inst.get_html(options, extra_top_space);
   }
-  return doc;
+  return {error:html_value.error, doc:html_value.html};
 }
 
 async function save_doc_separate(type, output, filename, doc_inst){
   let output_filename =  filename + get_extension(type);
   let output_path = path_lib.join(output, output_filename);
+  let error;
   if (type === 'html'){
-    await doc_inst.save_html(output_path);
+    error = await doc_inst.save_html(output_path);
   }
   else{
-    await doc_inst.save_markdown(output_path);
+    error = await doc_inst.save_markdown(output_path);
   }
-  return '';
+  return {error:error, doc:''};
 }
 
 function get_graph_declaration(type, graph, output_dir_doc, output_dir_doc_relative){
@@ -153,7 +168,7 @@ function get_graph_declaration(type, graph, output_dir_doc, output_dir_doc_relat
 }
 
 function get_title_project(type, project_name){
-  let title = `# Project documentation: : ${project_name}\n`;
+  let title = `# Project documentation: ${project_name}\n`;
   if (type === 'html'){
     title = `<h1>Project documentation: ${project_name}</h1>\n`;
   }
@@ -256,22 +271,6 @@ class Declaration_finder{
     return entity_name;
   }
 
-}
-
-
-async function get_declaration_from_file(filename){
-  let lang = utils.get_lang_from_path(filename);
-  if (lang === 'systemverilog'){
-    lang = 'verilog';
-  }
-  let parser_factory = new Parser.ParserFactory();
-  let parser = await parser_factory.getParser(lang);
-  let code = fs.readFileSync(filename, "utf8");
-  let entity_name = await parser.get_entity_or_package_name(code);
-  if (entity_name === undefined){
-    return '';
-  }
-  return entity_name;
 }
 
 function get_sources_as_array(files_edam){

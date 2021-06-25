@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 // Copyright 2020 Teros Technology
 //
 // Ismael Perez Rojo
@@ -31,15 +32,17 @@ class Parser extends ts_base_parser.Ts_base_parser {
 
   async init() {
     try{
-      const Tree_sitter = require('web-tree-sitter');
-      await Tree_sitter.init();
-      this.parser = new Tree_sitter();
-      let Lang = await Tree_sitter.Language.load(path.join(__dirname, path.sep +
-        "parsers" + path.sep + "tree-sitter-verilog.wasm"));
-      this.parser.setLanguage(Lang);
-      this.loaded = true;
+      if (this.loaded !== true){
+        const Tree_sitter = require('web-tree-sitter');
+        await Tree_sitter.init();
+        this.parser = new Tree_sitter();
+        let Lang = await Tree_sitter.Language.load(path.join(__dirname, path.sep +
+          "parsers" + path.sep + "tree-sitter-verilog.wasm"));
+        this.parser.setLanguage(Lang);
+        this.loaded = true;
+      }
     }
-    catch(e){console.log(e);}
+    catch(e){}
   }
 
   async get_all(sourceCode, comment_symbol) {
@@ -63,8 +66,10 @@ class Parser extends ts_base_parser.Ts_base_parser {
         let body_elements = this.get_body_elements_and_declarations(arch_body, lines, comments, true);
         file_type = "package";
 
+        let package_declaration = this.get_package_declaration(tree.rootNode, lines);
+
         structure = {
-          "package": this.get_package_declaration(tree.rootNode, lines), // package_identifier 
+          "package": package_declaration, // package_identifier 
           "declarations": {
             'types': body_elements.types,
             'signals': body_elements.signals,
@@ -104,8 +109,6 @@ class Parser extends ts_base_parser.Ts_base_parser {
       return structure;
     }
     catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
       return undefined;
     }
   }
@@ -941,6 +944,9 @@ class Parser extends ts_base_parser.Ts_base_parser {
     var element = tree;
     var arr = this.search_multiple_in_tree(element, 'package_identifier');
     element = arr;
+    if (arr.length === 0){
+      return {'name':'', 'description':''};
+    }
     arr = this.search_multiple_in_tree(element[0], 'simple_identifier');
     var module_index = this.index(arr[0]);
     let item = {

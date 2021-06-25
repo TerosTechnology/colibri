@@ -25,17 +25,19 @@ const shell = require("shelljs");
 const path_lib = require("path");
 const yaml = require("js-yaml");
 let project_edam = require("../src/projectManager/edam.js");
+const utils = require('../src/utils/utils');
+const documenter_lib = require('../src/documenter/documenter');
 
 class Doc {
   constructor(doc_options) {
     this.doc_options = doc_options;
   }
 
-  gen_doc(options, mode, input_path, output_path) {
+  async gen_doc(options, mode, input_path, output_path) {
     let out_type = options.out;
     try {
       // Python3 path
-      let pypath = options.python_path;
+      let pypath = options.pypath;
 
       //Read content input
       let trs_file_content = '';
@@ -49,7 +51,8 @@ class Doc {
       // cd to input_path
       let input_path_dir = path_lib.dirname(input_path);
       shell.cd(input_path_dir);
-      this.save_doc(input_path, out_type, trs_file_content, output_path, pypath, mode);
+      let result = await this.save_doc(input_path, out_type, trs_file_content, output_path, pypath, mode);
+      return result;
     } catch (e) {
       console.log(e);
     }
@@ -58,26 +61,47 @@ class Doc {
   async save_doc(trs_file_absolute, type, trs_file_content, path, pypath, mode){
     let config = this.configure_documenter();
 
-    let doc_inst = new project_edam.Edam_project('');
+    const cliProgress = require('cli-progress');
+    const cli_bar = new cliProgress.SingleBar({
+      format: 'Progress |' + '{bar}' + '| {percentage}% || {value}/{total} || {filename}',
+      barCompleteChar: '\u2588',
+      barIncompleteChar: '\u2591',
+      hideCursor: true,
+      clearOnComplete: true
+    });
+
+    let edam_project = new project_edam.Edam_project('', {}, cli_bar);
     if (mode === 'yml'){
-      doc_inst.load_edam_file(trs_file_content);
+      edam_project.load_edam_file(trs_file_content);
+    }
+    else if(mode === 'file'){
+      let result_error = await save_one_file(trs_file_absolute, config, type, path);
+      let ok_file = 1;
+      let fail_files = 0;
+      if (result_error === true){
+        fail_files = 1;
+        ok_file = 0;
+      }
+      return {fail_files: fail_files, ok_files: ok_file};
     }
     else if(mode === 'csv'){
-      this.load_edam_csv(doc_inst, trs_file_content);
+      this.load_edam_csv(edam_project, trs_file_content);
     }
     else if(mode === 'directory'){
-      this.load_edam_directory(doc_inst, trs_file_absolute);
+      this.load_edam_directory(edam_project, trs_file_absolute);
     }
 
      //Create output directory
      fs.mkdirSync(path,{ recursive: true });
 
+    let result;
     if (type === 'html'){
-      await doc_inst.save_html_doc(path, pypath, config);
+      result = await edam_project.save_html_doc(path, pypath, config);
     }
     if (type === 'markdown'){
-      await doc_inst.save_markdown_doc(path, pypath, config);
+      result = await edam_project.save_markdown_doc(path, pypath, config);
     }
+    return result;
   }
 
   load_edam_csv(edam, content){
@@ -106,10 +130,12 @@ class Doc {
     let file_list = this.getFilesFromDir(directory_path);
     for (let i = 0; i < file_list.length; i++) {
       const element = file_list[i];
-      edam.add_file(element, false, "", "");
+      const lang = utils.get_lang_from_path(element);
+      if (lang !== 'none'){
+        edam.add_file(element, false, "", "");
+      }
     }
   }
-
 
   configure_documenter() {
     if (this.doc_options !== undefined) {
@@ -146,6 +172,42 @@ class Doc {
 
 }
 
+async function save_one_file(input_file, config, type, output_path){
+  let complete_output_path = output_path;
+  let is_directory = fs.lstatSync(output_path).isDirectory();
+  if (is_directory === true){
+    if (type === 'html'){
+      complete_output_path = path_lib.join(complete_output_path, 'README.html');
+    }
+    else{
+      complete_output_path = path_lib.join(complete_output_path, 'README.md');
+
+    }
+  }
+
+  let lang = utils.get_lang_from_path(input_file);
+  let code = fs.readFileSync(input_file, "utf8");
+  let symbol;
+  if (lang === 'vhdl'){
+    symbol = config.symbol_vhdl;
+  }
+  else{
+    symbol = config.symbol_verilog;
+  }
+  let documenter = new documenter_lib.Documenter(code, lang, symbol, config);
+  documenter.set_symbol(symbol);
+  documenter.set_code(code);
+  documenter.set_config(config);
+
+  let result;
+  if (type === 'html'){
+    result = await documenter.save_html(complete_output_path);
+  }
+  else if (type === 'markdown'){
+    result = await documenter.save_markdown(complete_output_path);
+  }
+  return result;
+}
 
 module.exports = {
   Doc: Doc,

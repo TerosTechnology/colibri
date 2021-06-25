@@ -1,41 +1,57 @@
 const html_style_preview = `
 <style>
-  h1, h2, h3, table, svg, p {
-    margin-left:2.5%;
-  }
-  h1, h2 {
-    font-weight:bold;
-  }
-  p {
-    color:black;
-    margin-top:5px;
-    margin-bottom:5px 
+  table {
+    width:90%;
+    margin-left: auto;
+    margin-right: auto
   }
   svg {
-    width:100%;
-    height:100%;
-  }
-  #state_machine {
+    display:block;  
     width:70%;
     height:70%;
-    display: block;
-    margin: auto;
+    margin-left: auto;
+    margin-right: auto
+  }
+  h1, h2, h3 {
+    margin-left:1.5%;
+    width:98%;
+    font-weight:bold
   }
   code {
     color:#545253;
   }
+  p {
+    width: 98%;
+    color:black;
+    margin-top:5px;
+    margin-bottom:5px 
+  }
   * {
     color:black;
+    line-height: 1.6;
+  }
+  li{
+    margin: 20px 0;
   }
   #function_return{
     font-weight: bold;
     color:green;
   }
+  #teroshdl_description, li {
+    width: 98%;
+    margin-left:2%;
+    margin-right:2%;
+  }
   #function_arguments{
     color:blue;
   }
+  div.templateTerosHDL {
+    background-color: white;
+    position:absolute;
+  }
   td, th {
-    border: 1px solid grey 
+    padding:7px; 
+    border: 1px solid grey;
   }
   th {
     background-color: #ffd78c;
@@ -51,28 +67,47 @@ const html_style_preview = `
 
 const html_style_save = `
 <style>
-  h1, h2, h3, table, svg {
-    margin-left:2.5%;
-    width:60%
+  table {
+    width:70%;
+    margin-left: auto;
+    margin-right: auto
   }
-  h1, h2 {
+  svg {
+    display:block;  
+    width:60%;
+    height:40%;
+    margin-left: auto;
+    margin-right: auto
+  }
+  h1, h2, h3 {
+    margin-left:1.5%;
+    width:98%;
     font-weight:bold
   }
   code {
     color:#545253;
   }
   p {
+    width: 98%;
     color:black;
     margin-top:5px;
-    margin-left:2.5%;
     margin-bottom:5px 
   }
   * {
     color:black;
+    line-height: 1.6;
+  }
+  li{
+    margin: 20px 0;
   }
   #function_return{
     font-weight: bold;
     color:green;
+  }
+  #teroshdl_description, li {
+    width: 98%;
+    margin-left:2%;
+    margin-right:2%;
   }
   #function_arguments{
     color:blue;
@@ -82,6 +117,7 @@ const html_style_save = `
     position:absolute;
   }
   td, th {
+    padding:7px; 
     border: 1px solid grey;
   }
   th {
