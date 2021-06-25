@@ -248,8 +248,8 @@ function print_result(result){
 function print_license(){
   let msg = `
 ****************************************************************************************************************
-Copyright 2020-2021
-Ismael Perez Rojo
+Copyright 2020-2021 Teros Technology terostechnology@gmail.com 
+Ismael Perez Rojo ismaelprojo@gmail.com
 Carlos Alberto Ruiz Naranjo: carlosruiznaranjo@gmail.com
 Alfredo Saez
 
