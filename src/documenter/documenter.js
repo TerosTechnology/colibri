@@ -373,13 +373,13 @@ class Documenter extends markdown_lib.Markdown {
         code_tree['declarations']['signals'], code_tree['declarations']['constants'],
         code_tree['declarations']['types']));
       //Functions
-      html += converter.makeHtml(this._get_functions_section(code_tree['declarations']['functions']));
+      html += this._get_functions_section(code_tree['declarations']['functions'], 'html');
     }
     if (code_tree['body'] !== undefined) {
       //Processes
-      html += converter.makeHtml(this._get_process_section(code_tree['body']['processes']));
+      html += this._get_process_section(code_tree['body']['processes'], 'html');
       //Instantiations
-      html += converter.makeHtml(this._get_instantiations_section(code_tree['body']['instantiations']));
+      html += this._get_instantiations_section(code_tree['body']['instantiations'],'html');
     }
 
     // State machine diagrams
