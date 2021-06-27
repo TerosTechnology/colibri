@@ -71,7 +71,6 @@ if (options.out === 'markdown'){
   options.self_contained = false;
 }
 
-
 let doc_config = get_documentation_config(options);
 validate_output_type(options);
 
@@ -129,6 +128,7 @@ function get_documentation_config(options){
   let doc_self_contained = options.self_contained;
 
   let config = {
+    "pypath": options.pypath,
     "dependency_graph": include_dependency_graph,
     "fsm": include_fsm,
     "signals": include_signals,

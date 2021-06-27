@@ -143,7 +143,7 @@ class Markdown {
       html += converter.makeHtml("## Processes\n");
       for (let i = 0; i < process.length; ++i) {
         let name = process[i].name;
-        let section = `- ${name}: _( ${process[i].sens_list} )_\n`;
+        let section = `- ${name}: ( ${process[i].sens_list} )\n`;
         md += section;
         html += converter.makeHtml(section);
         let description = process[i].description.replace('\n','');

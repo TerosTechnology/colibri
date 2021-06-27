@@ -4,6 +4,7 @@ const utils = require('../utils/utils');
 const fs = require('fs');
 const Documenter_lib = require('./documenter');
 const Parser = require('../parser/factory');
+const css_style_lib = require('./css_style');
 
 async function get_md_doc_from_project(project, output_dir_doc, graph, config, cli_bar) {
   let result = await get_doc_from_project(project, output_dir_doc, graph, config, 'markdown', cli_bar);
@@ -24,8 +25,6 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
     self_contained = false;
   }
   
-  let symbol_vhdl = config.symbol_vhdl;
-  let symbol_verilog = config.symbol_verilog;
   //Internal doc folder
   const INTERNAL_DOC_FOLDER = 'doc_internal';
   const INTERNAL_DOC_FOLDER_COMPLETE = path_lib.join(output_dir_doc,'doc_internal');
@@ -47,8 +46,8 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
   let doc_modules = '';
   let list_modules = '';
 
-  let doc_inst_vhdl = new Documenter_lib.Documenter('', 'vhdl', symbol_vhdl, config);
-  let doc_inst_verilog = new Documenter_lib.Documenter('', 'verilog', symbol_verilog, config);
+  let doc_inst_vhdl = new Documenter_lib.Documenter(config);
+  let doc_inst_verilog = new Documenter_lib.Documenter(config);
 
   let declaration_finder = new Declaration_finder();
 
@@ -85,9 +84,9 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
           else{
             doc_current = doc_inst_verilog;
           }
-          doc_current.set_code(contents);
+          // doc_current.set_code(contents);
           let inst_doc_module = await save_doc(self_contained, type, INTERNAL_DOC_FOLDER_COMPLETE, 
-                  filename, doc_current);
+                  filename, doc_current, contents, lang, config);
           if (self_contained === false && inst_doc_module.error === false){
             main_doc += list_modules_inst;
             main_doc += inst_doc_module.doc;
@@ -109,6 +108,7 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
     main_doc += list_modules;
     main_doc += '\n\n';
     main_doc += doc_modules;
+    main_doc = css_style_lib.html_style_save + main_doc;
   }
 
   main_doc += get_separation_end(type);
@@ -119,36 +119,37 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
   return {'fail_files':fail_files, 'ok_files':ok_files};
 }
 
-async function save_doc(self_contained, type, output, filename, doc_inst){
+async function save_doc(self_contained, type, output, filename, doc_inst, code, lang, config){
   let result;
   if (self_contained === true && type === 'html'){
-    result = await save_doc_self_contained(type, doc_inst);
+    result = await save_doc_self_contained(type, doc_inst, code, lang, config);
   }
   else{
-    result = await save_doc_separate(type, output, filename, doc_inst);
+    result = await save_doc_separate(type, output, filename, doc_inst, code, lang, config);
   }
   return result;
 }
 
-async function save_doc_self_contained(type, doc_inst){
+async function save_doc_self_contained(type, doc_inst, code, lang, config){
+  config.html_style = true;
   let html_value = '';
   if (type === 'html'){
-    let options = { 'html_style': 'save', 'disable_overflow': true};
-    const extra_top_space = false;
-    html_value = await doc_inst.get_html(options, extra_top_space);
+    config.html_style = 'save';
+    config.extra_top_space = false;
+    html_value = await doc_inst.get_html(code, lang, config);
   }
   return {error:html_value.error, doc:html_value.html};
 }
 
-async function save_doc_separate(type, output, filename, doc_inst){
+async function save_doc_separate(type, output, filename, doc_inst, code, lang, config){
   let output_filename =  filename + get_extension(type);
   let output_path = path_lib.join(output, output_filename);
   let error;
   if (type === 'html'){
-    error = await doc_inst.save_html(output_path);
+    error = await doc_inst.save_html(code, lang, config, output_path);
   }
   else{
-    error = await doc_inst.save_markdown(output_path);
+    error = await doc_inst.save_markdown(code, lang, config, output_path);
   }
   return {error:error, doc:''};
 }

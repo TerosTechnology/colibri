@@ -239,7 +239,10 @@ class Documenter extends markdown_lib.Markdown {
 
     //HTML style
     let html = "";
-    if (configuration.custom_css_path !== undefined && fs.existsSync(configuration.custom_css_path) === true ) {
+    if (configuration.html_style === 'none'){
+      html = '';
+    }
+    else if (configuration.custom_css_path !== undefined && fs.existsSync(configuration.custom_css_path) === true ) {
       try {
         let custom_css_str = fs.readFileSync(configuration.custom_css_path, { encoding: 'utf8' });
         html = `<style>\n${custom_css_str}</style>\n`;
