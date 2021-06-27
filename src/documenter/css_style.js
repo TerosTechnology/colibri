@@ -7,8 +7,7 @@ const html_style_preview = `
   }
   svg {
     display:block;  
-    width:70%;
-    height:70%;
+    width:60%;
     margin-left: auto;
     margin-right: auto
   }
@@ -38,19 +37,23 @@ const html_style_preview = `
     color:green;
   }
   #teroshdl_description, li {
-    width: 98%;
+    width: 95%;
     margin-left:2%;
     margin-right:2%;
   }
   #function_arguments{
-    color:blue;
+    color:black;
+  }
+  #descriptions{
+    margin-left:5.5%;
+    margin-right:3%;
   }
   div.templateTerosHDL {
     background-color: white;
     position:absolute;
   }
   td, th {
-    padding:7px; 
+    padding:2px; 
     border: 1px solid grey;
   }
   th {
@@ -75,7 +78,6 @@ const html_style_save = `
   svg {
     display:block;  
     width:60%;
-    height:40%;
     margin-left: auto;
     margin-right: auto
   }
@@ -105,19 +107,24 @@ const html_style_save = `
     color:green;
   }
   #teroshdl_description, li {
-    width: 98%;
+    width: 95%;
     margin-left:2%;
     margin-right:2%;
   }
   #function_arguments{
-    color:blue;
+    color:black;
+  }
+  #descriptions{
+    width: 90%;
+    margin-left:5.5%;
+    margin-right:3%;
   }
   div.templateTerosHDL {
     background-color: white;
     position:absolute;
   }
   td, th {
-    padding:7px; 
+    padding:2px; 
     border: 1px solid grey;
   }
   th {

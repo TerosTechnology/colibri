@@ -27,17 +27,18 @@ class Project_documenter{
     this.dependency_graph = new dependency.Dependency_graph();
   }
 
-  async save_markdown_doc(output_dir_doc, python3_path, config) {
-    let result = await this.save_doc('markdown', output_dir_doc, python3_path, config);
+  async save_markdown_doc(output_dir_doc, config) {
+    let result = await this.save_doc('markdown', output_dir_doc, config);
     return result;
   }
 
-  async save_html_doc(output_dir_doc, python3_path, config) {
-      let result = await this.save_doc('html', output_dir_doc, python3_path, config);
+  async save_html_doc(output_dir_doc, config) {
+      let result = await this.save_doc('html', output_dir_doc, config);
       return result;
   }
   
-  async save_doc(type, output_dir_doc, python3_path, config) {
+  async save_doc(type, output_dir_doc, config) {
+    let python3_path = config.pypath;
     let project = this.get_json_prj();
     let svg_dependency_graph;
     if (config.dependency_graph === true) {

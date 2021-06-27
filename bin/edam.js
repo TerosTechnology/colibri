@@ -36,9 +36,6 @@ class Doc {
   async gen_doc(options, mode, input_path, output_path) {
     let out_type = options.out;
     try {
-      // Python3 path
-      let pypath = options.pypath;
-
       //Read content input
       let trs_file_content = '';
       if (mode === 'yml'){
@@ -51,14 +48,14 @@ class Doc {
       // cd to input_path
       let input_path_dir = path_lib.dirname(input_path);
       shell.cd(input_path_dir);
-      let result = await this.save_doc(input_path, out_type, trs_file_content, output_path, pypath, mode);
+      let result = await this.save_doc(input_path, out_type, trs_file_content, output_path, mode);
       return result;
     } catch (e) {
       console.log(e);
     }
   }
 
-  async save_doc(trs_file_absolute, type, trs_file_content, path, pypath, mode){
+  async save_doc(trs_file_absolute, type, trs_file_content, path, mode){
     let config = this.configure_documenter();
 
     const cliProgress = require('cli-progress');
@@ -96,10 +93,10 @@ class Doc {
 
     let result;
     if (type === 'html'){
-      result = await edam_project.save_html_doc(path, pypath, config);
+      result = await edam_project.save_html_doc(path, config);
     }
     if (type === 'markdown'){
-      result = await edam_project.save_markdown_doc(path, pypath, config);
+      result = await edam_project.save_markdown_doc(path, config);
     }
     return result;
   }

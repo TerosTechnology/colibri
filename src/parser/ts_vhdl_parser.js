@@ -820,6 +820,24 @@ class Parser extends ts_base_parser.Ts_base_parser {
     };
   }
 
+  remove_comments(str){
+    let str_split = str.split('\n');
+    let str_not_comments = '';
+    for (let i = 0; i < str_split.length; i++) {
+      let element = str_split[i];
+      element = element.trim();
+      if (element[0] !== '-' && element[1] !== '-'){
+        str_not_comments += element + '\n';
+      }
+    }
+    return str_not_comments;
+  }
+
+  remove_break_line(str){
+    let str_out = str.replace(/(\r\n|\n|\r)/gm, " ");
+    return str_out;
+  }
+
   get_function_body(p) {
     let element = {
       'name': '',
@@ -841,14 +859,12 @@ class Parser extends ts_base_parser.Ts_base_parser {
           }
           else if (cursor.nodeType === 'formal_procedure_parameter_clause' || 
                 cursor.nodeType === 'formal_function_parameter_clause'){
-            const regex = /--/gm;
             let return_arguments = cursor.nodeText;
-            element.arguments = return_arguments.replace(regex, '').replace('\n','');
+            element.arguments = this.remove_break_line(this.remove_comments(return_arguments));
           }
           else if (cursor.nodeType === 'return'){
-            const regex = /--/gm;
             let return_definitions = cursor.nodeText;
-            element.return = return_definitions.replace(regex, '').replace('\n','');
+            element.return = this.remove_break_line(this.remove_comments(return_definitions));
           }
         }
         while (cursor.gotoNextSibling() === true && break_p === false);
@@ -875,9 +891,8 @@ class Parser extends ts_base_parser.Ts_base_parser {
         element.name = cursor.nodeText;
       }
       else if (cursor.nodeType === 'enumeration_type_definition') {
-        const regex = /--/gm;
         let type_definition = cursor.nodeText;
-        element.type = type_definition.replace(regex, '');
+        element.type = this.remove_break_line(this.remove_comments(type_definition));
       }
     }
     while (cursor.gotoNextSibling() === true && break_p === false);

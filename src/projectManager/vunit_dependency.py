@@ -9,22 +9,29 @@
 """
 Test the project functionality
 """
-from typing import Set, List, TypeVar, Generic, Dict, Mapping, Callable, Iterable
-from os.path import join, exists, dirname
-import itertools
 # from graphviz import Digraph
 import ntpath
-from fnmatch import fnmatch
-from os.path import exists, abspath, join, basename, normpath, dirname
-import sys
-from pathlib import Path
-from vunit.vhdl_standard import VHDL, VHDLStandard
 import json
-
-import project as pj
-from source import SourceFile, SourceFileList, simplify_path
-from vunit.vhdl_standard import VHDL, VHDLStandard
+from pathlib import Path
 import sys
+
+import vunit.project as pj
+from vunit.vhdl_standard import VHDL
+import sys
+
+
+def get_direct_dependencies(project):
+    dependency_graph = project.create_dependency_graph(True)
+    files = project.get_source_files_in_order()
+    dependencies = []
+    for i in range(0, len(files)):
+        dependency_local = []
+        dependency = dependency_graph.get_direct_dependencies(files[i])
+        for dep in dependency:
+            dependency_local.append(str(dep.name))
+        dependencies.append(dependency_local)
+    return files, dependencies
+
 
 prj = sys.argv[1]
 f = open(prj,)
@@ -58,7 +65,7 @@ for i in range(0, len(project_sources)):
         file_name, file_library, file_type=filetype, vhdl_standard=VHDL.STD_2008)
 
 try:
-    files, dependencies = project.get_direct_dependencies()
+    files, dependencies = get_direct_dependencies(project)
 except:
     pass
 

@@ -18,7 +18,8 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
-    
+const showdown = require('showdown');
+
 class Markdown {
 
   _get_info_section(code_tree){
@@ -93,30 +94,30 @@ class Markdown {
     return elements_i;
   }
 
-  _get_signals_constants_section(signals, constants, types) {
+  _get_signals_constants_section(signals, constants, types, configuration) {
     let md = "";
 
-    if (this.config.signals === 'commented') {
+    if (configuration.signals === 'commented') {
       signals = this._get_elements_with_description(signals);
     }
-    if (this.config.constants === 'commented') {
+    if (configuration.constants === 'commented') {
       constants = this._get_elements_with_description(constants);
       types = this._get_elements_with_description(types);
     }
 
-    if ((signals.length !== 0 && this.config.signals !== 'none') ||
-      (constants.length !== 0 && this.config.constants !== 'none') || 
-      (types.length !== 0 && this.config.constants !== 'none')) {
+    if ((signals.length !== 0 && configuration.signals !== 'none') ||
+      (constants.length !== 0 && configuration.constants !== 'none') || 
+      (types.length !== 0 && configuration.constants !== 'none')) {
       //Tables
-      if (signals.length !== 0 && this.config.signals !== 'none') {
+      if (signals.length !== 0 && configuration.signals !== 'none') {
         md += "## Signals\n";
         md += this._get_doc_signals(signals);
       }
-      if (constants.length !== 0 && this.config.constants !== 'none') {
+      if (constants.length !== 0 && configuration.constants !== 'none') {
         md += "## Constants\n";
         md += this._get_doc_constants(constants);
       }
-      if (types.length !== 0 && this.config.constants !== 'none') {
+      if (types.length !== 0 && configuration.constants !== 'none') {
         md += "## Types\n";
         md += this._get_doc_types(types);
       }
@@ -124,38 +125,57 @@ class Markdown {
     return md;
   }
 
-  _get_process_section(process) {
-    if (this.config.process === 'none') {
+  _get_process_section(process, configuration, mode) {
+    if (configuration.process === 'none') {
       return '';
     }
-    if (this.config.process === 'commented') {
+    if (configuration.process === 'commented') {
       process = this._get_elements_with_description(process);
     }
+    let converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
+    converter.setFlavor('github');
+
     let md = "";
+    let html = "";
     if (process.length !== 0) {
       //Title
       md += "## Processes\n";
+      html += converter.makeHtml("## Processes\n");
       for (let i = 0; i < process.length; ++i) {
-        md += `- ${process[i].name}: _( ${process[i].sens_list} )_\n`;
-        md += `${process[i].description}\n`;
+        let name = process[i].name;
+        let section = `- ${name}: ( ${process[i].sens_list} )\n`;
+        md += section;
+        html += converter.makeHtml(section);
         let description = process[i].description.replace('\n','');
         if (description !== ''){
-          md += '**Description**\n';
-          md += `${process[i].description}\n`;
+          let description = '**Description**\n';
+          description += `${process[i].description}\n`;
+          md += description;
+          html += '<div id="descriptions">' + converter.makeHtml(description) + '</div>';
         }
       }
     }
-    return md;
+    if (mode === 'html'){
+      return html;
+    }
+    else{
+      return md;
+    }
   }
 
-  _get_functions_section(functions) {
+  _get_functions_section(functions, configuration, mode) {
     let md = "";
-    if (this.config.functions === 'none') {
+    let html = "";
+    let converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
+    converter.setFlavor('github');
+
+    if (configuration.functions === 'none') {
       return '';
     }
     if (functions.length !== 0) {
       //Title
       md += "## Functions\n";
+      html += converter.makeHtml("## Functions\n");
       for (let i = 0; i < functions.length; ++i) {
         if (functions[i].name !== ''){
           let arguments_str = functions[i].arguments;
@@ -167,33 +187,63 @@ class Markdown {
             return_str = 'return ()';
           }
           // eslint-disable-next-line max-len
-          md += `- ${functions[i].name} <font id="function_arguments">${arguments_str}</font> <font id="function_return">${return_str}</font>\n`;
+          let name = functions[i].name;
+          let section = `- ${name} <font id="function_arguments">${arguments_str}</font> <font id="function_return">${return_str}</font>\n`;
+          md += section;
+          html += converter.makeHtml(section);
+          
           let description = functions[i].description;
           if (description !== ''){
-            md += '**Description**\n';
-            md += `${functions[i].description}\n`;
+            let description = '**Description**\n';
+            description += `${functions[i].description}\n`;
+            md += description;
+            html += '<div id="descriptions">' + converter.makeHtml(description) + '</div>';
           }
         }
       }
     }
-    return md;
+    if (mode === 'html'){
+      return html;
+    }
+    else{
+      return md;
+    }  
   }
 
-  _get_instantiations_section(instantiations) {
+
+  _get_instantiations_section(instantiations, configuration, mode) {
     let md = "";
+    let html = "";
+    let converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
+    converter.setFlavor('github');
+
     if (instantiations.length !== 0) {
       //Title
-      md += "## Instantiations\n";
+      let title = "## Instantiations\n";
+      md += title;
+      html += converter.makeHtml(title);
+
       for (let i = 0; i < instantiations.length; ++i) {
-        md += `- ${instantiations[i].name}: ${instantiations[i].type}\n`;
+        let name = instantiations[i].name;
+        let section = `- ${name}: ${instantiations[i].type}\n`;
+        md += section;
+        html += converter.makeHtml(section);
+
         let description = instantiations[i].description;
         if (description !== ''){
-          md += '**Description**\n';
-          md += `${instantiations[i].description}\n`;
+          let description = '**Description**\n';
+          description += `${process[i].description}\n`;
+          md += description;
+          html += '<div id="descriptions">' + converter.makeHtml(description) + '</div>';
         }
       }
     }
-    return md;
+    if (mode === 'html'){
+      return html;
+    }
+    else{
+      return md;
+    }  
   }
 
   _get_doc_ports(ports) {
