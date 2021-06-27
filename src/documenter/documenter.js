@@ -22,21 +22,27 @@
 const fs = require('fs');
 const path_lib = require('path');
 const Diagram = require('./diagram');
-const Stm = require('../parser/stm_parser');
 const ParserLib = require('../parser/factory');
 const css_const_style = require('./css_style');
 const showdown = require('showdown');
-const json5 = require('json5');
-const temp = require('temp');
 const markdown_lib = require('./markdown');
+const utils = require('./utils');
+
+// let configuration = {
+//   'fsm': true,
+//   'signals': 'all',
+//   'constants': 'all',
+//   'process': 'all',
+//   'symbol_vhdl': '',
+//   'symbol_verilog': '',
+//   'extra_top_space': true
+// };
 
 class Documenter extends markdown_lib.Markdown {
-  constructor(code, lang, comment_symbol, config) {
+  constructor(config) {
     super();
-    this.lang = lang;
-    this.code = code;
-    this.comment_symbol = comment_symbol;
     this.set_config(config);
+    this.init_parser = false;
   }
 
   set_config(config) {
@@ -54,88 +60,60 @@ class Documenter extends markdown_lib.Markdown {
     }
   }
 
-  set_symbol(comment_symbol) {
-    this.comment_symbol = comment_symbol;
-  }
-
-  set_code(code) {
-    this.code = code;
-  }
-
-  set_lang(lang) {
-    this.lang = lang;
-  }
-
-  set_comment_symbol(comment_symbol) {
-    this.comment_symbol = comment_symbol;
-  }
-
   // ***************************************************************************
-  // options = {"custom_css_path":"/custom_css/path"}
-  async save_html(path, options) {
-    if (options === undefined) {
-      options = { 'html_style': 'save' };
-    }
-    else {
-      options.html_style = 'save';
-    }
-    const extra_top_space = false;
-    let html_value = await this.get_html(options, extra_top_space);
-    let html_doc = html_value.html;
-    if (html_value.error === false){
+  // Save
+  // ***************************************************************************
+  async save_html(code, lang, configuration, path) {
+    configuration.html_style = 'save';
+    configuration.extra_top_space = false;
+
+    let html_result = await this.get_html(code, lang, configuration);
+    let html_doc = html_result.html;
+
+    //Save the document only if no error
+    if (html_result.error === false){
       fs.writeFileSync(path, html_doc);
     }
-    return html_value.error;
+    return html_result.error;
   }
 
-  async save_svg(path) {
-    let svg_diagram_str = await this._get_diagram_svg();
-    await fs.writeFileSync(path, svg_diagram_str);
-    await this._save_fsms(path);
-    await this._save_wavedrom(path);
-  }
-  async save_markdown(path, config) {
-    let custom_section = undefined;
-    let custom_svg_path_in_readme = undefined;
-    let custom_svg_path = path;
+  async save_markdown(code, lang, configuration, path) {
+    let dirname_svg = path_lib.dirname(path);
+    let filename_svg = path_lib.basename(path, path_lib.extname(path)) + ".svg";
+    let path_svg = path_lib.join(dirname_svg, filename_svg);
 
-    let file = path_lib.dirname(custom_svg_path) + path_lib.sep + 
-          path_lib.basename(custom_svg_path, path_lib.extname(custom_svg_path)) + ".svg";
-
-    if (config !== undefined){
-      if (config.custom_section !== undefined){
-        custom_section = config.custom_section;
-      }
-      if (config.custom_svg_path !== undefined){
-        custom_svg_path = config.custom_svg_path;
-        file = custom_svg_path + path_lib.sep + 
-            path_lib.basename(path, path_lib.extname(path)) + ".svg";
-      }
-      if (config.custom_svg_path_in_readme !== undefined){
-        custom_svg_path_in_readme = config.custom_svg_path_in_readme;
-      }
-    }
-    let result = await this._get_markdown(file, null, custom_section, custom_svg_path_in_readme);
+    let result = await this._get_markdown(code, lang, configuration, path_svg);
     if (result.error !== true){
       fs.writeFileSync(path, result.markdown);
     }
     return result.error;
   }
-  // ***************************************************************************
-  async get_html(options, extra_top_space) {
-    let html_doc = await this._get_html_from_code(options, extra_top_space);
-    return html_doc;
-  }
 
-  async _get_markdown(path, extra_top_space, custom_section, custom_svg_path_in_readme) {
-    let extra_top_space_l = "";
-    if (extra_top_space !== null && extra_top_space !== false) {
-      extra_top_space_l = "&nbsp;&nbsp;\n\n";
+  async save_svg(code, lang, configuration, path) {
+    let code_tree = await this._get_code_tree(code, lang, configuration);
+    if (code_tree === undefined) {
+      return;
     }
-    let code_tree = await this._get_code_tree();
+
+    let svg_diagram_str = await this._get_diagram_svg_from_code_tree(code_tree);
+    await fs.writeFileSync(path, svg_diagram_str);
+    await this._save_fsms(code_tree, code, lang, configuration, path);
+    await this._save_wavedrom(code_tree, path);
+  }
+  // ***************************************************************************
+  // Document creator
+  // ***************************************************************************
+  async _get_markdown(code, lang, configuration, path_svg) {
+    let code_tree = await this._get_code_tree(code, lang, configuration);
     if (code_tree === undefined) {
       return { 'markdown': '', error: true };
     }
+
+    let extra_top_space_l = "";
+    if (configuration.extra_top_space === true) {
+      extra_top_space_l = "&nbsp;&nbsp;\n\n";
+    }
+
     let markdown_doc = extra_top_space_l;
 
     //Entity
@@ -153,33 +131,33 @@ class Documenter extends markdown_lib.Markdown {
       //Optional info section
       markdown_doc += this._get_info_section(code_tree);
       //Diagram
-      await this._save_svg_from_code_tree(path, code_tree);
+      await this._save_svg_from_code_tree(path_svg, code_tree);
       markdown_doc += "## Diagram\n";
-      if (custom_svg_path_in_readme !== undefined){
-        markdown_doc += '![Diagram](' + custom_svg_path_in_readme + ' "Diagram")';
+      if (configuration.custom_svg_path_in_readme !== undefined){
+        markdown_doc += '![Diagram](' + configuration.custom_svg_path_in_readme + ' "Diagram")';
       }
       else{
-        markdown_doc += '![Diagram](' + path_lib.basename(path) + ' "Diagram")';
+        markdown_doc += '![Diagram](' + path_lib.basename(path_svg) + ' "Diagram")';
       }
       markdown_doc += "\n";
       //Description
       let description_inst = code_tree['entity']['description'];
       if (description_inst.replace('\n','') !== '') {
         markdown_doc += "## Description\n";
-        const { description, wavedrom } = this._get_wavedrom_svg(description_inst);
+        const { description, wavedrom } = utils.get_wavedrom_svg(description_inst);
         let wavedrom_description = description;
         for (let i = 0; i < wavedrom.length; ++i) {
-          let random_id = this._makeid(4);
+          let random_id = utils.makeid(4);
           let img = `![alt text](wavedrom_${random_id}${i}.svg "title")`;
-          let path_img = path_lib.dirname(path) + path_lib.sep + `wavedrom_${random_id}${i}.svg`;
+          let path_img = path_lib.dirname(path_svg) + path_lib.sep + `wavedrom_${random_id}${i}.svg`;
           fs.writeFileSync(path_img, wavedrom[i]);
           wavedrom_description = wavedrom_description.replace("$cholosimeone$" + i, img);
         }
         markdown_doc += wavedrom_description;
       }
       //Custom section
-      if (custom_section !== undefined){
-        markdown_doc += `\n${custom_section}\n`;
+      if (configuration.custom_section !== undefined){
+        markdown_doc += `\n${configuration.custom_section}\n`;
       }
       //Generics and ports
       markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics'],code_tree['virtual_buses']);
@@ -206,8 +184,8 @@ class Documenter extends markdown_lib.Markdown {
       }
 
       //Custom section
-      if (custom_section !== undefined){
-        markdown_doc += `\n${custom_section}\n`;
+      if (configuration.custom_section !== undefined){
+        markdown_doc += `\n${configuration.custom_section}\n`;
       }
     }
 
@@ -215,24 +193,24 @@ class Documenter extends markdown_lib.Markdown {
     if (code_tree['declarations'] !== undefined) {
       markdown_doc += this._get_signals_constants_section(
         code_tree['declarations']['signals'], code_tree['declarations']['constants'],
-        code_tree['declarations']['types']);
+        code_tree['declarations']['types'], configuration);
       //Functions
-      markdown_doc += this._get_functions_section(code_tree['declarations']['functions']);
+      markdown_doc += this._get_functions_section(code_tree['declarations']['functions'], configuration, 'markdown');
     }
     if (code_tree['body'] !== undefined) {
       //Processes
-      markdown_doc += this._get_process_section(code_tree['body']['processes']);
+      markdown_doc += this._get_process_section(code_tree['body']['processes'], configuration, 'markdown');
       //Instantiations
-      markdown_doc += this._get_instantiations_section(code_tree['body']['instantiations']);
+      markdown_doc += this._get_instantiations_section(code_tree['body']['instantiations'], configuration, 'markdown');
     }
 
     // State machine diagrams
-    let stm_array = await this._get_stm();
+    let stm_array = await this._get_stm(code, lang, configuration);
     if (this.config.fsm === true && stm_array !== undefined && stm_array.length !== 0) {
       markdown_doc += "## State machines\n";
       for (let i = 0; i < stm_array.length; ++i) {
         let entity_name = code_tree['entity']['name'];
-        let stm_path = `${path_lib.dirname(path)}${path_lib.sep}stm_${entity_name}_${i}${i}.svg`;
+        let stm_path = `${path_lib.dirname(path_svg)}${path_lib.sep}stm_${entity_name}_${i}${i}.svg`;
         if (stm_array[i].description !== '') {
           markdown_doc += '- ' + stm_array[i].description;
         }
@@ -243,43 +221,27 @@ class Documenter extends markdown_lib.Markdown {
     return { 'markdown': markdown_doc, error: false };
   }
 
-  _makeid(length) {
-    var result = '';
-    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  async get_html(code, lang, configuration) {
+    let code_tree = await this._get_code_tree(code, lang, configuration);
+    if (code_tree === undefined) {
+      return { 'html': html, error: true };
     }
-    return result;
-  }
 
-  normalize_description(description){
-    let desc_inst = description.replace(/\n\s*\n/g, '<br>');
-    desc_inst = desc_inst.replace(/\n/g, '');
-    desc_inst = desc_inst.replace(/<br \/>/g,'');
-    return desc_inst;
-  }
-
-  async _get_html_from_code(options, extra_top_space) {
-    
-    let html_style = `<div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%">\n`;
-    if (options.disable_overflow === true || options.html_style === "save"){
+    let html_style = '';
+    if (configuration.html_style === "save") {
       html_style = `<div id="teroshdl" class='templateTerosHDL'>\n`;
-    }
-
-    if (options !== undefined && options.html_style !== undefined
-      && options.html_style === "save") {
       html_style = css_const_style.html_style_save + html_style;
     }
     else {
+      html_style = `<div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%">\n`;
       html_style = css_const_style.html_style_preview + html_style;
     }
 
     //HTML style
     let html = "";
-    if (options !== undefined && options.custom_css_path !== undefined) {
+    if (configuration.custom_css_path !== undefined && fs.existsSync(configuration.custom_css_path) === true ) {
       try {
-        let custom_css_str = fs.readFileSync(options.custom_css_path, { encoding: 'utf8' });
+        let custom_css_str = fs.readFileSync(configuration.custom_css_path, { encoding: 'utf8' });
         html = `<style>\n${custom_css_str}</style>\n`;
       }
       catch (e) {
@@ -291,15 +253,11 @@ class Documenter extends markdown_lib.Markdown {
     else {
       html = html_style;
     }
-    let code_tree = await this._get_code_tree();
-    if (code_tree === undefined) {
-      return { 'html': html, error: true };
-    }
 
     let converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
     converter.setFlavor('github');
 
-    if (extra_top_space === true){
+    if (configuration.extra_top_space === true){
       html += "<br><br><br><br><br><br>\n";
     }
     //Entity
@@ -322,20 +280,20 @@ class Documenter extends markdown_lib.Markdown {
       //Diagram
       html += converter.makeHtml("## Diagram\n");
       html += converter.makeHtml((await this._get_diagram_svg_from_code_tree(code_tree) + 
-          "\n").replace(/\*/g, "\\*").replace(/\`/g, "\\`"));
+          "\n").replace(/\*/g, "\\*").replace(/S`/g, "\\`"));
       //Description
       let inst_description = code_tree['entity']['description'];
       if (inst_description.replace('\n','') !== ''){
         html += converter.makeHtml("## Description\n");
-        let { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
+        let { description, wavedrom } = utils.get_wavedrom_svg(code_tree['entity']['description']);
 
-        description = this.remove_description_spaces(description);
+        description = utils.remove_description_spaces(description);
         let html_description = converter.makeHtml(description);
 
         for (let i = 0; i < wavedrom.length; ++i) {
           html_description = html_description.replace("$cholosimeone$" + i, wavedrom[i]);
         }
-        html_description = this.normalize_description(html_description);
+        html_description = utils.normalize_description(html_description);
         html += '<div id="teroshdl_description">' + html_description + '</div>';
       }
       //Generics and ports
@@ -371,19 +329,19 @@ class Documenter extends markdown_lib.Markdown {
       //Signals and constants
       html += converter.makeHtml(this._get_signals_constants_section(
         code_tree['declarations']['signals'], code_tree['declarations']['constants'],
-        code_tree['declarations']['types']));
+        code_tree['declarations']['types'], configuration));
       //Functions
-      html += this._get_functions_section(code_tree['declarations']['functions'], 'html');
+      html += this._get_functions_section(code_tree['declarations']['functions'], configuration, 'html');
     }
     if (code_tree['body'] !== undefined) {
       //Processes
-      html += this._get_process_section(code_tree['body']['processes'], 'html');
+      html += this._get_process_section(code_tree['body']['processes'], configuration, 'html');
       //Instantiations
-      html += this._get_instantiations_section(code_tree['body']['instantiations'],'html');
+      html += this._get_instantiations_section(code_tree['body']['instantiations'], configuration, 'html');
     }
 
     // State machine diagrams
-    let stm_array = await this._get_stm();
+    let stm_array = await this._get_stm(code, lang, configuration);
     if (this.config.fsm === true && stm_array !== undefined && stm_array.length !== 0) {
       html += converter.makeHtml("## State machines\n");
       html += '<div>';
@@ -400,100 +358,6 @@ class Documenter extends markdown_lib.Markdown {
     return { 'html': html, error: false };
   }
 
-  remove_description_spaces(description){
-    let description_split = description.split(/\r?\n/);
-    let description_trail = '';
-    for (let i = 0; i < description_split.length; i++) {
-      const element = description_split[i];
-      description_trail += ' ' + element.trim() + '\n';
-    }
-    return description_trail;
-  }
-
-  _get_wavedrom_svg(text) {
-    //Search json candidates
-    let json_candidates = this._get_json_candidates(text);
-    let svg_diagrams = [];
-    let text_modified = text;
-
-    let wavedrom = require('wavedrom');
-    var render = require('bit-field/lib/render');
-    let onml = require('onml');
-
-    let counter = 0;
-    for (let i = 0; i < json_candidates.length; ++i) {
-      try {
-        let json = json5.parse(json_candidates[i]);
-        let diagram = wavedrom.renderAny(0, json, wavedrom.waveSkin);
-        let diagram_svg = onml.s(diagram);
-        svg_diagrams.push(diagram_svg);
-        text_modified = text_modified.replace(json_candidates[i], "\n" + "$cholosimeone$" + counter + " \n");
-        ++counter;
-      }
-      catch (error) {
-        try {
-          let json = json5.parse(json_candidates[i]);
-          let options = {
-            hspace: 888
-          };
-          let jsonml = render(json, options);
-          let diagram_svg = onml.stringify(jsonml);
-
-          svg_diagrams.push(diagram_svg);
-          text_modified = text_modified.replace(json_candidates[i], "\n" + "$cholosimeone$" + counter + " \n");
-          ++counter;
-        }
-        // eslint-disable-next-line no-console
-        catch (error) { console.log(""); }
-      }
-
-    }
-    return { description: text_modified, wavedrom: svg_diagrams };
-  }
-
-  _get_json_candidates(text) {
-    let json = [];
-    let i = 0;
-    let brackets = 0;
-    let character_number_begin = 0;
-    while (i < text.length) {
-      if (text[i] === '{') {
-        character_number_begin = i;
-        ++brackets;
-        ++i;
-        while (i < text.length) {
-          if (text[i] === '{') {
-            ++brackets;
-            ++i;
-          }
-          else if (text[i] === '}') {
-            --brackets;
-            if (brackets === 0) {
-              json.push(text.slice(character_number_begin, i + 1));
-              break;
-            }
-            ++i;
-          }
-          else {
-            ++i;
-          }
-        }
-      }
-      else {
-        ++i;
-      }
-    }
-    return json;
-  }
-
-  async _get_diagram_svg() {
-    let code_tree = await this._get_code_tree();
-    if (code_tree === undefined) {
-      return;
-    }
-    return await Diagram.diagramGenerator(code_tree, 0);
-  }
-
   async _get_diagram_svg_from_code_tree(code_tree) {
     let svg_diagram_str = await Diagram.diagramGenerator(code_tree, 0);
     return svg_diagram_str;
@@ -504,32 +368,23 @@ class Documenter extends markdown_lib.Markdown {
     fs.writeFileSync(path, svg_diagram_str);
   }
 
-  async _save_fsms(path) {
-    let markdown_doc = '';
-    let code_tree = await this._get_code_tree(this.code);
-    if (code_tree === undefined) {
-      return;
-    }
-    let stm_array = await this._get_stm();
+  async _save_fsms(code_tree, code, lang, configuration, path) {
+    let stm_array = await this._get_stm(code, lang, configuration);
     for (let i = 0; i < stm_array.length; ++i) {
       let entity_name = code_tree['entity']['name'];
       let stm_path = `${path_lib.dirname(path)}${path_lib.sep}stm_${entity_name}_${i}${i}.svg`;
-      if (stm_array[i].description !== '') {
-        markdown_doc += '- ' + stm_array[i].description;
-      }
       fs.writeFileSync(stm_path, stm_array[i].svg);
     }
   }
 
-  async _save_wavedrom(path) {
-    let code_tree = await this._get_code_tree(this.code);
+  async _save_wavedrom(code_tree, path) {
     if (code_tree === undefined) {
       return;
     }
-    const { description, wavedrom } = this._get_wavedrom_svg(code_tree['entity']['description']);
+    const { description, wavedrom } = utils.get_wavedrom_svg(code_tree['entity']['description']);
     let wavedrom_description = description;
     for (let i = 0; i < wavedrom.length; ++i) {
-      let random_id = this._makeid(4);
+      let random_id = utils.makeid(4);
       let img = `![alt text](wavedrom_${random_id}${i}.svg "title")`;
       let path_img = path_lib.dirname(path) + path_lib.sep + `wavedrom_${random_id}${i}.svg`;
       fs.writeFileSync(path_img, wavedrom[i]);
@@ -537,9 +392,19 @@ class Documenter extends markdown_lib.Markdown {
     }
   }
 
-  async _get_code_tree() {
-    let parser = await this.get_parser(this.lang);
-    let code_tree = await parser.get_all(this.code, this.symbol);
+  // ***************************************************************************
+  // Parsers
+  // ***************************************************************************
+  async _get_code_tree(code, lang, configuration) {
+    let parser = await this.get_parser(lang);
+    let symbol = '';
+    if (lang === 'vhdl'){
+      symbol = configuration.symbol_vhdl;
+    }
+    else{
+      symbol = configuration.symbol_verilog;
+    }
+    let code_tree = await parser.get_all(code, symbol);
     return code_tree;
   }
 
@@ -548,10 +413,11 @@ class Documenter extends markdown_lib.Markdown {
     await this.create_parser('verilog');
     await this.create_parser_stm('vhdl');
     await this.create_parser_stm('verilog');
+    this.init_parser = true;
   }
 
   async get_parser(lang) {
-    if (this.vhdl_parser === undefined || this.verilog_parser === undefined) {
+    if (this.init_parser === false) {
       await this.init();
     }
 
@@ -567,7 +433,7 @@ class Documenter extends markdown_lib.Markdown {
   }
 
   async get_parser_stm(lang) {
-    if (this.vhdl_parser_stm === undefined || this.verilog_parser_stm === undefined) {
+    if (this.init_parser === false) {
       await this.init();
     }
 
@@ -586,11 +452,11 @@ class Documenter extends markdown_lib.Markdown {
     let parser = new ParserLib.ParserFactory;
     if (lang === 'vhdl') {
       //VHDL parser
-      this.vhdl_parser = await parser.getParser(this.lang, this.comment_symbol);
+      this.vhdl_parser = await parser.getParser(lang);
     }
     else if (lang === 'verilog') {
       //Verilog parser
-      this.verilog_parser = await parser.getParser(this.lang, this.comment_symbol);
+      this.verilog_parser = await parser.getParser(lang);
     }
   }
 
@@ -598,23 +464,27 @@ class Documenter extends markdown_lib.Markdown {
     let parser = new ParserLib.ParserFactory;
     if (lang === 'vhdl') {
       //VHDL parser
-      this.vhdl_parser_stm = await parser.get_parser_stm(this.lang, this.comment_symbol);
+      this.vhdl_parser_stm = await parser.get_parser_stm(lang);
     }
     else if (lang === 'verilog') {
       //Verilog parser
-      this.verilog_parser_stm = await parser.get_parser_stm(this.lang, this.comment_symbol);
+      this.verilog_parser_stm = await parser.get_parser_stm(lang);
     }
   }
 
-  async _get_stm() {
-    let parser = await this.get_parser_stm(this.lang);
-    let stm_array = await parser.get_svg_sm(this.code, this.comment_symbol);
+  async _get_stm(code, lang, configuration) {
+    let symbol = '';
+    if (lang === 'vhdl'){
+      symbol = configuration.symbol_vhdl;
+    }
+    else{
+      symbol = configuration.symbol_verilog;
+    }
+    let parser = await this.get_parser_stm(lang);
+    let stm_array = await parser.get_svg_sm(code, symbol);
     return stm_array.svg;
   }
 
-  async _gen_code_tree() {
-    this.code_tree = await this._get_code_tree();
-  }
 }
 
 module.exports = {

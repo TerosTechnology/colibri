@@ -94,30 +94,30 @@ class Markdown {
     return elements_i;
   }
 
-  _get_signals_constants_section(signals, constants, types) {
+  _get_signals_constants_section(signals, constants, types, configuration) {
     let md = "";
 
-    if (this.config.signals === 'commented') {
+    if (configuration.signals === 'commented') {
       signals = this._get_elements_with_description(signals);
     }
-    if (this.config.constants === 'commented') {
+    if (configuration.constants === 'commented') {
       constants = this._get_elements_with_description(constants);
       types = this._get_elements_with_description(types);
     }
 
-    if ((signals.length !== 0 && this.config.signals !== 'none') ||
-      (constants.length !== 0 && this.config.constants !== 'none') || 
-      (types.length !== 0 && this.config.constants !== 'none')) {
+    if ((signals.length !== 0 && configuration.signals !== 'none') ||
+      (constants.length !== 0 && configuration.constants !== 'none') || 
+      (types.length !== 0 && configuration.constants !== 'none')) {
       //Tables
-      if (signals.length !== 0 && this.config.signals !== 'none') {
+      if (signals.length !== 0 && configuration.signals !== 'none') {
         md += "## Signals\n";
         md += this._get_doc_signals(signals);
       }
-      if (constants.length !== 0 && this.config.constants !== 'none') {
+      if (constants.length !== 0 && configuration.constants !== 'none') {
         md += "## Constants\n";
         md += this._get_doc_constants(constants);
       }
-      if (types.length !== 0 && this.config.constants !== 'none') {
+      if (types.length !== 0 && configuration.constants !== 'none') {
         md += "## Types\n";
         md += this._get_doc_types(types);
       }
@@ -125,11 +125,11 @@ class Markdown {
     return md;
   }
 
-  _get_process_section(process, mode) {
-    if (this.config.process === 'none') {
+  _get_process_section(process, configuration, mode) {
+    if (configuration.process === 'none') {
       return '';
     }
-    if (this.config.process === 'commented') {
+    if (configuration.process === 'commented') {
       process = this._get_elements_with_description(process);
     }
     let converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
@@ -163,13 +163,13 @@ class Markdown {
     }
   }
 
-  _get_functions_section(functions, mode) {
+  _get_functions_section(functions, configuration, mode) {
     let md = "";
     let html = "";
     let converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
     converter.setFlavor('github');
 
-    if (this.config.functions === 'none') {
+    if (configuration.functions === 'none') {
       return '';
     }
     if (functions.length !== 0) {
@@ -211,7 +211,7 @@ class Markdown {
   }
 
 
-  _get_instantiations_section(instantiations, mode) {
+  _get_instantiations_section(instantiations, configuration, mode) {
     let md = "";
     let html = "";
     let converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
