@@ -74,7 +74,8 @@ complete_nodes = []
 for i in range(0, len(files)):
     complete_nodes.append(files[i].name)
     name = ntpath.basename(files[i].name)
-    name = files[i].design_units[0].name
+    if (len(files[i].design_units) >= 1):
+        name = files[i].design_units[0].name
     nodes.append(name)
 
 total_dependencies = []
@@ -84,7 +85,6 @@ for i in range(0, len(nodes)):
 
 json_dependencies = {'root': total_dependencies}
 
-# print(json_dependencies)
 dir_path = os.path.dirname(os.path.realpath(__file__))
 output_path = os.path.join(dir_path, 'tree_graph_output.json')
 with open(output_path, 'w') as outfile:
