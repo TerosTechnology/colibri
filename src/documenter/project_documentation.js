@@ -156,11 +156,9 @@ async function save_doc_separate(type, output, filename, doc_inst){
 function get_graph_declaration(type, graph, output_dir_doc, output_dir_doc_relative){
   let declaration = '';
   if (type === 'html'){
-    declaration += "<h2>Project dependency graph\n</h2>";
     declaration += graph + '\n';
   }
   else{
-    declaration += "## Project dependency graph\n";
     declaration += `![system](./${output_dir_doc_relative}/dependency_graph.svg "System")\n`;
     fs.writeFileSync(output_dir_doc + path_lib.sep + "dependency_graph.svg", graph);
   }

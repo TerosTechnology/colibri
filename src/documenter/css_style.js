@@ -7,8 +7,7 @@ const html_style_preview = `
   }
   svg {
     display:block;  
-    width:70%;
-    height:70%;
+    width:60%;
     margin-left: auto;
     margin-right: auto
   }
@@ -54,7 +53,7 @@ const html_style_preview = `
     position:absolute;
   }
   td, th {
-    padding:7px; 
+    padding:2px; 
     border: 1px solid grey;
   }
   th {
@@ -79,7 +78,6 @@ const html_style_save = `
   svg {
     display:block;  
     width:60%;
-    height:40%;
     margin-left: auto;
     margin-right: auto
   }
@@ -126,7 +124,7 @@ const html_style_save = `
     position:absolute;
   }
   td, th {
-    padding:7px; 
+    padding:2px; 
     border: 1px solid grey;
   }
   th {
