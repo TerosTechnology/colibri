@@ -19,10 +19,6 @@
 
 # pylint: disable=too-many-lines
 
-"""
-Test the project functionality
-"""
-# from graphviz import Digraph
 import ntpath
 import json
 from pathlib import Path
