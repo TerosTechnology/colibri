@@ -21,6 +21,7 @@
 const path_lib = require('path');
 const prj_documenter = require('./project_documentation');
 const utils = require('../utils/utils');
+const dependency = require('./dependency_graph');
 
 function json_edam_to_yml_edam(json_data){
   const json2yaml = require('./json2yaml').json2yaml;
@@ -233,6 +234,12 @@ class Edam_project extends prj_documenter.Project_documenter{
     return normalized_prj;
   }
 
+  async get_dependency_tree(pypath) {
+    let project = this.get_json_prj();
+    let dependency_inst = new dependency.Dependency_graph();
+    let dependency_tree = await dependency_inst.get_dependency_tree(project, pypath);
+    return dependency_tree;
+  }
 }
 
 class Edam_file {

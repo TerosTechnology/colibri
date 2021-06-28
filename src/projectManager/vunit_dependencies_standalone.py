@@ -23,10 +23,10 @@ import ntpath
 import json
 from pathlib import Path
 import sys
+import os
 
 import vunit.project as pj
 from vunit.vhdl_standard import VHDL
-import sys
 
 
 def get_direct_dependencies(project):
@@ -83,24 +83,19 @@ complete_nodes = []
 for i in range(0, len(files)):
     complete_nodes.append(files[i].name)
     name = ntpath.basename(files[i].name)
+    if (len(files[i].design_units) >= 1):
+        name = files[i].design_units[0].name
     nodes.append(name)
 
-# Add nodes
-diagram = """
-digraph {
-    node [color="#069302" fillcolor=lightgray fontname=helvetica shape=component splines=line style="filled,rounded"]
-"""
+total_dependencies = []
 for i in range(0, len(nodes)):
-    diagram += '    "' + \
-        str(complete_nodes[i]) + '" [label="' + str(nodes[i]) + '"]\n'
+    inst_mod = {'filename': complete_nodes[i], 'entity': nodes[i], 'dependencies': dependencies[i]}
+    total_dependencies.append(inst_mod)
 
-# Add edge node
-for i in range(0, len(dependencies)):
-    for j in range(0, len(dependencies[i])):
-        if (str(complete_nodes[i]) != str(dependencies[i][j])):
-            diagram += '    "' + \
-                str(complete_nodes[i]) + '" -> "' + \
-                str(dependencies[i][j]) + '"\n'
-diagram += '}'
-print(diagram)
+json_dependencies = {'root': total_dependencies}
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+output_path = os.path.join(dir_path, 'tree_graph_output.json')
+with open(output_path, 'w') as outfile:
+    json.dump(json_dependencies, outfile)
 exit(0)

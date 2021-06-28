@@ -45,6 +45,31 @@ class Dependency_graph {
     return dep_graph;
   }
 
+  async get_dependency_tree(project, pypath) {
+    const project_files_path = path_lib.join(__dirname, 'json_project_dependencies.json');
+    const tree_graph_output = path_lib.join(__dirname, 'tree_graph_output.json');
+
+    let project_files_json = JSON.stringify(project);
+    fs.writeFileSync(project_files_path, project_files_json);
+
+    let python_script_path = `${__dirname}${path_lib.sep}vunit_dependencies_standalone.py ${project_files_path}`;
+    let result = await python_tools.exec_python_script(
+      pypath,
+      python_script_path
+    );
+    let dep_tree;
+    if (result.error === 0){
+      try{
+        let rawdata = fs.readFileSync(tree_graph_output);
+        dep_tree = JSON.parse(rawdata);
+      }
+      catch(e){
+        return dep_tree;
+      }
+    }
+    return dep_tree;
+  }
+
   async get_dependency_graph_svg(project, python3_path) {
     let dependencies = await this.create_dependency_graph(project, python3_path);
     try{
