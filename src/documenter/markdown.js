@@ -50,11 +50,11 @@ class Markdown {
     }
     let md = "";
     if (generics.length !== 0) {
-      md += "## Generics\n";
+      md += "## Generics\n\n";
       md += this._get_doc_generics(generics);
     }
     if (ports.length !== 0) {
-      md += `## Ports\n`;
+      md += `## Ports\n\n`;
       if (virtual_buses !== undefined) {
         let virtual_buses_to_add = virtual_buses.filter(obj => obj.keep_ports === true);
         if (virtual_buses_to_add.length > 0) {
@@ -72,10 +72,10 @@ class Markdown {
     if (virtual_buses !== undefined) {
       let virtual_buses_to_show = virtual_buses.filter(obj => obj.keep_ports === false);
       if (virtual_buses_to_show.length > 0) {
-        md += "### 1.3 Virtual Buses\n";
+        md += "### Virtual Buses\n\n";
         for (let i = 0; i < virtual_buses_to_show.length; i++) {
           const element = virtual_buses_to_show[i];
-          md += "### Table 1.3."+(i+1).toString()+" "+ element.name+"\n";
+          md += "#### "+ element.name+"\n\n";
           md += this._get_doc_ports(element.ports);
         }
       }
@@ -110,15 +110,15 @@ class Markdown {
       (types.length !== 0 && configuration.constants !== 'none')) {
       //Tables
       if (signals.length !== 0 && configuration.signals !== 'none') {
-        md += "## Signals\n";
+        md += "## Signals\n\n";
         md += this._get_doc_signals(signals);
       }
       if (constants.length !== 0 && configuration.constants !== 'none') {
-        md += "## Constants\n";
+        md += "## Constants\n\n";
         md += this._get_doc_constants(constants);
       }
       if (types.length !== 0 && configuration.constants !== 'none') {
-        md += "## Types\n";
+        md += "## Types\n\n";
         md += this._get_doc_types(types);
       }
     }
@@ -140,7 +140,7 @@ class Markdown {
     if (process.length !== 0) {
       //Title
       md += "## Processes\n";
-      html += converter.makeHtml("## Processes\n");
+      html += converter.makeHtml("## Processes\n\n");
       for (let i = 0; i < process.length; ++i) {
         let name = process[i].name;
         let section = `- ${name}: ( ${process[i].sens_list} )\n`;
@@ -175,7 +175,7 @@ class Markdown {
     if (functions.length !== 0) {
       //Title
       md += "## Functions\n";
-      html += converter.makeHtml("## Functions\n");
+      html += converter.makeHtml("## Functions\n\n");
       for (let i = 0; i < functions.length; ++i) {
         if (functions[i].name !== ''){
           let arguments_str = functions[i].arguments;
@@ -219,7 +219,7 @@ class Markdown {
 
     if (instantiations.length !== 0) {
       //Title
-      let title = "## Instantiations\n";
+      let title = "## Instantiations\n\n";
       md += title;
       html += converter.makeHtml(title);
 
@@ -232,7 +232,7 @@ class Markdown {
         let description = instantiations[i].description;
         if (description !== ''){
           let description = '**Description**\n';
-          description += `${process[i].description}\n`;
+          description += `${instantiations[i].description}\n`;
           md += description;
           html += '<div id="descriptions">' + converter.makeHtml(description) + '</div>';
         }

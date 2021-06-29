@@ -26,7 +26,7 @@
 - Installation:
 
 ```
-sudo npm install -g .
+sudo npm install .
 ```
 - Commands
 ```

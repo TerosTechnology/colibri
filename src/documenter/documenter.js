@@ -124,15 +124,15 @@ class Documenter extends markdown_lib.Markdown {
 
       //Title
       if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
-        markdown_doc += "# " + code_tree['info']['title'] + "\n";
+        markdown_doc += "# " + code_tree['info']['title'] + "\n\n";
       }else{
-        markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n";
+        markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n\n";
       }
       //Optional info section
       markdown_doc += this._get_info_section(code_tree);
       //Diagram
       await this._save_svg_from_code_tree(path_svg, code_tree);
-      markdown_doc += "## Diagram\n";
+      markdown_doc += "## Diagram\n\n";
       if (configuration.custom_svg_path_in_readme !== undefined){
         markdown_doc += '![Diagram](' + configuration.custom_svg_path_in_readme + ' "Diagram")';
       }
@@ -143,7 +143,7 @@ class Documenter extends markdown_lib.Markdown {
       //Description
       let description_inst = code_tree['entity']['description'];
       if (description_inst.replace('\n','') !== '') {
-        markdown_doc += "## Description\n";
+        markdown_doc += "## Description\n\n";
         const { description, wavedrom } = utils.get_wavedrom_svg(description_inst);
         let wavedrom_description = description;
         for (let i = 0; i < wavedrom.length; ++i) {
@@ -172,14 +172,14 @@ class Documenter extends markdown_lib.Markdown {
       if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
         markdown_doc += "# " + code_tree['info']['title'] + "\n";
       }else{
-        markdown_doc += "# Package: " + code_tree['package']['name'] + "\n";
+        markdown_doc += "# Package: " + code_tree['package']['name'] + "\n\n";
       }
       //Optional info section
       markdown_doc += this._get_info_section(code_tree);
       //Description
       let description_inst = code_tree['package']['description'];
       if (description_inst.replace('\n','') !== '') {
-        markdown_doc += "## Description\n";
+        markdown_doc += "## Description\n\n";
         markdown_doc += code_tree['package']['description'] + "\n";
       }
 
@@ -207,7 +207,7 @@ class Documenter extends markdown_lib.Markdown {
     // State machine diagrams
     let stm_array = await this._get_stm(code, lang, configuration);
     if (this.config.fsm === true && stm_array !== undefined && stm_array.length !== 0) {
-      markdown_doc += "## State machines\n";
+      markdown_doc += "## State machines\n\n";
       for (let i = 0; i < stm_array.length; ++i) {
         let entity_name = code_tree['entity']['name'];
         let stm_path = `${path_lib.dirname(path_svg)}${path_lib.sep}stm_${entity_name}_${i}${i}.svg`;
@@ -287,7 +287,7 @@ class Documenter extends markdown_lib.Markdown {
       //Description
       let inst_description = code_tree['entity']['description'];
       if (inst_description.replace('\n','') !== ''){
-        html += converter.makeHtml("## Description\n");
+        html += converter.makeHtml("## Description\n\n");
         let { description, wavedrom } = utils.get_wavedrom_svg(code_tree['entity']['description']);
 
         description = utils.remove_description_spaces(description);
@@ -313,17 +313,17 @@ class Documenter extends markdown_lib.Markdown {
       let name = '';
       if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
         name = code_tree['info']['title'];
-        doc_title = "# " + code_tree['info']['title'] + "\n";
+        doc_title = "# " + code_tree['info']['title'] + "\n\n";
       }else{
         name =  code_tree['package']['name'];
-        doc_title = "# Package: " + code_tree['package']['name'] + "\n";
+        doc_title = "# Package: " + code_tree['package']['name'] + "\n\n";
       }
       html += `<a id=${name}>` + converter.makeHtml(doc_title) + '</a>';
       html += converter.makeHtml(this._get_info_section(code_tree));
 
       let inst_description = code_tree['package']['description'];
       if (inst_description.replace('\n','') !== ''){
-        html += converter.makeHtml("## Description\n");
+        html += converter.makeHtml("## Description\n\n");
         html += '<div id="teroshdl_description">' 
               + converter.makeHtml(code_tree['package']['description'] + "</div>\n");
       }
@@ -346,7 +346,7 @@ class Documenter extends markdown_lib.Markdown {
     // State machine diagrams
     let stm_array = await this._get_stm(code, lang, configuration);
     if (this.config.fsm === true && stm_array !== undefined && stm_array.length !== 0) {
-      html += converter.makeHtml("## State machines\n");
+      html += converter.makeHtml("## State machines\n\n");
       html += '<div>';
       for (let i = 0; i < stm_array.length; ++i) {
         if (stm_array[i].description !== '') {
