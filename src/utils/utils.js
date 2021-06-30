@@ -145,6 +145,9 @@ async function get_toplevel_from_path(filepath){
     return '';
   }  
   let lang = get_file_lang(filepath);
+   if (lang !== 'vhdl' && lang !== 'verilog' && lang !== 'systemverilog'){
+    return '';
+  }
   // let parser_factory = new Parser.ParserFactory();
   // let parser = await parser_factory.getParser(lang);
 
