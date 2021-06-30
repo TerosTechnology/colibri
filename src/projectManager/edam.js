@@ -101,6 +101,27 @@ class Edam_project extends prj_documenter.Project_documenter{
     this.toplevel_library = library;
   }
 
+  async set_top_from_toplevel(toplevel, library) {
+    if (library === undefined){
+      library = '';
+    }
+    if (toplevel === undefined){
+      return;
+    }
+    let toplevel_path = '';
+    for (let i = 0; i < this.files.length; i++) {
+      const filename = this.files[i].name;
+      let toplevel_file = await utils.get_toplevel_from_path(filename);
+      if (toplevel_file === toplevel) {
+        toplevel_path = filename;
+        break;
+      }
+    }
+    this.toplevel = toplevel;
+    this.toplevel_path = toplevel_path;
+    this.toplevel_library = library;
+  }
+
   get_number_of_files() {
     return this.files.length;
   }
