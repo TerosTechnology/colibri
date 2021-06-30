@@ -251,7 +251,11 @@ class Markdown {
     let table = [];
     table.push(["Port name", "Direction", "Type", "Description"]);
     for (let i = 0; i < ports.length; ++i) {
-      let direction = ports[i]['direction'].replace(/\r/g, ' ').replace(/\n/g, ' ')
+      let direction = ports[i]['direction'];
+      if (direction === undefined){
+        direction = '';
+      }
+      direction = direction.replace(/\r/g, ' ').replace(/\n/g, ' ');
       if (ports[i]['type'] === "virtual_bus"){
         direction = "-";
       }
