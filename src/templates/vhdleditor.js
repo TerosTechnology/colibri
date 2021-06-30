@@ -280,10 +280,14 @@ class Vhdl_editor {
 
   __vhdl_ports(port){
     let out_port="";
-    if (port=== 'input') {
+    if (port === 'input') {
       out_port = 'in';
-    } else if (port=== 'output'){
+    } 
+    else if (port === 'output'){
       out_port = 'out';
+    }
+    else if (port === 'inout'){
+      out_port = 'inout';
     }
     return out_port;
   }
