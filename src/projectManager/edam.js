@@ -88,7 +88,15 @@ class Edam_project extends prj_documenter.Project_documenter{
     fs.writeFileSync(path, edam_yml, "utf8");
   }
 
-  set_top(path, library) {
+  async set_top(path, library) {
+    if (library === undefined){
+      library = '';
+    }
+    if (path === undefined){
+      return;
+    }
+    let toplevel = await utils.get_toplevel_from_path(path);
+    this.toplevel = toplevel;
     this.toplevel_path = path;
     this.toplevel_library = library;
   }
@@ -262,12 +270,8 @@ class Edam_file {
       'file_type': this.file_type,
       'is_include_file': this.is_include_file
     };
-    if (this.include_path !== '') {
-      info['include_path'] = this.include_path;
-    }
-    if (this.logical_name !== '') {
-      info['logical_name'] = this.logical_name;
-    }
+    info['include_path'] = this.include_path;
+    info['logical_name'] = this.logical_name;
     return info;
   }
 

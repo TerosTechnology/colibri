@@ -19,7 +19,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
-const { start } = require('repl');
+const path_lib = require("path");
+const fs = require("fs");
+const Parser = require('../parser/factory');
 
 function get_lang_from_extension(extension){
   const vhdl_type = ['.vhd', '.vho', '.vhdl'];
@@ -56,7 +58,46 @@ function check_if_hdl_file(file_path){
   return check;
 }
 
+
+async function get_toplevel_from_path(filepath){
+  if (filepath === undefined){
+    return '';
+  }
+  if (fs.existsSync(filepath) === false){
+    return '';
+  }  
+  let lang = get_file_lang(filepath);
+  let parser_factory = new Parser.ParserFactory();
+  let parser = await parser_factory.getParser(lang);
+
+  let code = fs.readFileSync(filepath, "utf8");
+  let entity_name = await parser.get_only_entity_name(code);
+  if (entity_name === undefined){
+    return '';
+  }
+  return entity_name;
+}
+
+function get_file_lang(filepath){
+  let vhdl_extensions = ['.vhd', '.vho', '.vhdl', '.vhd'];
+  let verilog_extensions = ['.v', '.vh', '.vl', '.sv', '.svh'];
+  let extension = path_lib.extname(filepath).toLowerCase();
+  let lang = 'vhdl';
+  if (vhdl_extensions.includes(extension) === true){
+    lang = 'vhdl';
+  }
+  else if(verilog_extensions.includes(extension) === true){
+    lang = 'verilog';
+  }
+  else{
+      lang = 'none';
+  }
+  return lang;
+}
+
 module.exports = {
+  get_file_lang:get_file_lang,
+  get_toplevel_from_path:get_toplevel_from_path,
   check_if_hdl_file : check_if_hdl_file,
   get_lang_from_path : get_lang_from_path,
   get_lang_from_extension: get_lang_from_extension
