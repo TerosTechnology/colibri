@@ -57,7 +57,7 @@ class Dependency_graph {
       pypath,
       python_script_path
     );
-    let dep_tree;
+    let dep_tree = [];
     if (result.error === 0){
       try{
         let rawdata = fs.readFileSync(tree_graph_output);

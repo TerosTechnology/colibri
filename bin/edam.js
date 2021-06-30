@@ -34,6 +34,7 @@ class Doc {
   }
 
   async gen_doc(options, mode, input_path, output_path) {
+    let recursive = options.recursive;
     let out_type = options.out;
     try {
       //Read content input
@@ -48,14 +49,14 @@ class Doc {
       // cd to input_path
       let input_path_dir = path_lib.dirname(input_path);
       shell.cd(input_path_dir);
-      let result = await this.save_doc(input_path, out_type, trs_file_content, output_path, mode);
+      let result = await this.save_doc(input_path, out_type, trs_file_content, output_path, mode, recursive);
       return result;
     } catch (e) {
       console.log(e);
     }
   }
 
-  async save_doc(trs_file_absolute, type, trs_file_content, path, mode){
+  async save_doc(trs_file_absolute, type, trs_file_content, path, mode, recursive){
     let config = this.configure_documenter();
 
     const cliProgress = require('cli-progress');
@@ -85,7 +86,7 @@ class Doc {
       this.load_edam_csv(edam_project, trs_file_content);
     }
     else if(mode === 'directory'){
-      this.load_edam_directory(edam_project, trs_file_absolute);
+      this.load_edam_directory(edam_project, trs_file_absolute, recursive);
     }
 
      //Create output directory
@@ -123,8 +124,14 @@ class Doc {
     }
   }
 
-  load_edam_directory(edam, directory_path){
-    let file_list = this.getFilesFromDir(directory_path);
+  load_edam_directory(edam, directory_path, recursive){
+    let file_list = [];
+    if (recursive === false){
+      file_list = fs.readdirSync(directory_path);
+    }
+    else{
+      file_list = this.get_files_from_dir_recursive(directory_path);
+    }
     for (let i = 0; i < file_list.length; i++) {
       const element = file_list[i];
       const lang = utils.get_lang_from_path(element);
@@ -153,11 +160,11 @@ class Doc {
     }
   }
 
-  getFilesFromDir (dir, filelist = []) {
+  get_files_from_dir_recursive (dir, filelist = []) {
     fs.readdirSync(dir).forEach(file => {
         const dirFile = path_lib.join(dir, file);
         try {
-            filelist = this.getFilesFromDir(dirFile, filelist);
+            filelist = this.get_files_from_dir_recursive(dirFile, filelist);
         }
         catch (err) {
             if (err.code === 'ENOTDIR' || err.code === 'EBUSY') filelist = [...filelist, dirFile];

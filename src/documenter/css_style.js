@@ -6,12 +6,13 @@ const html_style_preview = `
     margin-right: auto
   }
   svg {
+    width:98%;
+    height:98%;
     display:block;  
-    width:60%;
     margin-left: auto;
     margin-right: auto
   }
-  h1, h2, h3 {
+  h1, h2, h3, h4 {
     margin-left:1.5%;
     width:98%;
     font-weight:bold
@@ -76,12 +77,13 @@ const html_style_save = `
     margin-right: auto
   }
   svg {
+    width:68%;
+    height:30%;
     display:block;  
-    width:60%;
     margin-left: auto;
     margin-right: auto
   }
-  h1, h2, h3 {
+  h1, h2, h3, h4 {
     margin-left:1.5%;
     width:98%;
     font-weight:bold

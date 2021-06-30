@@ -133,7 +133,7 @@ function getPortsIn(structure, name, kind) {
   var str_in = [[], []];
   var cont_in = 0;
   for (let x = 0; x <= structure.ports.length - 1; ++x) {
-    if (structure.ports[x]['direction'] === "in" || structure.ports[x]['direction'] === "input") {
+    if (structure.ports[x]['direction'] === "in" || structure.ports[x]['direction'] === "input" || structure.ports[x]['direction'] === undefined) {
       str_in[name][cont_in] = '   ' + structure.ports[x]['name'] + ' ';
       str_in[kind][cont_in] = '   ' + structure.ports[x]['type'] + ' ';
       cont_in++;
