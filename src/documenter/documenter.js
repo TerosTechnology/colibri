@@ -234,6 +234,7 @@ class Documenter extends markdown_lib.Markdown {
     }
     else {
       html_style = `<div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%">\n`;
+      html_style = ''
       html_style = css_const_style.html_style_preview + html_style;
     }
 
@@ -261,7 +262,7 @@ class Documenter extends markdown_lib.Markdown {
     converter.setFlavor('github');
 
     if (configuration.extra_top_space === true){
-      html += "<br><br><br><br><br><br>\n";
+      html += "<br><br>\n";
     }
     //Entity
     if (code_tree['entity'] !== undefined) {
@@ -356,6 +357,12 @@ class Documenter extends markdown_lib.Markdown {
       }
       html += '</div>';
     }
+    html += `
+    </article class="markdown-body">
+
+    </body>
+    
+    `;
     html += '<br><br><br><br><br><br>';
 
     return { 'html': html, error: false };
