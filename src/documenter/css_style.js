@@ -1019,8 +1019,7 @@ const html_style_preview = `
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
-    <title>GitHub Markdown CSS demo</title>
-    <link rel="stylesheet" href="github-markdown.css">
+    <title>TerosHDL</title>
   <style>
     body {
       box-sizing: border-box;
@@ -2035,8 +2034,7 @@ const html_style_save = `
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
-    <title>GitHub Markdown CSS demo</title>
-    <link rel="stylesheet" href="github-markdown.css">
+    <title>TerosHDL</title>
   <style>
     body {
       box-sizing: border-box;
@@ -2048,6 +2046,7 @@ const html_style_save = `
   </style>
   </head>
   <body>
+  <article class="markdown-body">
 \n`;
 
 
