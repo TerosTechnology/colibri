@@ -117,9 +117,9 @@ function get_toplevel_regex(code, lang){
   let regex;
   if (lang === 'vhdl'){
     code = del_comments_vhdl(code);
-    regex = /(entity|pacakge)\s+(?<name>\w+)\s*is\s*/gim;
+    regex = /(entity|package)\s+(?<name>\w+)\s*is\s*/gim;
     result = regex.exec(code)
-    if (result !== undefined && result.length >= 3){
+    if (result !== null && result !== undefined && result.length >= 3){
       return result[2];
     }
   }
@@ -128,7 +128,7 @@ function get_toplevel_regex(code, lang){
     code = del_comments_verilog(code);
     regex = /(?<type>module|program|interface|package|primitive|config|property)\s+(?:automatic\s+)?(?<name>\w+)/gm;
     result = regex.exec(code)
-    if (result !== undefined && result.length >= 3){
+    if (result !== null && result !== undefined && result.length >= 3){
       return result[2];
     }
     return 
