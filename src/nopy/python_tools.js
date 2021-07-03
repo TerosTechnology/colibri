@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Copyright 2021
 // Carlos Alberto Ruiz Naranjo, Ismael Pérez Rojo,
 // Alfredo Enrique Sáez Pérez de la Lastra
@@ -21,6 +22,7 @@ async function get_python_exec(python_path) {
   // Check custom python3 path
   if (python_path !== ''){
     let python_path_check = await check_custom_python_path(python_path);
+    console.log(`[colibri-nopy] Current python3 path: ${python_path_check}`);
     return python_path_check;
   }
 
@@ -28,12 +30,14 @@ async function get_python_exec(python_path) {
   let binary = 'python3';
   let python_path_check = await check_custom_python_path(binary);
   if (python_path_check !== ''){
+    console.log(`[colibri-nopy] Current python3 path: ${python_path_check}`);
     return python_path_check;
   }
 
   //Check system python3 path with binary python
   binary = 'python';
   python_path_check = await check_custom_python_path(binary);
+  console.log(`[colibri-nopy] Current python3 path: ${python_path_check}`);
   return python_path_check;
 }
 
@@ -66,6 +70,7 @@ async function _exec_command(command) {
 async function exec_python_script(python3_path, python_script_path) {
   let python_path = await get_python_exec(python3_path);
   let command = `${python_path} ${python_script_path}`;
+  console.log(`[colibri-nopy] Run python3 command: ${command}`);
   let result = await _exec_command(command);
   return result;
 }

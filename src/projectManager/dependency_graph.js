@@ -33,7 +33,7 @@ class Dependency_graph {
     let project_files_json = JSON.stringify(project);
     fs.writeFileSync(project_files_path, project_files_json);
 
-    let python_script_path = `${__dirname}${path_lib.sep}vunit_dependency.py ${project_files_path}`;
+    let python_script_path = `"${__dirname}${path_lib.sep}vunit_dependency.py" "${project_files_path}"`;
     let result = await python_tools.exec_python_script(
       python3_path,
       python_script_path
@@ -52,7 +52,7 @@ class Dependency_graph {
     let project_files_json = JSON.stringify(project);
     fs.writeFileSync(project_files_path, project_files_json);
 
-    let python_script_path = `${__dirname}${path_lib.sep}vunit_dependencies_standalone.py ${project_files_path}`;
+    let python_script_path = `"${__dirname}${path_lib.sep}vunit_dependencies_standalone.py" "${project_files_path}"`;
     let result = await python_tools.exec_python_script(
       pypath,
       python_script_path
