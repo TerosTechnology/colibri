@@ -19,6 +19,10 @@
 // along with TerosHDL.  If not, see <https://www.gnu.org/licenses/>.
 
 async function get_python_exec(python_path) {
+  if (python_path === undefined){
+    python_path = '';
+  }
+  python_path = python_path.replace(/ /g, '\\ ');
   // Check custom python3 path
   if (python_path !== ''){
     let python_path_check = await check_custom_python_path(python_path);
@@ -51,7 +55,6 @@ async function check_custom_python_path(python_path) {
     return "";
   }
 }
-
 
 async function _exec_command(command) {
   const exec = require("child_process").exec;

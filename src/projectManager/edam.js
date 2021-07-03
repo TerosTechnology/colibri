@@ -77,7 +77,7 @@ class Edam_project extends prj_documenter.Project_documenter{
     let dir_path = path_lib.dirname(path);
     let edam_json = this.get_json_prj(tool_configuration, dir_path);
     let edam_str = JSON.stringify(edam_json);
-    fs.writeFileSync(path, edam_str, "utf8");
+    fs.writeFileSync(path, edam_str);
   }
 
   save_as_yml(path, tool_configuration){
@@ -85,7 +85,7 @@ class Edam_project extends prj_documenter.Project_documenter{
     let dir_path = path_lib.dirname(path);
     let edam_json = this.get_json_prj(tool_configuration, dir_path);
     let edam_yml = json_edam_to_yml_edam(edam_json);
-    fs.writeFileSync(path, edam_yml, "utf8");
+    fs.writeFileSync(path, edam_yml);
   }
 
   async set_top(path, library) {
