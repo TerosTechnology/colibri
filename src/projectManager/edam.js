@@ -327,6 +327,12 @@ class Edam_file {
     else if (extension === '.py') {
       file_type = 'python';
     }
+    else if (extension === '.xdc') {
+      file_type = 'xdc';
+    }
+    else if (extension === '.xci') {
+      file_type = 'xci';
+    }
     else {
       file_type = extension.substring(1).toLocaleUpperCase();
     }

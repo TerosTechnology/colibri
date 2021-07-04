@@ -26,6 +26,9 @@ class Markdown {
     let markdown_doc = "";
     //Doxygen parsed commands insertion (only if available)
     if (code_tree['info'] !== undefined){
+      if (code_tree['info']['copyright'] !== undefined){
+        markdown_doc += "- **Copyright:** " + code_tree['info']['copyright'] + "\n";
+      }
       if (code_tree['info']['file'] !== undefined){
         markdown_doc += "- **File:** " + code_tree['info']['file'] + "\n";
       }
@@ -38,8 +41,8 @@ class Markdown {
       if (code_tree['info']['date'] !== undefined){
         markdown_doc += "- **Date:** " + code_tree['info']['date'] + "\n";
       }
-      if (code_tree['info']['copyright'] !== undefined){
-        markdown_doc += "- **Copyright:** " + code_tree['info']['copyright'] + "\n";
+      if (code_tree['info']['project'] !== undefined){
+        markdown_doc += "- **Project:** " + code_tree['info']['project'] + "\n";
       }
     }
     return markdown_doc;

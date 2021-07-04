@@ -55,16 +55,16 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
     let file_path = files[i];
     let file_path_name = path_lib.basename(file_path);
     
-    cli_bar.update(i, {filename: file_path_name});
-
+    
     let filename = path_lib.basename(file_path, path_lib.extname(file_path));
     lang = utils.get_lang_from_path(file_path);
     if( lang === 'systemverilog'){
       lang = 'verilog';
     }
-
+    
     // Only save the doc for a HDL file and exists
     if (lang !== 'none' && fs.existsSync(file_path) === true){
+      cli_bar.update(i, {filename: file_path_name});
       try{
         let declaration = await declaration_finder.get_declaration_from_file(file_path);
         if (declaration.name !== ''){
