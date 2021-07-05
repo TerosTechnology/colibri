@@ -221,7 +221,7 @@ class Documenter extends markdown_lib.Markdown {
       }
     }
     //Custom section
-    markdown_doc += this.get_custom_section('end', 'html', code_tree, configuration);
+    markdown_doc += this.get_custom_section('end', 'markdown', code_tree, configuration);
     return { 'markdown': markdown_doc, error: false };
   }
 
