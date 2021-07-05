@@ -21,6 +21,7 @@
 async function get_python_exec(python_path) {
   // Check custom python3 path
   if (python_path !== ''){
+    python_path = '"python_path"';
     let python_path_check = await check_custom_python_path(python_path);
     console.log(`[colibri-nopy] Current python3 path: ${python_path_check}`);
     return python_path_check;
