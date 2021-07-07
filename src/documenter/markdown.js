@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 // Copyright 2021 Teros Technology
 //
 // Ismael Perez Rojo
@@ -191,6 +192,9 @@ class Markdown {
           }
           // eslint-disable-next-line max-len
           let name = functions[i].name;
+          arguments_str = arguments_str
+            .replace(/;/g, ';<br><span style="padding-left:20px">')
+            .replace(/,/g, ',<br><span style="padding-left:20px">');
           let section = `- ${name} <font id="function_arguments">${arguments_str}</font> <font id="function_return">${return_str}</font>\n`;
           md += section;
           html += converter.makeHtml(section);
@@ -291,7 +295,10 @@ class Markdown {
     table.push(["Name", "Type", "Description"]);
     for (let i = 0; i < signals.length; ++i) {
       table.push([signals[i]['name'],
-      signals[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      signals[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' ')
+          .replace(/;/g, ';<br><span style="padding-left:20px">')
+          .replace(/,/g, ',<br><span style="padding-left:20px">')
+          .replace(/{/g, '{<br><span style="padding-left:20px">'),
       signals[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
     let text = md(table) + '\n';
@@ -304,8 +311,14 @@ class Markdown {
     table.push(["Name", "Type", "Value", "Description"]);
     for (let i = 0; i < constants.length; ++i) {
       table.push([constants[i]['name'],
-      constants[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
-      constants[i]['default_value'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      constants[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' ')
+          .replace(/;/g, ';<br><span style="padding-left:20px">')
+          .replace(/,/g, ',<br><span style="padding-left:20px">')
+          .replace(/{/g, '{<br><span style="padding-left:20px">'),
+      constants[i]['default_value'].replace(/\r/g, ' ').replace(/\n/g, ' ')
+      .replace(/;/g, ';<br><span style="padding-left:20px">')
+      .replace(/,/g, ',<br><span style="padding-left:20px">')
+      .replace(/{/g, '{<br><span style="padding-left:20px">'),
       constants[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
     let text = md(table) + '\n';
@@ -318,7 +331,10 @@ class Markdown {
     table.push(["Name", "Type", "Description"]);
     for (let i = 0; i < tpyes.length; ++i) {
       table.push([tpyes[i]['name'],
-      tpyes[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      tpyes[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' ')
+            .replace(/;/g, ';<br><span style="padding-left:20px">')
+            .replace(/,/g, ',<br><span style="padding-left:20px">')
+            .replace(/{/g, '{<br><span style="padding-left:20px">'),
       tpyes[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
     let text = md(table) + '\n';

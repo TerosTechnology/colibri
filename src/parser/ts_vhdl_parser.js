@@ -894,6 +894,10 @@ class Parser extends ts_base_parser.Ts_base_parser {
         let type_definition = cursor.nodeText;
         element.type = this.remove_break_line(this.remove_comments(type_definition));
       }
+      else if (cursor.nodeType === 'unbounded_array_definition') {
+        let type_definition = cursor.nodeText;
+        element.type = this.remove_break_line(this.remove_comments(type_definition));
+      }
     }
     while (cursor.gotoNextSibling() === true && break_p === false);
     elements.push(element);
