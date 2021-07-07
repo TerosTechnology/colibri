@@ -25,6 +25,11 @@ const html_style_preview = `
   vertical-align: text-bottom;
 }
 
+#descriptions{
+  margin-left:5.5%;
+  margin-right:3%;
+}
+
 .markdown-body .anchor {
   float: left;
   line-height: 1;
@@ -1039,6 +1044,11 @@ const html_style_save = `
   display: inline-block;
   fill: currentColor;
   vertical-align: text-bottom;
+}
+
+#descriptions{
+  margin-left:5.5%;
+  margin-right:3%;
 }
 
 .markdown-body .anchor {

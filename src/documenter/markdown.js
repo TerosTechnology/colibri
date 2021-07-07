@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 // Copyright 2021 Teros Technology
 //
 // Ismael Perez Rojo
@@ -26,6 +27,9 @@ class Markdown {
     let markdown_doc = "";
     //Doxygen parsed commands insertion (only if available)
     if (code_tree['info'] !== undefined){
+      if (code_tree['info']['copyright'] !== undefined){
+        markdown_doc += "- **Copyright:** " + code_tree['info']['copyright'] + "\n";
+      }
       if (code_tree['info']['file'] !== undefined){
         markdown_doc += "- **File:** " + code_tree['info']['file'] + "\n";
       }
@@ -38,8 +42,14 @@ class Markdown {
       if (code_tree['info']['date'] !== undefined){
         markdown_doc += "- **Date:** " + code_tree['info']['date'] + "\n";
       }
-      if (code_tree['info']['copyright'] !== undefined){
-        markdown_doc += "- **Copyright:** " + code_tree['info']['copyright'] + "\n";
+      if (code_tree['info']['project'] !== undefined){
+        markdown_doc += "- **Project:** " + code_tree['info']['project'] + "\n";
+      }
+      if (code_tree['info']['brief'] !== undefined){
+        markdown_doc += "- **Brief:** " + code_tree['info']['brief'] + "\n";
+      }
+      if (code_tree['info']['details'] !== undefined){
+        markdown_doc += "- **Details:** " + code_tree['info']['details'] + "\n";
       }
     }
     return markdown_doc;
@@ -188,6 +198,9 @@ class Markdown {
           }
           // eslint-disable-next-line max-len
           let name = functions[i].name;
+          arguments_str = arguments_str
+            .replace(/;/g, ';<br><span style="padding-left:20px">')
+            .replace(/,/g, ',<br><span style="padding-left:20px">');
           let section = `- ${name} <font id="function_arguments">${arguments_str}</font> <font id="function_return">${return_str}</font>\n`;
           md += section;
           html += converter.makeHtml(section);
@@ -288,7 +301,10 @@ class Markdown {
     table.push(["Name", "Type", "Description"]);
     for (let i = 0; i < signals.length; ++i) {
       table.push([signals[i]['name'],
-      signals[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      signals[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' ')
+          .replace(/;/g, ';<br><span style="padding-left:20px">')
+          .replace(/,/g, ',<br><span style="padding-left:20px">')
+          .replace(/{/g, '{<br><span style="padding-left:20px">'),
       signals[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
     let text = md(table) + '\n';
@@ -301,8 +317,14 @@ class Markdown {
     table.push(["Name", "Type", "Value", "Description"]);
     for (let i = 0; i < constants.length; ++i) {
       table.push([constants[i]['name'],
-      constants[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
-      constants[i]['default_value'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      constants[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' ')
+          .replace(/;/g, ';<br><span style="padding-left:20px">')
+          .replace(/,/g, ',<br><span style="padding-left:20px">')
+          .replace(/{/g, '{<br><span style="padding-left:20px">'),
+      constants[i]['default_value'].replace(/\r/g, ' ').replace(/\n/g, ' ')
+      .replace(/;/g, ';<br><span style="padding-left:20px">')
+      .replace(/,/g, ',<br><span style="padding-left:20px">')
+      .replace(/{/g, '{<br><span style="padding-left:20px">'),
       constants[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
     let text = md(table) + '\n';
@@ -315,7 +337,10 @@ class Markdown {
     table.push(["Name", "Type", "Description"]);
     for (let i = 0; i < tpyes.length; ++i) {
       table.push([tpyes[i]['name'],
-      tpyes[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      tpyes[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' ')
+            .replace(/;/g, ';<br><span style="padding-left:20px">')
+            .replace(/,/g, ',<br><span style="padding-left:20px">')
+            .replace(/{/g, '{<br><span style="padding-left:20px">'),
       tpyes[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
     let text = md(table) + '\n';

@@ -224,7 +224,7 @@ class Documenter extends markdown_lib.Markdown {
   async get_html(code, lang, configuration) {
     let code_tree = await this._get_code_tree(code, lang, configuration);
     if (code_tree === undefined) {
-      return { 'html': html, error: true };
+      return { 'html': '', error: true };
     }
 
     let html_style = '';

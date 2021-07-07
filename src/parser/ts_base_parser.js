@@ -19,10 +19,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 const clone = require('clone');
+const Doxygen_parser = require('./doxygen_parser');
 
 class Ts_base_parser {
+  constructor(){
+      this.command_end_regex = /^\s*[@\\]end\s*/gm;
+  }
 
-  command_end_regex = /^\s*[@\\]end\s*/gm;
+  // command_end_regex = /^\s*[@\\]end\s*/gm;
 
   search_multiple_in_tree(element, matching_title) {
     var arr_match = [];
@@ -111,7 +115,7 @@ class Ts_base_parser {
     // always remove carriage return
     desc_root.description = desc_root.description.replace(/\r/gm, "");
     // look for single line commands
-    const single_line_regex = /^\s*[@\\](file|author|version|date|title)\s.+$/gm;
+    const single_line_regex = /^\s*[@\\](file|date|title)\s.+$/gm;
     // get all matches for single line attributes
     let matches_array = Array.from(desc_root.description.matchAll(single_line_regex));
     // add a new property for the newly found matches
@@ -119,41 +123,24 @@ class Ts_base_parser {
       dic.info = {};
       // append found matches
       for (let index = 0; index < matches_array.length; index++) {
-        dic.info[matches_array[index][1]] = matches_array[index][0].replace(/^\s*[@\\](file|author|version|date|title)/, "").trim();
+        dic.info[matches_array[index][1]] = matches_array[index][0].replace(/^\s*[@\\](file|date|title)/, "").trim();
       }
       // clean up the description field
       desc_root.description = desc_root.description.replace(single_line_regex, "");
     }
-    // look for copyrights regex, it can be followed by another description or not
-    const copyright_regex_followed = /^\s*[@\\]copyright\s.*\n\n/gms;
-    const copyright_regex_not_followed = /^\s*[@\\]copyright\s.*/gms;
+    desc_root.description = desc_root.description.replace(/@copyright/gm, "\n@copyright");
+    desc_root.description = desc_root.description.replace(/@author/gm, "\n@author");
+    desc_root.description = desc_root.description.replace(/@version/gm, "\n@version");
+    desc_root.description = desc_root.description.replace(/@project/gm, "\n@project");
+    desc_root.description = desc_root.description.replace(/@brief/gm, "\n@brief");
+    desc_root.description = desc_root.description.replace(/@details/gm, "\n@details");
 
-    let copyright = desc_root.description.match(copyright_regex_followed);
-    if (copyright === null) {
-      copyright = desc_root.description.match(copyright_regex_not_followed);
-    }
-    if (copyright !== null) {
-      let stripped_copyright = copyright[0].split(/\n[\s]*\n/gm);
-      for (let index = 0; index < stripped_copyright.length; index++) {
-        if (stripped_copyright[index] !== undefined && stripped_copyright[index].match(copyright_regex_not_followed) !== null) {
-          dic.info.copyright = stripped_copyright[index].replace(/^\s*[@\\]copyright\s/, "");
-          desc_root.description = desc_root.description.replace(stripped_copyright[index], "");
-        }
-      }
-    }
-    // clean @details and @brief and create the new description
-    const description_regex = /^\s*[@\\](brief|details)\s/gm;
-    desc_root.description = desc_root.description.replace(description_regex, "");
-    // desc_root.description = desc_root.description.replace(/\n[\s]*\n/gm, "");
-    dic[file_type] = desc_root;
-    if (file_type === "entity") {
-      let processes_list = dic['body']['processes']
-      if (processes_list.length > 0) {
-        for (let i = 0; i < processes_list.length; i++) {
-          dic.body.processes[i].description = dic.body.processes[i].description.replace(description_regex, "");
-        }
-      }
-    }
+    Doxygen_parser.parse_copyright(dic, desc_root);
+    Doxygen_parser.parse_author(dic, desc_root);
+    Doxygen_parser.parse_version(dic, desc_root);
+    Doxygen_parser.parse_project(dic, desc_root);
+    Doxygen_parser.parse_brief(dic, desc_root);
+    Doxygen_parser.parse_details(dic, desc_root);
     return dic;
   }
 
@@ -188,6 +175,7 @@ class Ts_base_parser {
   }
 
   parse_ports_group(dic) {
+    
     const group_regex = /^\s*[@\\]portgroup\s.*$/gm;
     let ports = dic.ports;
     // hold the current group name

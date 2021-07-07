@@ -22,6 +22,7 @@
 const python_tools = require("../nopy/python_tools");
 const path_lib = require("path");
 const fs = require("fs");
+const utils = require("../utils/utils");
 
 class Dependency_graph {
   constructor() {
@@ -29,8 +30,10 @@ class Dependency_graph {
   }
 
   async create_dependency_graph(project, python3_path) {
+    let clean_project = this.clean_non_hdl_files(project);
+
     const project_files_path = path_lib.join(__dirname, 'json_project_dependencies.json');
-    let project_files_json = JSON.stringify(project);
+    let project_files_json = JSON.stringify(clean_project);
     fs.writeFileSync(project_files_path, project_files_json);
 
     let python_script_path = `"${__dirname}${path_lib.sep}vunit_dependency.py" "${project_files_path}"`;
@@ -45,11 +48,28 @@ class Dependency_graph {
     return dep_graph;
   }
 
+  clean_non_hdl_files(project){
+    let files = project.files;
+    let hdl_files = [];
+    for (let i = 0; i < files.length; i++) {
+      const element = files[i];
+      let check_hdl = utils.check_if_hdl_file(element.name);
+      if (check_hdl === true){
+        hdl_files.push(element);
+      }
+    }
+    let clean_project = JSON.parse(JSON.stringify(project));
+    clean_project.files = hdl_files;
+    return clean_project;
+  }
+
   async get_dependency_tree(project, pypath) {
+    let clean_project = this.clean_non_hdl_files(project);
+
     const project_files_path = path_lib.join(__dirname, 'json_project_dependencies.json');
     const tree_graph_output = path_lib.join(__dirname, 'tree_graph_output.json');
 
-    let project_files_json = JSON.stringify(project);
+    let project_files_json = JSON.stringify(clean_project);
     fs.writeFileSync(project_files_path, project_files_json);
 
     let python_script_path = `"${__dirname}${path_lib.sep}vunit_dependencies_standalone.py" "${project_files_path}"`;

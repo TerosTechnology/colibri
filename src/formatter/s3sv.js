@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Copyright 2021 Julien Faucher
 //
 // This file is part of Colibri.
@@ -16,7 +17,6 @@
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
 const fs = require('fs');
-const os = require('os');
 const path_lib = require('path');
 const Base_formatter = require('./base_formatter');
 
@@ -36,11 +36,11 @@ class S3SV extends Base_formatter {
   //Options: {custom_path:"/path/to/bin, custom_bin:"bin", style:"path/to/rules.json" extra_args:""}
   async format_from_code(code,options){
 
-    this.python3_path =      options["python3_path"]
-    this.use_tabs =          options["use_tabs"]
-    this.indent_size =       options["indent_size"]
-    this.one_bind_per_line = options["one_bind_per_line"]
-    this.one_decl_per_line = options["one_decl_per_line"]
+    this.python3_path =      options["python3_path"];
+    this.use_tabs =          options["use_tabs"];
+    this.indent_size =       options["indent_size"];
+    this.one_bind_per_line = options["one_bind_per_line"];
+    this.one_decl_per_line = options["one_decl_per_line"];
 
     let temp_file = await this._create_temp_file_of_code(code);
     let formatted_code = await this._format(temp_file,options);
@@ -49,8 +49,7 @@ class S3SV extends Base_formatter {
 
   async _format(file,options){
     
-    let entry = `${__dirname}${path_lib.sep}bin${path_lib.sep}s3sv${path_lib.sep}verilog_beautifier.py`;
-    let path_bin = `${this.python3_path} ${__dirname}${path_lib.sep}bin${path_lib.sep}svistyle${path_lib.sep}`;
+    let entry = `"${__dirname}${path_lib.sep}bin${path_lib.sep}s3sv${path_lib.sep}verilog_beautifier.py"`;
 
     //Argument construction from members parameters
     let args = " ";
@@ -60,14 +59,14 @@ class S3SV extends Base_formatter {
       args += "--use-tabs ";
     }
     if (! this.one_bind_per_line) {
-      args += "--no-oneBindPerLine "
+      args += "--no-oneBindPerLine ";
     }
 
     if (this.one_decl_per_line){
-      args += "--oneDeclPerLine "
+      args += "--oneDeclPerLine ";
     }
 
-    args += `-i ${file}`
+    args += `-i ${file}`;
 
     await this._exec_formatter(this.python3_path + " " + entry + args);
     let formatted_code = fs.readFileSync(file, 'utf8');
