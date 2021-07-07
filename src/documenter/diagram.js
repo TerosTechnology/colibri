@@ -1,4 +1,4 @@
-// Copyright 2020 Teros Technology
+// Copyright 2020-2021 Teros Technology
 //
 // Ismael Perez Rojo
 // Carlos Alberto Ruiz Naranjo
@@ -58,7 +58,9 @@ function diagramGenerator(structure, bn) {
   outPorts = getPortsOut(structure, name, kind);
   locx = (size / 2) * maxString(generics, inPorts, [0, 0], kind) + 2 * offset;
   width = (size / 2) * (maxString(generics, inPorts, [0, 0], name) + maxString([0, 0], [0, 0], outPorts, name));
-
+  if ((generics[0].length === 0 && inPorts[0].length === 0) || outPorts[0].length === 0) {
+    width=width*2;
+  }
   let min_x = 0;
   let max_x = 0;
   let max_leght_text_x = 0;
@@ -86,17 +88,19 @@ function diagramGenerator(structure, bn) {
   locy = high + offset / 2 + separator;
   high = size * Math.max(inPorts[0].length, outPorts[0].length);
   total_high = total_high + high + offset / 2;
-  var recta = canvas.rect(width, high + offset).fill(border).move(locx, locy);
-  canvas.rect(width - 4, high + offset / 2).fill(portBox).move(locx + 2, locy + 2);
-  //write ports
-  for (let i = 0; i < inPorts[0].length; i++) {
-    locy = size * generics[0].length + offset + size * i + separator;
-    var textleft = canvas.text(inPorts[kind][i]).move(locx - text_space - text_space_pin, locy - text_offset).font({ family: font, size: size, anchor: 'end' });
-    var textleft = canvas.text(inPorts[name][i]).move(locx + text_space, locy - text_offset).font({ family: font, size: size, anchor: 'start' });
-    let max_local = inPorts[kind][i].length;
-    max_leght_text_x = Math.max(max_leght_text_x, max_local);
-    min_x = Math.min(min_x, textleft['node'].getAttribute('x'));
-    var pins = canvas.line(locx - text_space, 0, locx, 0).move(locx - text_space, locy + size * 2 / 4).stroke({ color: 'black', width: size / 4, linecap: 'rec' });
+  if(inPorts[0].length > 0 || outPorts[0].length > 0){
+    var recta = canvas.rect(width, high + offset).fill(border).move(locx, locy);
+    canvas.rect(width - 4, high + offset / 2).fill(portBox).move(locx + 2, locy + 2);
+    //write ports
+    for (let i = 0; i < inPorts[0].length; i++) {
+      locy = size * generics[0].length + offset + size * i + separator;
+      var textleft = canvas.text(inPorts[kind][i]).move(locx - text_space - text_space_pin, locy - text_offset).font({ family: font, size: size, anchor: 'end' });
+      var textleft = canvas.text(inPorts[name][i]).move(locx + text_space, locy - text_offset).font({ family: font, size: size, anchor: 'start' });
+      let max_local = inPorts[kind][i].length;
+      max_leght_text_x = Math.max(max_leght_text_x, max_local);
+      min_x = Math.min(min_x, textleft['node'].getAttribute('x'));
+      var pins = canvas.line(locx - text_space, 0, locx, 0).move(locx - text_space, locy + size * 2 / 4).stroke({ color: 'black', width: size / 4, linecap: 'rec' });
+    }
   }
   max_x = width;
   max_leght_text_out_kind = Math.max(max_leght_text_x + offset, offset);
@@ -117,7 +121,12 @@ function diagramGenerator(structure, bn) {
   let total_width = max_x + (size / 2) * max_leght_text_out_kind + 2 * offset;
   canvas.viewbox(0, 0, total_width, 2 * offset + total_high);
 
-  return canvas.svg();
+  if (inPorts[0].length > 0 || outPorts[0].length > 0 || generics[0].length > 0) {
+    return canvas.svg();
+  } else {
+    return [];    
+  }
+
 }
 
 function getGenerics(structure, name, kind) {
