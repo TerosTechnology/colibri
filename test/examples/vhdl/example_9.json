@@ -1,7 +1,8 @@
 {
   "entity": {
     "name": "arith_counter_bcd",
-    "description": "Some description can be added here\nalso in multi-linesAnother description can be added hereAnd more core description can be added here\nanother description of the core is also ok"  },
+    "description": "\n \n\n \n\n \n\n\n\n And more core description can be added here\n another description of the core is also ok \n"
+  },
   "generics": [
     {
       "name": "DIGITS",
@@ -62,8 +63,10 @@
   },
   "info": {
     "file": "example_8.vhd",
+    "date": "2020-07-10",
     "author": "el3ctrician (elbadriahmad@gmail.com)",
     "version": "0.1",
-    "date": "2020-07-10"
+    "brief": "Some description can be added here\n also in multi-lines",
+    "details": "Another description can be added here"
   }
 }
