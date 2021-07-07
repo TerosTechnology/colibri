@@ -1,4 +1,4 @@
-// Copyright 2020 Teros Technology
+// Copyright 2020-2021 Teros Technology
 //
 // Ismael Perez Rojo
 // Carlos Alberto Ruiz Naranjo
@@ -56,8 +56,6 @@ if (process.argv[2] === 'verilog') {
         // D.save_html(__dirname + path.sep + build_folfer_v + path.sep + x + '_html.html');
         // D.save_svg(__dirname + path.sep + build_folfer_v + path.sep + x + '_svg.svg');
         // D.save_pdf(__dirname + path.sep + build_folfer_v + path.sep + x + '_pdf.pdf');
-        // console.log(md)
-        // console.log(html)
     }
 }
 
@@ -71,8 +69,6 @@ if (process.argv[2] === 'sv') {
         // D.save_html(__dirname + path.sep + build_folfer_sv + path.sep + x +'_html.html');
         // D.save_svg(__dirname + path.sep + build_folfer_sv + path.sep + x +'_svg.svg');
         // D.save_pdf(__dirname + path.sep + build_folfer_sv + path.sep + x +'_pdf.pdf');
-    // console.log(md)
-    // console.log(html)
     }
 }
 
