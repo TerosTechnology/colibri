@@ -45,6 +45,12 @@ class Markdown {
       if (code_tree['info']['project'] !== undefined){
         markdown_doc += "- **Project:** " + code_tree['info']['project'] + "\n";
       }
+      if (code_tree['info']['brief'] !== undefined){
+        markdown_doc += "- **Brief:** " + code_tree['info']['brief'] + "\n";
+      }
+      if (code_tree['info']['details'] !== undefined){
+        markdown_doc += "- **Details:** " + code_tree['info']['details'] + "\n";
+      }
     }
     return markdown_doc;
   }

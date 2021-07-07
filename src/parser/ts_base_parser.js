@@ -132,25 +132,15 @@ class Ts_base_parser {
     desc_root.description = desc_root.description.replace(/@author/gm, "\n@author");
     desc_root.description = desc_root.description.replace(/@version/gm, "\n@version");
     desc_root.description = desc_root.description.replace(/@project/gm, "\n@project");
+    desc_root.description = desc_root.description.replace(/@brief/gm, "\n@brief");
+    desc_root.description = desc_root.description.replace(/@details/gm, "\n@details");
 
     Doxygen_parser.parse_copyright(dic, desc_root);
     Doxygen_parser.parse_author(dic, desc_root);
     Doxygen_parser.parse_version(dic, desc_root);
     Doxygen_parser.parse_project(dic, desc_root);
-
-    // clean @details and @brief and create the new description
-    const description_regex = /^\s*[@\\](brief|details)\s/gm;
-    desc_root.description = desc_root.description.replace(description_regex, "");
-    // desc_root.description = desc_root.description.replace(/\n[\s]*\n/gm, "");
-    dic[file_type] = desc_root;
-    if (file_type === "entity") {
-      let processes_list = dic['body']['processes']
-      if (processes_list.length > 0) {
-        for (let i = 0; i < processes_list.length; i++) {
-          dic.body.processes[i].description = dic.body.processes[i].description.replace(description_regex, "");
-        }
-      }
-    }
+    Doxygen_parser.parse_brief(dic, desc_root);
+    Doxygen_parser.parse_details(dic, desc_root);
     return dic;
   }
 

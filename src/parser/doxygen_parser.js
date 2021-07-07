@@ -26,6 +26,20 @@ function parse_copyright(dic, desc_root){
   parse_doxygen(regex_followed, regex_not_followed, regex_replace, 'copyright', dic, desc_root);
 }
 
+function parse_brief(dic, desc_root){
+  const regex_followed = /^\s*[@\\]brief\s.*\n\n/gms;
+  const regex_not_followed = /^\s*[@\\]brief\s.*/gms;
+  const regex_replace = /^\s*[@\\]brief\s/;
+  parse_doxygen(regex_followed, regex_not_followed, regex_replace, 'brief', dic, desc_root);
+}
+
+function parse_details(dic, desc_root){
+  const regex_followed = /^\s*[@\\]details\s.*\n\n/gms;
+  const regex_not_followed = /^\s*[@\\]details\s.*/gms;
+  const regex_replace = /^\s*[@\\]details\s/;
+  parse_doxygen(regex_followed, regex_not_followed, regex_replace, 'details', dic, desc_root);
+}
+
 function parse_doxygen(regex_followed, regex_not_followed, regex_replace, name, dic, desc_root){
     // look for copyrights regex, it can be followed by another description or not
     const copyright_regex_followed = regex_followed;
@@ -50,5 +64,7 @@ module.exports = {
   parse_copyright: parse_copyright,
   parse_project: parse_project,
   parse_author: parse_author,
-  parse_version: parse_version
+  parse_version: parse_version,
+  parse_details: parse_details,
+  parse_brief: parse_brief,
 };
