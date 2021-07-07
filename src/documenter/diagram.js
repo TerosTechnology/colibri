@@ -59,7 +59,7 @@ function diagramGenerator(structure, bn) {
   locx = (size / 2) * maxString(generics, inPorts, [0, 0], kind) + 2 * offset;
   width = (size / 2) * (maxString(generics, inPorts, [0, 0], name) + maxString([0, 0], [0, 0], outPorts, name));
   if ((generics[0].length === 0 && inPorts[0].length === 0) || outPorts[0].length === 0) {
-    width=width*2;
+    width=width*1.5;
   }
   let min_x = 0;
   let max_x = 0;
