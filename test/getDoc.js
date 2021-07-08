@@ -1,4 +1,4 @@
-// Copyright 2020 Teros Technology
+// Copyright 2020-2021 Teros Technology
 //
 // Ismael Perez Rojo
 // Carlos Alberto Ruiz Naranjo
@@ -23,54 +23,62 @@ const ln = require('../src/documenter/documenter');
 const fs = require('fs');
 const path = require('path');
 
-let build_folfer = 'build_diagram';
-create_folder(build_folfer);
-// let build_folfer_path = __dirname + path.sep + build_folfer;
-// if ((fs.accessSync(build_folfer_path))!==undefined) {
-//     fs.mkdirSync(__dirname + path.sep + build_folfer);
-// }
+let configuration = {
+  'fsm': true,
+  'signals': 'all',
+  'constants': 'all',
+  'process': 'all',
+  'symbol_vhdl': '!',
+  'symbol_verilog': '!',
+  'extra_top_space': true
+};
 
-// for (let x=0;x<17;++x){
-//     let code = fs.readFileSync(__dirname + path.sep + './examples/vhdl_diagram/example_'+x+'.vhd','utf8');
-//     let D = new ln.Documenter(code,"vhdl","!");
-//     D.save_markdown(__dirname + path.sep + build_folfer + path.sep + x + '_md.md');
-//     D.save_html(__dirname + path.sep + build_folfer + path.sep + x +'_html.html');
-//     D.save_svg(__dirname + path.sep + build_folfer + path.sep + x +'_svg.svg');
-//     D.save_pdf(__dirname + path.sep + build_folfer + path.sep + x +'_pdf.pdf');
-// // console.log(md)
-// // console.log(html)
-// }
-
-let build_folfer_v = 'build_diagram_v';
-create_folder(build_folfer_v);
-for (let x = 5; x < 6; ++x) {
-    let code = fs.readFileSync(__dirname + path.sep + './examples/verilog_diagram/example_' + x + '.v', 'utf8');
-    let D = new ln.Documenter(code, "verilog", "!");
-    D.save_markdown(__dirname + path.sep + build_folfer_v + path.sep + x + '_md.md');
-    // D.save_html(__dirname + path.sep + build_folfer_v + path.sep + x + '_html.html');
-    // D.save_svg(__dirname + path.sep + build_folfer_v + path.sep + x + '_svg.svg');
-    // D.save_pdf(__dirname + path.sep + build_folfer_v + path.sep + x + '_pdf.pdf');
-    // console.log(md)
-    // console.log(html)
+if (process.argv[2] === 'vhdl') {
+    let build_folfer = 'build_diagram';
+    create_folder(build_folfer);
+    for (let x=0;x<17;++x){
+        let code = fs.readFileSync(__dirname + path.sep + './examples/vhdl_diagram/example_'+x+'.vhd','utf8');
+        let D = new ln.Documenter(configuration);
+        D.save_markdown(code, "vhdl",configuration,__dirname + path.sep + build_folfer + path.sep + x + '_md.md');
+        // D.save_html(__dirname + path.sep + build_folfer + path.sep + x +'_html.html');
+        // D.save_svg(__dirname + path.sep + build_folfer + path.sep + x +'_svg.svg');
+        // D.save_pdf(__dirname + path.sep + build_folfer + path.sep + x +'_pdf.pdf');
+    }
 }
 
-let build_folfer_sv = 'build_diagram_sv';
-create_folder(build_folfer_sv);
-for (let x=2;x<3;++x){
-    let code = fs.readFileSync(__dirname + path.sep + './examples/verilog_diagram/example_'+x+'.sv','utf8');
-    let D = new ln.Documenter(code,"verilog","!");
-    D.save_markdown(__dirname + path.sep + build_folfer_sv + path.sep + x + '_md.md');
-    // D.save_html(__dirname + path.sep + build_folfer_sv + path.sep + x +'_html.html');
-    // D.save_svg(__dirname + path.sep + build_folfer_sv + path.sep + x +'_svg.svg');
-    // D.save_pdf(__dirname + path.sep + build_folfer_sv + path.sep + x +'_pdf.pdf');
-// console.log(md)
-// console.log(html)
+if (process.argv[2] === 'verilog') {
+    let build_folfer_v = 'build_diagram_v';
+    create_folder(build_folfer_v);
+    for (let x = 0; x < 14; ++x) {
+        let code = fs.readFileSync(__dirname + path.sep + './examples/verilog_diagram/example_' + x + '.v', 'utf8');
+        let D = new ln.Documenter(configuration);
+        D.save_markdown(code, "verilog", configuration, __dirname + path.sep + build_folfer_v + path.sep + x + '_md.md');
+        // D.save_html(__dirname + path.sep + build_folfer_v + path.sep + x + '_html.html');
+        // D.save_svg(__dirname + path.sep + build_folfer_v + path.sep + x + '_svg.svg');
+        // D.save_pdf(__dirname + path.sep + build_folfer_v + path.sep + x + '_pdf.pdf');
+    }
+}
+
+if (process.argv[2] === 'sv') {
+    let build_folfer_sv = 'build_diagram_sv';
+    create_folder(build_folfer_sv);
+    for (let x=0;x<4;++x){
+        let code = fs.readFileSync(__dirname + path.sep + './examples/verilog_diagram/example_'+x+'.sv','utf8');
+        let D = new ln.Documenter(configuration);
+        D.save_markdown(code, "verilog", configuration, __dirname + path.sep + build_folfer_sv + path.sep + x + '_md.md');
+        // D.save_html(__dirname + path.sep + build_folfer_sv + path.sep + x +'_html.html');
+        // D.save_svg(__dirname + path.sep + build_folfer_sv + path.sep + x +'_svg.svg');
+        // D.save_pdf(__dirname + path.sep + build_folfer_sv + path.sep + x +'_pdf.pdf');
+    }
 }
 
 function create_folder(build_folfer) {
     let build_folfer_path = __dirname + path.sep + build_folfer;
-    if ((fs.accessSync(build_folfer_path)) !== undefined) {
+    try {
+        fs.accessSync(build_folfer_path);
+    } catch (error) {
         fs.mkdirSync(__dirname + path.sep + build_folfer);
+        console.log(`${build_folfer} created`);
     }
 }
 
