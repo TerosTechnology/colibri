@@ -215,6 +215,7 @@ class Custom_yml{
       "dependency_graph": false,
       'fsm': true,
       'signals': 'none',
+      'functions': 'none',
       'constants': 'none',
       'process': 'none',
       'symbol_vhdl': "!",

@@ -545,6 +545,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
     let name = '';
     let element = {
       'name': '',
+      'type': '',
       'sens_list': ''
     };
     let break_p = false;

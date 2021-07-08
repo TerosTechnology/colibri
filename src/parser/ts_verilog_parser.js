@@ -158,7 +158,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
             }
             comments = '';
           }
-          else if (cursor.nodeType === 'function_identifier') {
+          else if (cursor.nodeType === 'function_identifier' || cursor.nodeType === 'function_declaration') {
             last_element_position = cursor.startPosition.row;
             let new_functions = this.get_functions(cursor.currentNode(), lines, general_comments);
             new_functions = this.set_description_to_array(new_functions, comments, general_comments);
@@ -735,6 +735,15 @@ class Parser extends ts_base_parser.Ts_base_parser {
     return always_name;
   }
 
+  get_always_type_list(always, lines) {
+    let type = '';
+    let arr = this.search_multiple_in_tree(always, 'always_keyword');
+    if (arr.length !== 0) {
+      type = this.extract_data(arr[0], lines);
+    }
+    return type;
+  }
+
   get_instantiation_name(always, lines) {
     var arr = this.search_multiple_in_tree(always, 'name_of_instance');
     if (arr.length === 0) {
@@ -862,12 +871,32 @@ class Parser extends ts_base_parser.Ts_base_parser {
   }
 
   get_function_name(input, lines) {
-    let arr = this.search_multiple_in_tree(input, 'simple_identifier');
+    let arr = this.search_multiple_in_tree(input, 'function_identifier');
     if (arr.length === 0) {
       let name = "undefined";
       return name;
     }
     let input_name = this.extract_data(arr[0], lines);
+    return input_name;
+  }
+
+  get_function_arguments(input, lines) {
+    let arr = this.search_multiple_in_tree(input, 'tf_port_list');
+    if (arr.length === 0) {
+      let name = "";
+      return name;
+    }
+    let input_name = '(' + this.extract_data(arr[0], lines) + ')';
+    return input_name;
+  }
+
+  get_function_return(input, lines) {
+    let arr = this.search_multiple_in_tree(input, 'function_data_type_or_implicit1');
+    if (arr.length === 0) {
+      let name = "";
+      return name;
+    }
+    let input_name = 'return (' + this.extract_data(arr[0], lines) + ')';
     return input_name;
   }
 
@@ -984,6 +1013,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       item = {
         "name": this.get_process_label(arr1),
         "sens_list": this.get_always_sens_list(inputs[x], lines),
+        "type": this.get_always_type_list(inputs[x], lines),
         "description": comment,
         'start_line': start_line
       };
@@ -1154,13 +1184,15 @@ class Parser extends ts_base_parser.Ts_base_parser {
     var element = tree;
     let start_line = element.startPosition.row;
     //Inputs
-    var arr = this.search_multiple_in_tree(element, 'function_identifier');
+    var arr = this.search_multiple_in_tree(element, 'function_body_declaration');
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
       let comment = "";
       item = {
         "name": this.get_function_name(inputs[x], lines),
         "description": comment,
+        "arguments": this.get_function_arguments(inputs[x], lines),
+        "return": this.get_function_return(inputs[x], lines),
         "start_line": start_line
       };
       items.push(item);
