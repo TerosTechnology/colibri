@@ -135,7 +135,34 @@ function get_toplevel_regex(code, lang){
   }
 }
 
-
+function get_declaration_regex(code, lang){
+  if (code === undefined){
+    return '';
+  }
+  let result;
+  let regex;
+  let declaration = {name:'',type:''}
+  if (lang === 'vhdl'){
+    code = del_comments_vhdl(code);
+    regex = /(entity|package)\s+(?<name>\w+)\s*is\s*/gim;
+    result = regex.exec(code)
+    if (result !== null && result !== undefined && result.length >= 3){
+      declaration.type = result[1];
+      declaration.name = result[2];
+    }
+  }
+  else{
+    //Remove comments
+    code = del_comments_verilog(code);
+    regex = /(?<type>module|program|interface|package|primitive|config|property)\s+(?:automatic\s+)?(?<name>\w+)/gm;
+    result = regex.exec(code)
+    if (result !== null && result !== undefined && result.length >= 3){
+      declaration.type = 'entity';
+      declaration.name = result[2];
+    }
+  }
+  return declaration;
+}
 
 async function get_toplevel_from_path(filepath){
   if (filepath === undefined){
@@ -162,6 +189,28 @@ async function get_toplevel_from_path(filepath){
   return entity_name;
 }
 
+async function get_declaration_from_path(filepath){
+  if (filepath === undefined){
+    return '';
+  }
+  if (fs.existsSync(filepath) === false){
+    return '';
+  }  
+  let lang = get_file_lang(filepath);
+   if (lang !== 'vhdl' && lang !== 'verilog' && lang !== 'systemverilog'){
+    return '';
+  }
+
+  let code = fs.readFileSync(filepath, "utf8");
+  let entity_name = '';
+  entity_name = get_declaration_regex(code,lang);
+
+  if (entity_name === undefined){
+    return '';
+  }
+  return entity_name;
+}
+
 function get_file_lang(filepath){
   let vhdl_extensions = ['.vhd', '.vho', '.vhdl', '.vhd'];
   let verilog_extensions = ['.v', '.vh', '.vl', '.sv', '.svh'];
@@ -180,6 +229,7 @@ function get_file_lang(filepath){
 }
 
 module.exports = {
+  get_declaration_from_path:get_declaration_from_path,
   get_file_lang:get_file_lang,
   get_toplevel_from_path:get_toplevel_from_path,
   check_if_hdl_file : check_if_hdl_file,

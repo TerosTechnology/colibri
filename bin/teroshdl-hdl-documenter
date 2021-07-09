@@ -46,6 +46,7 @@ program.version(require('../package.json').version)
     .option('-s, --signals <type>', `Include signals/regs/wires in the documentation: ${doc_options_choice}`, 'all')
     .option('-c, --constants <type>', `Include constants/types in the documentation: ${doc_options_choice}`, 'all')
     .option('-p, --process <type>', `Include process/always in the documentation: ${doc_options_choice}`, 'all')
+    .option('-f, --functions <type>', `Include functions in the documentation: ${doc_options_choice}`, 'all')
     .option('--symbol_verilog, <type>', `Special character to parse comments into documentation`,'')
     .option('--symbol_vhdl <type>', `Special character to parse comments into documentation`,'')
     .option('--pypath, <type>', `Explicit python path`,"")
@@ -126,6 +127,8 @@ function get_documentation_config(options){
   validate_config('constants',include_constants);
   let include_process = options.process;
   validate_config('process',include_process);
+  let include_functions = options.functions;
+  validate_config('functions',include_functions);
 
   let doc_symbol_verilog = options.symbol_verilog;
   let doc_symbol_vhdl = options.symbol_vhdl;
@@ -138,6 +141,7 @@ function get_documentation_config(options){
     "signals": include_signals,
     "constants": include_constants,
     "process": include_process,
+    "functions": include_functions,
     "symbol_verilog": doc_symbol_verilog,
     "symbol_vhdl": doc_symbol_vhdl,
     "self_contained": doc_self_contained
@@ -220,6 +224,7 @@ async function print_configuration(options, doc_config, absolute_input_path, abs
 -----> Include FSM: ${doc_config.fsm}
 -----> Include signals: ${doc_config.signals}
 -----> Include process/always: ${doc_config.process}
+-----> Include functions: ${doc_config.functions}
 -----> HTML self contained (only 1 file): ${doc_config.self_contained}
 -----> Verilog symbol to parse the comments: ${doc_config.symbol_verilog}
 -----> VHDL symbol to parse the comments: ${doc_config.symbol_vhdl}

@@ -24,9 +24,16 @@ const stm_base = require('./stm_base_parser');
 const Path = require('path');
 
 class Paser_stm_verilog extends stm_base.Parser_stm_base {
-  constructor(comment_symbol) {
+  constructor(comment_symbol, parser) {
     super();
-    this.comment_symbol = comment_symbol;
+    this.comment_symbol = '';
+    if (comment_symbol !== undefined){
+      this.comment_symbol = comment_symbol;
+    }
+    if (parser !== undefined){
+      this.parser = parser;
+      this.loaded_wasm = true;
+    }
   }
   
   set_comment_symbol(comment_symbol) {
@@ -50,7 +57,10 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
 
   async get_svg_sm(code, comment_symbol) {
     if (comment_symbol !== undefined){
-      this.comment_symbol;
+      this.comment_symbol = comment_symbol;
+    }
+    else{
+      this.comment_symbol = '';
     }
     let process;
     try {
@@ -88,9 +98,6 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
   }
 
   get_process(tree) {
-    if (this.comment_symbol === '') {
-      this.comment_symbol = ' ';
-    }
     let process_array = [];
     let arch_body = this.get_architecture_body(tree);
     let cursor = arch_body.walk();
@@ -104,7 +111,7 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
           if (cursor.nodeType === 'always_construct') {
             let process = {
               'code': this.get_deep_process(cursor.currentNode()),
-              'comments': comments
+              'comments': comments.trim()
             };
             process_array.push(process);
             comments = '';
@@ -117,8 +124,11 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
         cursor.gotoParent();
       }
       else if (cursor.nodeType === 'comment') {
-        let txt_comment = cursor.nodeText.slice(2);
-        if (txt_comment[0] === this.comment_symbol) {
+        let txt_comment = cursor.nodeText.slice(2).trim();
+        if (this.comment_symbol === ''){
+          comments += txt_comment.slice(0).trim() + '\n';
+        }
+        else if (txt_comment[0] === this.comment_symbol) {
           comments += txt_comment.slice(1).trim() + '\n';
         }
       }
@@ -150,7 +160,6 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
 
     return seq_block;
   }
-
 
   get_architecture_body(p) {
     let break_p = false;

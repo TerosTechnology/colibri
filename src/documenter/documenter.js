@@ -28,16 +28,6 @@ const showdown = require('showdown');
 const markdown_lib = require('./markdown');
 const utils = require('./utils');
 
-// let configuration = {
-//   'fsm': true,
-//   'signals': 'all',
-//   'constants': 'all',
-//   'process': 'all',
-//   'symbol_vhdl': '',
-//   'symbol_verilog': '',
-//   'extra_top_space': true
-// };
-
 class Documenter extends markdown_lib.Markdown {
   constructor(config) {
     super();
@@ -421,8 +411,6 @@ class Documenter extends markdown_lib.Markdown {
   async init() {
     await this.create_parser('vhdl');
     await this.create_parser('verilog');
-    await this.create_parser_stm('vhdl');
-    await this.create_parser_stm('verilog');
     this.init_parser = true;
   }
 
@@ -442,22 +430,6 @@ class Documenter extends markdown_lib.Markdown {
     }
   }
 
-  async get_parser_stm(lang) {
-    if (this.init_parser === false) {
-      await this.init();
-    }
-
-    if (lang === 'vhdl') {
-      return this.vhdl_parser_stm;
-    }
-    else if (lang === 'verilog') {
-      return this.verilog_parser_stm;
-    }
-    else {
-      return undefined;
-    }
-  }
-
   async create_parser(lang) {
     let parser = new ParserLib.ParserFactory;
     if (lang === 'vhdl') {
@@ -470,18 +442,6 @@ class Documenter extends markdown_lib.Markdown {
     }
   }
 
-  async create_parser_stm(lang) {
-    let parser = new ParserLib.ParserFactory;
-    if (lang === 'vhdl') {
-      //VHDL parser
-      this.vhdl_parser_stm = await parser.get_parser_stm(lang);
-    }
-    else if (lang === 'verilog') {
-      //Verilog parser
-      this.verilog_parser_stm = await parser.get_parser_stm(lang);
-    }
-  }
-
   async _get_stm(code, lang, configuration) {
     let symbol = '';
     if (lang === 'vhdl'){
@@ -490,7 +450,7 @@ class Documenter extends markdown_lib.Markdown {
     else{
       symbol = configuration.symbol_verilog;
     }
-    let parser = await this.get_parser_stm(lang);
+    let parser = await this.get_parser(lang);
     let stm_array = await parser.get_svg_sm(code, symbol);
     return stm_array.svg;
   }

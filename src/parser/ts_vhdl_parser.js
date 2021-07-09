@@ -22,6 +22,7 @@
 
 const path = require('path');
 const ts_base_parser = require('./ts_base_parser');
+const stm_parser = require('./vhdl_sm');
 
 class Parser extends ts_base_parser.Ts_base_parser {
   constructor(comment_symbol) {
@@ -41,9 +42,14 @@ class Parser extends ts_base_parser.Ts_base_parser {
           Parser.Language.load(path.join(__dirname, path.sep + "parsers" + path.sep + "tree-sitter-vhdl.wasm"));
         this.parser.setLanguage(Lang);
         this.loaded = true;
+        this.stm_parser = new stm_parser.Paser_stm_vhdl(this.comment_symbol, this.parser);
       }
     }
     catch(e){}
+  }
+  
+  async get_svg_sm(code, symbol) {
+    return this.stm_parser.get_svg_sm(code, symbol);
   }
 
   parse(code) {
@@ -545,6 +551,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
     let name = '';
     let element = {
       'name': '',
+      'type': '',
       'sens_list': ''
     };
     let break_p = false;

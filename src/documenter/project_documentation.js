@@ -3,7 +3,7 @@ const path_lib = require('path');
 const utils = require('../utils/utils');
 const fs = require('fs');
 const Documenter_lib = require('./documenter');
-const Parser = require('../parser/factory');
+const declaration_finder = require('../utils/utils');
 const css_style_lib = require('./css_style');
 
 async function get_md_doc_from_project(project, output_dir_doc, graph, config, cli_bar) {
@@ -46,15 +46,11 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
   let doc_modules = '';
   let list_modules = '';
 
-  let doc_inst_vhdl = new Documenter_lib.Documenter(config);
-  let doc_inst_verilog = new Documenter_lib.Documenter(config);
-
-  let declaration_finder = new Declaration_finder();
+  let doc_current = new Documenter_lib.Documenter(config);
 
   for (let i = 0; i < files.length; ++i) {    
     let file_path = files[i];
     let file_path_name = path_lib.basename(file_path);
-    
     
     let filename = path_lib.basename(file_path, path_lib.extname(file_path));
     lang = utils.get_lang_from_path(file_path);
@@ -64,43 +60,42 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
     
     // Only save the doc for a HDL file and exists
     if (lang !== 'none' && fs.existsSync(file_path) === true){
-      cli_bar.update(i, {filename: file_path_name});
-      try{
-        let declaration = await declaration_finder.get_declaration_from_file(file_path);
-        if (declaration.name !== ''){
-          ok_files += 1;
-          let list_modules_inst = '';
-          if (declaration.type === 'entity'){
-            list_modules_inst = get_module_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
+      let contents = fs.readFileSync(files[i], 'utf8');
+      if (contents.split(/\r\n|\r|\n/).length < 8000){
+        
+        cli_bar.update(i, {filename: file_path_name});
+        try{
+          let declaration = await declaration_finder.get_declaration_from_path(file_path);
+          if (declaration.name !== ''){
+            ok_files += 1;
+            let list_modules_inst = '';
+            if (declaration.type === 'entity'){
+              list_modules_inst = get_module_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
+            }
+            else{
+              list_modules_inst = get_package_str(self_contained, INTERNAL_DOC_FOLDER, 
+                    filename, declaration.name, type);
+            }
+            let inst_doc_module = await save_doc(self_contained, type, INTERNAL_DOC_FOLDER_COMPLETE, 
+                    filename, doc_current, contents, lang, config);
+            if (self_contained === false && inst_doc_module.error === false){
+              main_doc += list_modules_inst;
+              main_doc += inst_doc_module.doc;
+            }
+            else if(inst_doc_module.error === false){
+              list_modules += list_modules_inst;
+              doc_modules += inst_doc_module.doc;
+            }
           }
           else{
-            list_modules_inst = get_package_str(self_contained, INTERNAL_DOC_FOLDER, filename, declaration.name, type);
-          }
-          let contents = fs.readFileSync(files[i], 'utf8');
-          let doc_current;
-          if (lang === 'vhdl'){
-            doc_current = doc_inst_vhdl;
-          }
-          else{
-            doc_current = doc_inst_verilog;
-          }
-          // doc_current.set_code(contents);
-          let inst_doc_module = await save_doc(self_contained, type, INTERNAL_DOC_FOLDER_COMPLETE, 
-                  filename, doc_current, contents, lang, config);
-          if (self_contained === false && inst_doc_module.error === false){
-            main_doc += list_modules_inst;
-            main_doc += inst_doc_module.doc;
-          }
-          else if(inst_doc_module.error === false){
-            list_modules += list_modules_inst;
-            doc_modules += inst_doc_module.doc;
+            fail_files += 1;
           }
         }
-        else{
-          fail_files += 1;
+        catch(e){
         }
       }
-      catch(e){
+      else{
+        fail_files += 1;
       }
     }
   }
@@ -234,42 +229,6 @@ function get_extension(type){
     declaration = '.html';
   }
   return declaration;
-}
-
-class Declaration_finder{
-  constructor(){
-    this.init = false;
-  }
-
-  async get_parser(lang){
-    if (this.init === false){
-      let parser_factory = new Parser.ParserFactory();
-      this.vhdl_parser = await parser_factory.getParser('vhdl');
-      this.verilog_parser = await parser_factory.getParser('verilog');
-      this.init = true;
-    }
-    if (lang === 'vhdl'){
-      return this.vhdl_parser;
-    }
-    else{
-      return this.verilog_parser;
-    }
-  }
-
-  async get_declaration_from_file(filename){
-    let lang = utils.get_lang_from_path(filename);
-    if (lang === 'systemverilog'){
-      lang = 'verilog';
-    }
-    let parser = await this.get_parser(lang);
-    let code = fs.readFileSync(filename, "utf8");
-    let entity_name = await parser.get_entity_or_package_name(code);
-    if (entity_name === undefined){
-      return '';
-    }
-    return entity_name;
-  }
-
 }
 
 function get_sources_as_array(files_edam){

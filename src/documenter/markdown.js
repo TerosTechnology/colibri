@@ -107,10 +107,10 @@ class Markdown {
   _get_signals_constants_section(signals, constants, types, configuration) {
     let md = "";
 
-    if (configuration.signals === 'commented') {
+    if (configuration.signals === 'only_commented') {
       signals = this._get_elements_with_description(signals);
     }
-    if (configuration.constants === 'commented') {
+    if (configuration.constants === 'only_commented') {
       constants = this._get_elements_with_description(constants);
       types = this._get_elements_with_description(types);
     }
@@ -139,7 +139,7 @@ class Markdown {
     if (configuration.process === 'none') {
       return '';
     }
-    if (configuration.process === 'commented') {
+    if (configuration.process === 'only_commented') {
       process = this._get_elements_with_description(process);
     }
     let converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
@@ -156,6 +156,10 @@ class Markdown {
         let section = `- ${name}: ( ${process[i].sens_list} )\n`;
         md += section;
         html += converter.makeHtml(section);
+        if (process[i].type !== '' && process[i].type !== undefined){
+          let type_str = `**Type:** ${process[i].type}\n`;
+          html += '<div id="descriptions">' + converter.makeHtml(type_str) + '</div>';
+        }
         let description = process[i].description.replace('\n','');
         if (description !== ''){
           let description = '**Description**\n';
@@ -174,6 +178,12 @@ class Markdown {
   }
 
   _get_functions_section(functions, configuration, mode) {
+    if (configuration.functions === 'none') {
+      return '';
+    }
+    if (configuration.functions === 'only_commented') {
+      functions = this._get_elements_with_description(functions);
+    }
     let md = "";
     let html = "";
     let converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
