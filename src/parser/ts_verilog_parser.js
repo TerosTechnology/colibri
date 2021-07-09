@@ -51,8 +51,8 @@ class Parser extends ts_base_parser.Ts_base_parser {
     catch(e){}
   }
 
-  async get_svg_sm(code) {
-    return this.stm_parser.get_svg_sm(code);
+  async get_svg_sm(code, symbol) {
+    return this.stm_parser.get_svg_sm(code, symbol);
   }
 
   async get_all(sourceCode, comment_symbol) {

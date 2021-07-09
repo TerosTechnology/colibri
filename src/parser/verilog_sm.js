@@ -57,7 +57,10 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
 
   async get_svg_sm(code, comment_symbol) {
     if (comment_symbol !== undefined){
-      this.comment_symbol;
+      this.comment_symbol = comment_symbol;
+    }
+    else{
+      this.comment_symbol = '';
     }
     let process;
     try {
@@ -122,8 +125,11 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
       }
       else if (cursor.nodeType === 'comment') {
         let txt_comment = cursor.nodeText.slice(2).trim();
-        if ( (txt_comment[0] === this.comment_symbol) || this.comment_symbol === '') {
-          comments += txt_comment.slice().trim() + '\n';
+        if (this.comment_symbol === ''){
+          comments += txt_comment.slice(0).trim() + '\n';
+        }
+        else if (txt_comment[0] === this.comment_symbol) {
+          comments += txt_comment.slice(1).trim() + '\n';
         }
       }
       else {

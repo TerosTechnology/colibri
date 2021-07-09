@@ -52,16 +52,14 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
     this.comment_symbol = comment_symbol;
   }
   
-  async get_svg_sm(code) {
-    try {
-      const Parser = await require('web-tree-sitter');
-      await Parser.init();
-      this.parser = new Parser();
-      let Lang = await
-        Parser.Language.load(Path.join(__dirname, Path.sep + "parsers" + Path.sep + "tree-sitter-vhdl.wasm"));
-      this.parser.setLanguage(Lang);
+  async get_svg_sm(code, comment_symbol) {
+    if (comment_symbol !== undefined){
+      this.comment_symbol = comment_symbol;
     }
-    catch(e){}
+    else{
+      this.comment_symbol = '';
+    }
+    this.set_comment_symbol(comment_symbol);
 
     let process;
     let tree;
@@ -117,8 +115,11 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
       }
       else if (cursor.nodeType === 'comment') {
         let txt_comment = cursor.nodeText.slice(2).trim();
-        if ( (txt_comment[0] === this.comment_symbol) || this.comment_symbol === '') {
-          comments += txt_comment.slice().trim() + '\n';
+        if (this.comment_symbol === ''){
+          comments += txt_comment.slice(0).trim() + '\n';
+        }
+        else if (txt_comment[0] === this.comment_symbol) {
+          comments += txt_comment.slice(1).trim() + '\n';
         }
       }
       else {
