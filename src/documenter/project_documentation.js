@@ -46,8 +46,7 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
   let doc_modules = '';
   let list_modules = '';
 
-  let doc_inst_vhdl;
-  let doc_inst_verilog;
+  let doc_current = new Documenter_lib.Documenter(config);
 
   for (let i = 0; i < files.length; ++i) {    
     let file_path = files[i];
@@ -61,13 +60,6 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
     
     // Only save the doc for a HDL file and exists
     if (lang !== 'none' && fs.existsSync(file_path) === true){
-      if (lang === 'vhdl' && doc_inst_vhdl === undefined){
-        doc_inst_vhdl = new Documenter_lib.Documenter(config);
-      }
-      if ( (lang === 'verilog' || lang === 'systemverilog') && doc_inst_verilog === undefined){
-        doc_inst_verilog = new Documenter_lib.Documenter(config);
-      }
-
       let contents = fs.readFileSync(files[i], 'utf8');
       if (contents.split(/\r\n|\r|\n/).length < 8000){
         
@@ -83,13 +75,6 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
             else{
               list_modules_inst = get_package_str(self_contained, INTERNAL_DOC_FOLDER, 
                     filename, declaration.name, type);
-            }
-            let doc_current;
-            if (lang === 'vhdl'){
-              doc_current = doc_inst_vhdl;
-            }
-            else{
-              doc_current = doc_inst_verilog;
             }
             let inst_doc_module = await save_doc(self_contained, type, INTERNAL_DOC_FOLDER_COMPLETE, 
                     filename, doc_current, contents, lang, config);
