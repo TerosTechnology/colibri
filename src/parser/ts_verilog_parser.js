@@ -22,10 +22,15 @@
 
 const path = require('path');
 const ts_base_parser = require('./ts_base_parser');
+const stm_parser = require('./verilog_sm');
 
 class Parser extends ts_base_parser.Ts_base_parser {
   constructor(comment_symbol) {
     super();
+    this.comment_symbol = '';
+    if (comment_symbol !== undefined){
+      this.comment_symbol = comment_symbol;
+    }
     this.comment_symbol = comment_symbol;
     this.loaded = false;
   }
@@ -40,9 +45,14 @@ class Parser extends ts_base_parser.Ts_base_parser {
           "parsers" + path.sep + "tree-sitter-verilog.wasm"));
         this.parser.setLanguage(Lang);
         this.loaded = true;
+        this.stm_parser = new stm_parser.Paser_stm_verilog(this.comment_symbol, this.parser);
       }
     }
     catch(e){}
+  }
+
+  async get_svg_sm(code) {
+    return this.stm_parser.get_svg_sm(code);
   }
 
   async get_all(sourceCode, comment_symbol) {
