@@ -184,12 +184,6 @@ class Ts_base_parser {
     let group_open = false;
     // loop along all ports
     for (let i = 0; i < ports.length; i++) {
-      let end_group = ports[i].description.match(this.command_end_regex);
-      if (end_group !== null && end_group.length > 0 && group_open) {
-        ports[i].description = ports[i].description.replace(end_group[0], "");
-        group_name = "";
-        group_open = false;
-      }
       let group = ports[i].description.match(group_regex);
       // look for a new group name
       if (group !== null && group.length > 0) {
@@ -296,9 +290,11 @@ class Ts_base_parser {
       dic.ports[i].description = ports[i].description.replace(/\n/, "");
 
       if (ports[i].description.match(this.command_end_regex) !== null) {
-        dic.ports[i].description = ports[i].description.replace(this.command_end_regex, "");
         if (virtual_bus_open) {
           virtual_bus_open = false;
+          for (let i = 0; i < virtual_bus_struct.ports.length; i++) {
+            virtual_bus_struct.ports[i].description = virtual_bus_struct.ports[i].description.replace(this.command_end_regex, "");
+          }
           virtual_bus_array.push(clone(virtual_bus_struct));
           virtual_bus_struct = clone(virtual_bus_base_struct);
         }

@@ -23,6 +23,7 @@
 let colibri = require('../src/main.js');
 const yaml = require('js-yaml');
 const fs = require('fs');
+const path_lib = require('path');
 
 
 class Custom_yml{
@@ -30,16 +31,17 @@ class Custom_yml{
     this.doc_options = doc_options;
   }
 
-  doc_yml(options){
-    let yml_file = options.input;
+  async gen_doc(options){
+    let srsfile = options.input;
+    this.doc_options = options;
     try {
-      const doc = yaml.load(fs.readFileSync(yml_file, 'utf8'));
+      const doc = yaml.load(fs.readFileSync(srsfile, 'utf8'));
       for (const x in doc) {
         if (x === 'library'){
-          this.doc_library(doc[x]);
+          await this.doc_library(doc[x], srsfile);
         }
         else if(x === 'ip'){
-          this.doc_ip(doc[x]);
+          await this.doc_ip(doc[x], srsfile);
         }
       }
     } catch (e) {
@@ -47,7 +49,7 @@ class Custom_yml{
     }
   }
 
-  doc_library(lib){
+  async doc_library(lib, srsfile){
     let name = lib.name;
     let ips = lib.ips;
 
@@ -61,10 +63,13 @@ class Custom_yml{
 
     for (const x in ips) {
       const ip = ips[x];
-      const source = ip.source;
+      let source = ip.source;
       const custom_doc = ip.custom_doc;
 
       if (source !== undefined){
+        source = path_lib.dirname(srsfile) + '/' + source;
+        ip.source = source;
+
         if (ip.internal_ips !== undefined){
           internal_ips = ip.internal_ips;
         }
@@ -77,11 +82,11 @@ class Custom_yml{
       }
     }
 
-    this.generate_and_save_documentation(index_output_path, lib_output_path, lib_output_from_readme_path, ips, name);
+    await this.generate_and_save_documentation(index_output_path, lib_output_path, lib_output_from_readme_path, ips, name);
   }
 
 
-  doc_ip(lib){
+  async doc_ip(lib, srsfile){
     let name = lib.name;
     let source = lib.source;
     let custom_doc = lib.custom_doc;
@@ -100,12 +105,12 @@ class Custom_yml{
     let lib_output_path = lib['readme-ips-path'];
     let lib_output_from_readme_path = lib['readme-ips-from-readme-path'];
 
-    this.generate_and_save_documentation_ip(index_output_path, lib_output_path, lib_output_from_readme_path, 
+    await this.generate_and_save_documentation_ip(index_output_path, lib_output_path, lib_output_from_readme_path, 
       ip_obj, name);
   }
 
 
-  generate_and_save_documentation(index_output_path, lib_output_path, lib_output_from_readme_path, ips, name) {
+  async generate_and_save_documentation(index_output_path, lib_output_path, lib_output_from_readme_path, ips, name) {
     const path_lib = require('path');
 
     let main_doc = "# " + name + "\n\n";
@@ -124,32 +129,32 @@ class Custom_yml{
       }
       let internal_ips_section = '';
       if (internal_ips !== undefined && internal_ips.length !== 0){
-        internal_ips_section = this.save_internal_ips(lib_output_path, internal_ips);
+        internal_ips_section = await this.save_internal_ips(lib_output_path, internal_ips);
       }
       if (ips[i].custom_doc !== true){
-        this.save_md_ip(lib_output_path, source, internal_ips_section);
+        await this.save_md_ip(lib_output_path, source, internal_ips_section);
       }
     }
     fs.writeFileSync(index_output_path + '/README.md', main_doc);
   }
 
 
-  generate_and_save_documentation_ip(index_output_path, lib_output_path, 
+  async generate_and_save_documentation_ip(index_output_path, lib_output_path, 
     lib_output_from_readme_path, ip) {
     const internal_ips = ip.internal_ips;
     const source = ip.source;
 
     let internal_ips_section = '';
     if (internal_ips !== undefined && internal_ips.length !== 0){
-      internal_ips_section = this.save_internal_ips(lib_output_path, internal_ips, lib_output_from_readme_path);
+      internal_ips_section = await this.save_internal_ips(lib_output_path, internal_ips, lib_output_from_readme_path);
     }
     if (ip.custom_doc !== true){
-      this.save_md_ip(index_output_path, source, internal_ips_section, lib_output_path, 'README', 
+      await this.save_md_ip(index_output_path, source, internal_ips_section, lib_output_path, 'README', 
         lib_output_from_readme_path);  
     }
   }
 
-  save_internal_ips(output_path, internal_ips, lib_output_from_readme_path){
+  async save_internal_ips(output_path, internal_ips, lib_output_from_readme_path){
     const path_lib = require('path');
     let main_doc = "## Intenal IPs\n";
 
@@ -164,7 +169,7 @@ class Custom_yml{
       else{
         main_doc += "- [" + filename + "](./" + filename2 + ".md)\n";
       }
-      this.save_md_ip(output_path, source, undefined, undefined);
+      await this.save_md_ip(output_path, source, undefined, undefined);
     }
     return main_doc;
   }
@@ -194,8 +199,10 @@ class Custom_yml{
       custom_svg_path_in_readme = lib_output_from_readme_path + '/README.svg';
     }
 
-    let config = {custom_section: internal_ips_section, custom_svg_path: output_svg_path, 
-            custom_svg_path_in_readme: custom_svg_path_in_readme};
+    let config = this.doc_options;
+    config.custom_section = internal_ips_section;
+    config.custom_svg_path = output_svg_path;
+    config.custom_svg_path_in_readme = custom_svg_path_in_readme;
 
     let contents = fs.readFileSync(path, 'utf8');
     let doc_inst = new colibri.Documenter.Documenter(contents, lang, symbol);
@@ -203,7 +210,7 @@ class Custom_yml{
       filename = readme_name;
     }
     this.configure_documenter(doc_inst);
-    doc_inst.save_markdown(output_path + path_lib.sep + filename + ".md", config);
+    await doc_inst.save_markdown(contents, lang, config, output_path + path_lib.sep + filename + ".md");
   }
 
   configure_documenter(documenter){
