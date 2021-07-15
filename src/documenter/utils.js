@@ -5,7 +5,7 @@ function remove_description_spaces(description){
   let description_trail = '';
   for (let i = 0; i < description_split.length; i++) {
     const element = description_split[i];
-    description_trail += ' ' + element.trim() + '\n';
+    description_trail += element.trim() + '\n';
   }
   return description_trail;
 }
