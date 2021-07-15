@@ -224,7 +224,7 @@ class Documenter extends markdown_lib.Markdown {
     }
     else {
       html_style = `<div id="teroshdl" class='templateTerosHDL' style="overflow-y:auto;height:100%;width:100%">\n`;
-      html_style = ''
+      html_style = '';
       html_style = css_const_style.html_style_preview + html_style;
     }
 
@@ -281,7 +281,7 @@ class Documenter extends markdown_lib.Markdown {
         html += converter.makeHtml("## Description\n\n");
         let { description, wavedrom } = utils.get_wavedrom_svg(code_tree['entity']['description']);
 
-        description = utils.remove_description_spaces(description);
+        description = utils.remove_description_spaces(description).trim();
         let html_description = converter.makeHtml(description);
 
         for (let i = 0; i < wavedrom.length; ++i) {
@@ -443,6 +443,9 @@ class Documenter extends markdown_lib.Markdown {
   }
 
   async _get_stm(code, lang, configuration) {
+    if (configuration.fsm === false){
+      return [];
+    }
     let symbol = '';
     if (lang === 'vhdl'){
       symbol = configuration.symbol_vhdl;

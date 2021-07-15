@@ -173,7 +173,7 @@ function validate_output_type(options){
 ////////////////////////////////////////////////////////////////////////////////
 // Generate documentation
 ////////////////////////////////////////////////////////////////////////////////
-function gen_doc(options, doc_config, input_path, output_path){
+async function gen_doc(options, doc_config, input_path, output_path){
   let is_directory = fs.lstatSync(input_path).isDirectory();
 
   let file_ext = '';
@@ -192,7 +192,7 @@ function gen_doc(options, doc_config, input_path, output_path){
     result = edam_yml_c.gen_doc(options, 'file', input_path, output_path);
   }
   else if (file_ext === '.srs') {
-    let custom_yml_c = new custom_yml.Doc(doc_config);
+    let custom_yml_c = new custom_yml.Custom_yml(doc_config);
     custom_yml_c.gen_doc(options);
   }
   else if (file_ext === '.yml') {

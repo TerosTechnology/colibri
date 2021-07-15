@@ -279,12 +279,14 @@ class Markdown {
         direction = '';
       }
       direction = direction.replace(/\r/g, ' ').replace(/\n/g, ' ');
+
+      let type = ports[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' ');
       if (ports[i]['type'] === "virtual_bus"){
-        direction = "-";
+        type = 'Virtual bus';
       }
       table.push([ports[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       direction,
-      ports[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
+      type,
       ports[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
     let text = md(table) + '\n';
