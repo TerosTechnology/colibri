@@ -118,8 +118,14 @@ class Documenter extends markdown_lib.Markdown {
       }else{
         markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n\n";
       }
+      if (configuration.input_path !== undefined){
+        let filename = path_lib.basename(configuration.input_path);
+        markdown_doc += '- **File**: ' + filename + '\n';
+      }
       //Optional info section
       markdown_doc += this._get_info_section(code_tree);
+      //Custom section
+      markdown_doc += this.get_custom_section('begin', 'markdown', code_tree, configuration);
       //Diagram
       await this._save_svg_from_code_tree(path_svg, code_tree);
       markdown_doc += "## Diagram\n\n";
@@ -164,8 +170,14 @@ class Documenter extends markdown_lib.Markdown {
       }else{
         markdown_doc += "# Package: " + code_tree['package']['name'] + "\n\n";
       }
+      if (configuration.input_path !== undefined){
+        let filename = path_lib.basename(configuration.input_path);
+        markdown_doc += '- **File**: ' + filename + '\n';
+      }
       //Optional info section
       markdown_doc += this._get_info_section(code_tree);
+      //Custom section
+      markdown_doc += this.get_custom_section('begin', 'markdown', code_tree, configuration);
       //Description
       let description_inst = code_tree['package']['description'];
       if (description_inst.replace('\n','') !== '') {
@@ -208,7 +220,51 @@ class Documenter extends markdown_lib.Markdown {
         markdown_doc += `![Diagram_state_machine_${i}]( stm_${entity_name}_${i}${i}.svg "Diagram")`;
       }
     }
+    //Custom section
+    markdown_doc += this.get_custom_section('end', 'html', code_tree, configuration);
     return { 'markdown': markdown_doc, error: false };
+  }
+
+  get_end_section(){
+
+  }
+
+  get_begin_section(){
+    
+  }
+
+  get_custom_section(position, type, code_tree, configuration){
+    let directory_base = '';
+    if (configuration.input_path !== undefined){
+      directory_base = path_lib.dirname(configuration.input_path);
+    }
+
+    let info = code_tree['info'];
+    if (info === undefined){
+      return '';
+    }
+    let file_path = '';
+    if (position === 'begin' && info.custom_section_begin !== undefined){
+      file_path = path_lib.join(directory_base,info.custom_section_end.trim());
+    }
+    else if (position === 'end' && info.custom_section_end !== undefined){
+      file_path = path_lib.join(directory_base,info.custom_section_end.trim());
+    }
+
+    if (fs.existsSync(file_path) === false){
+      return '';
+    }
+
+    let result = fs.readFileSync(file_path, {encoding:'utf8', flag:'r'});
+    if (type === 'html'){
+      let converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
+      converter.setFlavor('github');
+      result = converter.makeHtml(result);
+    }
+    if (result !== ''){
+      result = '\n' + result + '\n';
+    }
+    return result;
   }
 
   async get_html(code, lang, configuration) {
@@ -270,7 +326,13 @@ class Documenter extends markdown_lib.Markdown {
         doc_title = "# Entity: " + name + "\n";
       }
       html += `<a id=${name}>` + converter.makeHtml(doc_title) + '</a>';
+      if (configuration.input_path !== undefined){
+        let filename = path_lib.basename(configuration.input_path);
+        html += converter.makeHtml('- **File**: ' + filename + '\n');
+      }
       html += converter.makeHtml(this._get_info_section(code_tree));
+      //Custom section
+      html += this.get_custom_section('begin', 'html', code_tree, configuration);
       //Diagram
       html += converter.makeHtml("## Diagram\n");
       html += converter.makeHtml((await this._get_diagram_svg_from_code_tree(code_tree) + 
@@ -310,8 +372,13 @@ class Documenter extends markdown_lib.Markdown {
         doc_title = "# Package: " + code_tree['package']['name'] + "\n\n";
       }
       html += `<a id=${name}>` + converter.makeHtml(doc_title) + '</a>';
+      if (configuration.input_path !== undefined){
+        let filename = path_lib.basename(configuration.input_path);
+        html += converter.makeHtml('- **File**: ' + filename + '\n');
+      }
       html += converter.makeHtml(this._get_info_section(code_tree));
-
+      //Custom section
+      html += this.get_custom_section('begin', 'html', code_tree, configuration);
       let inst_description = code_tree['package']['description'];
       if (inst_description.replace('\n','') !== ''){
         html += converter.makeHtml("## Description\n\n");
@@ -347,13 +414,15 @@ class Documenter extends markdown_lib.Markdown {
       }
       html += '</div>';
     }
+    //Custom section
+    html += this.get_custom_section('end', 'html', code_tree, configuration);
+    html += '<br><br><br><br><br><br>';
     html += `
     </article class="markdown-body">
 
     </body>
     
     `;
-    html += '<br><br><br><br><br><br>';
 
     return { 'html': html, error: false };
   }

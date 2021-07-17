@@ -82,13 +82,12 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
     // Only save the doc for a HDL file and exists
     if (lang !== 'none' && fs.existsSync(file_path) === true){
 
-      console.log(file_path);
-
       let contents = fs.readFileSync(files[i], 'utf8');
       if (contents.split(/\r\n|\r|\n/).length < 8000){
         
         cli_bar.update(i, {filename: file_path_name});
         try{
+          config.input_path = file_path;
           let declaration = await declaration_finder.get_declaration_from_path(file_path);
           if (declaration.name !== ''){
             ok_files += 1;

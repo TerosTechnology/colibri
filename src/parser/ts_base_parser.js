@@ -23,10 +23,8 @@ const Doxygen_parser = require('./doxygen_parser');
 
 class Ts_base_parser {
   constructor(){
-      this.command_end_regex = /^\s*[@\\]end\s*/gm;
+      this.command_end_regex = /@end/gm;
   }
-
-  // command_end_regex = /^\s*[@\\]end\s*/gm;
 
   search_multiple_in_tree(element, matching_title) {
     var arr_match = [];
@@ -115,7 +113,7 @@ class Ts_base_parser {
     // always remove carriage return
     desc_root.description = desc_root.description.replace(/\r/gm, "");
     // look for single line commands
-    const single_line_regex = /^\s*[@\\](file|date|title)\s.+$/gm;
+    const single_line_regex = /^\s*[@\\](file|date|title|custom_section_begin|custom_section_end)\s.+$/gm;
     // get all matches for single line attributes
     let matches_array = Array.from(desc_root.description.matchAll(single_line_regex));
     // add a new property for the newly found matches
@@ -123,7 +121,7 @@ class Ts_base_parser {
       dic.info = {};
       // append found matches
       for (let index = 0; index < matches_array.length; index++) {
-        dic.info[matches_array[index][1]] = matches_array[index][0].replace(/^\s*[@\\](file|date|title)/, "").trim();
+        dic.info[matches_array[index][1]] = matches_array[index][0].replace(/^\s*[@\\](file|date|title|custom_section_begin|custom_section_end)/, "").trim();
       }
       // clean up the description field
       desc_root.description = desc_root.description.replace(single_line_regex, "");
