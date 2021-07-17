@@ -210,7 +210,7 @@ function get_title_project(type, project_name){
   }
   title += 'Carlos Alberto Ruiz Naranjo (carlosruiznaranjo@gmail.com)<br>';
   title += 'Ismael Perez Rojo (ismaelprojo@gmail.com)<br><br>';
-  title += `<br><br>Project revision ${date}\n`;
+  title += `Project revision ${date}<br><br>\n`;
   return title;
 }
 
