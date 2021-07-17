@@ -94,7 +94,7 @@ for i in range(0, len(nodes)):
 
 json_dependencies = {'root': total_dependencies}
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
+dir_path = os.path.dirname(prj)
 output_path = os.path.join(dir_path, 'tree_graph_output.json')
 with open(output_path, 'w') as outfile:
     json.dump(json_dependencies, outfile)

@@ -147,7 +147,7 @@ function get_declaration_regex(code, lang){
     regex = /(entity|package)\s+(?<name>\w+)\s*is\s*/gim;
     result = regex.exec(code)
     if (result !== null && result !== undefined && result.length >= 3){
-      declaration.type = result[1];
+      declaration.type = result[1].toLocaleLowerCase();
       declaration.name = result[2];
     }
   }

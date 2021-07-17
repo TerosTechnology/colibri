@@ -32,7 +32,8 @@ class Dependency_graph {
   async create_dependency_graph(project, python3_path) {
     let clean_project = this.clean_non_hdl_files(project);
 
-    const project_files_path = path_lib.join(__dirname, 'json_project_dependencies.json');
+    const tmpdir = require('os').tmpdir();
+    const project_files_path = path_lib.join(tmpdir, 'json_project_dependencies.json');
     let project_files_json = JSON.stringify(clean_project);
     fs.writeFileSync(project_files_path, project_files_json);
 
@@ -66,8 +67,9 @@ class Dependency_graph {
   async get_dependency_tree(project, pypath) {
     let clean_project = this.clean_non_hdl_files(project);
 
-    const project_files_path = path_lib.join(__dirname, 'json_project_dependencies.json');
-    const tree_graph_output = path_lib.join(__dirname, 'tree_graph_output.json');
+    const tmpdir = require('os').tmpdir();
+    const project_files_path = path_lib.join(tmpdir, 'json_project_dependencies.json');
+    const tree_graph_output = path_lib.join(tmpdir, 'tree_graph_output.json');
 
     let project_files_json = JSON.stringify(clean_project);
     fs.writeFileSync(project_files_path, project_files_json);
