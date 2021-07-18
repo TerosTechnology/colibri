@@ -27,11 +27,7 @@ const stm_parser = require('./verilog_sm');
 class Parser extends ts_base_parser.Ts_base_parser {
   constructor(comment_symbol) {
     super();
-    this.comment_symbol = '';
-    if (comment_symbol !== undefined){
-      this.comment_symbol = comment_symbol;
-    }
-    this.comment_symbol = comment_symbol;
+    this.set_symbol(comment_symbol);
     this.loaded = false;
   }
 
@@ -61,9 +57,9 @@ class Parser extends ts_base_parser.Ts_base_parser {
     }
     let structure;
     let file_type;
-    if (comment_symbol !== undefined) {
-      this.comment_symbol = comment_symbol;
-    }
+
+    this.set_symbol(comment_symbol);
+
     try {
       var lines = this.fileLines(sourceCode);
       const tree = await this.parser.parse(sourceCode);
@@ -125,9 +121,6 @@ class Parser extends ts_base_parser.Ts_base_parser {
 
   //////////////////////////////////////////////////////////////////////////////
   get_body_elements_and_declarations(arch_body, lines, general_comments, enable_package) {
-    if (this.comment_symbol === '') {
-      this.comment_symbol = ' ';
-    }
     let last_element_position = -1;
     //Elements array
     let process_array = [];
@@ -247,9 +240,8 @@ class Parser extends ts_base_parser.Ts_base_parser {
       }
       else if (cursor.nodeType === 'comment') {
         let comment_position = cursor.startPosition.row;
-        let txt_comment = cursor.nodeText.slice(2);
-        if (txt_comment[0] === this.comment_symbol && last_element_position !== comment_position) {
-          comments += txt_comment.slice(1).trim() + '\n';
+        if (last_element_position !== comment_position) {
+          comments += this.get_comment(cursor.nodeText);
         }
         else {
           comments = '';
@@ -300,10 +292,9 @@ class Parser extends ts_base_parser.Ts_base_parser {
         comments = '';
       }
       else if (cursor.nodeType === 'comment') {
-        let txt_comment = cursor.nodeText.slice(2);
         let comment_position = cursor.startPosition.row;
-        if (txt_comment[0] === this.comment_symbol && last_element_position !== comment_position) {
-          comments += txt_comment.slice(1).trim() + '\n';
+        if (last_element_position !== comment_position) {
+          comments += this.get_comment(cursor.nodeText);
         }
         else {
           comments = '';
@@ -349,9 +340,8 @@ class Parser extends ts_base_parser.Ts_base_parser {
       }
       else if (cursor.nodeType === 'comment') {
         let comment_position = cursor.startPosition.row;
-        let txt_comment = cursor.nodeText.slice(2);
-        if (txt_comment[0] === this.comment_symbol && last_element_position !== comment_position) {
-          comments += txt_comment.slice(1).trim() + '\n';
+        if (last_element_position !== comment_position) {
+          comments += this.get_comment(cursor.nodeText);
         }
         else {
           comments = '';
@@ -397,9 +387,8 @@ class Parser extends ts_base_parser.Ts_base_parser {
       }
       else if (cursor.nodeType === 'comment') {
         let comment_position = cursor.startPosition.row;
-        let txt_comment = cursor.nodeText.slice(2);
-        if (txt_comment[0] === this.comment_symbol && last_element_position !== comment_position) {
-          comments += txt_comment.slice(1).trim() + '\n';
+        if (last_element_position !== comment_position) {
+          comments += this.get_comment(cursor.nodeText);
         }
         else {
           comments = '';
@@ -448,8 +437,12 @@ class Parser extends ts_base_parser.Ts_base_parser {
   check_comment(comment) {
     let check = false;
     let result = '';
-    if (comment[0] === this.comment_symbol) {
-      result = comment.slice(1).trim();
+    if (this.comment_symbol === ''){
+      result = comment.trim() + '\n';
+      check = true;    
+    }
+    else if (comment[0] === this.comment_symbol) {
+      result = comment.slice(1).trim() + '\n';
       check = true;
     }
     return { check: check, comment: result };
@@ -583,19 +576,15 @@ class Parser extends ts_base_parser.Ts_base_parser {
             if (port_ref_name === port_name[i].trim()) {
               var pre_comment = comments[port_ref[z].startPosition.row];
               if (pre_comment !== undefined) {
-                if (this.comment_symbol === "" || pre_comment[0] === this.comment_symbol) {
-                  comment = pre_comment.substring(1);
-                } else {
-                  comment = "";
-                }
+                comment = this.get_comment(pre_comment);
               }
             }
           }
         }
-        else if (this.comment_symbol === "" || comment_str[0] === this.comment_symbol) {
-          comment = comment_str.substring(1);
+        let comment_check = this.get_comment(comment_str);
+        if (comment_check !== ''){
+          comment = comment_check;
         }
-
         if (directionVar === undefined) {
           directionVar = this.last_direction;
         }
@@ -669,11 +658,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       let comment = "";
       let pre_comment = comments[inputs[x].startPosition.row];
       if (pre_comment !== undefined) {
-        if (this.comment_symbol === "" || pre_comment[0] === this.comment_symbol) {
-          comment = pre_comment.substring(1);
-        } else {
-          comment = "";
-        }
+        comment = this.get_comment(pre_comment);
       }
       item = {
         "name": this.get_generic_name(inputs[x], lines),
@@ -685,8 +670,6 @@ class Parser extends ts_base_parser.Ts_base_parser {
     }
     return items;
   }
-
-
 
   get_library_name(port, lines) {
     let arr = this.search_multiple_in_tree(port, 'double_quoted_string');
@@ -968,10 +951,8 @@ class Parser extends ts_base_parser.Ts_base_parser {
       if (comments[x].startPosition.row >= module_index[0]) {
         break;
       }
-      let comment_str = this.extract_data(comments[x], lines).substr(2) + '\n ';
-      if (this.comment_symbol === "" || comment_str[0] === this.comment_symbol) {
-        description += comment_str.substring(1);
-      }
+      let comment_str = this.extract_data(comments[x], lines);
+      description += this.get_comment(comment_str);
     }
     description += '\n';
     item["description"] = description;
@@ -997,10 +978,8 @@ class Parser extends ts_base_parser.Ts_base_parser {
     var comments = this.search_multiple_in_tree(tree, 'comment');
     for (var x = 0; x < comments.length; ++x) {
       if (comments[x].startPosition.row >= module_index[0]) { break; }
-      var comment_str = this.extract_data(comments[x], lines).substr(2) + '\n ';
-      if (this.comment_symbol === "" || comment_str[0] === this.comment_symbol) {
-        description += comment_str.substring(1);
-      }
+      var comment_str = this.extract_data(comments[x], lines);
+      description += this.get_comment(comment_str);
     }
     description += '\n';
     item["description"] = description;

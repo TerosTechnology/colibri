@@ -61,13 +61,11 @@ class Parser extends ts_base_parser.Ts_base_parser {
   }
 
   get_all(code, comment_symbol) {
+    this.set_symbol(comment_symbol);
     if (this.loaded === false){
       return undefined;
     }
     let struct;
-    if (comment_symbol !== undefined) {
-      this.comment_symbol = comment_symbol;
-    }
     let entity_file = this.get_entity_file(code);
     if (entity_file === undefined || entity_file.entity.name === '') {
       let package_file = this.get_package_file(code);
@@ -161,11 +159,6 @@ class Parser extends ts_base_parser.Ts_base_parser {
   }
 
   get_package_declaration(code) {
-    let comment_symbol = this.comment_symbol;
-    if (comment_symbol === '') {
-      comment_symbol = ' ';
-    }
-
     let tree = this.parse(code);
 
     let description = '';
@@ -189,13 +182,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
             while (cursor.gotoNextSibling() === true && break_p === false);
           }
           else if (cursor.nodeType === 'comment') {
-            let txt_comment = cursor.nodeText.slice(2);
-            if (txt_comment[0] === comment_symbol) {
-              description += txt_comment.slice(1);
-            }
-            else {
-              // description = '';
-            }
+            description += this.get_comment(cursor.nodeText);
           }
           else {
             description = '';
@@ -220,14 +207,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
   }
 
   get_entity_declaration(code) {
-    let comment_symbol = this.comment_symbol;
-    if (comment_symbol === '') {
-      comment_symbol = ' ';
-    }
-
     let tree = this.parse(code);
-
-    let entity_description = '';
     let entity_name = '';
 
     let description = this.get_entity_declaration_description(code);
@@ -259,16 +239,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
         while (cursor.gotoNextSibling() === true && break_p === false);
       }
       else if (cursor.nodeType === 'comment') {
-        let txt_comment = cursor.nodeText.slice(2);
-        if (txt_comment[0] === comment_symbol) {
-          entity_description += txt_comment.slice(1);
-        }
-        else {
-          // entity_description = '';
-        }
-      }
-      else {
-        entity_description = '';
+        description += this.get_comment(cursor.nodeText);
       }
     }
     while (cursor.gotoNextSibling() === true && break_p === false);
@@ -277,11 +248,6 @@ class Parser extends ts_base_parser.Ts_base_parser {
   }
 
   get_entity_declaration_description(code) {
-    let comment_symbol = this.comment_symbol;
-    if (comment_symbol === '') {
-      comment_symbol = ' ';
-    }
-
     let tree = this.parse(code);
 
     let entity_description = '';
@@ -296,25 +262,13 @@ class Parser extends ts_base_parser.Ts_base_parser {
           if (cursor.nodeType === 'entity_declaration') {
           }
           else if (cursor.nodeType === 'comment') {
-            let txt_comment = cursor.nodeText.slice(2);
-            if (txt_comment[0] === comment_symbol) {
-              entity_description += txt_comment.slice(1);
-            }
-            else {
-              // entity_description = '';
-            }
+            entity_description += this.get_comment(cursor.nodeText);
           }
         }
         while (cursor.gotoNextSibling() === true && break_p === false);
       }
       else if (cursor.nodeType === 'comment') {
-        let txt_comment = cursor.nodeText.slice(2);
-        if (txt_comment[0] === comment_symbol) {
-          entity_description += txt_comment.slice(1);
-        }
-        else {
-          // entity_description = '';
-        }
+        entity_description += this.get_comment(cursor.nodeText);
       }
       else {
         entity_description = '';
@@ -344,10 +298,6 @@ class Parser extends ts_base_parser.Ts_base_parser {
   }
 
   get_generics_or_ports(p) {
-    let comment_symbol = this.comment_symbol;
-    if (comment_symbol === '') {
-      comment_symbol = ' ';
-    }
     let break_p = false;
     let elements_array = [];
 
@@ -375,7 +325,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       else if (cursor.nodeType === 'comment') {
         let txt_comment = cursor.nodeText.slice(2);
         let comment_line = cursor.startPosition.row;
-        if (txt_comment[0] === comment_symbol) {
+        if (txt_comment[0] === this.comment_symbol) {
           if (txt_comment.charAt(txt_comment.length - 1) === '\n'
             || txt_comment.charAt(txt_comment.length - 1) === '\r') {
             txt_comment = txt_comment.slice(0, -1);
@@ -499,11 +449,6 @@ class Parser extends ts_base_parser.Ts_base_parser {
   get_architecture_body_elements(code) {
     try {
       let arch_body = this.get_architecture_body(code);
-
-      let comment_symbol = this.comment_symbol;
-      if (comment_symbol === '') {
-        comment_symbol = ' ';
-      }
       let process_array = [];
       let instanciation_array = [];
 
@@ -529,10 +474,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
           comments = '';
         }
         else if (cursor.nodeType === 'comment') {
-          let txt_comment = cursor.nodeText.slice(2);
-          if (txt_comment[0] === comment_symbol) {
-            comments += txt_comment.slice(1);
-          }
+          comments += this.get_comment(cursor.nodeText);
         }
         else {
           comments = '';
@@ -643,31 +585,6 @@ class Parser extends ts_base_parser.Ts_base_parser {
     return arch_declaration;
   }
 
-  // get_package_top_declaration(code) {
-  //   let tree = this.parse(code);
-
-  //   let break_p = false;
-  //   let declaration = undefined;
-  //   let cursor = tree.walk();
-  //   cursor.gotoFirstChild();
-  //   do {
-  //     if (cursor.nodeType === 'package_declaration') {
-  //       cursor.gotoFirstChild();
-  //       do {
-  //         if (cursor.nodeType === 'declarative_part') {
-  //           declaration = cursor.currentNode();
-  //           break_p = true;
-  //         }
-  //       }
-  //       while (cursor.gotoNextSibling() === true && break_p === false);
-  //     }
-
-  //   }
-  //   while (cursor.gotoNextSibling() === true && break_p === false);
-  //   return declaration;
-  // }
-
-
   get_package_top_declaration(code) {
     let tree = this.parse(code);
 
@@ -715,11 +632,6 @@ class Parser extends ts_base_parser.Ts_base_parser {
     }
     else {
       top_declaration = this.get_package_top_declaration(code);
-    }
-
-    let comment_symbol = this.comment_symbol;
-    if (comment_symbol === '') {
-      comment_symbol = ' ';
     }
     let types_array = [];
     let signals_array = [];
@@ -778,38 +690,42 @@ class Parser extends ts_base_parser.Ts_base_parser {
         }
 
         let comment_line = cursor.startPosition.row;
-        if (txt_comment[0] === comment_symbol) {
+        if (txt_comment[0] === this.comment_symbol || this.comment_symbol === '') {
+          if (this.comment_symbol !== ''){
+            txt_comment = txt_comment.slice(1);
+          }
+
           let check = false;
           //Types
           for (let i = 0; i < types_array.length; ++i) {
             if (comment_line === types_array[i].line) {
-              types_array[i].description = txt_comment.slice(1);
+              types_array[i].description = txt_comment;
               check = true;
             }
           }
           //Signals
           for (let i = 0; i < signals_array.length; ++i) {
             if (comment_line === signals_array[i].line) {
-              signals_array[i].description = txt_comment.slice(1);
+              signals_array[i].description = txt_comment;
               check = true;
             }
           }
           //Constants
           for (let i = 0; i < constants_array.length; ++i) {
             if (comment_line === constants_array[i].line) {
-              constants_array[i].description = txt_comment.slice(1);
+              constants_array[i].description = txt_comment;
               check = true;
             }
           }
           //Functions
           for (let i = 0; i < functions_array.length; ++i) {
             if (comment_line === functions_array[i].line) {
-              functions_array[i].description = txt_comment.slice(1);
+              functions_array[i].description = txt_comment;
               check = true;
             }
           }
           if (check === false) {
-            comments += txt_comment.slice(1);
+            comments += txt_comment;
           }
         }
         else {

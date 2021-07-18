@@ -149,6 +149,29 @@ class Ts_base_parser {
     return desc_inst;
   }
 
+  get_comment(comment){
+    if (comment === undefined){
+      return '';
+    }
+    let txt_comment = comment.slice(2);
+    if (this.comment_symbol === '') {
+      return txt_comment + '\n';
+    }
+    else if (txt_comment[0] === this.comment_symbol) {
+      return txt_comment.slice(1).trim() + '\n';
+    }
+    return '';
+  }
+
+  set_symbol(symbol){
+    if (symbol === undefined) {
+      this.comment_symbol = '';
+    }
+    else{
+      this.comment_symbol = symbol;
+    }
+  }
+
   parse_mermaid(dic,file_type) {
     // the command regex
     const mermaid_regex = /^\s*[@\\]mermaid\s*.*[@\\]end/gms;

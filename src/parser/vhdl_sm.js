@@ -26,7 +26,7 @@ const stm_base = require('./stm_base_parser');
 class Paser_stm_vhdl extends stm_base.Parser_stm_base {
   constructor(comment_symbol, parser) {
     super();
-    this.comment_symbol = comment_symbol;
+    this.set_symbol(comment_symbol);
     if (parser !== undefined){
       this.parser = parser;
       this.loaded_wasm = true;
@@ -49,16 +49,10 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
   }
 
   set_comment_symbol(comment_symbol) {
-    this.comment_symbol = comment_symbol;
+    this.set_symbol(comment_symbol);
   }
   
   async get_svg_sm(code, comment_symbol) {
-    if (comment_symbol !== undefined){
-      this.comment_symbol = comment_symbol;
-    }
-    else{
-      this.comment_symbol = '';
-    }
     this.set_comment_symbol(comment_symbol);
 
     let process;
@@ -114,13 +108,7 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
         comments = '';
       }
       else if (cursor.nodeType === 'comment') {
-        let txt_comment = cursor.nodeText.slice(2).trim();
-        if (this.comment_symbol === ''){
-          comments += txt_comment.slice(0).trim() + '\n';
-        }
-        else if (txt_comment[0] === this.comment_symbol) {
-          comments += txt_comment.slice(1).trim() + '\n';
-        }
+        comments += this.get_comment(cursor.nodeText);
       }
       else {
         comments = '';
