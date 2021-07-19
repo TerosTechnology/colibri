@@ -225,14 +225,6 @@ class Documenter extends markdown_lib.Markdown {
     return { 'markdown': markdown_doc, error: false };
   }
 
-  get_end_section(){
-
-  }
-
-  get_begin_section(){
-    
-  }
-
   get_custom_section(position, type, code_tree, configuration){
     let directory_base = '';
     if (configuration.input_path !== undefined){
@@ -257,7 +249,14 @@ class Documenter extends markdown_lib.Markdown {
 
     let result = fs.readFileSync(file_path, {encoding:'utf8', flag:'r'});
     if (type === 'html'){
-      let converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
+      const showdownHighlight = require("showdown-highlight");
+      let converter = new showdown.Converter({ tables: true, ghCodeBlocks: true,
+        extensions: [showdownHighlight({
+          // Whether to add the classes to the <pre> tag
+          pre: true
+        })]
+      });
+
       converter.setFlavor('github');
       result = converter.makeHtml(result);
     }
@@ -303,8 +302,13 @@ class Documenter extends markdown_lib.Markdown {
     else {
       html = html_style;
     }
-
-    let converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
+    const showdownHighlight = require("showdown-highlight");
+    let converter = new showdown.Converter({ tables: true, ghCodeBlocks: true,
+      extensions: [showdownHighlight({
+        // Whether to add the classes to the <pre> tag
+        pre: true
+      })]
+    });
     converter.setFlavor('github');
 
     if (configuration.extra_top_space === true){
@@ -423,7 +427,6 @@ class Documenter extends markdown_lib.Markdown {
     </body>
     
     `;
-
     return { 'html': html, error: false };
   }
 

@@ -136,6 +136,29 @@ class Parser_stm_base extends ts_base_parser.Ts_base_parser {
     return self.indexOf(value) === index;
   }
 
+  get_comment(comment){
+    if (comment === undefined){
+      return '';
+    }
+    let txt_comment = comment.slice(2);
+    if (this.comment_symbol === '') {
+      return txt_comment + '\n';
+    }
+    else if (txt_comment[0] === this.comment_symbol) {
+      return txt_comment.slice(1).trim() + '\n';
+    }
+    return '';
+  }
+
+  set_symbol(symbol){
+    if (symbol === undefined) {
+      this.comment_symbol = '';
+    }
+    else{
+      this.comment_symbol = symbol;
+    }
+  }
+
 }
 
 module.exports = {
