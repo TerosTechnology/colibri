@@ -25,14 +25,14 @@ class Verible extends Base_linter {
     super();
     if (type !== "syntax"){
       this.PARAMETERS = {
-        'SYNT' : "verilog_lint ",
-        'SYNT_WINDOWS' : "verilog_lint "
+        'SYNT' : "verible-verilog-lint ",
+        'SYNT_WINDOWS' : "verible-verilog-lint "
       };
     }
     else {
       this.PARAMETERS = {
-        'SYNT' : "verilog_syntax ",
-        'SYNT_WINDOWS' : "verilog_syntax "
+        'SYNT' : "verible-verilog-syntax ",
+        'SYNT_WINDOWS' : "verible-verilog-syntax "
       };
     }
 
