@@ -155,10 +155,10 @@ class Ts_base_parser {
     }
     let txt_comment = comment.slice(2);
     if (this.comment_symbol === '') {
-      return txt_comment + '\n';
+      return txt_comment;
     }
     else if (txt_comment[0] === this.comment_symbol) {
-      return txt_comment.slice(1).trim() + '\n';
+      return txt_comment.slice(1);
     }
     return '';
   }
