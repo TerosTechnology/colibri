@@ -325,7 +325,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       else if (cursor.nodeType === 'comment') {
         let txt_comment = cursor.nodeText.slice(2);
         let comment_line = cursor.startPosition.row;
-        if (txt_comment[0] === this.comment_symbol) {
+        if (txt_comment[0] === this.comment_symbol || this.comment_symbol === '') {
           if (txt_comment.charAt(txt_comment.length - 1) === '\n'
             || txt_comment.charAt(txt_comment.length - 1) === '\r') {
             txt_comment = txt_comment.slice(0, -1);
@@ -334,10 +334,15 @@ class Parser extends ts_base_parser.Ts_base_parser {
           //Constants
           for (let i = 0; i < elements_array.length; ++i) {
             if (comment_line === elements_array[i].line) {
-              elements_array[i].description = txt_comment.slice(1);
+              if (this.comment_symbol === ''){
+                elements_array[i].description = txt_comment;
+              }
+              else{
+                elements_array[i].description = txt_comment.slice(1);
+              }
               check = true;
             }
-          }
+          } 
           if (check === false) {
             comments += txt_comment.slice(1)+"\n";
           }
