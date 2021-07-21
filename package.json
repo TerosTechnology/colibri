@@ -3,6 +3,9 @@
   "version": "0.2.0",
   "description": "Backend for terosHDL IDE",
   "main": "src/main.js",
+  "engines": {
+    "node": ">=12.0.0"
+  },
   "scripts": {
     "testLinter": "cd test && cd linter && node linter",
     "testTemplates": "cd test && cd templates && node coco_test && node verilator_test && node vunit_runpy && node tb_vhdl && node tb_verilog && node component",

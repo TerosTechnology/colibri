@@ -11,7 +11,12 @@
 
 # TerosHDL backend
 
+## Requirements
+
+- nodejs >= v12.0.0
+
 ## Documenter CI
+
 
 - Installation:
 

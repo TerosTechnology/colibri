@@ -64,6 +64,36 @@ class Dependency_graph {
     return clean_project;
   }
 
+  async get_compile_order(project, pypath) {
+    let clean_project = this.clean_non_hdl_files(project);
+
+    const tmpdir = require('os').tmpdir();
+    const project_files_path = path_lib.join(tmpdir, 'json_project_compile_order.json');
+    const compile_order_output = path_lib.join(tmpdir, 'teroshdl_compile_order.json');
+
+    let project_files_json = JSON.stringify(clean_project);
+    fs.writeFileSync(project_files_path, project_files_json);
+
+    let python_script_path = `"${__dirname}${path_lib.sep}vunit_compile_order.py" "${project_files_path}"`;
+    let result = await python_tools.exec_python_script(
+      pypath,
+      python_script_path
+    );
+    let compile_order = [];
+    if (result.error === 0){
+      try{
+        let rawdata = fs.readFileSync(compile_order_output);
+        compile_order = JSON.parse(rawdata)['compile_order'];
+      }
+      catch(e){
+        return compile_order;
+      }
+    }
+    return compile_order;
+  }
+
+
+
   async get_dependency_tree(project, pypath) {
     let clean_project = this.clean_non_hdl_files(project);
 
