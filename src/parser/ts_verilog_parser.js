@@ -437,6 +437,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
   check_comment(comment) {
     let check = false;
     let result = '';
+    comment = comment.slice(2);
     if (this.comment_symbol === ''){
       result = comment.trim() + '\n';
       check = true;    
@@ -521,7 +522,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
     if (arr[0] == null) {
       return "";
     }
-    var port_type = this.extract_data(arr[0], lines);
+    let port_type = this.extract_data(arr[0], lines);
     return port_type;
   }
 
@@ -627,7 +628,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
     var arr = this.search_multiple_in_tree(tree, 'comment');
     inputs = arr;
     for (var x = 0; x < inputs.length; ++x) {
-      item[inputs[x].startPosition.row] = this.extract_data(inputs[x], lines).substr(2);
+      item[inputs[x].startPosition.row] = this.extract_data(inputs[x], lines);
     }
     return item;
   }
