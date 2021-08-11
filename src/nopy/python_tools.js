@@ -17,6 +17,68 @@
 // You should have received a copy of the GNU General Public License
 // along with TerosHDL.  If not, see <https://www.gnu.org/licenses/>.
 
+async function check_python(python_path) {
+  let complete_python_path = await get_complete_python_path(python_path);
+
+  let result = {
+    'python_path': complete_python_path,
+    'python_directories': await get_python_directories(python_path),
+    'vunit': await check_vunit(python_path),
+    'edalize': await check_edalize(python_path),
+    'cocotb': await check_cocotb(python_path)
+  };
+  return result;
+}
+
+async function get_python_directories(python_path) {
+  let python_exec = await get_python_exec(python_path);
+  let command = `${python_exec} -c "import sys; print( ','.join(sys.path)[1:] )"`;
+  let result_command = await _exec_command(command);
+  if (result_command.error === 0) {
+    return result_command.stdout.trim();
+  } else {
+    return '';
+  }
+}
+
+async function get_complete_python_path(python_path) {
+  let python_exec = await get_python_exec(python_path);
+  let command = `${python_exec} -c "import sys; print(sys.executable)"`;
+  let result_command = await _exec_command(command);
+  if (result_command.error === 0) {
+    return result_command.stdout.trim();
+  } else {
+    return '';
+  }
+}
+
+async function check_vunit(python_path) {
+  let check = check_python_package(python_path, 'vunit');
+  return check;
+}
+
+async function check_edalize(python_path) {
+  let check = check_python_package(python_path, 'edalize');
+  return check;
+}
+
+async function check_cocotb(python_path) {
+  let check = check_python_package(python_path, 'cocotb');
+  return check;
+}
+
+async function check_python_package(python_path, python_package) {
+  let python_exec = await get_python_exec(python_path);
+  // eslint-disable-next-line max-len
+  let command = `${python_exec} -c "import ${python_package}; exit(0)"`;
+  let result_command = await _exec_command(command);
+  if (result_command.error === 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 async function get_python_exec(python_path) {
   if (python_path === undefined){
     python_path = '';
@@ -75,6 +137,9 @@ async function exec_python_script(python3_path, python_script_path) {
 }
 
 module.exports = {
+  check_python,
+  check_vunit,
+  check_cocotb,
   get_python_exec,
   exec_python_script,
 };

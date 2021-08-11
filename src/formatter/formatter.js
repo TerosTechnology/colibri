@@ -23,8 +23,7 @@ const Vsg = require('./vsg');
 const Standalone_vhdl = require('./standalone_vhdl');
 const Istyle = require('./istyle');
 const S3SV = require('./s3sv');
-
-// const Verible = require('./verible');
+const Verible = require('./verible');
 const General = require('../general/general');
 
 class Formatter {
@@ -42,7 +41,7 @@ class Formatter {
       return this.get_s3sv();
     }
     else if (formatter_name === General.FORMATTERS.VERIBLE) {
-    //   return this.get_verible();
+      return this.get_verible();
     }
     else if (formatter_name === General.FORMATTERS.STANDALONE) {
       return this.get_standalone_vhdl();
@@ -56,7 +55,7 @@ class Formatter {
     return new Istyle.Istyle();
   }
   get_verible() {
-    return new Verible.Verilbe();
+    return new Verible.Verible();
   }
   get_standalone_vhdl() {
     return new Standalone_vhdl.Standalone_vhdl();

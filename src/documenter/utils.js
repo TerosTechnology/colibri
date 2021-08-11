@@ -97,9 +97,9 @@ function makeid(length) {
 }
 
 function normalize_description(description){
-  let desc_inst = description.replace(/\n\s*\n/g, '<br>');
-  desc_inst = desc_inst.replace(/\n/g, '');
-  desc_inst = desc_inst.replace(/<br \/>/g,'');
+  let desc_inst = description.replace(/\n\s*\n/g, '<br> ');
+  desc_inst = desc_inst.replace(/\n/g, ' ');
+  desc_inst = desc_inst.replace(/<br \/>/g,' ');
   return desc_inst;
 }
 

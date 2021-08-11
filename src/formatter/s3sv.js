@@ -47,7 +47,7 @@ class S3SV extends Base_formatter {
     return formatted_code;
   }
 
-  async _format(file,options){
+  async _format(file){
     
     let entry = `"${__dirname}${path_lib.sep}bin${path_lib.sep}s3sv${path_lib.sep}verilog_beautifier.py"`;
 
@@ -68,7 +68,9 @@ class S3SV extends Base_formatter {
 
     args += `-i ${file}`;
 
-    await this._exec_formatter(this.python3_path + " " + entry + args);
+    let cmd = this.python3_path + " " + entry + args;
+
+    await this._exec_formatter(cmd);
     let formatted_code = fs.readFileSync(file, 'utf8');
     return formatted_code;
   }
