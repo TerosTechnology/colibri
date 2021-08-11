@@ -238,9 +238,6 @@ class Parser extends ts_base_parser.Ts_base_parser {
         }
         while (cursor.gotoNextSibling() === true && break_p === false);
       }
-      else if (cursor.nodeType === 'comment') {
-        description += this.get_comment(cursor.nodeText);
-      }
     }
     while (cursor.gotoNextSibling() === true && break_p === false);
     let entity = { 'name': entity_name, 'description': description };

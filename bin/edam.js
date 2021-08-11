@@ -89,8 +89,8 @@ class Doc {
       this.load_edam_directory(edam_project, trs_file_absolute, recursive);
     }
 
-     //Create output directory
-     fs.mkdirSync(path,{ recursive: true });
+    //Create output directory
+    fs.mkdirSync(path,{ recursive: true });
 
     let result;
     if (type === 'html'){
@@ -127,7 +127,11 @@ class Doc {
   load_edam_directory(edam, directory_path, recursive){
     let file_list = [];
     if (recursive === false){
-      file_list = fs.readdirSync(directory_path);
+      let file_list_tmp = fs.readdirSync(directory_path);
+      for (let i = 0; i < file_list_tmp.length; i++) {
+        const element = path_lib.join(directory_path,file_list_tmp[i]);
+        file_list.push(element);
+      }
     }
     else{
       file_list = this.get_files_from_dir_recursive(directory_path);
@@ -191,24 +195,14 @@ async function save_one_file(input_file, config, type, output_path){
 
   let lang = utils.get_lang_from_path(input_file);
   let code = fs.readFileSync(input_file, "utf8");
-  let symbol;
-  if (lang === 'vhdl'){
-    symbol = config.symbol_vhdl;
-  }
-  else{
-    symbol = config.symbol_verilog;
-  }
-  let documenter = new documenter_lib.Documenter(code, lang, symbol, config);
-  documenter.set_symbol(symbol);
-  documenter.set_code(code);
-  documenter.set_config(config);
+  let documenter = new documenter_lib.Documenter(config);
 
   let result;
   if (type === 'html'){
-    result = await documenter.save_html(complete_output_path);
+    result = await documenter.save_html(code, lang, config, complete_output_path);
   }
   else if (type === 'markdown'){
-    result = await documenter.save_markdown(complete_output_path);
+    result = await documenter.save_markdown(code, lang, config, complete_output_path);
   }
   return result;
 }
