@@ -347,6 +347,7 @@ class Documenter extends markdown_lib.Markdown {
         html += converter.makeHtml("## Description\n\n");
         let { description, wavedrom } = utils.get_wavedrom_svg(code_tree['entity']['description']);
 
+        description = utils.remove_description_first_space(description).trim();
         let html_description = converter.makeHtml(description);
 
         for (let i = 0; i < wavedrom.length; ++i) {

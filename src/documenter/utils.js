@@ -10,6 +10,21 @@ function remove_description_spaces(description){
   return description_trail;
 }
 
+function remove_description_first_space(description){
+  let description_split = description.split(/\r?\n/);
+  let description_trail = '';
+  for (let i = 0; i < description_split.length; i++) {
+    const element = description_split[i];
+    if (element[0] === ' '){
+      description_trail += element.substring(1) + '\n';
+    }
+    else{
+      description_trail += element + '\n';
+    }
+  }
+  return description_trail;
+}
+
 function get_wavedrom_svg(text) {
   //Search json candidates
   let json_candidates = get_json_candidates(text);
@@ -104,6 +119,7 @@ function normalize_description(description){
 }
 
 module.exports = {
+  remove_description_first_space: remove_description_first_space,
   remove_description_spaces: remove_description_spaces,
   get_wavedrom_svg: get_wavedrom_svg,
   get_json_candidates: get_json_candidates,
