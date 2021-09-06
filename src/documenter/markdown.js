@@ -166,7 +166,7 @@ class Markdown {
         if (description !== ''){
           let description = '**Description**\n';
           description += `${utils.normalize_description(process[i].description)}\n`;
-          md += description;
+          md += '</br>' + description;
           html += '<div id="descriptions">' + converter.makeHtml(description) + '</div>';
         }
       }
@@ -221,7 +221,7 @@ class Markdown {
           if (description !== ''){
             let description = '**Description**\n';
             description += `${functions[i].description}\n`;
-            md += description;
+            md += '</br>' + description;
             html += '<div id="descriptions">' + converter.makeHtml(description) + '</div>';
           }
         }
@@ -257,7 +257,7 @@ class Markdown {
         if (description !== ''){
           let description = '**Description**\n';
           description += `${instantiations[i].description}\n`;
-          md += description;
+          md += '</br>' + description;
           html += '<div id="descriptions">' + converter.makeHtml(description) + '</div>';
         }
       }
