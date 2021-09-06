@@ -953,7 +953,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
         break;
       }
       let comment_str = this.extract_data(comments[x], lines);
-      description += this.get_comment_with_break(comment_str) + '\n';
+      description += this.get_comment(comment_str) + '\n';
     }
     description += '\n';
     item["description"] = description;
