@@ -164,9 +164,8 @@ class Markdown {
         }
         let description = process[i].description.replace('\n','');
         if (description !== ''){
-          let description = '**Description**\n';
-          description += `${utils.normalize_description(process[i].description)}\n`;
-          md += '</br>' + description;
+          let description = `**Description**\n ${utils.normalize_description(process[i].description)}\n`;
+          md += '  - ' + description;
           html += '<div id="descriptions">' + converter.makeHtml(description) + '</div>';
         }
       }
@@ -219,9 +218,8 @@ class Markdown {
           
           let description = functions[i].description;
           if (description !== ''){
-            let description = '**Description**\n';
-            description += `${functions[i].description}\n`;
-            md += '</br>' + description;
+            let description = `**Description**\n ${functions[i].description}\n`;
+            md += '  - ' + description;
             html += '<div id="descriptions">' + converter.makeHtml(description) + '</div>';
           }
         }
@@ -254,10 +252,9 @@ class Markdown {
         html += converter.makeHtml(section);
 
         let description = instantiations[i].description;
-        if (description !== ''){
-          let description = '**Description**\n';
-          description += `${instantiations[i].description}\n`;
-          md += '</br>' + description;
+        if (description !== '') {
+          let description = `**Description**\n ${instantiations[i].description}\n`;
+          md += '  - ' + description;
           html += '<div id="descriptions">' + converter.makeHtml(description) + '</div>';
         }
       }
