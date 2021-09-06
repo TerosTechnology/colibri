@@ -237,10 +237,22 @@ class Documenter extends markdown_lib.Markdown {
     }
     let file_path = '';
     if (position === 'begin' && info.custom_section_begin !== undefined){
-      file_path = path_lib.join(directory_base,info.custom_section_end.trim());
+      let base_path = info.custom_section_begin.trim();
+      if(path_lib.isAbsolute(base_path)) {
+        file_path = base_path;
+      }
+      else{
+        file_path = path_lib.join(directory_base,base_path);
+      }
     }
     else if (position === 'end' && info.custom_section_end !== undefined){
-      file_path = path_lib.join(directory_base,info.custom_section_end.trim());
+      let base_path = info.custom_section_end.trim();
+      if(path_lib.isAbsolute(base_path)) {
+        file_path = base_path;
+      }
+      else{
+        file_path = path_lib.join(directory_base,base_path);
+      }
     }
 
     if (fs.existsSync(file_path) === false){

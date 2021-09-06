@@ -20,6 +20,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 const showdown = require('showdown');
+const utils = require('./utils');
 
 class Markdown {
 
@@ -158,12 +159,13 @@ class Markdown {
         html += converter.makeHtml(section);
         if (process[i].type !== '' && process[i].type !== undefined){
           let type_str = `**Type:** ${process[i].type}\n`;
+          md += '  - ' + type_str;
           html += '<div id="descriptions">' + converter.makeHtml(type_str) + '</div>';
         }
         let description = process[i].description.replace('\n','');
         if (description !== ''){
           let description = '**Description**\n';
-          description += `${process[i].description}\n`;
+          description += `${utils.normalize_description(process[i].description)}\n`;
           md += description;
           html += '<div id="descriptions">' + converter.makeHtml(description) + '</div>';
         }
@@ -233,7 +235,6 @@ class Markdown {
     }  
   }
 
-
   _get_instantiations_section(instantiations, configuration, mode) {
     let md = "";
     let html = "";
@@ -274,6 +275,7 @@ class Markdown {
     let table = [];
     table.push(["Port name", "Direction", "Type", "Description"]);
     for (let i = 0; i < ports.length; ++i) {
+      let description = utils.normalize_description(ports[i]['description']);
       let direction = ports[i]['direction'];
       if (direction === undefined){
         direction = '';
@@ -287,7 +289,7 @@ class Markdown {
       table.push([ports[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       direction,
       type,
-      ports[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
+      description]);
     }
     let text = md(table) + '\n';
     return text;
@@ -298,10 +300,11 @@ class Markdown {
     let table = [];
     table.push(["Generic name", "Type", "Value", "Description"]);
     for (let i = 0; i < generics.length; ++i) {
+      let description = utils.normalize_description(generics[i]['description']);
       table.push([generics[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       generics[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       generics[i]['default_value'].replace(/\r/g, ' ').replace(/\n/g, ' '),
-      generics[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
+      description]);
     }
     let text = md(table) + '\n';
     return text;
@@ -312,12 +315,17 @@ class Markdown {
     let table = [];
     table.push(["Name", "Type", "Description"]);
     for (let i = 0; i < signals.length; ++i) {
+      let description = signals[i]['description'];
+      description = utils.normalize_description(description);
+
       table.push([signals[i]['name'],
       signals[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' ')
           .replace(/;/g, ';<br><span style="padding-left:20px">')
           .replace(/,/g, ',<br><span style="padding-left:20px">')
           .replace(/{/g, '{<br><span style="padding-left:20px">'),
-      signals[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
+          description]);
+
+      // signals[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
     }
     let text = md(table) + '\n';
     return text;
@@ -328,6 +336,7 @@ class Markdown {
     let table = [];
     table.push(["Name", "Type", "Value", "Description"]);
     for (let i = 0; i < constants.length; ++i) {
+      let description = utils.normalize_description(constants[i]['description']);
       table.push([constants[i]['name'],
       constants[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' ')
           .replace(/;/g, ';<br><span style="padding-left:20px">')
@@ -337,7 +346,7 @@ class Markdown {
       .replace(/;/g, ';<br><span style="padding-left:20px">')
       .replace(/,/g, ',<br><span style="padding-left:20px">')
       .replace(/{/g, '{<br><span style="padding-left:20px">'),
-      constants[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
+      description]);
     }
     let text = md(table) + '\n';
     return text;
@@ -348,12 +357,13 @@ class Markdown {
     let table = [];
     table.push(["Name", "Type", "Description"]);
     for (let i = 0; i < tpyes.length; ++i) {
+      let description = utils.normalize_description(tpyes[i]['description']);
       table.push([tpyes[i]['name'],
       tpyes[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' ')
             .replace(/;/g, ';<br><span style="padding-left:20px">')
             .replace(/,/g, ',<br><span style="padding-left:20px">')
             .replace(/{/g, '{<br><span style="padding-left:20px">'),
-      tpyes[i]['description'].replace(/\r/g, ' ').replace(/\n/g, ' ')]);
+            description]);
     }
     let text = md(table) + '\n';
     return text;

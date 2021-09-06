@@ -727,7 +727,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
             }
           }
           if (check === false) {
-            comments += txt_comment;
+            comments += txt_comment + "\n";
           }
         }
         else {

@@ -163,6 +163,20 @@ class Ts_base_parser {
     return '';
   }
 
+  get_comment_with_break(comment){
+    if (comment === undefined){
+      return '';
+    }
+    let txt_comment = comment.slice(2);
+    if (this.comment_symbol === '') {
+      return txt_comment + '\n';
+    }
+    else if (txt_comment[0] === this.comment_symbol) {
+      return txt_comment.slice(1) + '\n';
+    }
+    return '';
+  }
+
   set_symbol(symbol){
     if (symbol === undefined) {
       this.comment_symbol = '';

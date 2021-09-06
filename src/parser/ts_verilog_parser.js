@@ -241,7 +241,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       else if (cursor.nodeType === 'comment') {
         let comment_position = cursor.startPosition.row;
         if (last_element_position !== comment_position) {
-          comments += this.get_comment(cursor.nodeText);
+          comments += this.get_comment_with_break(cursor.nodeText);
         }
         else {
           comments = '';
@@ -294,7 +294,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       else if (cursor.nodeType === 'comment') {
         let comment_position = cursor.startPosition.row;
         if (last_element_position !== comment_position) {
-          comments += this.get_comment(cursor.nodeText);
+          comments += this.get_comment_with_break(cursor.nodeText);
         }
         else {
           comments = '';
@@ -341,7 +341,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       else if (cursor.nodeType === 'comment') {
         let comment_position = cursor.startPosition.row;
         if (last_element_position !== comment_position) {
-          comments += this.get_comment(cursor.nodeText);
+          comments += this.get_comment_with_break(cursor.nodeText);
         }
         else {
           comments = '';
@@ -388,7 +388,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       else if (cursor.nodeType === 'comment') {
         let comment_position = cursor.startPosition.row;
         if (last_element_position !== comment_position) {
-          comments += this.get_comment(cursor.nodeText);
+          comments += this.get_comment_with_break(cursor.nodeText);
         }
         else {
           comments = '';
@@ -577,12 +577,12 @@ class Parser extends ts_base_parser.Ts_base_parser {
             if (port_ref_name === port_name[i].trim()) {
               var pre_comment = comments[port_ref[z].startPosition.row];
               if (pre_comment !== undefined) {
-                comment = this.get_comment(pre_comment);
+                comment = this.get_comment_with_break(pre_comment);
               }
             }
           }
         }
-        let comment_check = this.get_comment(comment_str);
+        let comment_check = this.get_comment_with_break(comment_str);
         if (comment_check !== ''){
           comment = comment_check;
         }
@@ -659,7 +659,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       let comment = "";
       let pre_comment = comments[inputs[x].startPosition.row];
       if (pre_comment !== undefined) {
-        comment = this.get_comment(pre_comment);
+        comment = this.get_comment_with_break(pre_comment);
       }
       item = {
         "name": this.get_generic_name(inputs[x], lines),
@@ -953,7 +953,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
         break;
       }
       let comment_str = this.extract_data(comments[x], lines);
-      description += this.get_comment(comment_str) + '\n';
+      description += this.get_comment_with_break(comment_str) + '\n';
     }
     description += '\n';
     item["description"] = description;
@@ -980,7 +980,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
     for (var x = 0; x < comments.length; ++x) {
       if (comments[x].startPosition.row >= module_index[0]) { break; }
       var comment_str = this.extract_data(comments[x], lines);
-      description += this.get_comment(comment_str);
+      description += this.get_comment_with_break(comment_str);
     }
     description += '\n';
     item["description"] = description;
