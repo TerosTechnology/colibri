@@ -172,7 +172,7 @@ class Doc {
         }
         catch (err) {
             if (err.code === 'ENOTDIR' || err.code === 'EBUSY') filelist = [...filelist, dirFile];
-            else throw err;
+            // else throw err;
         }
     });
     return filelist;
