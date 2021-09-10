@@ -133,6 +133,7 @@ async function exec_python_script(python3_path, python_script_path) {
   let python_path = await get_python_exec(python3_path);
   let command = `${python_path} ${python_script_path}`;
   let result = await _exec_command(command);
+  result.cmd = command;
   return result;
 }
 

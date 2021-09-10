@@ -72,6 +72,9 @@ class Dependency_graph {
     const compile_order_output = path_lib.join(tmpdir, 'teroshdl_compile_order.json');
 
     let project_files_json = JSON.stringify(clean_project);
+    console.log("[Colibri| Compile order] project:");
+    console.log(clean_project);
+
     fs.writeFileSync(project_files_path, project_files_json);
 
     let python_script_path = `"${__dirname}${path_lib.sep}vunit_compile_order.py" "${project_files_path}"`;
@@ -79,7 +82,10 @@ class Dependency_graph {
       pypath,
       python_script_path
     );
-    console.log("[Colibri| Compile order] :");
+    console.log("[Colibri| Compile order] cmd: " + result.cmd);
+    console.log("[Colibri| Compile order] stdout:");
+    console.log(result.stdout);
+    console.log("[Colibri| Compile order] stderr:");
     console.log(result.stdout);
 
     let compile_order = [];
