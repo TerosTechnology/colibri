@@ -23,6 +23,7 @@ import os
 import json
 from pathlib import Path
 import sys
+import os.path
 
 import vunit.project as pj
 from vunit.vhdl_standard import VHDL
@@ -52,26 +53,27 @@ libraries = []
 
 for i in range(0, len(project_sources)):
     file_name = project_sources[i]['name']
-    file_library = 'src_lib_teroshdl'
+    if os.path.exists(file_name):
+        file_library = 'src_lib_teroshdl'
 
-    if 'logic_name' in project_sources[i]:
-        file_library = project_sources[i]['logic_name']
+        if 'logic_name' in project_sources[i]:
+            file_library = project_sources[i]['logic_name']
 
-    if file_library in libraries:
-        pass
-    else:
-        project.add_library(file_library, "work_path")
-        libraries.append(file_library)
+        if file_library in libraries:
+            pass
+        else:
+            project.add_library(file_library, "work_path")
+            libraries.append(file_library)
 
-    suffix = Path(file_name).suffix
-    if (suffix == ".v" or suffix == ".vh" or suffix == ".vl"):
-        filetype = "verilog"
-    elif (suffix == ".sv" or suffix == ".svh"):
-        filetype = "systemverilog"
-    else:
-        filetype = "vhdl"
-    project.add_source_file(
-        file_name, file_library, file_type=filetype, vhdl_standard=VHDL.STD_2008)
+        suffix = Path(file_name).suffix
+        if (suffix == ".v" or suffix == ".vh" or suffix == ".vl"):
+            filetype = "verilog"
+        elif (suffix == ".sv" or suffix == ".svh"):
+            filetype = "systemverilog"
+        else:
+            filetype = "vhdl"
+        project.add_source_file(
+            file_name, file_library, file_type=filetype, vhdl_standard=VHDL.STD_2008)
 
 files_array = []
 try:

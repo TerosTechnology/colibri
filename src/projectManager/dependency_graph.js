@@ -72,9 +72,6 @@ class Dependency_graph {
     const compile_order_output = path_lib.join(tmpdir, 'teroshdl_compile_order.json');
 
     let project_files_json = JSON.stringify(clean_project);
-    console.log("[Colibri| Compile order] project:");
-    console.log(clean_project);
-
     fs.writeFileSync(project_files_path, project_files_json);
 
     let python_script_path = `"${__dirname}${path_lib.sep}vunit_compile_order.py" "${project_files_path}"`;
@@ -82,11 +79,6 @@ class Dependency_graph {
       pypath,
       python_script_path
     );
-    console.log("[Colibri| Compile order] cmd: " + result.cmd);
-    console.log("[Colibri| Compile order] stdout:");
-    console.log(result.stdout);
-    console.log("[Colibri| Compile order] stderr:");
-    console.log(result.stdout);
 
     let compile_order = [];
     if (result.error === 0){
@@ -95,8 +87,6 @@ class Dependency_graph {
         compile_order = JSON.parse(rawdata)['compile_order'];
       }
       catch (e) {
-        console.log("[Colibri| Compile order] :");
-        console.log(e);
         return compile_order;
       }
     }
@@ -106,6 +96,14 @@ class Dependency_graph {
 
 
   async get_dependency_tree(project, pypath) {
+    let dep_tree = { 'root': undefined, 'error': 'Failed to process the project'};
+    
+    let configuration_check = await python_tools.check_python(pypath);
+    if (configuration_check.vunit === false) {
+      dep_tree.error = 'Configure your Python 3 path and install pyteroshdl';
+      return dep_tree;
+    }
+
     let clean_project = this.clean_non_hdl_files(project);
 
     const tmpdir = require('os').tmpdir();
@@ -120,7 +118,6 @@ class Dependency_graph {
       pypath,
       python_script_path
     );
-    let dep_tree = [];
     if (result.error === 0){
       try{
         let rawdata = fs.readFileSync(tree_graph_output);
