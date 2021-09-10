@@ -79,13 +79,18 @@ class Dependency_graph {
       pypath,
       python_script_path
     );
+    console.log("[Colibri| Compile order] :");
+    console.log(result.stdout);
+
     let compile_order = [];
     if (result.error === 0){
       try{
         let rawdata = fs.readFileSync(compile_order_output);
         compile_order = JSON.parse(rawdata)['compile_order'];
       }
-      catch(e){
+      catch (e) {
+        console.log("[Colibri| Compile order] :");
+        console.log(e);
         return compile_order;
       }
     }
