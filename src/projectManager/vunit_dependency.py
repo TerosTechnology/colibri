@@ -52,8 +52,8 @@ project = pj.Project()
 libraries = []
 
 for i in range(0, len(project_sources)):
+    file_name = project_sources[i]['name']
     if os.path.exists(file_name):
-        file_name = project_sources[i]['name']
         file_library = 'src_lib_teroshdl'
 
         if 'logic_name' in project_sources[i]:

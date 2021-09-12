@@ -77,7 +77,7 @@ class Verilog_editor {
     }
     let parser = new ParserLib.ParserFactory;
     parser = await parser.getParser(General.LANGUAGES.VERILOG, '');
-    let structure = await parser.get_all(src);
+    let structure = await parser.get_all(src, '}{}');
     if (structure === undefined) {
       return undefined;
     }
@@ -321,7 +321,7 @@ class Verilog_component extends Verilog_editor {
       lang = General.LANGUAGES.VERILOG;
     }
     parser = await parser.getParser(lang, '');
-    let structure = await parser.get_all(src);
+    let structure = await parser.get_all(src, '}{}');
     if (structure === undefined) {
       return undefined;
     }

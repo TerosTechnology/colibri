@@ -74,7 +74,8 @@ for i in range(0, len(project_sources)):
             filetype = "vhdl"
         project.add_source_file(
             file_name, file_library, file_type=filetype, vhdl_standard=VHDL.STD_2008)
-
+    else:
+        exit(-1)
 try:
     files, dependencies = get_direct_dependencies(project)
 except:

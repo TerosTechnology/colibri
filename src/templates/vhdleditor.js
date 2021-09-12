@@ -79,7 +79,7 @@ class Vhdl_editor {
     let parser = new ParserLib.ParserFactory;
     parser = await parser.getParser(General.LANGUAGES.VHDL, '');
     parser.init();
-    let structure = await parser.get_all(src);
+    let structure = await parser.get_all(src, '}{}');
     if (structure === undefined) {
       return undefined;
     }
@@ -404,7 +404,7 @@ class Vhdl_component extends Vhdl_editor {
     }
     parser = await parser.getParser(lang, '');
     parser.init();
-    let structure = await parser.get_all(src);
+    let structure = await parser.get_all(src, '}{}');
     if (structure === undefined) {
       return undefined;
     }

@@ -181,7 +181,7 @@ class Paser_stm_verilog extends stm_base.Parser_stm_base {
         p_info.state_variable_name = this.get_state_variable_name(case_statements[i]);
         p_info.states = this.get_states(case_statements[i], p_info.state_variable_name);
         let check = this.check_empty_states_transitions(p_info.states);
-        if (check === true && description.includes('fsm_extract') === true) {
+        if (check === true) {
           let result = this.force_case_stm(case_statements[i]);
           p_info.state_variable_name = result.variable_name;
           p_info.states = result.states;

@@ -22,6 +22,7 @@ const path_lib = require('path');
 const prj_documenter = require('./project_documentation');
 const utils = require('../utils/utils');
 const dependency = require('./dependency_graph');
+const fs = require('fs');
 
 function json_edam_to_yml_edam(json_data){
   const json2yaml = require('./json2yaml').json2yaml;
@@ -261,6 +262,26 @@ class Edam_project extends prj_documenter.Project_documenter{
       libraries: libraries
     };
     return normalized_prj;
+  }
+
+  check_if_files_exist() {
+    let files = this.get_sources_as_array();
+    let error_files = [];
+    for (let i = 0; i < files.length; i++) {
+      const element = files[i];
+      if (!fs.existsSync(element)) {
+        error_files.push(element);
+      }
+    }
+    let return_error = {
+      files: error_files,
+      error: false      
+    };
+
+    if (error_files.length > 0) {
+      return_error.error = true;
+    }
+    return return_error;
   }
 
   async get_dependency_tree(pypath) {
