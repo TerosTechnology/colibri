@@ -26,7 +26,8 @@ async function check_python(python_path) {
     'vunit': await check_vunit(python_path),
     'edalize': await check_edalize(python_path),
     'cocotb': await check_cocotb(python_path),
-    'yowasp_yosys': await check_yowasp_yosys(python_path)
+    'yowasp_yosys': await check_yowasp_yosys(python_path),
+    'make': await check_make(),
   };
   return result;
 }
@@ -50,6 +51,20 @@ async function get_complete_python_path(python_path) {
     return result_command.stdout.trim();
   } else {
     return '';
+  }
+}
+
+async function check_make() {
+  let check = await check_if_program_exist('make --help');
+  return check;
+}
+
+async function check_if_program_exist(command) {
+  let result_command = await _exec_command(command);
+  if (result_command.error === 0) {
+    return true;
+  } else {
+    return false;
   }
 }
 
