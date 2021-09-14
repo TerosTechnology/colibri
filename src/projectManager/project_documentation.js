@@ -56,6 +56,11 @@ class Project_documenter{
     return result;
   }
 
+  async get_dependency_graph_svg(python3_path) {
+    let project = this.get_json_prj();
+    return await this.dependency_graph.get_dependency_graph_svg(project, python3_path);
+  }
+
   async get_dependency_graph_dot(python3_path) {
     let project = this.get_json_prj();
     return await this.dependency_graph.create_dependency_graph(project, python3_path);
