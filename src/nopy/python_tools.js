@@ -25,7 +25,8 @@ async function check_python(python_path) {
     'python_directories': await get_python_directories(python_path),
     'vunit': await check_vunit(python_path),
     'edalize': await check_edalize(python_path),
-    'cocotb': await check_cocotb(python_path)
+    'cocotb': await check_cocotb(python_path),
+    'yowasp_yosys': await check_yowasp_yosys(python_path)
   };
   return result;
 }
@@ -64,6 +65,11 @@ async function check_edalize(python_path) {
 
 async function check_cocotb(python_path) {
   let check = check_python_package(python_path, 'cocotb');
+  return check;
+}
+
+async function check_yowasp_yosys(python_path) {
+  let check = check_python_package(python_path, 'yowasp_yosys');
   return check;
 }
 
