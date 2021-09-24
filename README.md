@@ -2,12 +2,17 @@
 ![TerosHDL](./doc/low_res_banner.png)
 <!-- ![Tests](https://github.com/TerosTechnology/colibri/workflows/Test/badge.svg?event=push) -->
 
+# TerosHDL command line
 
-# Requirements
+Command line version of TerosHDL. Current features:
+
+- Documenter.
+
+## Requirements
 
 - nodejs >= v12.0.0
 
-# Installation
+## Installation
 
 
 - Installation from NPM:
@@ -22,7 +27,7 @@ sudo npm install teroshdl
 sudo npm install .
 ```
 
-# Getting started
+## Getting started
 
 
 - Arguments
@@ -42,7 +47,7 @@ sudo npm install .
 --self, --self_contained , Documentation generated in a single file for html output
 ```
 
-# Examples
+## Examples
 
 **Documenter with teros project manager file or EDAM file**
 
