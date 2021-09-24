@@ -1,29 +1,32 @@
-![Tests](https://github.com/TerosTechnology/colibri/workflows/Test/badge.svg?event=push)
 
-**UNDER CONSTRUCTION!!!! THE RELEASE WILL BE AVAIABLE SOON!!**\
-**UNDER CONSTRUCTION!!!! THE RELEASE WILL BE AVAIABLE SOON!!**\
-**UNDER CONSTRUCTION!!!! THE RELEASE WILL BE AVAIABLE SOON!!**\
-**UNDER CONSTRUCTION!!!! THE RELEASE WILL BE AVAIABLE SOON!!**\
-**UNDER CONSTRUCTION!!!! THE RELEASE WILL BE AVAIABLE SOON!!**\
-**UNDER CONSTRUCTION!!!! THE RELEASE WILL BE AVAIABLE SOON!!**\
-**UNDER CONSTRUCTION!!!! THE RELEASE WILL BE AVAIABLE SOON!!**\
-**UNDER CONSTRUCTION!!!! THE RELEASE WILL BE AVAIABLE SOON!!**
+![TerosHDL](./doc/low_res_banner.png)
+<!-- ![Tests](https://github.com/TerosTechnology/colibri/workflows/Test/badge.svg?event=push) -->
 
-# TerosHDL backend
 
-## Requirements
+# Requirements
 
 - nodejs >= v12.0.0
 
-## Documenter CI
+# Installation
 
 
-- Installation:
+- Installation from NPM:
+
+```
+sudo npm install teroshdl
+```
+
+- From sources:
 
 ```
 sudo npm install .
 ```
-- Commands
+
+# Getting started
+
+
+- Arguments
+
 ```
 -i, --input [path], Directory with the HDL files, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information
 -o, --out [type], Documentation format: md, html (default: "markdown")
@@ -39,7 +42,7 @@ sudo npm install .
 --self, --self_contained , Documentation generated in a single file for html output
 ```
 
-### Documenter examples:
+# Examples
 
 **Documenter with teros project manager file or EDAM file**
 
@@ -52,10 +55,3 @@ teroshdl-hdl-documenter -i example_edam.yml -o html
 teroshdl-hdl-documenter -i example.csv -o html
 teroshdl-hdl-documenter -i ../rtl -o html
 ```
-
-## Third-party
-
-The `s3sv` formatter is taken from the [SystemVerilog](https://www.github.com/TheClams/SystemVerilog) project.
-See informations about license and changes if any in the corresponding folder `src/formatter/bin/s3sv`.
-
-

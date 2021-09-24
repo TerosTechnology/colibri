@@ -1,5 +1,0 @@
-# Documenter
-
-- BaseStructure.
-- StateMachineVHDL.
-- StateMachineVerilog.
