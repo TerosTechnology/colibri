@@ -100,7 +100,7 @@ class Dependency_graph {
     
     let configuration_check = await python_tools.check_python(pypath);
     if (configuration_check.vunit === false) {
-      dep_tree.error = 'Configure your Python 3 path and install pyteroshdl';
+      dep_tree.error = 'Configure your Python 3 path and install teroshdl ( pip install teroshdl )';
       return dep_tree;
     }
 
