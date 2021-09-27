@@ -4,7 +4,7 @@
 
 # TerosHDL command line
 
-Command line version of TerosHDL. Current features:
+Command line version of TerosHDL (https://terostechnology.github.io). Current features:
 
 - Documenter.
 
@@ -26,6 +26,11 @@ sudo npm install teroshdl
 ```
 sudo npm install .
 ```
+
+## Documentation
+
+Full documentation: https://terostechnology.github.io/terosHDLdoc/documenter/command_line.html
+
 
 ## Getting started
 
