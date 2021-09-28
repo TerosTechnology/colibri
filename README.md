@@ -18,7 +18,7 @@ Command line version of TerosHDL (https://terostechnology.github.io). Current fe
 - Installation from NPM:
 
 ```
-sudo npm install teroshdl
+npm install -g teroshdl
 ```
 
 - From sources:
