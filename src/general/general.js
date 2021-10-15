@@ -20,50 +20,50 @@
 // along with Colibri.  If not, see <https://www.gnu.org/licenses/>.
 
 const SIMULATORS = {
-  GHDL : 'ghdl',
-  ICARUS : 'icarus',
-  MODELSIM : 'modelsim',
-  VERILATOR : 'verilator'
+    GHDL: 'ghdl',
+    ICARUS: 'icarus',
+    MODELSIM: 'modelsim',
+    VERILATOR: 'verilator'
 };
 
 const FORMATTERS = {
-  ISTYLE : 'istyle',
-  VERIBLE : 'verible',
-  VSG : 'vsg',
-  S3SV: 's3sv',
-  STANDALONE : 'standalone'
+    ISTYLE: 'istyle',
+    VERIBLE: 'verible',
+    VSG: 'vsg',
+    S3SV: 's3sv',
+    STANDALONE: 'standalone'
 };
 
 const LINTERS = {
-  GHDL : 'ghdl',
-  ICARUS : 'icarus',
-  MODELSIM : 'modelsim',
-  VERILATOR : 'verilator',
-  XVLOG : 'xvlog',
-  XVHDL : 'xvhdl',
-  VSG : 'vsg',
-  VERIBLE : 'verible',
-  SVLINT : 'svlint'
+    GHDL: 'ghdl',
+    ICARUS: 'icarus',
+    MODELSIM: 'modelsim',
+    VERILATOR: 'verilator',
+    XVLOG: 'xvlog',
+    XVHDL: 'xvhdl',
+    VSG: 'vsg',
+    VERIBLE: 'verible',
+    SVLINT: 'svlint'
 };
 
 const VHDLSTANDARS = {
-  VHDL2018 : '08'
+    VHDL2018: '08'
 };
 
 const VERILOGSTANDARS = {
-  VERILOG2001 : '2001',
+    VERILOG2001: '2001',
 };
 
 const LANGUAGES = {
-  VHDL : 'vhdl',
-  VERILOG : 'verilog',
-  SYSTEMVERILOG : 'systemverilog',
+    VHDL: 'vhdl',
+    VERILOG: 'verilog',
+    SYSTEMVERILOG: 'systemverilog',
 };
 
 module.exports = {
-  LANGUAGES : LANGUAGES,
-  SIMULATORS : SIMULATORS,
-  VERILOGSTANDARS : VERILOGSTANDARS,
-  LINTERS : LINTERS,
-  FORMATTERS : FORMATTERS
+    LANGUAGES: LANGUAGES,
+    SIMULATORS: SIMULATORS,
+    VERILOGSTANDARS: VERILOGSTANDARS,
+    LINTERS: LINTERS,
+    FORMATTERS: FORMATTERS
 };

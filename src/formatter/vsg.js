@@ -23,31 +23,30 @@ const fs = require('fs');
 const Base_formatter = require('./base_formatter');
 
 class Vsg extends Base_formatter {
-  constructor() {
-    super();
-  }
-
-  //Options: {custom_path:"/path/to/bin, custom_bin:"bin", file_rules:"path/to/rules.json"}
-  async format_from_code(code,options){
-    let temp_file = await this._create_temp_file_of_code(code);
-    let formatted_code = await this._format(temp_file,options);
-    return formatted_code;
-  }
-
-  async _format(file,options){
-    let synt = "";
-    if (options !== undefined && options.file_rules !== undefined){
-      synt = `vsg --fix -lr ${options.file_rules} -f `;
+    constructor() {
+        super();
     }
-    else{
-      synt = `vsg --fix -f `;
+
+    //Options: {custom_path:"/path/to/bin, custom_bin:"bin", file_rules:"path/to/rules.json"}
+    async format_from_code(code, options) {
+        let temp_file = await this._create_temp_file_of_code(code);
+        let formatted_code = await this._format(temp_file, options);
+        return formatted_code;
     }
-    await this._exec_formatter(file,synt, synt,options);
-    let formatted_code = fs.readFileSync(file, 'utf8');
-    return formatted_code;
-  }
+
+    async _format(file, options) {
+        let synt = "";
+        if (options !== undefined && options.file_rules !== undefined) {
+            synt = `vsg --fix -c ${options.file_rules} -f `;
+        } else {
+            synt = `vsg --fix -f `;
+        }
+        await this._exec_formatter(file, synt, synt, options);
+        let formatted_code = fs.readFileSync(file, 'utf8');
+        return formatted_code;
+    }
 }
 
 module.exports = {
-  Vsg: Vsg
+    Vsg: Vsg
 };
