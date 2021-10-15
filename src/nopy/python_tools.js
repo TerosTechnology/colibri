@@ -25,6 +25,7 @@ async function check_python(python_path) {
         'python_directories': await get_python_directories(python_path),
         'vunit': await check_vunit(python_path),
         'edalize': await check_edalize(python_path),
+        'vsg': await check_vsg(python_path),
         'cocotb': await check_cocotb(python_path),
         'yowasp_yosys': await check_yowasp_yosys(python_path),
         'make': await check_make(),
@@ -70,6 +71,11 @@ async function check_if_program_exist(command) {
 
 async function check_vunit(python_path) {
     let check = check_python_package(python_path, 'vunit');
+    return check;
+}
+
+async function check_vsg(python_path) {
+    let check = check_python_package(python_path, 'vsg');
     return check;
 }
 
@@ -161,6 +167,7 @@ async function exec_python_script(python3_path, python_script_path) {
 module.exports = {
     check_python,
     check_vunit,
+    check_vsg,
     check_cocotb,
     get_python_exec,
     exec_python_script,
