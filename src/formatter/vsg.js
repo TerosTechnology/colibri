@@ -37,9 +37,9 @@ class Vsg extends Base_formatter {
     async _format(file, options) {
         let synt = "";
         if (options !== undefined && options.file_rules !== undefined) {
-            synt = `vsg --fix -c ${options.file_rules} -f `;
+            synt = `vsg -p 2 --fix -c ${options.file_rules} -f `;
         } else {
-            synt = `vsg --fix -f `;
+            synt = `vsg -p 2 --fix -f `;
         }
         await this._exec_formatter(file, synt, synt, options);
         let formatted_code = fs.readFileSync(file, 'utf8');
