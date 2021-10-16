@@ -1,6 +1,6 @@
 {
     "name": "teroshdl",
-    "version": "2.0.0",
+    "version": "2.0.3",
     "description": "Backend for terosHDL IDE",
     "keywords": ["vhdl", "verilog", "systemverilog", "fpga", "teroshdl"],
     "main": "src/main.js",
