@@ -195,8 +195,9 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
     }
 
     mode(array) {
-        if (array.length == 0)
+        if (array.length === 0){
             return null;
+        }
         var mode_map = {};
         var max_el = array[0],
             max_count = 1;

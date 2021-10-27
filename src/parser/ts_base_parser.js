@@ -104,6 +104,22 @@ class Ts_base_parser {
     return item;
   }
 
+  get_item_from_childs_last(p, type) {
+    if (p === undefined) {
+      return undefined;
+    }
+    let item = undefined;
+    let cursor = p.walk();
+    cursor.gotoFirstChild();
+    do {
+      if (cursor.nodeType === type) {
+        item = cursor.currentNode();
+      }
+    }
+    while (cursor.gotoNextSibling() === true);
+    return item;
+  }
+
   parse_doxy(dic, file_type) {
     if (dic.info === undefined){
       dic.info = {};
