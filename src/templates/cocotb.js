@@ -108,7 +108,7 @@ class cocotb {
     let test_instance = "";
     test_instance += '\n@cocotb.test()\n';
     test_instance += 'async def run_test(dut):\n';
-    test_instance += this.indet_0 + 'PERIOD = 10\n';
+    test_instance += this.indet_1 + 'PERIOD = 10\n';
 
     let ports = structure.ports;
     // Search clock
@@ -122,7 +122,7 @@ class cocotb {
       if (is_clk === true) {
         clock_ports_index.push(i);
         //Clock instance
-        test_instance += this.indet_0 + `cocotb.fork(Clock(dut.${port['name']}, PERIOD, 'ns').start(start_high=False))\n`;
+        test_instance += this.indet_1 + `cocotb.fork(Clock(dut.${port['name']}, PERIOD, 'ns').start(start_high=False))\n`;
       }
     }
     test_instance += '\n';
@@ -130,20 +130,20 @@ class cocotb {
     for (let i = 0; i < ports.length; i++) {
       const port = ports[i];
       if (clock_ports_index.includes(i) === false) {
-        test_instance += this.indet_0 + `dut.${port['name']} = 0\n`;
+        test_instance += this.indet_1 + `dut.${port['name']} = 0\n`;
       }
     }
     test_instance += '\n';
-    test_instance += this.indet_0 + `await Timer(20*PERIOD, units='ns')\n\n`;
+    test_instance += this.indet_1 + `await Timer(20*PERIOD, units='ns')\n\n`;
     //Ports instance to 1
     for (let i = 0; i < ports.length; i++) {
       const port = ports[i];
       if (clock_ports_index.includes(i) === false) {
-        test_instance += `    dut.${port['name']} = 1\n`;
+        test_instance += this.indet_1 + `dut.${port['name']} = 1\n`;
       }
     }
     test_instance += '\n';
-    test_instance += this.indet_0 + `await Timer(20*PERIOD, units='ns')\n`;
+    test_instance += this.indet_1 + `await Timer(20*PERIOD, units='ns')\n`;
 
     return test_instance;
   }
