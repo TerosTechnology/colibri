@@ -573,7 +573,7 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
         cursor.gotoFirstChild();
         do {
             if (cursor.nodeType === 'waveforms') {
-                rigth = cursor.nodeText;
+                rigth = cursor.nodeText.split(/(\s)/)[0].trim();
             }
         }
         while (cursor.gotoNextSibling() !== false);
@@ -586,7 +586,7 @@ class Paser_stm_vhdl extends stm_base.Parser_stm_base {
         cursor.gotoFirstChild();
         do {
             if (cursor.nodeType === 'simple_name') {
-                rigth = cursor.nodeText;
+                rigth = cursor.nodeText.split(/(\s)/)[0].trim();
             }
         }
         while (cursor.gotoNextSibling() !== false);

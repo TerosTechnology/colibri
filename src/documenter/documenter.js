@@ -27,6 +27,7 @@ const css_const_style = require('./css_style');
 const showdown = require('showdown');
 const markdown_lib = require('./markdown');
 const utils = require('./utils');
+const translator_lib = require('./translator');
 
 class Documenter extends markdown_lib.Markdown {
   constructor(config) {
@@ -94,6 +95,8 @@ class Documenter extends markdown_lib.Markdown {
   // Document creator
   // ***************************************************************************
   async _get_markdown(code, lang, configuration, path_svg) {
+    let translator = new translator_lib.Translator(configuration['language']);
+
     let code_tree = await this._get_code_tree(code, lang, configuration);
     if (code_tree === undefined) {
       return { 'markdown': '', error: true };
@@ -116,30 +119,30 @@ class Documenter extends markdown_lib.Markdown {
       if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
         markdown_doc += "# " + code_tree['info']['title'] + "\n\n";
       }else{
-        markdown_doc += "# Entity: " + code_tree['entity']['name'] + "\n\n";
+        markdown_doc += `# ${translator.get_str('Entity')}: ${code_tree['entity']['name']} \n\n`;
       }
       if (configuration.input_path !== undefined){
         let filename = path_lib.basename(configuration.input_path);
-        markdown_doc += '- **File**: ' + filename + '\n';
+        markdown_doc += `- **${translator.get_str('File')}**: ${filename}\n`;
       }
       //Optional info section
-      markdown_doc += this._get_info_section(code_tree);
+      markdown_doc += this._get_info_section(code_tree, translator);
       //Custom section
-      markdown_doc += this.get_custom_section('begin', 'markdown', code_tree, configuration);
+      markdown_doc += this.get_custom_section('begin', 'markdown', code_tree, configuration, translator);
       //Diagram
-      await this._save_svg_from_code_tree(path_svg, code_tree);
-      markdown_doc += "## Diagram\n\n";
+      await this._save_svg_from_code_tree(path_svg, code_tree, translator);
+      markdown_doc += `## ${translator.get_str('Diagram')}\n\n`;
       if (configuration.custom_svg_path_in_readme !== undefined){
-        markdown_doc += '![Diagram](' + configuration.custom_svg_path_in_readme + ' "Diagram")';
+        markdown_doc += `![${translator.get_str('Diagram')}]( ${configuration.custom_svg_path_in_readme} "${translator.get_str('Diagram')}")`;
       }
       else{
-        markdown_doc += '![Diagram](' + path_lib.basename(path_svg) + ' "Diagram")';
+        markdown_doc += `![${translator.get_str('Diagram')}](${path_lib.basename(path_svg)} "${translator.get_str('Diagram')}")`;
       }
       markdown_doc += "\n";
       //Description
       let description_inst = code_tree['entity']['description'];
       if (description_inst.replace('\n','') !== '') {
-        markdown_doc += "## Description\n\n";
+        markdown_doc += `## ${translator.get_str('Description')}\n\n`;
         const { description, wavedrom } = utils.get_wavedrom_svg(description_inst);
         let wavedrom_description = description;
         for (let i = 0; i < wavedrom.length; ++i) {
@@ -156,7 +159,7 @@ class Documenter extends markdown_lib.Markdown {
         markdown_doc += `\n${configuration.custom_section}\n`;
       }
       //Generics and ports
-      markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics'],code_tree['virtual_buses']);
+      markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics'],code_tree['virtual_buses'], translator);
     }
     //Package
     if (code_tree.package !== undefined) {
@@ -168,20 +171,20 @@ class Documenter extends markdown_lib.Markdown {
       if (code_tree['info'] !== undefined && code_tree['info']['title'] !== undefined){
         markdown_doc += "# " + code_tree['info']['title'] + "\n";
       }else{
-        markdown_doc += "# Package: " + code_tree['package']['name'] + "\n\n";
+        markdown_doc += `# ${translator.get_str('Package')}: ${code_tree['package']['name']} \n\n`;
       }
       if (configuration.input_path !== undefined){
         let filename = path_lib.basename(configuration.input_path);
-        markdown_doc += '- **File**: ' + filename + '\n';
+        markdown_doc += `- **${translator.get_str('File')}**: ${filename}\n`;
       }
       //Optional info section
-      markdown_doc += this._get_info_section(code_tree);
+      markdown_doc += this._get_info_section(code_tree, translator);
       //Custom section
-      markdown_doc += this.get_custom_section('begin', 'markdown', code_tree, configuration);
+      markdown_doc += this.get_custom_section('begin', 'markdown', code_tree, configuration, translator);
       //Description
       let description_inst = code_tree['package']['description'];
       if (description_inst.replace('\n','') !== '') {
-        markdown_doc += "## Description\n\n";
+        markdown_doc += `## ${translator.get_str('Description')}\n\n`;
         markdown_doc += code_tree['package']['description'] + "\n";
       }
 
@@ -195,21 +198,23 @@ class Documenter extends markdown_lib.Markdown {
     if (code_tree['declarations'] !== undefined) {
       markdown_doc += this._get_signals_constants_section(
         code_tree['declarations']['signals'], code_tree['declarations']['constants'],
-        code_tree['declarations']['types'], configuration);
+        code_tree['declarations']['types'], configuration, translator);
       //Functions
-      markdown_doc += this._get_functions_section(code_tree['declarations']['functions'], configuration, 'markdown');
+      markdown_doc += this._get_functions_section(code_tree['declarations']['functions'],
+            configuration, 'markdown', translator);
     }
     if (code_tree['body'] !== undefined) {
       //Processes
-      markdown_doc += this._get_process_section(code_tree['body']['processes'], configuration, 'markdown');
+      markdown_doc += this._get_process_section(code_tree['body']['processes'], configuration, 'markdown', translator);
       //Instantiations
-      markdown_doc += this._get_instantiations_section(code_tree['body']['instantiations'], configuration, 'markdown');
+      markdown_doc += this._get_instantiations_section(code_tree['body']['instantiations'],
+        configuration, 'markdown', translator);
     }
 
     // State machine diagrams
-    let stm_array = await this._get_stm(code, lang, configuration);
+    let stm_array = await this._get_stm(code, lang, configuration, translator);
     if (this.config.fsm === true && stm_array !== undefined && stm_array.length !== 0) {
-      markdown_doc += "## State machines\n\n";
+      markdown_doc += `## ${translator.get_str('State machines')}\n\n`;
       for (let i = 0; i < stm_array.length; ++i) {
         let entity_name = code_tree['entity']['name'];
         let stm_path = `${path_lib.dirname(path_svg)}${path_lib.sep}stm_${entity_name}_${i}${i}.svg`;
@@ -221,7 +226,7 @@ class Documenter extends markdown_lib.Markdown {
       }
     }
     //Custom section
-    markdown_doc += this.get_custom_section('end', 'markdown', code_tree, configuration);
+    markdown_doc += this.get_custom_section('end', 'markdown', code_tree, configuration, translator);
     return { 'markdown': markdown_doc, error: false };
   }
 
@@ -279,6 +284,8 @@ class Documenter extends markdown_lib.Markdown {
   }
 
   async get_html(code, lang, configuration) {
+    let translator = new translator_lib.Translator(configuration['language']);
+
     let code_tree = await this._get_code_tree(code, lang, configuration);
     if (code_tree === undefined) {
       return { 'html': '', error: true };
@@ -339,24 +346,24 @@ class Documenter extends markdown_lib.Markdown {
         doc_title = "# " + name + "\n";
       }else{
         name = code_tree['entity']['name'];
-        doc_title = "# Entity: " + name + "\n";
+        doc_title = `# ${translator.get_str('Entity')}: ${name} \n`;
       }
       html += `<a id=${name}>` + converter.makeHtml(doc_title) + '</a>';
       if (configuration.input_path !== undefined){
         let filename = path_lib.basename(configuration.input_path);
-        html += converter.makeHtml('- **File**: ' + filename + '\n');
+        html += converter.makeHtml(`- **${translator.get_str('File')}**: ${ filename}\n`);
       }
-      html += converter.makeHtml(this._get_info_section(code_tree));
+      html += converter.makeHtml(this._get_info_section(code_tree, translator));
       //Custom section
-      html += this.get_custom_section('begin', 'html', code_tree, configuration);
+      html += this.get_custom_section('begin', 'html', code_tree, configuration, translator);
       //Diagram
-      html += converter.makeHtml("## Diagram\n");
+      html += converter.makeHtml(`## ${translator.get_str('Diagram')}\n`);
       html += converter.makeHtml((await this._get_diagram_svg_from_code_tree(code_tree) + 
           "\n").replace(/\*/g, "\\*").replace(/S`/g, "\\`"));
       //Description
       let inst_description = code_tree['entity']['description'];
       if (inst_description.replace('\n','') !== ''){
-        html += converter.makeHtml("## Description\n\n");
+        html += converter.makeHtml(`## ${translator.get_str('Description')}\n\n`);
         let { description, wavedrom } = utils.get_wavedrom_svg(code_tree['entity']['description']);
 
         description = utils.remove_description_first_space(description).trim();
@@ -370,7 +377,7 @@ class Documenter extends markdown_lib.Markdown {
       }
       //Generics and ports
       html += converter.makeHtml(this._get_in_out_section(code_tree['ports'], 
-            code_tree['generics'],code_tree['virtual_buses']));
+            code_tree['generics'],code_tree['virtual_buses'], translator));
     }
     //Package
     if (code_tree.package !== undefined) {
@@ -385,16 +392,16 @@ class Documenter extends markdown_lib.Markdown {
         doc_title = "# " + code_tree['info']['title'] + "\n\n";
       }else{
         name =  code_tree['package']['name'];
-        doc_title = "# Package: " + code_tree['package']['name'] + "\n\n";
+        doc_title = `# ${translator.get_str('Package')}: ${code_tree['package']['name']}\n\n`;
       }
       html += `<a id=${name}>` + converter.makeHtml(doc_title) + '</a>';
       if (configuration.input_path !== undefined){
         let filename = path_lib.basename(configuration.input_path);
-        html += converter.makeHtml('- **File**: ' + filename + '\n');
+        html += converter.makeHtml(`- **${translator.get_str('File')}**: ` + filename + '\n');
       }
-      html += converter.makeHtml(this._get_info_section(code_tree));
+      html += converter.makeHtml(this._get_info_section(code_tree, translator));
       //Custom section
-      html += this.get_custom_section('begin', 'html', code_tree, configuration);
+      html += this.get_custom_section('begin', 'html', code_tree, configuration, translator);
       let inst_description = code_tree['package']['description'];
       if (inst_description.replace('\n','') !== ''){
         html += converter.makeHtml("## Description\n\n");
@@ -406,21 +413,21 @@ class Documenter extends markdown_lib.Markdown {
       //Signals and constants
       html += converter.makeHtml(this._get_signals_constants_section(
         code_tree['declarations']['signals'], code_tree['declarations']['constants'],
-        code_tree['declarations']['types'], configuration));
+        code_tree['declarations']['types'], configuration, translator));
       //Functions
-      html += this._get_functions_section(code_tree['declarations']['functions'], configuration, 'html');
+      html += this._get_functions_section(code_tree['declarations']['functions'], configuration, 'html', translator);
     }
     if (code_tree['body'] !== undefined) {
       //Processes
-      html += this._get_process_section(code_tree['body']['processes'], configuration, 'html');
+      html += this._get_process_section(code_tree['body']['processes'], configuration, 'html', translator);
       //Instantiations
-      html += this._get_instantiations_section(code_tree['body']['instantiations'], configuration, 'html');
+      html += this._get_instantiations_section(code_tree['body']['instantiations'], configuration, 'html', translator);
     }
 
     // State machine diagrams
     let stm_array = await this._get_stm(code, lang, configuration);
     if (this.config.fsm === true && stm_array !== undefined && stm_array.length !== 0) {
-      html += converter.makeHtml("## State machines\n\n");
+      html += converter.makeHtml(`## ${translator.get_str('State machines')}\n\n`);
       html += '<div>';
       for (let i = 0; i < stm_array.length; ++i) {
         if (stm_array[i].description !== '') {
@@ -431,7 +438,7 @@ class Documenter extends markdown_lib.Markdown {
       html += '</div>';
     }
     //Custom section
-    html += this.get_custom_section('end', 'html', code_tree, configuration);
+    html += this.get_custom_section('end', 'html', code_tree, configuration, translator);
     html += '<br><br><br><br><br><br>';
     html += `
     </article class="markdown-body">

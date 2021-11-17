@@ -24,48 +24,49 @@ const utils = require('./utils');
 
 class Markdown {
 
-  _get_info_section(code_tree){
+  _get_info_section(code_tree, translator) {
+    
     let markdown_doc = "";
     //Doxygen parsed commands insertion (only if available)
     if (code_tree['info'] !== undefined){
       if (code_tree['info']['copyright'] !== undefined){
-        markdown_doc += "- **Copyright:** " + code_tree['info']['copyright'] + "\n";
+        markdown_doc += `- **Copyright:** ${code_tree['info']['copyright']}\n`;
       }
       if (code_tree['info']['file'] !== undefined){
-        markdown_doc += "- **File:** " + code_tree['info']['file'] + "\n";
+        markdown_doc += `- **${translator.get_str('File')}:** ${code_tree['info']['file']}\n`;
       }
       if (code_tree['info']['author'] !== undefined){
-        markdown_doc += "- **Author:** " + code_tree['info']['author'] + "\n";
+        markdown_doc += `- **${translator.get_str('Author')}:** ${code_tree['info']['author']}\n`;
       }
       if (code_tree['info']['version'] !== undefined){
-        markdown_doc += "- **Version:** " + code_tree['info']['version'] + "\n";
+        markdown_doc += `- **${translator.get_str('Version')}:** ${code_tree['info']['version']}\n`;
       }
       if (code_tree['info']['date'] !== undefined){
-        markdown_doc += "- **Date:** " + code_tree['info']['date'] + "\n";
+        markdown_doc += `- **${translator.get_str('Date')}:** ${code_tree['info']['date']}\n`;
       }
       if (code_tree['info']['project'] !== undefined){
-        markdown_doc += "- **Project:** " + code_tree['info']['project'] + "\n";
+        markdown_doc += `- **${translator.get_str('Project')}:** ${code_tree['info']['project']}\n`;
       }
       if (code_tree['info']['brief'] !== undefined){
-        markdown_doc += "- **Brief:** " + code_tree['info']['brief'] + "\n";
+        markdown_doc += `- **${translator.get_str('Brief')}:** ${code_tree['info']['brief']}\n`;
       }
       if (code_tree['info']['details'] !== undefined){
-        markdown_doc += "- **Details:** " + code_tree['info']['details'] + "\n";
+        markdown_doc += `- **${translator.get_str('Details')}:** ${code_tree['info']['details']}\n`;
       }
     }
     return markdown_doc;
   }
-  _get_in_out_section(ports, generics,virtual_buses) {
+  _get_in_out_section(ports, generics, virtual_buses, translator) {
     if (generics.length === 0 && ports.length === 0){
       return '';
     }
     let md = "";
     if (generics.length !== 0) {
-      md += "## Generics\n\n";
-      md += this._get_doc_generics(generics);
+      md += `## ${translator.get_str('Generics')}\n\n`;
+      md += this._get_doc_generics(generics, translator);
     }
     if (ports.length !== 0) {
-      md += `## Ports\n\n`;
+      md += `## ${translator.get_str('Ports')}\n\n`;
       if (virtual_buses !== undefined) {
         let virtual_buses_to_add = virtual_buses.filter(obj => obj.keep_ports === true);
         if (virtual_buses_to_add.length > 0) {
@@ -78,16 +79,16 @@ class Markdown {
           }
         }
       }
-      md += this._get_doc_ports(ports);
+      md += this._get_doc_ports(ports, translator);
     }
     if (virtual_buses !== undefined) {
       let virtual_buses_to_show = virtual_buses.filter(obj => obj.keep_ports === false);
       if (virtual_buses_to_show.length > 0) {
-        md += "### Virtual Buses\n\n";
+        md += `### ${translator.get_str('Virtual Buses')}\n\n`;
         for (let i = 0; i < virtual_buses_to_show.length; i++) {
           const element = virtual_buses_to_show[i];
           md += "#### "+ element.name+"\n\n";
-          md += this._get_doc_ports(element.ports);
+          md += this._get_doc_ports(element.ports, translator);
         }
       }
     }
@@ -105,7 +106,7 @@ class Markdown {
     return elements_i;
   }
 
-  _get_signals_constants_section(signals, constants, types, configuration) {
+  _get_signals_constants_section(signals, constants, types, configuration, translator) {
     let md = "";
 
     if (configuration.signals === 'only_commented') {
@@ -121,22 +122,22 @@ class Markdown {
       (types.length !== 0 && configuration.constants !== 'none')) {
       //Tables
       if (signals.length !== 0 && configuration.signals !== 'none') {
-        md += "## Signals\n\n";
-        md += this._get_doc_signals(signals);
+        md += `## ${translator.get_str('Signals')}\n\n`;
+        md += this._get_doc_signals(signals, translator);
       }
       if (constants.length !== 0 && configuration.constants !== 'none') {
-        md += "## Constants\n\n";
-        md += this._get_doc_constants(constants);
+        md += `## ${translator.get_str('Constants')}\n\n`;
+        md += this._get_doc_constants(constants, translator);
       }
       if (types.length !== 0 && configuration.constants !== 'none') {
-        md += "## Types\n\n";
-        md += this._get_doc_types(types);
+        md += `## ${translator.get_str('Types')}\n\n`;
+        md += this._get_doc_types(types, translator);
       }
     }
     return md;
   }
 
-  _get_process_section(process, configuration, mode) {
+  _get_process_section(process, configuration, mode, translator) {
     if (configuration.process === 'none') {
       return '';
     }
@@ -150,21 +151,21 @@ class Markdown {
     let html = "";
     if (process.length !== 0) {
       //Title
-      md += "## Processes\n";
-      html += converter.makeHtml("## Processes\n\n");
+      md += `## ${translator.get_str('Processes')}\n`;
+      html += converter.makeHtml(`## ${translator.get_str('Processes')}\n\n`);
       for (let i = 0; i < process.length; ++i) {
         let name = process[i].name;
         let section = `- ${name}: ( ${process[i].sens_list} )\n`;
         md += section;
         html += converter.makeHtml(section);
         if (process[i].type !== '' && process[i].type !== undefined){
-          let type_str = `**Type:** ${process[i].type}\n`;
+          let type_str = `**${translator.get_str('Type')}:** ${process[i].type}\n`;
           md += '  - ' + type_str;
           html += '<div id="descriptions">' + converter.makeHtml(type_str) + '</div>';
         }
         let description = process[i].description.replace('\n','');
         if (description !== ''){
-          let description = `**Description**\n ${utils.normalize_description(process[i].description)}\n`;
+          let description = `**${translator.get_str('Description')}**\n ${utils.normalize_description(process[i].description)}\n`;
           md += '  - ' + description;
           html += '<div id="descriptions">' + converter.makeHtml(description) + '</div>';
         }
@@ -178,7 +179,7 @@ class Markdown {
     }
   }
 
-  _get_functions_section(functions, configuration, mode) {
+  _get_functions_section(functions, configuration, mode, translator) {
     if (configuration.functions === 'none') {
       return '';
     }
@@ -195,8 +196,8 @@ class Markdown {
     }
     if (functions.length !== 0) {
       //Title
-      md += "## Functions\n";
-      html += converter.makeHtml("## Functions\n\n");
+      md += `## ${translator.get_str('Functions')}\n`;
+      html += converter.makeHtml(`## ${translator.get_str('Functions')}\n\n`);
       for (let i = 0; i < functions.length; ++i) {
         if (functions[i].name !== ''){
           let arguments_str = functions[i].arguments;
@@ -205,7 +206,7 @@ class Markdown {
           }
           let return_str = functions[i].return;
           if (return_str === ''){
-            return_str = 'return ()';
+            return_str = `${translator.get_str('return')} ()`;
           }
           // eslint-disable-next-line max-len
           let name = functions[i].name;
@@ -218,7 +219,7 @@ class Markdown {
           
           let description = functions[i].description;
           if (description !== ''){
-            let description = `**Description**\n ${functions[i].description}\n`;
+            let description = `**${translator.get_str('Description')}**\n ${functions[i].description}\n`;
             md += '  - ' + description;
             html += '<div id="descriptions">' + converter.makeHtml(description) + '</div>';
           }
@@ -233,7 +234,7 @@ class Markdown {
     }  
   }
 
-  _get_instantiations_section(instantiations, configuration, mode) {
+  _get_instantiations_section(instantiations, configuration, mode, translator) {
     let md = "";
     let html = "";
     let converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
@@ -241,7 +242,7 @@ class Markdown {
 
     if (instantiations.length !== 0) {
       //Title
-      let title = "## Instantiations\n\n";
+      let title = `## ${translator.get_str('Instantiations')}\n\n`;
       md += title;
       html += converter.makeHtml(title);
 
@@ -253,7 +254,7 @@ class Markdown {
 
         let description = instantiations[i].description;
         if (description !== '') {
-          let description = `**Description**\n ${instantiations[i].description}\n`;
+          let description = `**${translator.get_str('Description')}**\n ${instantiations[i].description}\n`;
           md += '  - ' + description;
           html += '<div id="descriptions">' + converter.makeHtml(description) + '</div>';
         }
@@ -267,10 +268,11 @@ class Markdown {
     }  
   }
 
-  _get_doc_ports(ports) {
+  _get_doc_ports(ports, translator) {
     const md = require('./markdownTable');
     let table = [];
-    table.push(["Port name", "Direction", "Type", "Description"]);
+    table.push([translator.get_str("Port name"), translator.get_str("Direction")
+          , translator.get_str("Type"), translator.get_str("Description")]);
     for (let i = 0; i < ports.length; ++i) {
       let description = utils.normalize_description(ports[i]['description']);
       let direction = ports[i]['direction'];
@@ -281,7 +283,7 @@ class Markdown {
 
       let type = ports[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' ');
       if (ports[i]['type'] === "virtual_bus"){
-        type = 'Virtual bus';
+        type = translator.get_str('Virtual bus');
       }
       table.push([ports[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       direction,
@@ -292,10 +294,11 @@ class Markdown {
     return text;
   }
 
-  _get_doc_generics(generics) {
+  _get_doc_generics(generics, translator) {
     const md = require('./markdownTable');
     let table = [];
-    table.push(["Generic name", "Type", "Value", "Description"]);
+    table.push([translator.get_str("Generic name"), translator.get_str("Type"),
+    translator.get_str("Value"), translator.get_str("Description")]);
     for (let i = 0; i < generics.length; ++i) {
       let description = utils.normalize_description(generics[i]['description']);
       table.push([generics[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
@@ -307,10 +310,10 @@ class Markdown {
     return text;
   }
 
-  _get_doc_signals(signals) {
+  _get_doc_signals(signals, translator) {
     const md = require('./markdownTable');
     let table = [];
-    table.push(["Name", "Type", "Description"]);
+    table.push([translator.get_str("Name"), translator.get_str("Type"), translator.get_str("Description")]);
     for (let i = 0; i < signals.length; ++i) {
       let description = signals[i]['description'];
       description = utils.normalize_description(description);
@@ -328,10 +331,12 @@ class Markdown {
     return text;
   }
 
-  _get_doc_constants(constants) {
+  _get_doc_constants(constants, translator) {
     const md = require('./markdownTable');
     let table = [];
-    table.push(["Name", "Type", "Value", "Description"]);
+    table.push([translator.get_str("Name"), translator.get_str("Type"), translator.get_str("Value"),
+      translator.get_str("Description")]);
+    
     for (let i = 0; i < constants.length; ++i) {
       let description = utils.normalize_description(constants[i]['description']);
       table.push([constants[i]['name'],
@@ -349,10 +354,10 @@ class Markdown {
     return text;
   }
 
-  _get_doc_types(tpyes) {
+  _get_doc_types(tpyes, translator) {
     const md = require('./markdownTable');
     let table = [];
-    table.push(["Name", "Type", "Description"]);
+    table.push([translator.get_str("Name"), translator.get_str("Type"), translator.get_str("Description")]);
     for (let i = 0; i < tpyes.length; ++i) {
       let description = utils.normalize_description(tpyes[i]['description']);
       table.push([tpyes[i]['name'],
