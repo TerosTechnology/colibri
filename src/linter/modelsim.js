@@ -99,7 +99,7 @@ class Modelsim extends Base_linter {
 
   async _lint(file, options, libraries_command) {
     let result = await this._exec_linter(file, this.PARAMETERS.SYNT,
-      this.PARAMETERS.SYNT_WINDOWS, options, libraries_command);
+      this.PARAMETERS.SYNT, options, libraries_command);
     file = file.replace('\\ ', ' ');
     let errors_str = result.stdout;
     let errors_str_lines = errors_str.split(/\r?\n/g);
