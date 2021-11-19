@@ -204,7 +204,7 @@ class Markdown {
           if (arguments_str === ''){
             arguments_str = '()';
           }
-          let return_str = functions[i].return;
+          let return_str = functions[i].return.replace('return', translator.get_str('return'));
           if (return_str === ''){
             return_str = `${translator.get_str('return')} ()`;
           }
