@@ -141,7 +141,7 @@ class Documenter extends markdown_lib.Markdown {
       markdown_doc += "\n";
       //Description
       let description_inst = code_tree['entity']['description'];
-      if (description_inst.replace('\n','') !== '') {
+      if (description_inst.trim() !== '') {
         markdown_doc += `## ${translator.get_str('Description')}\n\n`;
         const { description, wavedrom } = utils.get_wavedrom_svg(description_inst);
         let wavedrom_description = description;
@@ -183,7 +183,7 @@ class Documenter extends markdown_lib.Markdown {
       markdown_doc += this.get_custom_section('begin', 'markdown', code_tree, configuration, translator);
       //Description
       let description_inst = code_tree['package']['description'];
-      if (description_inst.replace('\n','') !== '') {
+      if (description_inst.trim() !== '') {
         markdown_doc += `## ${translator.get_str('Description')}\n\n`;
         markdown_doc += code_tree['package']['description'] + "\n";
       }
@@ -362,7 +362,7 @@ class Documenter extends markdown_lib.Markdown {
           "\n").replace(/\*/g, "\\*").replace(/S`/g, "\\`"));
       //Description
       let inst_description = code_tree['entity']['description'];
-      if (inst_description.replace('\n','') !== ''){
+      if (inst_description.trim() !== ''){
         html += converter.makeHtml(`## ${translator.get_str('Description')}\n\n`);
         let { description, wavedrom } = utils.get_wavedrom_svg(code_tree['entity']['description']);
 
@@ -403,7 +403,7 @@ class Documenter extends markdown_lib.Markdown {
       //Custom section
       html += this.get_custom_section('begin', 'html', code_tree, configuration, translator);
       let inst_description = code_tree['package']['description'];
-      if (inst_description.replace('\n','') !== ''){
+      if (inst_description.trim() !== ''){
         html += converter.makeHtml("## Description\n\n");
         html += '<div id="teroshdl_description">' 
               + converter.makeHtml(code_tree['package']['description'] + "</div>\n");
