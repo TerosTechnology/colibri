@@ -30,7 +30,7 @@ class Markdown {
     //Doxygen parsed commands insertion (only if available)
     if (code_tree['info'] !== undefined){
       if (code_tree['info']['copyright'] !== undefined){
-        markdown_doc += `- **Copyright:** ${code_tree['info']['copyright']}\n`;
+        markdown_doc += `- **${translator.get_str('Copyright')}:** ${code_tree['info']['copyright']}\n`;
       }
       if (code_tree['info']['file'] !== undefined){
         markdown_doc += `- **${translator.get_str('File')}:** ${code_tree['info']['file']}\n`;
@@ -283,7 +283,7 @@ class Markdown {
 
       let type = ports[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' ');
       if (ports[i]['type'] === "virtual_bus"){
-        type = translator.get_str('Virtual bus');
+        type = translator.get_str('virtual bus');
       }
       table.push([ports[i]['name'].replace(/\r/g, ' ').replace(/\n/g, ' '),
       direction,

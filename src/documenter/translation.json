@@ -66,6 +66,10 @@
         "english": "Description",
         "russian": "Описание"
     },
+    "virtual bus":{
+        "english": "virtual bus",
+        "russian": "bиртуальн шины"
+    },
     "Virtual Buses":{
         "english": "Virtual Buses",
         "russian": "Виртуальные шины"
