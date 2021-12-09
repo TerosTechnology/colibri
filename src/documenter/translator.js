@@ -18,7 +18,10 @@
 // You should have received a copy of the GNU General Public License
 // along with TerosHDL.  If not, see <https://www.gnu.org/licenses/>.
 
+const SUPPORTED_LANGUAGES = ['english', 'russian'];
+
 class Translator {
+
     constructor(language) {
 
         const fs = require('fs');
@@ -29,7 +32,7 @@ class Translator {
         this.translation = JSON.parse(rawdata);
 
 
-        if (language === undefined) {
+        if (SUPPORTED_LANGUAGES.includes(language) === false) {
             this.language = 'english';
         }
         else {
@@ -38,7 +41,12 @@ class Translator {
     }
 
     set_language(language) {
-        this.language = language;
+        if (SUPPORTED_LANGUAGES.includes(language) === false) {
+            this.language = 'english';
+        }
+        else {
+            this.language = language;
+        }
     }
 
     get_str(key) {
