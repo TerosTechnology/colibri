@@ -310,6 +310,11 @@ class Edam_file {
 
     get_info(relative_path) {
         let file_path = this.name;
+        const os = require('os');
+        if (os.platform === "win32") {
+            file_path = file_path.replace(/\\/g, '\\\\');
+        }
+
         if (relative_path !== undefined && relative_path !== '') {
             file_path = path_lib.relative(relative_path, file_path);
         }
