@@ -22,6 +22,7 @@
 
 const path = require('path');
 const ts_base_parser = require('./ts_base_parser');
+const ts_verilog_parser_interface = require('./ts_verilog_parser_interface');
 const stm_parser = require('./verilog_sm');
 
 class Parser extends ts_base_parser.Ts_base_parser {
@@ -73,15 +74,28 @@ class Parser extends ts_base_parser.Ts_base_parser {
 
                 let package_declaration = this.get_package_declaration(tree.rootNode, lines);
 
-                structure = {
-                    "package": package_declaration, // package_identifier 
-                    "declarations": {
-                        'types': body_elements.types,
-                        'signals': body_elements.signals,
-                        'constants': body_elements.constants,
-                        'functions': body_elements.functions
-                    }
-                };
+                // Search interfaces
+                if (package_declaration.name === '') {
+                    file_type = "interface";
+                    let ts_verilog_parser_interface_i =
+                        new ts_verilog_parser_interface.Parser_interface(this.comment_symbol);
+                    
+                    let interfaces = ts_verilog_parser_interface_i.get_interfaces(tree, lines, comments);
+                    structure = {
+                        "interface": interfaces, // interfaces 
+                    };
+                }
+                else {
+                    structure = {
+                        "package": package_declaration, // package_identifier 
+                        "declarations": {
+                            'types': body_elements.types,
+                            'signals': body_elements.signals,
+                            'constants': body_elements.constants,
+                            'functions': body_elements.functions
+                        }
+                    };
+                }
             } else {
                 let arch_body = this.get_architecture_body(tree);
                 let body_elements = this.get_body_elements_and_declarations(arch_body, lines, comments);

@@ -28,6 +28,7 @@ const showdown = require('showdown');
 const markdown_lib = require('./markdown');
 const utils = require('./utils');
 const translator_lib = require('./translator');
+const documenter_interface = require('./documenter_interface');
 
 class Documenter extends markdown_lib.Markdown {
   constructor(config) {
@@ -133,10 +134,12 @@ class Documenter extends markdown_lib.Markdown {
       await this._save_svg_from_code_tree(path_svg, code_tree, translator);
       markdown_doc += `## ${translator.get_str('Diagram')}\n\n`;
       if (configuration.custom_svg_path_in_readme !== undefined){
-        markdown_doc += `![${translator.get_str('Diagram')}]( ${configuration.custom_svg_path_in_readme} "${translator.get_str('Diagram')}")`;
+        markdown_doc +=
+            `![${translator.get_str('Diagram')}]( ${configuration.custom_svg_path_in_readme} "${translator.get_str('Diagram')}")`;
       }
       else{
-        markdown_doc += `![${translator.get_str('Diagram')}](${path_lib.basename(path_svg)} "${translator.get_str('Diagram')}")`;
+        markdown_doc +=
+            `![${translator.get_str('Diagram')}](${path_lib.basename(path_svg)} "${translator.get_str('Diagram')}")`;
       }
       markdown_doc += "\n";
       //Description
@@ -159,7 +162,8 @@ class Documenter extends markdown_lib.Markdown {
         markdown_doc += `\n${configuration.custom_section}\n`;
       }
       //Generics and ports
-      markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics'],code_tree['virtual_buses'], translator);
+      markdown_doc += this._get_in_out_section(code_tree['ports'], code_tree['generics'],
+          code_tree['virtual_buses'], translator);
     }
     //Package
     if (code_tree.package !== undefined) {
@@ -192,6 +196,12 @@ class Documenter extends markdown_lib.Markdown {
       if (configuration.custom_section !== undefined){
         markdown_doc += `\n${configuration.custom_section}\n`;
       }
+    }
+
+    //Interface
+    if (code_tree.interface !== undefined) {
+      let documenter_interface_inst = new documenter_interface.Documenter_interface(translator, 'markdown');
+      markdown_doc += documenter_interface_inst.get_doc(code_tree);
     }
 
     //Signals, constants and types
@@ -409,6 +419,13 @@ class Documenter extends markdown_lib.Markdown {
               + converter.makeHtml(code_tree['package']['description'] + "</div>\n");
       }
     }
+
+    //Interface
+    if (code_tree.interface !== undefined){
+      let documenter_interface_inst = new documenter_interface.Documenter_interface(translator, 'html');
+      html += documenter_interface_inst.get_doc(code_tree);
+    }
+
     if (code_tree['declarations'] !== undefined) {
       //Signals and constants
       html += converter.makeHtml(this._get_signals_constants_section(
