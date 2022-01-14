@@ -356,6 +356,8 @@ class Edam_file {
             file_type = 'xdc';
         } else if (extension === '.xci') {
             file_type = 'xci';
+        } else if (extension === '.sby') {
+            file_type = 'sbyConfigTemplate';
         } else {
             file_type = extension.substring(1).toLocaleUpperCase();
         }
