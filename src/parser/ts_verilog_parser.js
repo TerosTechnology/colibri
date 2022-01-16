@@ -76,6 +76,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
 
                 // Search interfaces
                 if (package_declaration.name === '') {
+                    return undefined;
                     file_type = "interface";
                     let ts_verilog_parser_interface_i =
                         new ts_verilog_parser_interface.Parser_interface(this.comment_symbol);
@@ -87,6 +88,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
                 }
                 else {
                     structure = {
+                        'lang': 'verilog',
                         "package": package_declaration, // package_identifier 
                         "declarations": {
                             'types': body_elements.types,
@@ -101,7 +103,14 @@ class Parser extends ts_base_parser.Ts_base_parser {
                 let body_elements = this.get_body_elements_and_declarations(arch_body, lines, comments);
                 file_type = "entity";
 
+                //Search interfaces
+                let post_proce = this.get_parse_interfaces(body_elements.instantiations);
+
+                body_elements.instantiations = post_proce.instantiations;
+                body_elements.signals = body_elements.signals.concat(post_proce.signals);
+
                 structure = {
+                    'lang': 'verilog',
                     'libraries': this.get_libraries(tree.rootNode, lines, comments), // includes
                     "entity": this.get_entityName(tree.rootNode, lines), // module
                     "generics": body_elements.generics, // parameters
@@ -129,6 +138,32 @@ class Parser extends ts_base_parser.Ts_base_parser {
         } catch (error) {
             return undefined;
         }
+    }
+
+    get_parse_interfaces(instantiations) {
+        let instantiations_clean = [];
+        let signal_interfaces = []
+        const str_parse = '@parse_interface';
+        for (const instantiation of instantiations) {
+            let position = instantiation.description.search(str_parse);
+            if (position === -1) {
+                // No interface
+                instantiations_clean.push(instantiation);
+            }
+            else {
+                // Interface
+                let type = `Interface: ${instantiation.type}`;
+                let signal_interface = {
+                    "name": instantiation.name,
+                    "type": type,
+                    "description": instantiation.description.replace(/\@parse_interface/gm, ""),
+                    "start_line": instantiation.start_line
+                };
+                signal_interfaces.push(signal_interface);
+
+            }
+        }
+        return { 'instantiations': instantiations_clean, 'signals': signal_interfaces };
     }
 
     //////////////////////////////////////////////////////////////////////////////

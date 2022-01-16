@@ -7,11 +7,26 @@ class Documenter_interface {
         this.type = type;
     }
 
-    get_doc(tree) {
+    get_doc(tree, filename) {
         let doc = '';
         let interfaces = tree.interface;
+        let doc_raw = '';
+        const converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
+        converter.setFlavor('github');
+
+        // Header
+        if (filename !== '') {
+            doc_raw = `- **${this.translator.get_str('File')}**: ` + filename + '\n';
+            if (this.type === 'markdown') {
+                doc += doc_raw;
+            }
+            else {
+                doc += converter.makeHtml(doc_raw);
+            }
+        }
+
         for (let interface_inst of interfaces) {
-            doc += this.get_interface(interface_inst);
+            doc += this.get_interface(interface_inst, filename);
         }
         return doc;
     }
@@ -24,13 +39,15 @@ class Documenter_interface {
 
     get_interface(interface_inst) {
         let doc = '';
+        let doc_raw = '';
+
         const converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
         converter.setFlavor('github');
 
         // Title
-        let doc_raw = `# Interface: ${interface_inst['name']}\n\n`;
+        doc_raw = `# ${this.translator.get_str('Interface')}: ${interface_inst['name']}\n\n`;
         if (this.type === 'markdown') {
-            doc = doc_raw;
+            doc += doc_raw;
         }
         else {
             doc += converter.makeHtml(doc_raw);
@@ -46,16 +63,26 @@ class Documenter_interface {
             doc += converter.makeHtml(doc_raw);
         }
 
-        // Others
-        doc += this.get_others(interface_inst['others']);
+        // Ports
+        doc += this.get_ports(interface_inst['ports']);
+
+        // Parameters
+        doc += this.get_parameters(interface_inst['generics']);
+
+        // Logics
+        doc += this.get_logics(interface_inst['logics']);
 
         // Modports
         doc += this.get_modports(interface_inst['modports']);
 
+        // Others
+        doc += this.get_others(interface_inst['others']);
+
         return doc;
     }
 
-    get_others(items) {
+
+    get_table_with_title(items, title, header, keys) {
         const md = require('./markdownTable');
         const converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
         converter.setFlavor('github');
@@ -68,18 +95,21 @@ class Documenter_interface {
         }
 
         // Title
-        let doc_raw = `## Others\n\n`;
+        let doc_raw = `## ${this.translator.get_str(title)}\n\n`;
         doc_markdown += doc_raw;
         doc_html += converter.makeHtml(doc_raw);
 
-        // Modports
+        // Parameters
         let table = [];
-        table.push([this.translator.get_str("Port name"), this.translator.get_str("Description")]);
-        for (const item of items) {
-            let item_name = item['name'];
-            let item_description = item['description'];
+        table.push(header);
 
-            table.push([item_name, item_description]);
+        for (const item of items) {
+            let value_to_table = [];
+            for (const key of keys) {
+                value_to_table.push(item[key]);
+            }
+
+            table.push(value_to_table);
             doc_raw = md(table) + '\n';
 
         }
@@ -90,7 +120,64 @@ class Documenter_interface {
         }
         else {
             return doc_html;
-        }        
+        }    
+    }
+
+
+    get_parameters(items) {
+        let title = "Parameters";
+
+        let header = [
+            this.translator.get_str("Name"),
+            this.translator.get_str("Default value"),
+            this.translator.get_str("Description")
+        ];
+
+        let keys = ['name', 'default_value', 'description'];
+
+        return this.get_table_with_title(items, title, header, keys);
+    }
+
+    get_ports(items) {
+        let title = "Ports";
+
+        let header = [
+            this.translator.get_str("Port name"),
+            this.translator.get_str("Direction"),
+            this.translator.get_str("Type"),
+            this.translator.get_str("Description")
+        ];
+
+        let keys = ['name', 'direction', 'type', 'description'];
+
+        return this.get_table_with_title(items, title, header, keys);
+    }
+
+    get_logics(items) {
+        let title = "Logics";
+
+        let header = [
+            this.translator.get_str("Name"),
+            this.translator.get_str("Description")
+        ];
+
+        let keys = ['name', 'description'];
+
+        return this.get_table_with_title(items, title, header, keys);
+    }
+
+    get_others(items) {
+        let title = "Others";
+
+        let header = [
+            this.translator.get_str("Name"),
+            this.translator.get_str("Type"),
+            this.translator.get_str("Description")
+        ];
+
+        let keys = ['name', 'kind', 'description'];
+
+        return this.get_table_with_title(items, title, header, keys);
     }
 
     get_modports(modports) {

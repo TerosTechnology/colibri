@@ -123,6 +123,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       let entity_declaration = this.get_entity_declaration(code);
       if (code_lines.length > 99999999999999) {
         let elements = {
+          'lang': 'vhdl',
           'entity': entity_declaration.entity,
           'generics': entity_declaration.generics,
           'ports': entity_declaration.ports,
@@ -134,6 +135,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
       }
       else {
         let elements = {
+          'lang': 'vhdl',
           'entity': entity_declaration.entity,
           'generics': entity_declaration.generics,
           'ports': entity_declaration.ports,
@@ -150,6 +152,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
     try {
       let packge_declaration = this.get_package_declaration(code);
       let elements = {
+        'lang': 'vhdl',
         'package': packge_declaration.package,
         'declarations': this.get_declaration_elements('package', code)
       };

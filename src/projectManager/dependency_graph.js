@@ -29,11 +29,31 @@ class Dependency_graph {
     this.dependency_graph_svg = "";
   }
 
+  get_temporal_name(prefix) {
+    const username = require("os").userInfo().username;
+    const random_number = Math.floor(Math.random() * 10); 
+    const date_s = Math.floor(new Date() / 1000);
+    const filename = `${prefix}_${username}_${random_number}_${date_s}.json`;
+
+    const tmpdir = require('os').tmpdir();
+    const tmp_name = path_lib.join(tmpdir, filename);
+    return tmp_name;
+  }
+
+  remove_file(file_path) {
+    if (fs.existsSync(file_path)) {
+        fs.unlink(file_path, (err) => {
+            if (err) {
+                console.log(err);
+            }
+        })
+    }
+  }
+
   async create_dependency_graph(project, python3_path) {
     let clean_project = this.clean_non_hdl_files(project);
 
-    const tmpdir = require('os').tmpdir();
-    const project_files_path = path_lib.join(tmpdir, 'json_project_dependencies.json');
+    const project_files_path = this.get_temporal_name('json_project_dependencies');
     let project_files_json = JSON.stringify(clean_project);
     fs.writeFileSync(project_files_path, project_files_json);
 
@@ -46,6 +66,9 @@ class Dependency_graph {
     if (result.error === 0){
       dep_graph = result.stdout;
     }
+
+    this.remove_file(project_files_path);
+
     return dep_graph;
   }
 
@@ -67,14 +90,13 @@ class Dependency_graph {
   async get_compile_order(project, pypath) {
     let clean_project = this.clean_non_hdl_files(project);
 
-    const tmpdir = require('os').tmpdir();
-    const project_files_path = path_lib.join(tmpdir, 'json_project_compile_order.json');
-    const compile_order_output = path_lib.join(tmpdir, 'teroshdl_compile_order.json');
+    const project_files_path = this.get_temporal_name('json_project_compile_order');
+    const compile_order_output = this.get_temporal_name('teroshdl_compile_order');
 
     let project_files_json = JSON.stringify(clean_project);
     fs.writeFileSync(project_files_path, project_files_json);
 
-    let python_script_path = `"${__dirname}${path_lib.sep}vunit_compile_order.py" "${project_files_path}"`;
+    let python_script_path = `"${__dirname}${path_lib.sep}vunit_compile_order.py" "${project_files_path}" "${compile_order_output}"`;
     let result = await python_tools.exec_python_script(
       pypath,
       python_script_path
@@ -87,9 +109,13 @@ class Dependency_graph {
         compile_order = JSON.parse(rawdata)['compile_order'];
       }
       catch (e) {
+        this.remove_file(project_files_path);
+        this.remove_file(compile_order_output);
         return compile_order;
       }
     }
+    this.remove_file(project_files_path);
+    this.remove_file(compile_order_output);
     return compile_order;
   }
 
@@ -106,14 +132,13 @@ class Dependency_graph {
 
     let clean_project = this.clean_non_hdl_files(project);
 
-    const tmpdir = require('os').tmpdir();
-    const project_files_path = path_lib.join(tmpdir, 'json_project_dependencies.json');
-    const tree_graph_output = path_lib.join(tmpdir, 'tree_graph_output.json');
+    const project_files_path = this.get_temporal_name('json_project_dependencies');
+    const tree_graph_output = this.get_temporal_name('tree_graph_output');
 
     let project_files_json = JSON.stringify(clean_project);
     fs.writeFileSync(project_files_path, project_files_json);
 
-    let python_script_path = `"${__dirname}${path_lib.sep}vunit_dependencies_standalone.py" "${project_files_path}"`;
+    let python_script_path = `"${__dirname}${path_lib.sep}vunit_dependencies_standalone.py" "${project_files_path}" "${tree_graph_output}"`;
     let result = await python_tools.exec_python_script(
       pypath,
       python_script_path
@@ -123,10 +148,14 @@ class Dependency_graph {
         let rawdata = fs.readFileSync(tree_graph_output);
         dep_tree = JSON.parse(rawdata);
       }
-      catch(e){
+      catch (e) {
+        this.remove_file(project_files_path);
+        this.remove_file(tree_graph_output);
         return dep_tree;
       }
     }
+    this.remove_file(project_files_path);
+    this.remove_file(tree_graph_output);
     return dep_tree;
   }
 

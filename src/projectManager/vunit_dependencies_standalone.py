@@ -44,6 +44,14 @@ def get_direct_dependencies(project):
 
 
 prj = sys.argv[1]
+
+output_path = ''
+try:
+    output_path = sys.argv[2]
+except:
+    dir_path = os.path.dirname(prj)
+    output_path = os.path.join(dir_path, 'tree_graph_output.json')
+
 f = open(prj,)
 json_prj = json.load(f)
 
@@ -97,8 +105,6 @@ for i in range(0, len(nodes)):
 
 json_dependencies = {'root': total_dependencies}
 
-dir_path = os.path.dirname(prj)
-output_path = os.path.join(dir_path, 'tree_graph_output.json')
 with open(output_path, 'w') as outfile:
     json.dump(json_dependencies, outfile)
 exit(0)

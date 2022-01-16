@@ -109,6 +109,10 @@ class Documenter extends markdown_lib.Markdown {
     }
 
     let markdown_doc = extra_top_space_l;
+    let filename = '';
+    if (configuration.input_path !== undefined){
+      filename = path_lib.basename(configuration.input_path);
+    }
 
     //Entity
     if (code_tree['entity'] !== undefined) {
@@ -123,7 +127,6 @@ class Documenter extends markdown_lib.Markdown {
         markdown_doc += `# ${translator.get_str('Entity')}: ${code_tree['entity']['name']} \n\n`;
       }
       if (configuration.input_path !== undefined){
-        let filename = path_lib.basename(configuration.input_path);
         markdown_doc += `- **${translator.get_str('File')}**: ${filename}\n`;
       }
       //Optional info section
@@ -178,7 +181,6 @@ class Documenter extends markdown_lib.Markdown {
         markdown_doc += `# ${translator.get_str('Package')}: ${code_tree['package']['name']} \n\n`;
       }
       if (configuration.input_path !== undefined){
-        let filename = path_lib.basename(configuration.input_path);
         markdown_doc += `- **${translator.get_str('File')}**: ${filename}\n`;
       }
       //Optional info section
@@ -201,7 +203,7 @@ class Documenter extends markdown_lib.Markdown {
     //Interface
     if (code_tree.interface !== undefined) {
       let documenter_interface_inst = new documenter_interface.Documenter_interface(translator, 'markdown');
-      markdown_doc += documenter_interface_inst.get_doc(code_tree);
+      markdown_doc += documenter_interface_inst.get_doc(code_tree, filename);
     }
 
     //Signals, constants and types
@@ -343,6 +345,10 @@ class Documenter extends markdown_lib.Markdown {
     if (configuration.extra_top_space === true){
       html += "<br><br>\n";
     }
+    let filename = '';
+    if (configuration.input_path !== undefined){
+      filename = path_lib.basename(configuration.input_path);
+    }
     //Entity
     if (code_tree['entity'] !== undefined) {
       if (code_tree['entity']['name'] === ''){
@@ -360,7 +366,6 @@ class Documenter extends markdown_lib.Markdown {
       }
       html += `<a id=${name}>` + converter.makeHtml(doc_title) + '</a>';
       if (configuration.input_path !== undefined){
-        let filename = path_lib.basename(configuration.input_path);
         html += converter.makeHtml(`- **${translator.get_str('File')}**: ${ filename}\n`);
       }
       html += converter.makeHtml(this._get_info_section(code_tree, translator));
@@ -405,8 +410,8 @@ class Documenter extends markdown_lib.Markdown {
         doc_title = `# ${translator.get_str('Package')}: ${code_tree['package']['name']}\n\n`;
       }
       html += `<a id=${name}>` + converter.makeHtml(doc_title) + '</a>';
-      if (configuration.input_path !== undefined){
-        let filename = path_lib.basename(configuration.input_path);
+
+      if (configuration.input_path !== undefined) {
         html += converter.makeHtml(`- **${translator.get_str('File')}**: ` + filename + '\n');
       }
       html += converter.makeHtml(this._get_info_section(code_tree, translator));
@@ -423,7 +428,7 @@ class Documenter extends markdown_lib.Markdown {
     //Interface
     if (code_tree.interface !== undefined){
       let documenter_interface_inst = new documenter_interface.Documenter_interface(translator, 'html');
-      html += documenter_interface_inst.get_doc(code_tree);
+      html += documenter_interface_inst.get_doc(code_tree, filename);
     }
 
     if (code_tree['declarations'] !== undefined) {

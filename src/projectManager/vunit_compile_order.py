@@ -44,6 +44,14 @@ def get_direct_dependencies(project):
 
 
 prj = sys.argv[1]
+
+output_path = ''
+try:
+    output_path = sys.argv[2]
+except:
+    dir_path = os.path.dirname(prj)
+    output_path = os.path.join(dir_path, 'teroshdl_compile_order.json')
+
 f = open(prj,)
 json_prj = json.load(f)
 
@@ -85,8 +93,6 @@ except:
 
 order_json = {'compile_order': files_array}
 
-dir_path = os.path.dirname(prj)
-output_path = os.path.join(dir_path, 'teroshdl_compile_order.json')
 with open(output_path, 'w') as outfile:
     json.dump(order_json, outfile)
 exit(0)

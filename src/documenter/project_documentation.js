@@ -59,20 +59,21 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
     fs.mkdirSync(INTERNAL_DOC_FOLDER_COMPLETE, { recursive: true });
   }
 
-  let custom_logo_path_output = '';
-  let custom_logo_path_output_relative = '';
-  //Copy logo to output folder
-  if (custom_logo_path !== '' && custom_logo_path !== undefined) {
-    let pathlib = require("path");
-    let filename = pathlib.basename(custom_logo_path);
+  // let custom_logo_path_output = '';
+  // let custom_logo_path_output_relative = '';
+  // //Copy logo to output folder
+  // if (custom_logo_path !== '' && custom_logo_path !== undefined) {
+  //   let pathlib = require("path");
+  //   let filename = pathlib.basename(custom_logo_path);
 
-    custom_logo_path_output_relative = `./${INTERNAL_DOC_FOLDER}/${filename}`;
-    custom_logo_path_output = pathlib.join(INTERNAL_DOC_FOLDER_COMPLETE, filename);
+  //   custom_logo_path_output_relative = `./${filename}`;
+  //   custom_logo_path_output = pathlib.join(INTERNAL_DOC_FOLDER_COMPLETE, filename);
 
-    const fs = require('fs');
-    fs.copyFileSync(custom_logo_path, custom_logo_path_output);
-  }
-
+  //   const fs = require('fs');
+  //   if (fs.existsSync(custom_logo_path)) {
+  //     fs.copyFileSync(custom_logo_path, custom_logo_path_output);
+  //   }
+  // }
 
   //Main doc
   let files = get_sources_as_array(project.files);
@@ -81,7 +82,7 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
   let project_name = project.name;
   let main_doc = get_title_project(type, project_name, translator, custom_license);
 
-  main_doc += get_logo(type, custom_logo_path_output_relative);
+  // main_doc += get_logo(type, custom_logo_path_output_relative);
 
   if (config.dependency_graph === true && graph !== undefined) {
     main_doc += get_graph_declaration(type, graph, INTERNAL_DOC_FOLDER_COMPLETE, INTERNAL_DOC_FOLDER);
