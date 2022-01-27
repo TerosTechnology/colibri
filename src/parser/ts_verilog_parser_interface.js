@@ -172,14 +172,30 @@ class Parser_interface extends ts_base_parser.Ts_base_parser {
     get_other_interface_items(tree) {
         let items = [];
         let data_declaration = this.search_multiple_in_tree(tree, 'data_declaration');
+
         if (data_declaration.length === 1) {
-            let child = data_declaration[0];
-            let item_name = child.text.replace('logic', '').trim().replace(';', '');
-            let item_names = item_name.split(',');
-            for (let i = 0; i < item_names.length; i++) {
-                const element = item_names[i];
-                let start_line = child.startPosition.row;
-                items.push({ 'name': element, 'type': 'logic', 'description': '', 'start_line': start_line});
+            let item_name = this.search_multiple_in_tree(data_declaration[0], 'list_of_variable_decl_assignments');
+            let item_type = this.search_multiple_in_tree(data_declaration[0], 'data_type_or_implicit1');
+            if (item_name.length === 1 && item_type.length === 1) {
+                let item_names = item_name[0].text.split(',');
+                for (const name_inst of item_names) {
+                    let start_line = item_name[0].startPosition.row;
+                    items.push({ 'name': name_inst, 'type': item_type[0].text, 'description': '', 'start_line': start_line});
+                }
+            }
+            return items;
+        }
+
+        let net_declaration = this.search_multiple_in_tree(tree, 'net_declaration');
+        if (net_declaration.length === 1) {
+            let item_name = this.search_multiple_in_tree(net_declaration[0], 'list_of_net_decl_assignments');
+            let item_type = this.search_multiple_in_tree(net_declaration[0], 'net_type_identifier');
+            if (item_name.length === 1 && item_type.length === 1) {
+                let item_names = item_name[0].text.split(',');
+                for (const name_inst of item_names) {
+                    let start_line = item_name[0].startPosition.row;
+                    items.push({ 'name': name_inst, 'type': item_type[0].text, 'description': '', 'start_line': start_line});
+                }
             }
         }
         return items;

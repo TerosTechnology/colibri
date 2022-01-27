@@ -51,6 +51,25 @@ class Parser extends ts_base_parser.Ts_base_parser {
         return this.stm_parser.get_svg_sm(code, symbol);
     }
 
+    check_body_empty(body) {
+        if (body['constants'].length === 0 && body['functions'].length === 0 && body['generics'].length === 0
+            && body['instantiations'].length === 0 && body['ports'].length === 0 && body['processes'].length === 0 &&
+            body['signals'].length === 0 && body['types'].length === 0) {
+            return true;
+        }
+        return false;
+    }
+
+    check_body_interfaces_empty(body) {
+        if (body['constants'].length === 0 && body['functions'].length === 0 && body['generics'].length === 0
+            && body['instantiations'].length === 0 && body['ports'].length === 0 && body['processes'].length === 0 &&
+            body['signals'].length === 0 && body['types'].length === 0) {
+            return true;
+        }
+        return false;
+    }
+
+
     async get_all(sourceCode, comment_symbol) {
         if (this.loaded === false) {
             return undefined;
@@ -73,10 +92,10 @@ class Parser extends ts_base_parser.Ts_base_parser {
                 file_type = "package";
 
                 let package_declaration = this.get_package_declaration(tree.rootNode, lines);
+                let body_empty = this.check_body_empty(body_elements);
 
                 // Search interfaces
-                if (package_declaration.name === '') {
-                    return undefined;
+                if (package_declaration.name === '' || body_empty == true) {
                     file_type = "interface";
                     let ts_verilog_parser_interface_i =
                         new ts_verilog_parser_interface.Parser_interface(this.comment_symbol);
@@ -544,6 +563,12 @@ class Parser extends ts_base_parser.Ts_base_parser {
     }
 
     getPortType(port, lines) {
+        //Interface
+        let interface_port = this.search_multiple_in_tree(port, 'interface_port_header')
+        if (interface_port.length === 1) {
+            return "Interface";
+        }
+
         var arr = this.search_multiple_in_tree(port, 'net_port_type1');
         if (arr[0] == null) {
             arr = this.search_multiple_in_tree(port, 'packed_dimension');

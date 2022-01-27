@@ -154,14 +154,15 @@ class Documenter_interface {
     }
 
     get_logics(items) {
-        let title = "Logics";
+        let title = "Signals";
 
         let header = [
             this.translator.get_str("Name"),
+            this.translator.get_str("Type"),
             this.translator.get_str("Description")
         ];
 
-        let keys = ['name', 'description'];
+        let keys = ['name', 'type', 'description'];
 
         return this.get_table_with_title(items, title, header, keys);
     }
