@@ -279,6 +279,9 @@ class Markdown {
       if (direction === undefined){
         direction = '';
       }
+      else if (ports[i]['type'] == 'modport' || ports[i]['type'] == 'interface') {
+        direction = '';
+      }
       direction = direction.replace(/\r/g, ' ').replace(/\n/g, ' ');
 
       let type = ports[i]['type'].replace(/\r/g, ' ').replace(/\n/g, ' ');

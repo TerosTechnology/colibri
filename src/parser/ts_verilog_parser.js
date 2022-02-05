@@ -567,7 +567,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
         //Interface
         let interface_port = this.search_multiple_in_tree(port, 'interface_port_header')
         if (interface_port.length === 1) {
-            return "Interface";
+            return "modport";
         }
 
         var arr = this.search_multiple_in_tree(port, 'net_port_type1');

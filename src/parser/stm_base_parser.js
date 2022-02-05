@@ -25,6 +25,13 @@ class Parser_stm_base extends ts_base_parser.Ts_base_parser {
     super();
   }
 
+  split_condition(condition) {
+    if (condition.length > 80) {
+      
+    }
+  }
+
+
   check_empty_states_transitions(states) {
     let check = true;
     for (let i = 0; i < states.length; ++i) {
