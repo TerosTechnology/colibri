@@ -29,6 +29,7 @@ class Parser_interface extends ts_base_parser.Ts_base_parser {
 
     get_interfaces(tree, lines, general_comments) {
         let interfaces = [];
+        let types = [];
         let last_element_position = -1;
         let generics_types = ['interface_declaration'];
         let comments = '';
@@ -110,13 +111,114 @@ class Parser_interface extends ts_base_parser.Ts_base_parser {
                 interfaces.push(interface_item);
                 comments_description = '';
             }
+            else if (cursor.nodeType === 'package_item') {
+                let new_type = this.get_types(cursor.currentNode());
+                new_type.decription = comments_description;
+
+                let data_types = this.get_data_from_type(cursor.currentNode(), general_comments);
+                for (const type_inst of new_type) {
+                    type_inst.data_type = data_types;
+                }
+            
+                types = types.concat(new_type);
+                comments_description = '';
+            }
             else if (cursor.nodeType === 'comment') {
                 comments_description += this.get_comment_with_break(cursor.nodeText);
             }
         }
         while (cursor.gotoNextSibling() !== false);
 
-        return interfaces;
+        return {'interfaces':interfaces, 'types':types};
+    }
+
+    get_types(tree, lines) {
+        let items = [];
+        let data_declaration = this.search_multiple_in_tree(tree, 'type_declaration'); 
+        if (data_declaration.length === 1) {
+            let data_declaration_inst = data_declaration[0];
+
+            let typedef = this.search_multiple_in_tree(data_declaration_inst, 'typedef'); 
+            let type = this.search_multiple_in_tree(data_declaration_inst, 'data_type'); 
+            let name = this.search_multiple_in_tree(data_declaration_inst, 'type_identifier'); 
+
+            if (typedef.length === 1 && type.length === 1 && name.length === 1) {
+                let type_item = {
+                    "name": name[0].text,
+                    "type": type[0].text,
+                    "description": 'comment',
+                    'start_line': name[0].startPosition.row
+                }
+                items.push(type_item);
+            }
+        }
+
+        return items;
+    }
+
+
+    get_data_from_type(tree, general_comments) {
+        let datas = [];
+        
+
+        let search_0 = this.search_multiple_in_tree(tree, 'data_declaration');
+        if (search_0.length !== 1) {
+            return datas;
+        }
+        let search_1 = this.search_multiple_in_tree(search_0[0], 'type_declaration');
+        if (search_1.length !== 1) {
+            return datas;
+        }
+        let search_2 = this.search_multiple_in_tree(search_1[0], 'data_type');
+        if (search_2.length !== 1) {
+            return datas;
+        }
+
+        let node_search = search_2[0];
+        // struct_union_member'
+        let comments = '';
+        let last_element_position = -1;
+
+        let cursor = node_search.walk();;
+        cursor.gotoFirstChild();
+        do {
+            if (cursor.nodeType === 'struct_union_member') {
+                // interface_name = this.get_interface_name(cursor.currentNode());
+                let new_logic = this.get_get_logic_from_type(cursor.currentNode());
+                new_logic = this.set_description_to_array(new_logic,comments, general_comments);
+                datas = datas.concat(new_logic);
+                comments = '';
+            } else if (cursor.nodeType === 'comment') {
+                let comment_position = cursor.startPosition.row;
+                if (last_element_position !== comment_position) {
+                    comments += this.get_comment_with_break(cursor.nodeText);
+                } else {
+                    comments = '';
+                }
+            } else {
+                comments = '';
+            }
+        }
+        while (cursor.gotoNextSibling() !== false);
+
+
+
+
+        return datas;
+    }
+
+    get_get_logic_from_type(tree) {
+        let items = [];
+        let item_name = this.search_multiple_in_tree(tree, 'list_of_variable_decl_assignments');
+        let item_type = this.search_multiple_in_tree(tree, 'data_type_or_void');
+        if (item_name.length === 1 && item_type.length === 1) {
+            let item_names = item_name[0].text.split(',');
+            for (const name_inst of item_names) {
+                let start_line = item_name[0].startPosition.row;
+                items.push({ 'name': name_inst, 'type': item_type[0].text, 'description': '', 'start_line': start_line});
+            }
+        }
+        return items;
     }
 
     get_interface_name(tree) {

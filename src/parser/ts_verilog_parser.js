@@ -100,9 +100,10 @@ class Parser extends ts_base_parser.Ts_base_parser {
                     let ts_verilog_parser_interface_i =
                         new ts_verilog_parser_interface.Parser_interface(this.comment_symbol);
                     
-                    let interfaces = ts_verilog_parser_interface_i.get_interfaces(tree, lines, comments);
+                    let include_types = ts_verilog_parser_interface_i.get_interfaces(tree, lines, comments);
                     structure = {
-                        "interface": interfaces, // interfaces 
+                        "interface": include_types.interfaces,
+                        "type": include_types.types, 
                     };
                 }
                 else {

@@ -570,7 +570,6 @@ class Documenter extends markdown_lib.Markdown {
     let stm_array = await parser.get_svg_sm(code, symbol);
     return stm_array.svg;
   }
-
 }
 
 module.exports = {

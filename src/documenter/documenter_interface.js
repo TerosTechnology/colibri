@@ -10,6 +10,7 @@ class Documenter_interface {
     get_doc(tree, filename) {
         let doc = '';
         let interfaces = tree.interface;
+        let types = tree.type;
         let doc_raw = '';
         const converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
         converter.setFlavor('github');
@@ -26,8 +27,13 @@ class Documenter_interface {
         }
 
         for (let interface_inst of interfaces) {
-            doc += this.get_interface(interface_inst, filename);
+            doc += this.get_interface(interface_inst);
         }
+
+        for (let type_inst of types) {
+            doc += this.get_type(type_inst);
+        }
+
         return doc;
     }
 
@@ -35,6 +41,40 @@ class Documenter_interface {
         let description_norm = utils.remove_description_first_space(description).trim();
         description_norm = utils.normalize_description(description_norm);
         return description_norm;
+    }
+
+
+    get_type(type_inst) {
+        let doc = '';
+        let doc_raw = '';
+
+        const converter = new showdown.Converter({ tables: true, ghCodeBlocks: true });
+        converter.setFlavor('github');
+
+        // Title
+        doc_raw = `# ${this.translator.get_str('Type')}: ${type_inst['name']}\n\n`;
+        if (this.type === 'markdown') {
+            doc += doc_raw;
+        }
+        else {
+            doc += converter.makeHtml(doc_raw);
+        }
+
+        // Description
+        let description = this.normalize_description(type_inst['description']);
+        doc_raw = `${description}\n\n`;
+        if (this.type === 'markdown') {
+            doc = doc_raw;
+        }
+        else {
+            doc += converter.makeHtml(doc_raw);
+        }
+
+        // Logics
+        doc += this.get_types_data(type_inst['data_type']);
+
+        return doc;
+
     }
 
     get_interface(interface_inst) {
@@ -149,6 +189,21 @@ class Documenter_interface {
         ];
 
         let keys = ['name', 'direction', 'type', 'description'];
+
+        return this.get_table_with_title(items, title, header, keys);
+    }
+
+
+    get_types_data(items) {
+        let title = "Signals";
+
+        let header = [
+            this.translator.get_str("Name"),
+            this.translator.get_str("Type"),
+            this.translator.get_str("Description")
+        ];
+
+        let keys = ['name', 'type', 'description'];
 
         return this.get_table_with_title(items, title, header, keys);
     }
