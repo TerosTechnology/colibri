@@ -52,8 +52,8 @@ class Parser extends ts_base_parser.Ts_base_parser {
     }
 
     check_body_empty(body) {
-        if (body['constants'].length === 0 && body['functions'].length === 0 && body['generics'].length === 0
-            && body['instantiations'].length === 0 && body['ports'].length === 0 && body['processes'].length === 0 &&
+        if (body['constants'].length === 0 && body['functions'].length === 0 && body['generics'].length === 0 &&
+            body['instantiations'].length === 0 && body['ports'].length === 0 && body['processes'].length === 0 &&
             body['signals'].length === 0 && body['types'].length === 0) {
             return true;
         }
@@ -61,8 +61,8 @@ class Parser extends ts_base_parser.Ts_base_parser {
     }
 
     check_body_interfaces_empty(body) {
-        if (body['constants'].length === 0 && body['functions'].length === 0 && body['generics'].length === 0
-            && body['instantiations'].length === 0 && body['ports'].length === 0 && body['processes'].length === 0 &&
+        if (body['constants'].length === 0 && body['functions'].length === 0 && body['generics'].length === 0 &&
+            body['instantiations'].length === 0 && body['ports'].length === 0 && body['processes'].length === 0 &&
             body['signals'].length === 0 && body['types'].length === 0) {
             return true;
         }
@@ -99,14 +99,13 @@ class Parser extends ts_base_parser.Ts_base_parser {
                     file_type = "interface";
                     let ts_verilog_parser_interface_i =
                         new ts_verilog_parser_interface.Parser_interface(this.comment_symbol);
-                    
+
                     let include_types = ts_verilog_parser_interface_i.get_interfaces(tree, lines, comments);
                     structure = {
                         "interface": include_types.interfaces,
-                        "type": include_types.types, 
+                        "type": include_types.types,
                     };
-                }
-                else {
+                } else {
                     structure = {
                         'lang': 'verilog',
                         "package": package_declaration, // package_identifier 
@@ -169,8 +168,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
             if (position === -1) {
                 // No interface
                 instantiations_clean.push(instantiation);
-            }
-            else {
+            } else {
                 // Interface
                 let type = `Interface: ${instantiation.type}`;
                 let signal_interface = {
@@ -565,7 +563,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
 
     getPortType(port, lines) {
         //Interface
-        let interface_port = this.search_multiple_in_tree(port, 'interface_port_header')
+        let interface_port = this.search_multiple_in_tree(port, 'interface_port_header');
         if (interface_port.length === 1) {
             return "modport";
         }
@@ -579,6 +577,15 @@ class Parser extends ts_base_parser.Ts_base_parser {
         }
         let port_type = this.extract_data(arr[0], lines);
         return port_type;
+    }
+
+    get_port_subtype(port) {
+        //Interface
+        let interface_port = this.search_multiple_in_tree(port, 'interface_port_header');
+        if (interface_port.length === 1) {
+            return interface_port[0].text;
+        }
+        return '';
     }
 
     getPortKind(port, lines) {
@@ -622,6 +629,12 @@ class Parser extends ts_base_parser.Ts_base_parser {
                 default:
                     typeVar = this.getPortType(inputs[x], lines);
             }
+
+            let subtype = '';
+            if (typeVar === 'modport') {
+                subtype = this.get_port_subtype(inputs[x], lines);
+            }
+
             var port_ref = this.search_multiple_in_tree(element, 'port_reference');
             var comment = "";
             var comment_str = comments[inputs[x].startPosition.row];
@@ -649,6 +662,7 @@ class Parser extends ts_base_parser.Ts_base_parser {
                     'name': port_name[i],
                     'direction': ((ansi === true) ? directionVar : direction),
                     'type': typeVar,
+                    'subtype': subtype,
                     "default_value": "",
                     "description": comment,
                     "start_line": start_line
