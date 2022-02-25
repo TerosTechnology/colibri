@@ -2,7 +2,13 @@
     "name": "teroshdl",
     "version": "2.0.3",
     "description": "Backend for terosHDL IDE",
-    "keywords": ["vhdl", "verilog", "systemverilog", "fpga", "teroshdl"],
+    "keywords": [
+        "vhdl",
+        "verilog",
+        "systemverilog",
+        "fpga",
+        "teroshdl"
+    ],
     "main": "src/main.js",
     "engines": {
         "node": ">=12.0.0"
@@ -19,7 +25,8 @@
     "author": "",
     "license": "GPL-3.0",
     "bin": {
-        "teroshdl-hdl-documenter": "bin/teroshdl-hdl-documenter"
+        "teroshdl-hdl-documenter": "bin/teroshdl-hdl-documenter",
+        "teroshdl-hdl-parser": "bin/teroshdl-parser"
     },
     "dependencies": {
         "bit-field": "1.3.6",

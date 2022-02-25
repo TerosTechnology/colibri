@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 /* eslint-disable max-len */
 // Copyright 2021 Teros Technology
 //
@@ -47,11 +48,12 @@ program.version(require('../package.json').version)
     .option('-c, --constants <type>', `Include constants/types in the documentation: ${doc_options_choice}`, 'all')
     .option('-p, --process <type>', `Include process/always in the documentation: ${doc_options_choice}`, 'all')
     .option('-f, --functions <type>', `Include functions in the documentation: ${doc_options_choice}`, 'all')
-    .option('--symbol_verilog, <type>', `Special character to parse comments into documentation`,'')
-    .option('--symbol_vhdl <type>', `Special character to parse comments into documentation`,'')
-    .option('--pypath, <type>', `Explicit python path`,"")
-    .option('--outpath, <type>', `Explicit outputh documentation path`,default_out_path)
+    .option('--symbol_verilog, <type>', `Special character to parse comments into documentation`, '')
+    .option('--symbol_vhdl <type>', `Special character to parse comments into documentation`, '')
+    .option('--pypath, <type>', `Explicit python path`, "")
+    .option('--outpath, <type>', `Explicit outputh documentation path`, default_out_path)
     .option('--self_contained', `Documentation generated in a single file for html output`)
+    .option('--magic_path <type>', `Magic path`, '')
     .usage('[options] <hdl-documenter>')
     .parse(process.argv);
 
@@ -59,21 +61,21 @@ program.parse(process.argv);
 let options = program.opts();
 
 print_license();
-if (!options.dep){
-  options.dep = false;
+if (!options.dep) {
+    options.dep = false;
 }
-if (!options.fsm){
-  options.fsm = false;
+if (!options.fsm) {
+    options.fsm = false;
 }
-if (!options.self_contained){
-  options.self_contained = false;
+if (!options.self_contained) {
+    options.self_contained = false;
 }
-if (!options.recursive){
-  options.recursive = false;
+if (!options.recursive) {
+    options.recursive = false;
 }
 
-if (options.out === 'markdown'){
-  options.self_contained = false;
+if (options.out === 'markdown') {
+    options.self_contained = false;
 }
 
 let doc_config = get_documentation_config(options);
@@ -82,139 +84,140 @@ validate_output_type(options);
 //Absolute path output directory
 let cmd_output_path = options.outpath;
 let absolute_output_path = process.cwd();
-if (cmd_output_path !== ''){
-  absolute_output_path = cmd_output_path;
-  if (path_lib.isAbsolute(cmd_output_path) === false){
-    absolute_output_path = path_lib.resolve(process.cwd(), cmd_output_path);
-  }
+if (cmd_output_path !== '') {
+    absolute_output_path = cmd_output_path;
+    if (path_lib.isAbsolute(cmd_output_path) === false) {
+        absolute_output_path = path_lib.resolve(process.cwd(), cmd_output_path);
+    }
 }
 
 //Absolute input
 let cmd_input_path = options.input;
 let absolute_input_path = process.cwd();
-if (cmd_input_path !== ''){
-  absolute_input_path = cmd_input_path;
-  if (path_lib.isAbsolute(cmd_input_path) === false){
-    absolute_input_path = path_lib.resolve(process.cwd(), cmd_input_path);
-  }
+if (cmd_input_path !== '') {
+    absolute_input_path = cmd_input_path;
+    if (path_lib.isAbsolute(cmd_input_path) === false) {
+        absolute_input_path = path_lib.resolve(process.cwd(), cmd_input_path);
+    }
 }
-(async () => {
-  print_configuration(options, doc_config, absolute_input_path, absolute_output_path).then(function() {
-    gen_doc(options, doc_config, absolute_input_path, absolute_output_path).then(function(result) {
-      print_result(result);
+(async() => {
+    print_configuration(options, doc_config, absolute_input_path, absolute_output_path).then(function() {
+        gen_doc(options, doc_config, absolute_input_path, absolute_output_path).then(function(result) {
+            print_result(result);
+        });
     });
-  });
 })();
 
 
 ////////////////////////////////////////////////////////////////////////////////
 // Get dodumenter configuration
 ////////////////////////////////////////////////////////////////////////////////
-function get_documentation_config(options){
-  let include_dependency_graph = options.dep;
-  if (include_dependency_graph === undefined){
-    include_dependency_graph = false;
-  }
+function get_documentation_config(options) {
+    let include_dependency_graph = options.dep;
+    if (include_dependency_graph === undefined) {
+        include_dependency_graph = false;
+    }
 
-  let include_fsm = options.fsm;
-  if (include_fsm === undefined){
-    include_fsm = false;
-  }
+    let include_fsm = options.fsm;
+    if (include_fsm === undefined) {
+        include_fsm = false;
+    }
 
-  let include_signals = options.signals;
-  validate_config('signals',include_signals);
-  let include_constants = options.constants;
-  validate_config('constants',include_constants);
-  let include_process = options.process;
-  validate_config('process',include_process);
-  let include_functions = options.functions;
-  validate_config('functions',include_functions);
+    let include_signals = options.signals;
+    validate_config('signals', include_signals);
+    let include_constants = options.constants;
+    validate_config('constants', include_constants);
+    let include_process = options.process;
+    validate_config('process', include_process);
+    let include_functions = options.functions;
+    validate_config('functions', include_functions);
 
-  let doc_symbol_verilog = options.symbol_verilog;
-  let doc_symbol_vhdl = options.symbol_vhdl;
-  let doc_self_contained = options.self_contained;
+    let doc_symbol_verilog = options.symbol_verilog;
+    let doc_symbol_vhdl = options.symbol_vhdl;
+    let doc_self_contained = options.self_contained;
+    let doc_magic_path = options.magic_path;
+    if (doc_magic_path === '') {
+        doc_magic_path = undefined;
+    }
 
-  let config = {
-    "pypath": options.pypath,
-    "dependency_graph": include_dependency_graph,
-    "fsm": include_fsm,
-    "signals": include_signals,
-    "constants": include_constants,
-    "process": include_process,
-    "functions": include_functions,
-    "symbol_verilog": doc_symbol_verilog,
-    "symbol_vhdl": doc_symbol_vhdl,
-    "self_contained": doc_self_contained
-  };
-  return config;
+    let config = {
+        "pypath": options.pypath,
+        "dependency_graph": include_dependency_graph,
+        "fsm": include_fsm,
+        "signals": include_signals,
+        "constants": include_constants,
+        "process": include_process,
+        "functions": include_functions,
+        "symbol_verilog": doc_symbol_verilog,
+        "symbol_vhdl": doc_symbol_vhdl,
+        "self_contained": doc_self_contained,
+        "magic_path": doc_magic_path
+    };
+    return config;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Validate configuration
 ////////////////////////////////////////////////////////////////////////////////
-function validate_config(name, config_data){
-  if (doc_options_choice.includes(config_data) === false){
-    console.log(`Error in config ${name}. Possible values: ${doc_options_choice}`);
-    exit();
-  }
+function validate_config(name, config_data) {
+    if (doc_options_choice.includes(config_data) === false) {
+        console.log(`Error in config ${name}. Possible values: ${doc_options_choice}`);
+        exit();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Validate output type
 ////////////////////////////////////////////////////////////////////////////////
-function validate_output_type(options){
-  let output_type = options.out;
-  if (output_doc_options_choice.includes(output_type) === false){
-    console.log(`Error in config --out. Possible values: ${output_doc_options_choice}`);
-    exit();
-  }
+function validate_output_type(options) {
+    let output_type = options.out;
+    if (output_doc_options_choice.includes(output_type) === false) {
+        console.log(`Error in config --out. Possible values: ${output_doc_options_choice}`);
+        exit();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Generate documentation
 ////////////////////////////////////////////////////////////////////////////////
-async function gen_doc(options, doc_config, input_path, output_path){
-  let is_directory = fs.lstatSync(input_path).isDirectory();
+async function gen_doc(options, doc_config, input_path, output_path) {
+    let is_directory = fs.lstatSync(input_path).isDirectory();
 
-  let file_ext = '';
-  let check_hdl_lang = false;
-  if (is_directory === false){
-    file_ext = path_lib.extname(input_path).toLowerCase();
-    check_hdl_lang = utils.check_if_hdl_file(input_path);
-  }
-  let result = {};
-  if (is_directory === true){
-    let edam_yml_c = new edam_yml.Doc(doc_config);
-    result = edam_yml_c.gen_doc(options, 'directory', input_path, output_path);
-  }
-  else if(check_hdl_lang === true){
-    let edam_yml_c = new edam_yml.Doc(doc_config);
-    result = edam_yml_c.gen_doc(options, 'file', input_path, output_path);
-  }
-  else if (file_ext === '.srs') {
-    let custom_yml_c = new custom_yml.Custom_yml(doc_config);
-    custom_yml_c.gen_doc(options);
-  }
-  else if (file_ext === '.yml') {
-    let edam_yml_c = new edam_yml.Doc(doc_config);
-    result = edam_yml_c.gen_doc(options, 'yml', input_path, output_path);
-  }
-  else if (file_ext === '.csv') {
-    let edam_yml_c = new edam_yml.Doc(doc_config);
-    result = edam_yml_c.gen_doc(options, 'csv', input_path, output_path);
-  }
-  return result;
-} 
+    let file_ext = '';
+    let check_hdl_lang = false;
+    if (is_directory === false) {
+        file_ext = path_lib.extname(input_path).toLowerCase();
+        check_hdl_lang = utils.check_if_hdl_file(input_path);
+    }
+    let result = {};
+    if (is_directory === true) {
+        let edam_yml_c = new edam_yml.Doc(doc_config);
+        result = edam_yml_c.gen_doc(options, 'directory', input_path, output_path);
+    } else if (check_hdl_lang === true) {
+        let edam_yml_c = new edam_yml.Doc(doc_config);
+        result = edam_yml_c.gen_doc(options, 'file', input_path, output_path);
+    } else if (file_ext === '.srs') {
+        let custom_yml_c = new custom_yml.Custom_yml(doc_config);
+        custom_yml_c.gen_doc(options);
+    } else if (file_ext === '.yml') {
+        let edam_yml_c = new edam_yml.Doc(doc_config);
+        result = edam_yml_c.gen_doc(options, 'yml', input_path, output_path);
+    } else if (file_ext === '.csv') {
+        let edam_yml_c = new edam_yml.Doc(doc_config);
+        result = edam_yml_c.gen_doc(options, 'csv', input_path, output_path);
+    }
+    return result;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Print configuration
 ////////////////////////////////////////////////////////////////////////////////
-async function print_configuration(options, doc_config, absolute_input_path, absolute_output_path){
-  let python_path = options.pypath;
-  const nopy = require('../src/nopy/python_tools');
-  let python_path_found = await nopy.get_python_exec(python_path);
+async function print_configuration(options, doc_config, absolute_input_path, absolute_output_path) {
+    let python_path = options.pypath;
+    const nopy = require('../src/nopy/python_tools');
+    let python_path_found = await nopy.get_python_exec(python_path);
 
-  let msg = `
+    let msg = `
 ****************************************************************************************************************
 --> Input: ${absolute_input_path}
 --> Output directory: ${absolute_output_path}
@@ -231,31 +234,31 @@ async function print_configuration(options, doc_config, absolute_input_path, abs
 ****************************************************************************************************************
 `;
 
-  print_warning(msg);
+    print_warning(msg);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Print result
 ////////////////////////////////////////////////////////////////////////////////
-function print_result(result){
-  let fail_files = result.fail_files;
-  let ok_files = result.ok_files;
-  let total_files = fail_files + ok_files;
-  let msg = `
+function print_result(result) {
+    let fail_files = result.fail_files;
+    let ok_files = result.ok_files;
+    let total_files = fail_files + ok_files;
+    let msg = `
 ****************************************************************************************************************
 --> Files found: ${total_files}
 --> Files processed successfully: ${ok_files}
 --> Unprocessed files: ${fail_files}
 ****************************************************************************************************************
 `;
-  print_ok(msg);
+    print_ok(msg);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Print license
 ////////////////////////////////////////////////////////////////////////////////
-function print_license(){
-  let msg = `
+function print_license() {
+    let msg = `
 ****************************************************************************************************************
 Copyright 2020-2021 Teros Technology terostechnology@gmail.com 
 Ismael Perez Rojo ismaelprojo@gmail.com
@@ -268,31 +271,14 @@ the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 ****************************************************************************************************************
 `;
-  console.log(msg);
+    console.log(msg);
 }
 
 
-function print_warning(msg){
-  console.log('\x1b[33m%s\x1b[0m', msg); //yellow
+function print_warning(msg) {
+    console.log('\x1b[33m%s\x1b[0m', msg); //yellow
 }
 
-function print_ok(msg){
-  console.log('\x1b[32m%s\x1b[0m', msg); //green
+function print_ok(msg) {
+    console.log('\x1b[32m%s\x1b[0m', msg); //green
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
