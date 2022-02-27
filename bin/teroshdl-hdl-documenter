@@ -37,6 +37,7 @@ const output_doc_options_choice = ['html', 'markdown'];
 const default_dir = '';
 const default_out = 'html';
 const default_out_path = '';
+const default_magic_path = '';
 
 program.version(require('../package.json').version)
     .option('-i, --input [path]', 'Directory with the HDL files, HDL, file, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information', default_dir)
@@ -53,7 +54,7 @@ program.version(require('../package.json').version)
     .option('--pypath, <type>', `Explicit python path`, "")
     .option('--outpath, <type>', `Explicit outputh documentation path`, default_out_path)
     .option('--self_contained', `Documentation generated in a single file for html output`)
-    .option('--magic_path <type>', `Magic path`, '')
+    .option('--magic_path <type>', `Magic path`, default_magic_path)
     .usage('[options] <hdl-documenter>')
     .parse(process.argv);
 
@@ -135,9 +136,9 @@ function get_documentation_config(options) {
     let doc_symbol_verilog = options.symbol_verilog;
     let doc_symbol_vhdl = options.symbol_vhdl;
     let doc_self_contained = options.self_contained;
-    let doc_magic_path = options.magic_path;
-    if (doc_magic_path === '') {
-        doc_magic_path = undefined;
+    let doc_magic_config_path = options.magic_path;
+    if (doc_magic_config_path === '') {
+        doc_magic_config_path = undefined;
     }
 
     let config = {
@@ -151,7 +152,7 @@ function get_documentation_config(options) {
         "symbol_verilog": doc_symbol_verilog,
         "symbol_vhdl": doc_symbol_vhdl,
         "self_contained": doc_self_contained,
-        "magic_path": doc_magic_path
+        "magic_config_path": doc_magic_config_path
     };
     return config;
 }
