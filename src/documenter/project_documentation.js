@@ -55,7 +55,7 @@ async function get_doc_from_project(project, output_dir_doc, graph, config, type
     //Internal doc folder
     const INTERNAL_DOC_FOLDER = 'doc_internal';
     const INTERNAL_DOC_FOLDER_COMPLETE = path_lib.join(output_dir_doc, 'doc_internal');
-    if (!fs.existsSync(INTERNAL_DOC_FOLDER_COMPLETE) && (self_contained === false || type === 'markdown')) {
+    if (!fs.existsSync(INTERNAL_DOC_FOLDER_COMPLETE) || type === 'markdown') {
         fs.mkdirSync(INTERNAL_DOC_FOLDER_COMPLETE, { recursive: true });
     }
 
