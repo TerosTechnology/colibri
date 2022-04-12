@@ -87,7 +87,12 @@ files_array = []
 try:
     files_in_compile_order = project.get_dependencies_in_compile_order()
     for i in range(0, len(files_in_compile_order)):
-        files_array.append(files_in_compile_order[i].name)
+        library_name = ''
+        if ( files_in_compile_order[i].library.name != 'src_lib_teroshdl'):
+            library_name = files_in_compile_order[i].library.name
+
+        file_order = {'name': files_in_compile_order[i].name, 'library': library_name}
+        files_array.append(file_order)
 except:
     pass
 

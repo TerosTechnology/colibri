@@ -294,9 +294,24 @@ class Edam_project extends prj_documenter.Project_documenter {
         let project = this.get_json_prj();
         let dependency_inst = new dependency.Dependency_graph();
         let compile_order = await dependency_inst.get_compile_order(project, pypath);
+
         return compile_order;
     }
 
+    async order_project(pypath) {
+        let compile_order = await this.get_compile_order(pypath);
+        if (compile_order === undefined) {
+            return;
+        }
+        for (const f of compile_order) {
+            this.delete_file(f.name, f.library);
+        }
+
+        for (const f of compile_order) {
+            this.add_file(f.name, false, '', f.library);
+        }
+        return true;
+    }
 }
 
 class Edam_file {

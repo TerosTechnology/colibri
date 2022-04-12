@@ -119,8 +119,6 @@ class Dependency_graph {
         return compile_order;
     }
 
-
-
     async get_dependency_tree(project, pypath) {
         let dep_tree = { 'root': undefined, 'error': 'Failed to process the project' };
 
