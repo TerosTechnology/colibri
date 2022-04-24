@@ -45,11 +45,11 @@ Full documentation: https://terostechnology.github.io/terosHDLdoc/documenter/com
 -s, --signals , Include signals/regs/wires in the documentation ['none', 'all', 'only_commented']
 -c, --constants , Include constants/types in the documentation ['none', 'all', 'only_commented']
 -p, --process , Include process/always in the documentation ['none', 'all', 'only_commented']
---sym-verilog, --symbol_verilog , Special character to parse comments into documentation
---sym-vhdl, --symbol_vhdl , Special character to parse comments into documentation
---pypath, --python_path , Explicit python path
+--symbol_verilog, --symbol_verilog , Special character to parse comments into documentation
+--symbol_vhdl, --symbol_vhdl , Special character to parse comments into documentation
+--pypath, --pypath , Explicit python path
 --outpath, --outpath , Explicit outputh documentation path
---self, --self_contained , Documentation generated in a single file for html output
+--self_contained, --self_contained , Documentation generated in a single file for html output
 ```
 
 ## Examples
