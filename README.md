@@ -1,67 +1,56 @@
+[![Testing](https://github.com/TerosTechnology/colibri2/actions/workflows/ci.yml/badge.svg)](https://github.com/TerosTechnology/colibri2/actions/workflows/ci.yml)
 
-![TerosHDL](./doc/low_res_banner.png)
-<!-- ![Tests](https://github.com/TerosTechnology/colibri/workflows/Test/badge.svg?event=push) -->
+![TerosHDL](./docs/bcard-front-low.png)
 
-# TerosHDL command line
+# Colibri2
 
-Command line version of TerosHDL (https://terostechnology.github.io). Current features:
-
-- Documenter.
-
-## Requirements
-
-- nodejs >= v12.0.0
-
-## Installation
+Colibri2 is a TypeScript library to work with HDL (VHDL, Verilog and SV). It's the back-end of [TerosHDL](https://github.com/TerosTechnology/vscode-terosHDL), but also it can be used as part of other programs. Features:
 
 
-- Installation from NPM:
+- State machine parser.
+- Schematic images.
+- Documenter: it extracts the comments in the code and generates the documentation in HTML or MarkDown.
+- Error linter: GHDL, Icarus, Verilator, Verible...
+- Style checking: Verible.
+- Code formatting.
+- Code templates.
+- Hierarchy images.
+- Dependencies images.
+- Projec manager: simulations, compilations...
 
-```
-npm install -g teroshdl
-```
+## Architecture
 
-- From sources:
+![Diagram](./docs/colibri.png "Diagram")
 
-```
-sudo npm install .
-```
-
-## Documentation
-
-Full documentation: https://terostechnology.github.io/terosHDLdoc/documenter/command_line.html
+- [Documenter](./src/documenter)
+- [Template](./src/template)
+- [State machine](./src/parser)
+- [Linter](./src/linter)
+- [Formatter](./src/formatter)
 
 
-## Getting started
+## Tests
+
+- [Testing plan](./docs/testing_plan.md)
+
+## Command line
+
+- [Command line](./docs/command_line.md)
 
 
-- Arguments
+## Managed by
 
-```
--i, --input [path], Directory with the HDL files, path of the YML (with EDAM format) file for documenter or CSV. Check the documentation for more information
--o, --out [type], Documentation format: md, html (default: "markdown")
---dep, --dep', Include dependency graph in the documentation
---fsm, --fsm', Include finite state machines in the documentation
--s, --signals , Include signals/regs/wires in the documentation ['none', 'all', 'only_commented']
--c, --constants , Include constants/types in the documentation ['none', 'all', 'only_commented']
--p, --process , Include process/always in the documentation ['none', 'all', 'only_commented']
---symbol_verilog, --symbol_verilog , Special character to parse comments into documentation
---symbol_vhdl, --symbol_vhdl , Special character to parse comments into documentation
---pypath, --pypath , Explicit python path
---outpath, --outpath , Explicit outputh documentation path
---self_contained, --self_contained , Documentation generated in a single file for html output
-```
+- [Carlos Alberto Ruiz](https://www.linkedin.com/in/carlos-alberto-ruiz-fpga/): carlosruiznaranjo@gmail.com 
+- [Ismael Pérez](https://www.linkedin.com/in/ispero/): ismaelprojo@gmail.com
 
-## Examples
+## Sponsor
 
-**Documenter with teros project manager file or EDAM file**
+This project was funded through the NGI Assure Fund, a fund established by NLnet with financial support from 
+the European Commission's Next Generation Internet programme, under the aegis of DG Communications Networks, 
+Content and Technology under grant agreement No 957073.
 
-Check the EDAM format: https://edalize.readthedocs.io/en/latest/edam/api.html
 
-```
-cd /bin/example/doc
-teroshdl-hdl-documenter -i example_edam.yml -o markdown
-teroshdl-hdl-documenter -i example_edam.yml -o html
-teroshdl-hdl-documenter -i example.csv -o html
-teroshdl-hdl-documenter -i ../rtl -o html
-```
+<img border=0 src="./docs/nlnet-fundation-150x150.png" width="150" height="150"><img border=0 src="./docs/banner_1.svg" width="250" height="150">
+
+
+

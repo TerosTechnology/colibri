@@ -1,0 +1,27 @@
+{% include "../header.nj" -%}
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity {{ name }}_tb is
+end;
+
+architecture bench of {{ name }}_tb is
+{{ indent[1] }}-- Clock period
+{{ indent[1] }}constant clk_period : time := 5 ns;
+{{ indent[1] }}-- Generics
+{% for generic_inst in generic -%}
+{{ indent[1] }}constant {{generic_inst['info']['name']}} : {{generic_inst['type']}};
+{% endfor -%}
+{{ indent[1] }}-- Ports
+{% for port_inst in port -%}
+{{ indent[1] }}signal {{port_inst['info']['name']}} : {{port_inst['type']}};
+{% endfor -%}
+{% if instance_style == "separate" %}
+{{ indent[1] }}{% include "./hdl_element_component.nj" %}
+{% endif -%}
+begin
+
+{{ indent[1] }}{% include "./hdl_element_instance.nj" %}
+{% include "./clock.nj" %}
+end;

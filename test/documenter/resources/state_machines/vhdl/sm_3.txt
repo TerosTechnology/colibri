@@ -1,4 +1,0 @@
-zero => edge:  level = '1' ;
-edge => one:  level = '1' ;
-edge => zero: ;
-one => zero:  level = '0' ;

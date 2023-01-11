@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+{% include 'web_css.nj' %}
+
+</style>
+</head>
+<body>
+
+{% include 'web_config_html.nj' %}
+
+<script>
+{% include 'web_config_js.nj' %}
+</script>
+
+</body>
+</html> 

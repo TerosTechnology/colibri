@@ -1,0 +1,3 @@
+{
+    "reporterEnabled": "spec,xunit,mochawesome,mocha-junit-reporter"
+}

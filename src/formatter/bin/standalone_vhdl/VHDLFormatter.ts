@@ -1,4 +1,3 @@
-let isTesting = false;
 const ILEscape = "@@";
 const ILCommentPrefix = ILEscape + "comments";
 const ILIndentedReturnPrefix = ILEscape;
@@ -47,13 +46,13 @@ export class NewLineSettings {
     }
 }
 
-function ConstructNewLineSettings(dict): NewLineSettings {
-    let settings: NewLineSettings = new NewLineSettings();
-    for (let key in dict) {
-        settings.push(key, dict[key]);
-    }
-    return settings;
-}
+// function ConstructNewLineSettings(dict): NewLineSettings {
+//     let settings: NewLineSettings = new NewLineSettings();
+//     for (let key in dict) {
+//         settings.push(key, dict[key]);
+//     }
+//     return settings;
+// }
 
 declare global {
     interface String {
@@ -93,22 +92,9 @@ String.prototype.regexIndexOf = function (pattern, startIndex) {
 }
 
 String.prototype.regexLastIndexOf = function (pattern, startIndex) {
-    pattern = (pattern.global) ? pattern :
-        new RegExp(pattern.source, 'g' + (pattern.ignoreCase ? 'i' : '') + (pattern.multiline ? 'm' : ''));
-    if (typeof (startIndex) === 'undefined') {
-        startIndex = this.length;
-    } else if (startIndex < 0) {
-        startIndex = 0;
-    }
-    const stringToWorkWith = this.substring(0, startIndex + 1);
-    let lastIndexOf = -1;
-    let nextStop = 0;
-    let result: RegExpExecArray;
-    while ((result = pattern.exec(stringToWorkWith)) != null) {
-        lastIndexOf = result.index;
-        pattern.lastIndex = ++nextStop;
-    }
-    return lastIndexOf;
+    startIndex = startIndex === undefined ? this.length : startIndex;
+    var searchResult = this.substr(0, startIndex).reverse().regexIndexOf(pattern, 0);
+    return (-1 === searchResult) ? -1 : this.length - ++searchResult;
 }
 
 String.prototype.reverse = function () {
@@ -130,71 +116,12 @@ function EscapeComments(arr: Array<string>): Array<string> {
     var comments = [];
     var count = 0;
     for (var i = 0; i < arr.length; i++) {
-        var line = arr[i];
+        var line: string = arr[i];
         var commentStartIndex = line.indexOf("--");
         if (commentStartIndex >= 0) {
             comments.push(line.substr(commentStartIndex));
             arr[i] = line.substr(0, commentStartIndex) + ILCommentPrefix + count;
             count++;
-        }
-    }
-    var isInComment = false;
-    var commentRegex = new RegExp("(?<=" + ILCommentPrefix + "[\\d]+).");
-    for (var i = 0; i < arr.length; i++) {
-        var commentStartIndex = 0;
-        var hasComment = true;
-        var commentEndInlineIndex = 0;
-        while (hasComment) {
-            var line = arr[i];
-            if (!isInComment) {
-                commentStartIndex = line.indexOf("/*");
-                var commentEndIndex = line.indexOf("*/", commentStartIndex);
-                if (commentStartIndex >= 0) {
-                    if (commentEndIndex >= 0) {
-                        commentEndInlineIndex = commentEndIndex + 2;
-                        isInComment = false;
-                        comments.push(line.substring(commentStartIndex, commentEndInlineIndex));
-                        arr[i] = line.substr(0, commentStartIndex) + ILCommentPrefix + count + line.substr(commentEndInlineIndex);
-                        count++;
-                        hasComment = true;
-                        if (commentStartIndex + 2 == line.length) {
-                            hasComment = false;
-                        }
-                    }
-                    else {
-                        isInComment = true;
-                        comments.push(line.substr(commentStartIndex));
-                        arr[i] = line.substr(0, commentStartIndex) + ILCommentPrefix + count;
-                        count++;
-                        hasComment = false;
-                    }
-                }
-                else {
-                    hasComment = false;
-                }
-                continue;
-            }
-            if (isInComment) {
-                var lastCommentEndIndex = line.regexLastIndexOf(commentRegex, line.length);
-                if (commentStartIndex == 0) {
-                    var commentEndIndex = line.indexOf("*/", lastCommentEndIndex);
-                }
-                else {
-                    var commentEndIndex = line.indexOf("*/", commentStartIndex);
-                }
-                if (commentEndIndex >= 0) {
-                    isInComment = false;
-                    comments.push(line.substr(0, commentEndIndex + 2));
-                    arr[i] = ILCommentPrefix + count + line.substr(commentEndIndex + 2);
-                    count++;
-                    hasComment = true;
-                } else {
-                    comments.push(line);
-                    arr[i] = ILCommentPrefix + count;
-                    count++;
-                    hasComment = false;
-                }
-            }
         }
     }
     return comments
@@ -250,7 +177,7 @@ export function SetNewLinesAfterSymbols(text: string, newLineSettings: NewLineSe
         newLineSettings.newLineAfter.forEach(symbol => {
             let upper = symbol.toUpperCase();
             var rexString = "(" + upper + ")[ ]?([^ \r\n@])";
-            let regex: RegExp = null;
+            let regex: any = null;
             if (upper.regexStartsWith(/\w/)) {
                 regex = new RegExp("\\b" + rexString, "g");
             }
@@ -266,7 +193,7 @@ export function SetNewLinesAfterSymbols(text: string, newLineSettings: NewLineSe
     if (newLineSettings.noNewLineAfter != null) {
         newLineSettings.noNewLineAfter.forEach(symbol => {
             let rexString = "(" + symbol.toUpperCase() + ")[ \r\n]+([^@])";
-            let regex: RegExp = null;
+            let regex: any = null;
             if (symbol.regexStartsWith(/\w/)) {
                 regex = new RegExp("\\b" + rexString, "g");
                 text = text.replace(regex, '$1 $2');
@@ -297,31 +224,31 @@ export class BeautifierSettings {
     RemoveComments: boolean;
     RemoveAsserts: boolean;
     CheckAlias: boolean;
+    AlignComments: boolean;
     SignAlignSettings: signAlignSettings;
     KeywordCase: string;
     TypeNameCase: string;
     Indentation: string;
     NewLineSettings: NewLineSettings;
     EndOfLine: string;
-    AddNewLine: boolean;
-    constructor(removeComments: boolean, removeReport: boolean, checkAlias: boolean,
+    constructor(removeComments: boolean, removeReport: boolean, checkAlias: boolean, alignComments: boolean,
         signAlignSettings: signAlignSettings, keywordCase: string, typeNameCase: string, indentation: string,
-        newLineSettings: NewLineSettings, endOfLine: string, addNewLine: boolean) {
+        newLineSettings: NewLineSettings, endOfLine: string) {
         this.RemoveComments = removeComments;
         this.RemoveAsserts = removeReport;
         this.CheckAlias = checkAlias;
+        this.AlignComments = alignComments;
         this.SignAlignSettings = signAlignSettings;
         this.KeywordCase = keywordCase;
         this.TypeNameCase = typeNameCase;
         this.Indentation = indentation;
         this.NewLineSettings = newLineSettings;
         this.EndOfLine = endOfLine;
-        this.AddNewLine = addNewLine;
     }
 }
 
 let KeyWords: Array<string> = ["ABS", "ACCESS", "AFTER", "ALIAS", "ALL", "AND", "ARCHITECTURE", "ARRAY", "ASSERT", "ATTRIBUTE", "BEGIN", "BLOCK", "BODY", "BUFFER", "BUS", "CASE", "COMPONENT", "CONFIGURATION", "CONSTANT", "CONTEXT", "COVER", "DISCONNECT", "DOWNTO", "DEFAULT", "ELSE", "ELSIF", "END", "ENTITY", "EXIT", "FAIRNESS", "FILE", "FOR", "FORCE", "FUNCTION", "GENERATE", "GENERIC", "GROUP", "GUARDED", "IF", "IMPURE", "IN", "INERTIAL", "INOUT", "IS", "LABEL", "LIBRARY", "LINKAGE", "LITERAL", "LOOP", "MAP", "MOD", "NAND", "NEW", "NEXT", "NOR", "NOT", "NULL", "OF", "ON", "OPEN", "OR", "OTHERS", "OUT", "PACKAGE", "PORT", "POSTPONED", "PROCEDURE", "PROCESS", "PROPERTY", "PROTECTED", "PURE", "RANGE", "RECORD", "REGISTER", "REJECT", "RELEASE", "REM", "REPORT", "RESTRICT", "RESTRICT_GUARANTEE", "RETURN", "ROL", "ROR", "SELECT", "SEQUENCE", "SEVERITY", "SHARED", "SIGNAL", "SLA", "SLL", "SRA", "SRL", "STRONG", "SUBTYPE", "THEN", "TO", "TRANSPORT", "TYPE", "UNAFFECTED", "UNITS", "UNTIL", "USE", "VARIABLE", "VMODE", "VPROP", "VUNIT", "WAIT", "WHEN", "WHILE", "WITH", "XNOR", "XOR"];
-let TypeNames: Array<string> = ["BOOLEAN", "BIT", "CHARACTER", "INTEGER", "TIME", "NATURAL", "POSITIVE", "STD_LOGIC", "STD_LOGIC_VECTOR", "STD_ULOGIC", "STD_ULOGIC_VECTOR", "STRING"];
+let TypeNames: Array<string> = ["BOOLEAN", "BIT", "CHARACTER", "INTEGER", "TIME", "NATURAL", "POSITIVE", "STRING", "STD_LOGIC", "STD_LOGIC_VECTOR"];
 
 export function beautify(input: string, settings: BeautifierSettings) {
     input = input.replace(/\r\n/g, "\n");
@@ -360,12 +287,11 @@ export function beautify(input: string, settings: BeautifierSettings) {
     if (newLineSettings != null) {
         input = SetNewLinesAfterSymbols(input, newLineSettings);
         arr = input.split("\r\n");
-        ApplyNoNewLineAfter(arr, newLineSettings.noNewLineAfter);
         input = arr.join("\r\n");
     }
 
     input = input.replace(/([a-zA-Z0-9\); ])\);(@@comments[0-9]+)?@@end/g, '$1\r\n);$2@@end');
-    input = input.replace(/[ ]?([&=:\-\+|\*]|[<>]+)[ ]?/g, ' $1 ');
+    input = input.replace(/[ ]?([&=:\-<>\+|\*])[ ]?/g, ' $1 ');
     input = input.replace(/(\d+e) +([+\-]) +(\d+)/g, '$1$2$3');// fix exponential notation format broken by previous step
     input = input.replace(/[ ]?([,])[ ]?/g, '$1 ');
     input = input.replace(/[ ]?(['"])(THEN)/g, '$1 $2');
@@ -391,7 +317,7 @@ export function beautify(input: string, settings: BeautifierSettings) {
     beautify3(arr, result, settings, 0, 0);
     var alignSettings = settings.SignAlignSettings;
     if (alignSettings != null && alignSettings.isAll) {
-        AlignSigns(result, 0, result.length - 1, alignSettings.mode);
+        AlignSigns(result, 0, result.length - 1, alignSettings.mode, settings.AlignComments);
     }
 
     arr = FormattedLineToString(result, settings.Indentation);
@@ -409,9 +335,6 @@ export function beautify(input: string, settings: BeautifierSettings) {
     var escapedTexts = new RegExp("[" + ILBackslash + ILQuote + ILSingleQuote + "]", "g");
     input = input.replace(escapedTexts, "");
     input = input.replace(/\r\n/g, settings.EndOfLine);
-    if (settings.AddNewLine && !input.endsWith(settings.EndOfLine)) {
-        input += settings.EndOfLine;
-    }
     return input;
 }
 
@@ -543,23 +466,26 @@ export function beautifyPortGenericBlock(inputs: Array<string>, result: (Formatt
             && alignSettings.keyWords != null
             && alignSettings.keyWords.indexOf(mode) >= 0) {
             blockBodyStartIndex++;
-            AlignSigns(result, blockBodyStartIndex, blockBodyEndIndex, alignSettings.mode);
+            AlignSigns(result, blockBodyStartIndex, blockBodyEndIndex, alignSettings.mode, settings.AlignComments);
         }
     }
     return [i, parentEndIndex];
 }
 
-export function AlignSigns(result: (FormattedLine | FormattedLine[])[], startIndex: number, endIndex: number, mode: string) {
+export function AlignSigns(result: (FormattedLine | FormattedLine[])[], startIndex: number, endIndex: number,
+    mode: string, alignComments: boolean) {
     AlignSign_(result, startIndex, endIndex, ":", mode);
     AlignSign_(result, startIndex, endIndex, ":=", mode);
     AlignSign_(result, startIndex, endIndex, "<=", mode);
     AlignSign_(result, startIndex, endIndex, "=>", mode);
-    AlignSign_(result, startIndex, endIndex, "@@comments", mode);
+    if (alignComments) {
+        AlignSign_(result, startIndex, endIndex, "@@comments", mode);
+    }
 }
 
 function AlignSign_(result: (FormattedLine | FormattedLine[])[], startIndex: number, endIndex: number, symbol: string, mode: string) {
     let maxSymbolIndex: number = -1;
-    let symbolIndices = {};
+    let symbolIndices: any = {};
     let startLine = startIndex;
     let labelAndKeywords: Array<string> = [
         "([\\w\\s]*:(\\s)*PROCESS)",
@@ -601,17 +527,18 @@ function AlignSign_(result: (FormattedLine | FormattedLine[])[], startIndex: num
     }
 }
 
-export function AlignSign(result: (FormattedLine | FormattedLine[])[], startIndex: number, endIndex: number, symbol: string, maxSymbolIndex: number = -1, symbolIndices = {}) {
+export function AlignSign(result: any, _startIndex: number, _endIndex: number,
+    _symbol: string, maxSymbolIndex: number = -1, symbolIndices: any = {}) {
     if (maxSymbolIndex < 0) {
         return;
     }
 
     for (let lineIndex in symbolIndices) {
-        let symbolIndex = symbolIndices[lineIndex];
+        let symbolIndex: any = symbolIndices[lineIndex];
         if (symbolIndex == maxSymbolIndex) {
             continue;
         }
-        let line = (<FormattedLine>result[lineIndex]).Line;
+        let line: any = (<FormattedLine>result[lineIndex]).Line;
         (<FormattedLine>result[lineIndex]).Line = line.substring(0, symbolIndex)
             + (Array(maxSymbolIndex - symbolIndex + 1).join(" "))
             + line.substring(symbolIndex);
@@ -677,31 +604,12 @@ export function beautifyComponentBlock(inputs: Array<string>, result: (Formatted
     return [endIndex, parentEndIndex];
 }
 
-export function beautifyPackageIsNewBlock(inputs: Array<string>, result: (FormattedLine | FormattedLine[])[], settings: BeautifierSettings, startIndex: number, parentEndIndex: number, indent: number): [number, number] {
-    let endIndex = startIndex;
-    for (let i = startIndex; i < inputs.length; i++) {
-        if (inputs[i].regexIndexOf(/;(\s|$)/) >= 0) {
-            endIndex = i;
-            break;
-        }
-    }
-    result.push(new FormattedLine(inputs[startIndex], indent));
-    if (endIndex != startIndex) {
-        let actualEndIndex = beautify3(inputs, result, settings, startIndex + 1, indent + 1, endIndex);
-        let incremental = actualEndIndex - endIndex;
-        endIndex += incremental;
-        parentEndIndex += incremental;
-    }
-
-    return [endIndex, parentEndIndex];
-}
-
 export function beautifySemicolonBlock(inputs: Array<string>, result: (FormattedLine | FormattedLine[])[], settings: BeautifierSettings, startIndex: number, parentEndIndex: number, indent: number): [number, number] {
     let endIndex = startIndex;
     [endIndex, parentEndIndex] = getSemicolonBlockEndIndex(inputs, settings, startIndex, parentEndIndex);
     result.push(new FormattedLine(inputs[startIndex], indent));
     if (endIndex != startIndex) {
-        let i = beautify3(inputs, result, settings, startIndex + 1, indent + 1, endIndex);
+        beautify3(inputs, result, settings, startIndex + 1, indent + 1, endIndex);
     }
 
     return [endIndex, parentEndIndex];
@@ -769,13 +677,6 @@ export function beautify3(inputs: Array<string>, result: (FormattedLine | Format
             Mode = modeCache;
             continue;
         }
-        if (input.regexStartsWith(/PACKAGE[\s\w]+IS\s+NEW/)) {
-            let modeCache = Mode;
-            Mode = FormatMode.EndsWithSemicolon;
-            [i, endIndex] = beautifyPackageIsNewBlock(inputs, result, settings, i, endIndex, indent);
-            Mode = modeCache;
-            continue;
-        }
         if (input.regexStartsWith(/\w+\s*:\s*ENTITY/)) {
             let modeCache = Mode;
             Mode = FormatMode.EndsWithSemicolon;
@@ -795,10 +696,6 @@ export function beautify3(inputs: Array<string>, result: (FormattedLine | Format
             Mode = FormatMode.CaseWhen;
             i = beautifyCaseBlock(inputs, result, settings, i, indent);
             Mode = modeCache;
-            continue;
-        }
-        if (input.regexStartsWith(/.*?\:\=\s*\($/)) {
-            [i, endIndex] = beautifyPortGenericBlock(inputs, result, settings, i, endIndex, indent, ":=");
             continue;
         }
         if (input.regexStartsWith(/[\w\s:]*\bPORT\b([\s]|$)/)) {
@@ -873,20 +770,6 @@ function ReserveSemicolonInKeywords(arr: Array<string>) {
         if (arr[i].match(/FUNCTION|PROCEDURE/) != null) {
             arr[i] = arr[i].replace(/;/g, ILSemicolon);
         }
-    }
-}
-
-export function ApplyNoNewLineAfter(arr: Array<string>, noNewLineAfter: Array<string>) {
-    if (noNewLineAfter == null) {
-        return;
-    }
-    for (let i = 0; i < arr.length; i++) {
-        noNewLineAfter.forEach(n => {
-            let regex = new RegExp("(" + n.toUpperCase + ")[ a-z0-9]+[a-z0-9]+");
-            if (arr[i].regexIndexOf(regex) >= 0) {
-                arr[i] += "@@singleline";
-            }
-        });
     }
 }
 

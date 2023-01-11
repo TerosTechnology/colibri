@@ -1,0 +1,7 @@
+{% for element in generic -%}
+{{ indent[1] }}constant {{element['info']['name']}} : {{element['type']}} := {{element['default_value']}};
+{% endfor -%}
+
+{% for element in port -%}
+{{ indent[1] }}signal {{element['info']['name']}} : {{element['type']}};
+{% endfor -%}

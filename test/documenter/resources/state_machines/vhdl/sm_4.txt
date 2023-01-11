@@ -1,2 +1,0 @@
-zero => one:  level = '1' ;
-one => zero:  level = '0' ;
