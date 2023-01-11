@@ -27,9 +27,14 @@ import * as cfg from "../../../src/config/config_declaration";
 
 const C_BASE_DIR = paht_lib.join(__dirname, 'helpers');
 
+function due_skip(tt: Mocha.Context) {
+    tt.skip();
+}
+
+
 describe(`Check Edalize`, function () {
     it(`Check GHDL`, async function () {
-        this.skip();
+        due_skip(this);
         // Init
         const C_TOOL_BASE_DIR = paht_lib.join(C_BASE_DIR, 'ghdl');
 
@@ -42,6 +47,7 @@ describe(`Check Edalize`, function () {
             name: paht_lib.join(C_TOOL_BASE_DIR, 'half_adder_tb.vhd'),
             is_include_file: false,
             include_path: '',
+            is_manual: true,
             logical_name: ''
         };
 
@@ -49,6 +55,7 @@ describe(`Check Edalize`, function () {
             name: paht_lib.join(C_TOOL_BASE_DIR, 'half_adder.vhd'),
             is_include_file: false,
             include_path: '',
+            is_manual: true,
             logical_name: ''
         };
 
@@ -82,7 +89,7 @@ describe(`Check Edalize`, function () {
 describe(`Check VUnit`, function () {
 
     it(`Check one tests in runpy`, async function () {
-        this.skip();
+        due_skip(this);
         // Init
         const C_TOOL_BASE_DIR = paht_lib.join(C_BASE_DIR, 'vunit');
 
@@ -97,6 +104,7 @@ describe(`Check VUnit`, function () {
             name: paht_lib.join(C_TOOL_BASE_DIR, 'run_0.py'),
             is_include_file: false,
             include_path: '',
+            is_manual: true,
             logical_name: ''
         };
 
@@ -127,7 +135,7 @@ describe(`Check VUnit`, function () {
     });
 
     it(`Check multiple tests in runpy`, async function () {
-        this.skip();
+        due_skip(this);
         // Init
         const C_TOOL_BASE_DIR = paht_lib.join(C_BASE_DIR, 'vunit');
 
@@ -142,6 +150,7 @@ describe(`Check VUnit`, function () {
             name: paht_lib.join(C_TOOL_BASE_DIR, 'run_1.py'),
             is_include_file: false,
             include_path: '',
+            is_manual: true,
             logical_name: ''
         };
 
@@ -174,7 +183,7 @@ describe(`Check VUnit`, function () {
     });
 
     it(`Check runpy creation`, async function () {
-        this.skip();
+        due_skip(this);
         // Init
         const C_TOOL_BASE_DIR = paht_lib.join(C_BASE_DIR, 'vunit');
 
@@ -189,6 +198,7 @@ describe(`Check VUnit`, function () {
             name: paht_lib.join(C_TOOL_BASE_DIR, 'tb_counting_errors.vhd'),
             is_include_file: false,
             include_path: '',
+            is_manual: true,
             logical_name: ''
         };
 
@@ -196,6 +206,7 @@ describe(`Check VUnit`, function () {
             name: paht_lib.join(C_TOOL_BASE_DIR, 'tb_with_test_cases.vhd'),
             is_include_file: false,
             include_path: '',
+            is_manual: true,
             logical_name: ''
         };
 
@@ -203,6 +214,7 @@ describe(`Check VUnit`, function () {
             name: paht_lib.join(C_TOOL_BASE_DIR, 'test_control.vhd'),
             is_include_file: false,
             include_path: '',
+            is_manual: true,
             logical_name: ''
         };
 
@@ -239,7 +251,7 @@ describe(`Check VUnit`, function () {
 
 describe(`Check cocotb`, function () {
     it(`Check multiple tests`, async function () {
-        this.skip();
+        due_skip(this);
         // Init
         const C_TOOL_BASE_DIR = paht_lib.join(C_BASE_DIR, 'cocotb');
 
@@ -253,6 +265,7 @@ describe(`Check cocotb`, function () {
             name: paht_lib.join(C_TOOL_BASE_DIR, 'Makefile'),
             is_include_file: false,
             include_path: '',
+            is_manual: true,
             logical_name: ''
         };
 
@@ -286,7 +299,7 @@ describe(`Check cocotb`, function () {
     });
 
     it(`Check one test`, async function () {
-        this.skip();
+        due_skip(this);
         // Init
         const C_TOOL_BASE_DIR = paht_lib.join(C_BASE_DIR, 'cocotb');
 
@@ -300,6 +313,7 @@ describe(`Check cocotb`, function () {
             name: paht_lib.join(C_TOOL_BASE_DIR, 'Makefile'),
             is_include_file: false,
             include_path: '',
+            is_manual: true,
             logical_name: ''
         };
 
@@ -331,5 +345,51 @@ describe(`Check cocotb`, function () {
             });
         }
 
+    });
+});
+
+describe(`Check OSVVM`, function () {
+    it(`Run test`, async function () {
+        due_skip(this);
+
+        // Config
+        const config = cfg.get_default_config();
+        config.tools.general.select_tool = cfg.e_tools_general_select_tool.osvvm;
+        config.tools.osvvm.installation_path = "/home/carlos/repo/osvvm/OsvvmLibraries/";
+        config.tools.osvvm.simulator_name = cfg.e_tools_osvvm_simulator_name.ghdl;
+        config.tools.osvvm.tclsh_binary = "tclsh8.6";
+
+        // Files
+        const file_0: common.t_file_reduced = {
+            name: "/home/carlos/repo/osvvm/OsvvmLibraries/UART/RunDemoTests.pro",
+            is_include_file: false,
+            include_path: '',
+            is_manual: true,
+            logical_name: ''
+        };
+
+        // Create project
+        const prj = new Project_manager("osvvm-prj");
+        prj.add_file(file_0);
+
+        // Set top level path
+        prj.add_toplevel_path(file_0.name);
+
+        // Tool options
+        prj.set_config(config);
+
+        // Get testlist
+        const test_list = await prj.get_test_list();
+
+        // Run
+        prj.run(undefined, test_list, (result: t_test_result[]) => {
+            equal(result[0].successful, false);
+        }, printer_stream);
+
+        function printer_stream(exec_i: any) {
+            exec_i.stdout.on('data', function (_data: any) {
+                // console.log(data);
+            });
+        }
     });
 });

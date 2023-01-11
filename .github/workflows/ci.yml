@@ -176,7 +176,7 @@ jobs:
     steps:
       - run: apt update
       - run: apt install -y nsis p7zip-full p7zip-rar git curl tar xz-utils apt-utils
-      - run: git config --global --add safe.directory /__w/colibri2/colibri2
+      - run: git config --global --add safe.directory /__w/colibri/colibri
       - uses: actions/setup-node@v2
         with:
           node-version: "16"
@@ -228,9 +228,9 @@ jobs:
       - name: Tar for release
         run: |
           cd ..
-          tar -cvzf teroshdl2-${{ steps.publish.outputs.version }}.tar.gz colibri2
-          mv teroshdl2-${{ steps.publish.outputs.version }}.tar.gz colibri2
-          cd colibri2
+          tar -cvzf teroshdl2-${{ steps.publish.outputs.version }}.tar.gz colibri
+          mv teroshdl2-${{ steps.publish.outputs.version }}.tar.gz colibri
+          cd colibri
 
       - name: Download artifacts pack
         uses: actions/download-artifact@v3

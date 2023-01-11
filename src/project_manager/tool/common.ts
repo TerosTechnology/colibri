@@ -37,6 +37,7 @@ export type t_location = {
 
 /** Test declaration */
 export type t_test_declaration = {
+    suite_name: string;
     /** Test name */
     name: string;
     /** Test type */
@@ -49,10 +50,19 @@ export type t_test_declaration = {
 
 /** Artifact type */
 export enum e_artifact_type {
+    CONSOLE_LOG = "console_log",
+    SUMMARY = "summary",
+    OTHER = "other",
+}
+
+/** File type */
+export enum e_element_type {
+    HTML_FILE = "html_file",
+    TEXT_FILE = "text_file",
+    HTML = "html",
     TEXT = "text",
     FILE = "file",
     FOLDER = "folder",
-    HTML = "html",
 }
 
 /** Test artifact */
@@ -64,11 +74,14 @@ export type t_test_artifact = {
     /** If associated command */
     command: string;
     /** Type of artifact */
-    type: e_artifact_type
+    artifact_type: e_artifact_type,
+    /** Type of file */
+    element_type: e_element_type,
 }
 
 /** Test result */
 export type t_test_result = {
+    suite_name: string;
     /** Test name */
     name: string;
     config: e_config;
@@ -81,5 +94,6 @@ export type t_test_result = {
     build_path: string;
     stdout: string;
     stderr: string;
-    time: number
+    time: number;
+    test_path: string;
 }

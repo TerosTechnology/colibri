@@ -19,6 +19,7 @@
 import { Cocotb } from "./cocotb/cocotb";
 import { Edalize } from "./edalize/edalize";
 import { Vunit } from "./vunit/vunit";
+import { Osvvm } from "./osvvm/osvvm";
 import { t_project_definition } from "../project_definition";
 import { t_test_declaration, t_test_result } from "./common";
 import { e_tools_general_select_tool } from "../../config/config_declaration";
@@ -29,12 +30,14 @@ export class Tool_manager {
     private edalize: Edalize;
     private vunit: Vunit;
     private cocotb: Cocotb;
+    private osvvm: Osvvm;
     private working_directory = "";
 
     constructor(working_directory: string | undefined) {
         this.edalize = new Edalize();
         this.vunit = new Vunit();
         this.cocotb = new Cocotb();
+        this.osvvm = new Osvvm();
         this.set_working_directory(working_directory);
     }
 
@@ -63,7 +66,7 @@ export class Tool_manager {
         return tool_handler.run(prj, test_list, this.working_directory, callback, callback_stream);
     }
 
-    private get_tool_handler(tool_name: e_tools_general_select_tool): Edalize | Vunit | Cocotb {
+    private get_tool_handler(tool_name: e_tools_general_select_tool): Edalize | Vunit | Cocotb | Osvvm {
 
         if (this.vunit.get_supported_tools().includes(tool_name)) {
             return this.vunit;
@@ -73,6 +76,9 @@ export class Tool_manager {
         }
         else if (this.cocotb.get_supported_tools().includes(tool_name)) {
             return this.cocotb;
+        }
+        else if (this.osvvm.get_supported_tools().includes(tool_name)) {
+            return this.osvvm;
         }
         return this.edalize;
     }

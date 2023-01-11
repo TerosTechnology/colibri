@@ -55,6 +55,6 @@
   <button id="button_cancel" class="button" type="button" onclick="close_panel(event)">Close</button>
   <button id="button_apply" class="button" type="button" onclick="send_config(event)">Apply</button>
   <button id="button_apply_close" class="button" type="button" onclick="send_config_and_close(event)">Apply and close</button>
-  <button id="button_load" class="button" type="button" onclick="load_config(event)">Load</button>
-  <button id="button_export" class="button" type="button" onclick="export_config(event)">Export</button>
+  {# <button id="button_load" class="button" type="button" onclick="load_config(event)">Load</button> #}
+  {# <button id="button_export" class="button" type="button" onclick="export_config(event)">Export</button> #}
 </div>

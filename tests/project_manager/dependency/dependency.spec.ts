@@ -107,7 +107,8 @@ function get_test_files() {
         name: f_path,
         is_include_file: false,
         include_path: "",
-        logical_name: ""
+        logical_name: "",
+        is_manual: true,
     };
     file_list.push(f_hdl);
 
@@ -116,7 +117,8 @@ function get_test_files() {
         name: f_path,
         is_include_file: false,
         include_path: "",
-        logical_name: ""
+        logical_name: "",
+        is_manual: true,
     };
     file_list.push(f_hdl);
 
@@ -125,7 +127,8 @@ function get_test_files() {
         name: f_path,
         is_include_file: false,
         include_path: "",
-        logical_name: "random_lib"
+        logical_name: "random_lib",
+        is_manual: true,
     };
     file_list.push(f_hdl);
 
@@ -134,7 +137,8 @@ function get_test_files() {
         name: f_path,
         is_include_file: false,
         include_path: "",
-        logical_name: ""
+        logical_name: "",
+        is_manual: true,
     };
     file_list.push(f_hdl);
 
@@ -143,7 +147,8 @@ function get_test_files() {
         name: f_path,
         is_include_file: false,
         include_path: "",
-        logical_name: ""
+        logical_name: "",
+        is_manual: true,
     };
     file_list.push(f_hdl);
 
@@ -152,7 +157,8 @@ function get_test_files() {
         name: f_path,
         is_include_file: false,
         include_path: "",
-        logical_name: ""
+        logical_name: "",
+        is_manual: true,
     };
     file_list.push(f_hdl);
 
@@ -161,7 +167,8 @@ function get_test_files() {
         name: f_path,
         is_include_file: false,
         include_path: "",
-        logical_name: ""
+        logical_name: "",
+        is_manual: true,
     };
     file_list.push(f_hdl);
 
@@ -170,7 +177,8 @@ function get_test_files() {
         name: f_path,
         is_include_file: false,
         include_path: "",
-        logical_name: ""
+        logical_name: "",
+        is_manual: true,
     };
     file_list.push(f_hdl);
 

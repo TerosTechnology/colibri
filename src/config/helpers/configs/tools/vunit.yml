@@ -28,31 +28,31 @@ extra_options:
   value: []
 
 enable_array_util_lib:
-  description: ""
+  description: "Enable array util library in non standalone mode"
   type: boolean
   value: false
 
 enable_com_lib:
-  description: ""
+  description: "Enable com library in non standalone mode"
   type: boolean
   value: false
 
 enable_json4vhdl_lib:
-  description: ""
+  description: "Enable json4vhdl library in non standalone mode"
   type: boolean
   value: false
 
 enable_osvvm_lib:
-  description: ""
+  description: "Enable OSVVM library in non standalone mode"
   type: boolean
   value: false
 
 enable_random_lib:
-  description: ""
+  description: "Enable random library in non standalone mode"
   type: boolean
   value: false
 
 enable_verification_components_lib:
-  description: ""
+  description: "Enable verification components library in non standalone mode"
   type: boolean
   value: false

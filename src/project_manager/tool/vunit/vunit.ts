@@ -18,7 +18,10 @@
 
 import { t_project_definition } from "../../project_definition";
 import { Generic_tool_handler } from "../generic_handler";
-import { t_test_declaration, t_test_result, t_location } from "../common";
+import {
+    t_test_declaration, t_test_result, t_location, e_artifact_type, e_element_type,
+    t_test_artifact
+} from "../common";
 import { get_edam_json } from "../../utils/utils";
 import * as path_lib from "path";
 import * as python from "../../../process/python";
@@ -96,10 +99,11 @@ export class Vunit extends Generic_tool_handler {
                         offset: parseInt(element['location']['offset'])
                     };
                     const t: t_test_declaration = {
+                        suite_name: "",
                         name: element['name'],
                         test_type: "",
                         filename: runpy_path,
-                        location: location
+                        location: location,
                     };
                     test_list.push(t);
                 });
@@ -126,26 +130,42 @@ export class Vunit extends Generic_tool_handler {
 
                 const path_f = path_lib.join(working_directory, 'config_summary.txt');
 
-                const result_xml = this.get_result_from_xml(output_path, test_list);
+                const python_script_dir = file_utils.get_directory(prj.toplevel_path_manager.get()[0]);
+
+                const result_xml = this.get_result_from_xml(python_script_dir, output_path, test_list);
                 const final_result: t_test_result[] = [];
 
                 result_xml.forEach(tst => {
+
+                    const log_artifact: t_test_artifact[] = [];
+                    if (tst.log !== "") {
+                        log_artifact.push({
+                            name: `Output log`,
+                            path: tst.log,
+                            command: "",
+                            artifact_type: e_artifact_type.CONSOLE_LOG,
+                            element_type: e_element_type.TEXT_FILE
+                        });
+                    }
+
                     const test_result: t_test_result = {
+                        suite_name: "",
                         name: tst.name,
                         edam: edam_json,
                         config_summary_path: path_f,
                         config: prj.config_manager.get_config(),
-                        artifact: [],
+                        artifact: log_artifact,
                         build_path: working_directory,
                         successful: tst.successful,
                         stdout: tst.stdout,
                         stderr: '',
-                        time: tst.time
+                        time: tst.time,
+                        test_path: "",
                     };
                     final_result.push(test_result);
                 });
 
-                file_utils.remove_file(output_path);
+                // file_utils.remove_file(output_path);
 
                 // Save config summary
                 this.save_config_summary(path_f, final_result);
@@ -240,7 +260,7 @@ export class Vunit extends Generic_tool_handler {
         return simulator_cmd;
     }
 
-    private get_result_from_xml(xml_path: string, test_list: t_test_declaration[]) {
+    private get_result_from_xml(runpy_dir: string, xml_path: string, test_list: t_test_declaration[]) {
         const xml_string = file_utils.read_file_sync(xml_path);
         const fxp_options = { ignoreAttributes: false, attributeNamePrefix: "@_", allowBooleanAttributes: true };
         const parser = new fxp.XMLParser(fxp_options);
@@ -265,7 +285,8 @@ export class Vunit extends Generic_tool_handler {
                     name: test_name,
                     successful: successful,
                     stdout: test_stdout,
-                    time: parseFloat(test['@_time'])
+                    time: parseFloat(test['@_time']),
+                    log: this.get_test_log(test_name, path_lib.join(runpy_dir, 'vunit_out')),
                 };
                 results.push(test_info);
             }
@@ -274,6 +295,28 @@ export class Vunit extends Generic_tool_handler {
             return this.get_all_test_fail(test_list);
         }
     }
+
+    private get_test_log(testname_with_suite: string, output_folder: string) {
+        let log_path = "";
+        try {
+            const csv_path = path_lib.join(output_folder, 'test_output', 'test_name_to_path_mapping.txt');
+            const csv_content = file_utils.read_file_sync(csv_path);
+            const csv_split_line = csv_content.split(/\r?\n/);
+            csv_split_line.forEach(line => {
+                const line_split_comma = line.split(/ (.*)/s);
+
+                if (line_split_comma.length >= 2 && line_split_comma[1].trim() === testname_with_suite) {
+                    log_path = path_lib.join(output_folder, 'test_output', line_split_comma[0].trim(), 'output.txt');
+                }
+            });
+        }
+        catch (e) {
+            // eslint-disable-next-line no-console
+            console.log(e);
+        }
+        return log_path;
+    }
+
 
     private get_all_test_fail(test_list: t_test_declaration[]) {
         const results: any[] = [];

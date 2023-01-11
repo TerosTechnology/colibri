@@ -39,6 +39,11 @@ export class Toplevel_path_manager extends Manager<string, undefined, string, un
             successful: true,
             msg: ""
         };
+        if (toplevel_path === "") {
+            result.successful = false;
+            result.msg = "Toplevel path empty";
+            return result;
+        }
         if (this.check_if_exists(toplevel_path)) {
             result.successful = false;
             result.msg = "Toplevel path is duplicated";

@@ -104,6 +104,7 @@ export class Cocotb extends Generic_tool_handler {
 
                 for (const cocotb_test of cocotb_tests) {
                     const test_item: t_test_declaration = {
+                        suite_name: "",
                         name: cocotb_test.name,
                         test_type: "",
                         filename: path_lib.resolve(makefile.makefile),
@@ -111,7 +112,7 @@ export class Cocotb extends Generic_tool_handler {
                             filename: `${filename}.py`,
                             length: cocotb_test.length,
                             offset: cocotb_test.offset
-                        }
+                        },
                     };
                     test_array.push(test_item);
                 }
@@ -148,6 +149,7 @@ export class Cocotb extends Generic_tool_handler {
 
                 result_xml.forEach(tst => {
                     const test_result: t_test_result = {
+                        suite_name: "",
                         name: tst.name,
                         edam: edam_json,
                         config_summary_path: path_f,
@@ -157,7 +159,8 @@ export class Cocotb extends Generic_tool_handler {
                         successful: tst.successful,
                         stdout: tst.stdout,
                         stderr: '',
-                        time: tst.time
+                        time: tst.time,
+                        test_path: "",
                     };
                     final_result.push(test_result);
                 });

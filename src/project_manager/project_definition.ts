@@ -21,6 +21,7 @@ import { Hook_manager } from "./list_manager/hook";
 import { Parameter_manager } from "./list_manager/parameter";
 import { Toplevel_path_manager } from "./list_manager/toplevel_path";
 import { Config_manager } from "../config/config_manager";
+import { Watcher_manager } from "./list_manager/watcher";
 
 export type t_project_definition = {
     name: string;
@@ -28,5 +29,6 @@ export type t_project_definition = {
     hook_manager: Hook_manager,
     parameter_manager: Parameter_manager,
     toplevel_path_manager: Toplevel_path_manager,
+    watcher_manager: Watcher_manager
     config_manager: Config_manager
 }

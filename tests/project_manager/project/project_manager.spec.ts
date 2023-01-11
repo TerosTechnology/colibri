@@ -27,25 +27,29 @@ const file_0: common.t_file_reduced = {
     name: '/my/file/0',
     is_include_file: false,
     include_path: '',
-    logical_name: 'work'
+    logical_name: 'work',
+    is_manual: true,
 };
 const file_1: common.t_file_reduced = {
     name: '/my/file/1',
     is_include_file: false,
     include_path: '',
-    logical_name: 'work'
+    logical_name: 'work',
+    is_manual: true,
 };
 const file_2: common.t_file_reduced = {
     name: '/my/file/2',
     is_include_file: false,
     include_path: '',
-    logical_name: ''
+    logical_name: '',
+    is_manual: true,
 };
 const file_3: common.t_file_reduced = {
     name: '/my/file/3',
     is_include_file: false,
     include_path: '',
-    logical_name: 'work'
+    logical_name: 'work',
+    is_manual: true,
 };
 const PRJ_NAME_0 = "my-prj-0";
 
@@ -123,7 +127,7 @@ describe(`Check project manager`, function () {
     it(`Add files from CSV`, async function () {
         const CSV_PATH = paht_lib.join(__dirname, 'helpers', 'files.csv');
         // Add files
-        prj.add_file_from_csv(CSV_PATH);
+        prj.add_file_from_csv(CSV_PATH, true);
         // Get files
         const file_list = prj.get_project_definition().file_manager.get();
         // Check file 2

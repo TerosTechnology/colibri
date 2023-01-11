@@ -16,7 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with colibri2.  If not, see <https://www.gnu.org/licenses/>.
 
-import { t_file_reduced, t_file, t_action_result } from "../common";
+import { t_file_reduced, t_file, t_action_result, t_logical } from "../common";
 import * as file_utils from "../../utils/file_utils";
 import * as hdl_utils from "../../utils/hdl_utils";
 import * as general from "../../common/general";
@@ -29,8 +29,40 @@ export class File_manager extends Manager<t_file_reduced, undefined, string, str
         this.files = [];
     }
 
+    clear_automatic_files() {
+        const new_files: t_file[] = [];
+        this.files.forEach(file => {
+            if (file.is_manual === true) {
+                new_files.push(file);
+            }
+        });
+        this.files = new_files;
+    }
+
     get(): t_file[] {
         return this.files;
+    }
+
+    get_by_logical_name(): t_logical[] {
+        const logical_list: t_logical[] = [];
+        this.files.forEach(file_inst => {
+            let exist = false;
+
+            // Find logic name exists
+            logical_list.every(logical_inst => {
+                // Logical name exists
+                if (logical_inst.name === file_inst.logical_name) {
+                    logical_inst.file_list.push(file_inst);
+                    exist = true;
+                    return false;
+                }
+                return true;
+            });
+            if (exist === false) {
+                logical_list.push({ name: file_inst.logical_name, file_list: [file_inst] });
+            }
+        });
+        return logical_list;
     }
 
     add(file: t_file_reduced): t_action_result {
@@ -50,7 +82,8 @@ export class File_manager extends Manager<t_file_reduced, undefined, string, str
             file_type: this.get_file_type(file.name),
             is_include_file: file.is_include_file,
             include_path: file.include_path,
-            logical_name: file.logical_name
+            logical_name: file.logical_name,
+            is_manual: file.is_manual
         };
 
         this.files.push(complete_file);
@@ -77,6 +110,25 @@ export class File_manager extends Manager<t_file_reduced, undefined, string, str
         });
         this.files = new_files;
         return result;
+    }
+
+    delete_by_logical_name(logical_name: string) {
+        this.files.forEach(file_inst => {
+            if (logical_name === file_inst.logical_name) {
+                this.delete(file_inst.name, logical_name);
+            }
+        });
+    }
+
+    add_logical(logical_name: string) {
+        const magic_file: t_file_reduced = {
+            name: "",
+            is_include_file: false,
+            include_path: "",
+            logical_name: logical_name,
+            is_manual: false
+        };
+        return this.add(magic_file);
     }
 
     private check_if_exists(name: string, logical_name = ""): boolean {
@@ -116,6 +168,8 @@ export class File_manager extends Manager<t_file_reduced, undefined, string, str
             file_type = 'xci';
         } else if (extension === '.sby') {
             file_type = 'sbyConfigTemplate';
+        } else if (extension === '.pro') {
+            file_type = 'osvvmProject';
         } else {
             file_type = extension.substring(1).toLocaleUpperCase();
         }

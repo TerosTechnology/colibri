@@ -116,6 +116,11 @@ tools:
   description:
   general: ./configs/tools/general.yml
   secondary:
+    osvvm:
+      title: OSVVM
+      description: "OSVVM is an advanced verification methodology that defines a VHDL verification framework, verification utility library, verification component library, and a scripting flow that simplifies your FPGA or ASIC verification project from start to finish. Using these libraries you can create a simple, readable, and powerful testbench that is suitable for either a simple FPGA block or a complex ASIC."
+      page: ./configs/tools/osvvm.yml
+
     ascenlint:
       title: Ascenlint
       description: "Ascent Lint performs static source code analysis on HDL code and checks for common coding errors or coding style violations."
@@ -244,4 +249,9 @@ tools:
     yosys:
       title: Yosys
       description: "Open source synthesis tool targeting many different FPGAs."
+      page: ./configs/tools/yosys.yml
+
+    openfpga:
+      title: OpenFPGA
+      description: "The award-winning OpenFPGA framework is the first open-source FPGA IP generator with silicon proofs supporting highly-customizable FPGA architectures."
       page: ./configs/tools/yosys.yml

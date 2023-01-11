@@ -45,7 +45,7 @@ const prj_2 = {
 };
 
 // Create project manager
-const multi_prj = new Multi_project_manager(MULTI_PRJ_NAME, "");
+const multi_prj = new Multi_project_manager(MULTI_PRJ_NAME, "", undefined, undefined);
 
 function add_files(multi_manager: Multi_project_manager, prj: any) {
     prj.files.forEach(function (file: any) {
@@ -53,7 +53,8 @@ function add_files(multi_manager: Multi_project_manager, prj: any) {
             name: file,
             is_include_file: false,
             include_path: "",
-            logical_name: ""
+            logical_name: "",
+            is_manual: true,
         };
         multi_manager.add_file(prj.name, file_inst);
     });
@@ -68,7 +69,6 @@ function check_project(multi_manager: Multi_project_manager, expected_project: a
     const prj_files = prj?.get_project_definition().file_manager.get();
     assert.equal(prj_files?.length, expected_project.files.length, 'Fail in number of files');
 }
-
 
 describe(`Check multi project manager`, function () {
 
@@ -118,11 +118,11 @@ describe(`Check multi project manager`, function () {
 
     it(`Select project`, async function () {
         // Select project
-        let result = multi_prj.select_project(prj_1.name);
+        let result = multi_prj.select_project_current(prj_1.name);
         assert.equal(result.successful, true);
         assert.equal(multi_prj.get_select_project().successful, true);
         // Select project doesn't exist
-        result = multi_prj.select_project(prj_0.name);
+        result = multi_prj.select_project_current(prj_0.name);
         assert.equal(result.successful, false);
         assert.equal(multi_prj.get_select_project().successful, true);
     });

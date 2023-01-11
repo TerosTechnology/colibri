@@ -20,6 +20,7 @@ import { Process } from "./process";
 import { get_os } from "./utils";
 import * as common from "./common";
 import { join } from "path";
+import { get_directory } from "../utils/file_utils";
 
 /** Python3 configuration options */
 export type python_options = {
@@ -139,10 +140,12 @@ export async function exec_python_script(python_path: string, python_script_path
     const opt: python_options = {
         path: python_path
     };
+
+    const python_script_dir = get_directory(python_script_path);
     const python_result = await get_python_path(opt);
     const cmd = `${python_result.python_path} "${python_script_path}" ${args}`;
     const p = new Process();
-    const result = await p.exec_wait(cmd);
+    const result = await p.exec_wait(cmd, { "cwd": python_script_dir });
     return result;
 }
 

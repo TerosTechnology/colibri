@@ -25,6 +25,11 @@ export enum e_file_type {
     VLOGDEFINE = "vlogdefine"
 }
 
+export type t_logical = {
+    name: string;
+    file_list: t_file_reduced[];
+}
+
 /** Result of action execution in the project manager*/
 export type t_action_result = {
     result: any;
@@ -43,6 +48,8 @@ export type t_file_reduced = {
     include_path: string;
     /** Logical name (e.g. VHDL/SystemVerilog library) of the file */
     logical_name: string;
+    /** If the file was added manually */
+    is_manual: boolean;
 }
 
 /** Project file */
@@ -58,6 +65,23 @@ export type t_file = {
     include_path: string;
     /** Logical name (e.g. VHDL/SystemVerilog library) of the file */
     logical_name: string;
+    /** If the file was added manually */
+    is_manual: boolean;
+}
+
+/** Type of watcher */
+export enum e_watcher_type {
+    VUNIT = "vunit",
+    CSV = "csv",
+    VIVADO = "vivado",
+}
+
+/** Watcher */
+export type t_watcher = {
+    /** File path */
+    path: string;
+    /** Watcher type */
+    watcher_type: e_watcher_type;
 }
 
 /** Script */
@@ -133,4 +157,9 @@ export type t_parameter = {
     description: string;
     /** Type of parameter. Valid values are cmdlinearg, generic, plusarg, vlogparam, vlogdefine */
     paramtype: e_parameter_type;
+}
+
+export type t_toplevel = {
+    path: string;
+    logical_name: string;
 }

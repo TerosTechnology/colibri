@@ -25,6 +25,7 @@ import { Modelsim } from "./modelsim";
 import { Verible } from "./verible";
 import * as common from "./common";
 import * as cfg from "../config/config_declaration";
+import { t_file } from "../project_manager/common";
 
 /** Linter */
 export class Linter {
@@ -87,4 +88,13 @@ export class Linter {
         const errors = await linter.lint_from_code(code, options);
         return errors;
     }
+
+    async lint_from_project(file_path: string, prj_file_list: t_file[],
+        linter_name: common.t_linter_name, options: common.l_options): Promise<common.l_error[]> {
+
+        const linter = this.get_linter(linter_name);
+        const errors = await linter.lint_from_project(file_path, prj_file_list, options);
+        return errors;
+    }
+
 }

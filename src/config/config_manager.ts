@@ -251,7 +251,7 @@ export class Config_manager {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public get_tool_options(): cfg_aux.t_tool_options {
         const tool_name = this.config.tools.general.select_tool;
-        const tool_config = this.config.tools[tool_name];
+        const tool_config = (<any>this.config.tools)[tool_name];
         const tool_options: cfg_aux.t_tool_options = {
             name: this.config.tools.general.select_tool,
             installation_path: tool_config['installation_path'],

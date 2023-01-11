@@ -18,6 +18,10 @@
 
 import * as cfg from "../config/config_declaration";
 
+export enum LINTER_MODE {
+    STYLE = "style",
+    ERRORS = "errors",
+}
 
 /** Linter name */
 export type t_linter_name = cfg.e_linter_general_linter_vhdl | cfg.e_linter_general_linter_verilog |

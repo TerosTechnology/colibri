@@ -8,6 +8,7 @@ body {
   font-family: 'Open Sans', sans-serif;
   background-color: white;
   color: black;
+  
 }
 
 h3 {
@@ -21,7 +22,7 @@ h3 {
 
 /*style the items (options), including the selected item:*/
 select{
-  width:20%;
+  width:50%;
   padding: 8px 16px;
   cursor: pointer;
   padding-right: 29px;
@@ -136,10 +137,10 @@ input[type='input'] {
 .button {
   border: none;
   color: white;
-  padding: 15px 32px;
+  padding: 11px 25px;
   text-align: center;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 13px;
   margin: 4px 2px;
   cursor: pointer;
   float: right;
@@ -310,6 +311,7 @@ input[type='input'] {
     </button>
     <div class="dropdown-container">
         <a style="color:black" id="btn-tools-general">General</a>
+        <a style="color:black" id="btn-tools-osvvm">OSVVM</a>
         <a style="color:black" id="btn-tools-ascenlint">Ascenlint</a>
         <a style="color:black" id="btn-tools-cocotb">Cocotb</a>
         <a style="color:black" id="btn-tools-diamond">Diamond</a>
@@ -336,6 +338,7 @@ input[type='input'] {
         <a style="color:black" id="btn-tools-xcelium">Xcelium</a>
         <a style="color:black" id="btn-tools-xsim">XSIM</a>
         <a style="color:black" id="btn-tools-yosys">Yosys</a>
+        <a style="color:black" id="btn-tools-openfpga">OpenFPGA</a>
     </div>
 </div>
 
@@ -854,9 +857,25 @@ input[type='input'] {
     <label>Select a tool, framework, simulator...</label>
         <br>
         <select name='select' id='tools-general-select_tool'>
+                <option value='osvvm'>OSVVM</option>
                 <option value='vunit'>VUnit</option>
                 <option value='ghdl'>GHDL</option>
                 <option value='cocotb'>cocotb</option>
+                <option value='icarus'>Icarus</option>
+                <option value='icestorm'>Icestorm</option>
+                <option value='ise'>ISE</option>
+                <option value='isim'>ISIM</option>
+                <option value='modelsim'>ModelSim</option>
+                <option value='openfpga'>OpenFPGA</option>
+                <option value='quartus'>Quartus</option>
+                <option value='rivierapro'>Riviera-PRO</option>
+                <option value='spyglass'>SpyGlass</option>
+                <option value='trellis'>Trellis</option>
+                <option value='vcs'>VCS</option>
+                <option value='verilator'>Verilator</option>
+                <option value='vivado'>Vivado</option>
+                <option value='xcelium'>Xcelium</option>
+                <option value='xsim'>XSIM</option>
         </select>
       <br><br>
     <label>Select the execution mode.</label>
@@ -872,6 +891,37 @@ input[type='input'] {
                 <option value='tool'>Tool GUI</option>
                 <option value='vcdrom'>VCDrom</option>
                 <option value='gtkwave'>GTKWave</option>
+        </select>
+      <br><br>
+    <label></label>
+      <br><br>
+    <label></label>
+      <br><br>
+  </div>
+  <div id="tools-osvvm" class='main'>
+    <h3>Tools: OSVVM</h3>
+    <hr></hr>
+    <p><i>OSVVM is an advanced verification methodology that defines a VHDL verification framework, verification utility library, verification component library, and a scripting flow that simplifies your FPGA or ASIC verification project from start to finish. Using these libraries you can create a simple, readable, and powerful testbench that is suitable for either a simple FPGA block or a complex ASIC.</i></p>
+    <label>Installation path:</label>
+      <br>
+      <input type='input' id='tools-osvvm-installation_path' class='radio-button'>
+      <br><br>
+    <label>tclsh binary path. E.g: /usr/bin/tclsh8.6</label>
+      <br>
+      <input type='input' id='tools-osvvm-tclsh_binary' class='radio-button'>
+      <br><br>
+    <label>Selects which simulator to use.</label>
+        <br>
+        <select name='select' id='tools-osvvm-simulator_name'>
+                <option value='activehdl'>Aldec Active-HDL</option>
+                <option value='ghdl'>GHDL</option>
+                <option value='nvc'>NVC</option>
+                <option value='riviera'>Aldec Riviera-PRO</option>
+                <option value='questa'>Mentor/Siemens EDA Questa</option>
+                <option value='modelsim'>Mentor/Siemens EDA ModelSim</option>
+                <option value='vcs'>VCS</option>
+                <option value='xsim'>XSIM</option>
+                <option value='xcelium'>Xcelium</option>
         </select>
       <br><br>
     <label></label>
@@ -1522,22 +1572,22 @@ input[type='input'] {
     <label>VUnit options. Extra options for the VUnit test runner.</label>
       <input type='input' id='tools-vunit-extra_options' class='radio-button'>
       <br><br>
-    <label></label>
+    <label>Enable array util library in non standalone mode</label>
       <input class='radio-button' id='tools-vunit-enable_array_util_lib' type='checkbox'>
       <br><br>
-    <label></label>
+    <label>Enable com library in non standalone mode</label>
       <input class='radio-button' id='tools-vunit-enable_com_lib' type='checkbox'>
       <br><br>
-    <label></label>
+    <label>Enable json4vhdl library in non standalone mode</label>
       <input class='radio-button' id='tools-vunit-enable_json4vhdl_lib' type='checkbox'>
       <br><br>
-    <label></label>
+    <label>Enable OSVVM library in non standalone mode</label>
       <input class='radio-button' id='tools-vunit-enable_osvvm_lib' type='checkbox'>
       <br><br>
-    <label></label>
+    <label>Enable random library in non standalone mode</label>
       <input class='radio-button' id='tools-vunit-enable_random_lib' type='checkbox'>
       <br><br>
-    <label></label>
+    <label>Enable verification components library in non standalone mode</label>
       <input class='radio-button' id='tools-vunit-enable_verification_components_lib' type='checkbox'>
       <br><br>
     <label></label>
@@ -1632,6 +1682,49 @@ input[type='input'] {
     <label></label>
       <br><br>
   </div>
+  <div id="tools-openfpga" class='main'>
+    <h3>Tools: OpenFPGA</h3>
+    <hr></hr>
+    <p><i>The award-winning OpenFPGA framework is the first open-source FPGA IP generator with silicon proofs supporting highly-customizable FPGA architectures.</i></p>
+    <label>Installation path:</label>
+      <br>
+      <input type='input' id='tools-openfpga-installation_path' class='radio-button'>
+      <br><br>
+    <label>Target architecture.</label>
+        <br>
+        <select name='select' id='tools-openfpga-arch'>
+                <option value='xilinx'>Xilinx</option>
+                <option value='ice40'>ICE40</option>
+                <option value='ecp5'>ECP5</option>
+        </select>
+      <br><br>
+    <label>Output file format.</label>
+        <br>
+        <select name='select' id='tools-openfpga-output_format'>
+                <option value='json'>JSON</option>
+                <option value='edif'>EDIF</option>
+                <option value='blif'>BLIF</option>
+        </select>
+      <br><br>
+    <label>Determines if Yosys is run as a part of bigger toolchain, or as a standalone tool.</label>
+      <input class='radio-button' id='tools-openfpga-yosys_as_subtool' type='checkbox'>
+      <br><br>
+    <label>Generated makefile name, defaults to $name.mk</label>
+      <br>
+      <input type='input' id='tools-openfpga-makefile_name' class='radio-button'>
+      <br><br>
+    <label>Generated tcl script filename, defaults to $name.mk</label>
+      <br>
+      <input type='input' id='tools-openfpga-script_name' class='radio-button'>
+      <br><br>
+    <label>Additional options for the synth_ice40 command.</label>
+      <input type='input' id='tools-openfpga-yosys_synth_options' class='radio-button'>
+      <br><br>
+    <label></label>
+      <br><br>
+    <label></label>
+      <br><br>
+  </div>
 
 </article> 
 
@@ -1639,8 +1732,8 @@ input[type='input'] {
   <button id="button_cancel" class="button" type="button" onclick="close_panel(event)">Close</button>
   <button id="button_apply" class="button" type="button" onclick="send_config(event)">Apply</button>
   <button id="button_apply_close" class="button" type="button" onclick="send_config_and_close(event)">Apply and close</button>
-  <button id="button_load" class="button" type="button" onclick="load_config(event)">Load</button>
-  <button id="button_export" class="button" type="button" onclick="export_config(event)">Export</button>
+  
+  
 </div>
 
 <script>
@@ -1766,6 +1859,12 @@ input[type='input'] {
   }
   else{
     document.getElementById("tools-general").style.visibility = "hidden"; 
+  }
+  if ("tools" == tp0 && "osvvm" == tp1){
+    document.getElementById("tools-osvvm").style.visibility = "visible"; 
+  }
+  else{
+    document.getElementById("tools-osvvm").style.visibility = "hidden"; 
   }
   if ("tools" == tp0 && "ascenlint" == tp1){
     document.getElementById("tools-ascenlint").style.visibility = "visible"; 
@@ -1923,6 +2022,12 @@ input[type='input'] {
   else{
     document.getElementById("tools-yosys").style.visibility = "hidden"; 
   }
+  if ("tools" == tp0 && "openfpga" == tp1){
+    document.getElementById("tools-openfpga").style.visibility = "visible"; 
+  }
+  else{
+    document.getElementById("tools-openfpga").style.visibility = "hidden"; 
+  }
   }
 
   enable_tab('general', 'general');
@@ -2005,6 +2110,10 @@ input[type='input'] {
 
   document.getElementById("btn-tools-general").addEventListener("click", function() {
     enable_tab("tools","general")
+  });
+
+  document.getElementById("btn-tools-osvvm").addEventListener("click", function() {
+    enable_tab("tools","osvvm")
   });
 
   document.getElementById("btn-tools-ascenlint").addEventListener("click", function() {
@@ -2109,6 +2218,10 @@ input[type='input'] {
 
   document.getElementById("btn-tools-yosys").addEventListener("click", function() {
     enable_tab("tools","yosys")
+  });
+
+  document.getElementById("btn-tools-openfpga").addEventListener("click", function() {
+    enable_tab("tools","openfpga")
   });
 
   /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - 
@@ -2338,6 +2451,13 @@ input[type='input'] {
     config["tools"]["general"]["execution_mode"] = element_value
     element_value = document.getElementById("tools-general-waveform_viewer").value;
     config["tools"]["general"]["waveform_viewer"] = element_value
+    config["tools"]["osvvm"] = {}
+    element_value = document.getElementById("tools-osvvm-installation_path").value;
+    config["tools"]["osvvm"]["installation_path"] = element_value
+    element_value = document.getElementById("tools-osvvm-tclsh_binary").value;
+    config["tools"]["osvvm"]["tclsh_binary"] = element_value
+    element_value = document.getElementById("tools-osvvm-simulator_name").value;
+    config["tools"]["osvvm"]["simulator_name"] = element_value
     config["tools"]["ascenlint"] = {}
     element_value = document.getElementById("tools-ascenlint-installation_path").value;
     config["tools"]["ascenlint"]["installation_path"] = element_value
@@ -2614,6 +2734,21 @@ input[type='input'] {
     config["tools"]["yosys"]["script_name"] = element_value
     element_value = document.getElementById("tools-yosys-yosys_synth_options").value.split(',');
     config["tools"]["yosys"]["yosys_synth_options"] = element_value
+    config["tools"]["openfpga"] = {}
+    element_value = document.getElementById("tools-openfpga-installation_path").value;
+    config["tools"]["openfpga"]["installation_path"] = element_value
+    element_value = document.getElementById("tools-openfpga-arch").value;
+    config["tools"]["openfpga"]["arch"] = element_value
+    element_value = document.getElementById("tools-openfpga-output_format").value;
+    config["tools"]["openfpga"]["output_format"] = element_value
+    element_value = document.getElementById("tools-openfpga-yosys_as_subtool").checked;
+    config["tools"]["openfpga"]["yosys_as_subtool"] = element_value
+    element_value = document.getElementById("tools-openfpga-makefile_name").value;
+    config["tools"]["openfpga"]["makefile_name"] = element_value
+    element_value = document.getElementById("tools-openfpga-script_name").value;
+    config["tools"]["openfpga"]["script_name"] = element_value
+    element_value = document.getElementById("tools-openfpga-yosys_synth_options").value.split(',');
+    config["tools"]["openfpga"]["yosys_synth_options"] = element_value
     return config;
   }
 
@@ -2684,6 +2819,9 @@ input[type='input'] {
     document.getElementById("tools-general-select_tool").value = config["tools"]["general"]["select_tool"];
     document.getElementById("tools-general-execution_mode").value = config["tools"]["general"]["execution_mode"];
     document.getElementById("tools-general-waveform_viewer").value = config["tools"]["general"]["waveform_viewer"];
+    document.getElementById("tools-osvvm-installation_path").value = config["tools"]["osvvm"]["installation_path"];
+    document.getElementById("tools-osvvm-tclsh_binary").value = config["tools"]["osvvm"]["tclsh_binary"];
+    document.getElementById("tools-osvvm-simulator_name").value = config["tools"]["osvvm"]["simulator_name"];
     document.getElementById("tools-ascenlint-installation_path").value = config["tools"]["ascenlint"]["installation_path"];
     element_value = document.getElementById("tools-ascenlint-ascentlint_options").value = String(config["tools"]["ascenlint"]["ascentlint_options"]);
     document.getElementById("tools-cocotb-installation_path").value = config["tools"]["cocotb"]["installation_path"];
@@ -2809,6 +2947,13 @@ input[type='input'] {
     document.getElementById("tools-yosys-makefile_name").value = config["tools"]["yosys"]["makefile_name"];
     document.getElementById("tools-yosys-script_name").value = config["tools"]["yosys"]["script_name"];
     element_value = document.getElementById("tools-yosys-yosys_synth_options").value = String(config["tools"]["yosys"]["yosys_synth_options"]);
+    document.getElementById("tools-openfpga-installation_path").value = config["tools"]["openfpga"]["installation_path"];
+    document.getElementById("tools-openfpga-arch").value = config["tools"]["openfpga"]["arch"];
+    document.getElementById("tools-openfpga-output_format").value = config["tools"]["openfpga"]["output_format"];
+    document.getElementById("tools-openfpga-yosys_as_subtool").checked = config["tools"]["openfpga"]["yosys_as_subtool"];
+    document.getElementById("tools-openfpga-makefile_name").value = config["tools"]["openfpga"]["makefile_name"];
+    document.getElementById("tools-openfpga-script_name").value = config["tools"]["openfpga"]["script_name"];
+    element_value = document.getElementById("tools-openfpga-yosys_synth_options").value = String(config["tools"]["openfpga"]["yosys_synth_options"]);
   }
 
   function open_submenu_icon(x) {

@@ -149,8 +149,8 @@ export function get_directory(path: string): string {
  * Create a folder
  * @param  {string} path Directory path
  */
-export function create_directory(folder_path: string) {
-    fs.mkdirSync(folder_path, { recursive: true });
+export function create_directory(folder_path: string, recursive = true) {
+    fs.mkdirSync(folder_path, { recursive: recursive });
 }
 
 /**

@@ -44,10 +44,11 @@ export class Edalize extends Generic_tool_handler {
             const entity_name = get_toplevel_from_path(toplevel_path);
             if (entity_name !== '') {
                 const test_inst: t_test_declaration = {
+                    suite_name: "",
                     name: entity_name,
                     test_type: "",
                     filename: toplevel_path,
-                    location: undefined
+                    location: undefined,
                 };
                 test_list.push(test_inst);
             }
@@ -72,7 +73,7 @@ export class Edalize extends Generic_tool_handler {
 
         const config = prj.config_manager.get_config();
         const tool_name = config.tools.general.select_tool;
-        const installation_path = config.tools[tool_name].installation_path;
+        const installation_path = (<any>config.tools)[tool_name].installation_path;
         const execution_mode = config.tools.general.execution_mode;
         const developer_mode = config.general.general.developer_mode;
         const waveform_viewer = config.tools.general.waveform_viewer;
@@ -97,7 +98,8 @@ export class Edalize extends Generic_tool_handler {
 
                 const path_f = path_lib.join(working_directory, 'config_summary.txt');
                 const test_result: t_test_result = {
-                    name: "",
+                    suite_name: "",
+                    name: top_level_list[0],
                     edam: edam_json,
                     config_summary_path: path_f,
                     config: config,
@@ -106,7 +108,8 @@ export class Edalize extends Generic_tool_handler {
                     successful: result.successful,
                     stdout: result.stdout,
                     stderr: result.stderr,
-                    time: 0
+                    time: 0,
+                    test_path: "",
                 };
 
                 const final_result = [test_result];

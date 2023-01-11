@@ -16,7 +16,11 @@
 // You should have received a copy of the GNU General Public License
 // along with colibri2.  If not, see <https://www.gnu.org/licenses/>.
 
-import { t_file_reduced, t_script, t_parameter, e_script_stage, t_action_result, } from "./common";
+import {
+    t_file_reduced, t_script, t_parameter, e_script_stage, t_action_result, t_watcher,
+    e_watcher_type
+} from "./common";
+import * as  manager_watcher from "./list_manager/watcher";
 import * as  manager_file from "./list_manager/file";
 import * as  manager_hook from "./list_manager/hook";
 import * as  manager_parameter from "./list_manager/parameter";
@@ -28,6 +32,15 @@ import { t_project_definition } from "./project_definition";
 import * as file_utils from "../utils/file_utils";
 import { Config_manager, merge_configs } from "../config/config_manager";
 import { e_config } from "../config/config_declaration";
+import * as utils from "./utils/utils";
+import * as process_utils from "../process/utils";
+import * as python from "../process/python";
+import * as events from "events";
+import * as path_lib from "path";
+import * as process from "../process/process";
+import { l_error } from "../linter/common";
+import { Linter } from "../linter/linter";
+import { t_linter_name, l_options } from "../linter/common";
 
 export class Project_manager {
     /**  Name of the project */
@@ -35,6 +48,8 @@ export class Project_manager {
     /** Contains all the HDL source files, constraint files, vendor IP description files, 
      * memory initialization files etc. for the project. */
     private files = new manager_file.File_manager();
+    /** File watcher. */
+    private watchers: manager_watcher.Watcher_manager;
     /** A dictionary of extra commands to execute at various stages of the project build/run. */
     private hooks = new manager_hook.Hook_manager();
     /** Specifies build- and run-time parameters, such as plusargs, VHDL generics, Verilog defines etc. */
@@ -44,9 +59,36 @@ export class Project_manager {
     /** Config manager. */
     private config_manager = new Config_manager();
     private tools_manager = new Tool_manager(undefined);
+    private emitter: events.EventEmitter | undefined = undefined;
+    /** Linter */
+    private linter = new Linter();
 
-    constructor(name: string) {
+    constructor(name: string, emitter: events.EventEmitter | undefined = undefined) {
         this.name = name;
+        this.emitter = emitter;
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        const selfm = this;
+        this.watchers = new manager_watcher.Watcher_manager((function () {
+            selfm.files.clear_automatic_files();
+            selfm.watchers.get().forEach(async (watcher: any) => {
+                if (selfm.emitter !== undefined) {
+                    selfm.emitter.emit('loading');
+                }
+                if (watcher.watcher_type === e_watcher_type.CSV) {
+                    selfm.add_file_from_csv(watcher.path, false);
+                }
+                else if (watcher.watcher_type === e_watcher_type.VUNIT) {
+                    await selfm.add_file_from_vunit(selfm.config_manager.get_config(), watcher.path, false);
+                }
+                else if (watcher.watcher_type === e_watcher_type.VIVADO) {
+                    await selfm.add_file_from_vivado(selfm.config_manager.get_config(), watcher.path, false);
+                }
+                if (selfm.emitter !== undefined) {
+                    selfm.emitter.emit('loaded');
+                    selfm.emitter.emit('refresh');
+                }
+            });
+        }), emitter);
     }
 
     get_name() {
@@ -57,12 +99,34 @@ export class Project_manager {
         this.name = name;
     }
 
+    get_watcher_type(path: string): e_watcher_type {
+        let watcher_type = e_watcher_type.CSV;
+        this.watchers.get().forEach(watcher => {
+            if (watcher.path === path) {
+                watcher_type = watcher.watcher_type;
+            }
+        });
+        return watcher_type;
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     // Project
     ////////////////////////////////////////////////////////////////////////////
     // public save_definition() {
     //     const definition = this.get_project_definition(undefined);
     // }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Linter
+    ////////////////////////////////////////////////////////////////////////////
+    public async lint_from_file(file_path: string, linter_name: t_linter_name,
+        options: l_options): Promise<l_error[]> {
+
+        if (this.check_if_path_in_project(file_path) === false) {
+            return await this.linter.lint_from_file(linter_name, file_path, options);
+        }
+        return await this.linter.lint_from_project(file_path, this.files.get(), linter_name, options);
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     // Hook
@@ -101,9 +165,99 @@ export class Project_manager {
     }
 
     ////////////////////////////////////////////////////////////////////////////
+    // Watcher
+    ////////////////////////////////////////////////////////////////////////////
+    add_file_to_watcher(watcher: t_watcher): t_action_result {
+        return this.watchers.add(watcher);
+    }
+
+    delete_file_in_watcher(watcher_path: string): t_action_result {
+        return this.watchers.delete(watcher_path);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
     // File
     ////////////////////////////////////////////////////////////////////////////
-    add_file_from_csv(csv_path: string): t_action_result {
+    async add_file_from_vivado(general_config: e_config | undefined, vivado_path: string, is_manual: boolean)
+        : Promise<t_action_result> {
+
+        const n_config = merge_configs(general_config, this.config_manager.get_config());
+        const n_config_manager = new Config_manager();
+        n_config_manager.set_config(n_config);
+
+        // Get Vivado binary path
+        let vivado_bin = n_config.tools.vivado.installation_path;
+        if (vivado_bin === "") {
+            vivado_bin = "vivado";
+        }
+        else {
+            vivado_bin = path_lib.join(vivado_bin, "vivado");
+        }
+
+        // Create temp file for out.csv
+        const csv_file = process_utils.create_temp_file("");
+        const tcl_file = path_lib.join(__dirname, 'prj_loaders', 'vivado.tcl');
+
+        const cmd = `vivado -mode batch -source ${tcl_file} -tclargs ${vivado_path} ${csv_file}`;
+        await (new process.Process(undefined)).exec_wait(cmd);
+
+        const result_load = this.add_file_from_csv(csv_file, is_manual);
+
+        // Delete temp file
+        file_utils.remove_file(csv_file);
+
+        return result_load;
+    }
+
+
+    async add_file_from_vunit(general_config: e_config | undefined, vunit_path: string, is_manual: boolean
+    ): Promise<t_action_result> {
+
+        const n_config = merge_configs(general_config, this.config_manager.get_config());
+        const n_config_manager = new Config_manager();
+        n_config_manager.set_config(n_config);
+
+        const py_path = n_config_manager.get_config().general.general.pypath;
+        const json_path = process_utils.create_temp_file("");
+        const args = `--export-json ${json_path}`;
+        console.log(`${py_path} ${vunit_path} ${args}`);
+        const result = await python.exec_python_script(py_path, vunit_path, args);
+        console.log(result.stderr);
+        console.log(result.stdout);
+
+        if (result.successful === true) {
+            try {
+                const json_str = file_utils.read_file_sync(json_path);
+                const file_list = JSON.parse(json_str).files;
+                file_list.forEach((file: any) => {
+                    const file_declaration: t_file_reduced = {
+                        name: file.file_name,
+                        is_include_file: false,
+                        include_path: "",
+                        logical_name: file.library_name,
+                        is_manual: is_manual
+                    };
+                    this.add_file(file_declaration);
+                });
+                const result: t_action_result = {
+                    result: undefined,
+                    successful: true,
+                    msg: ""
+                };
+                return result;
+            }
+            // eslint-disable-next-line no-empty
+            catch (e) { }
+        }
+        const result_error: t_action_result = {
+            result: undefined,
+            successful: false,
+            msg: "Error processing run.py"
+        };
+        return result_error;
+    }
+
+    add_file_from_csv(csv_path: string, is_manual: boolean): t_action_result {
         const csv_content = file_utils.read_file_sync(csv_path);
         const file_list_array = csv_content.split('\n');
         for (let i = 0; i < file_list_array.length; ++i) {
@@ -136,7 +290,8 @@ export class Project_manager {
                             name: complete_file_path,
                             is_include_file: false,
                             include_path: "",
-                            logical_name: lib_inst
+                            logical_name: lib_inst,
+                            is_manual: is_manual
                         };
                         this.add_file(file_edam);
                     }
@@ -164,7 +319,27 @@ export class Project_manager {
     }
 
     delete_file(name: string, logical_name = "") {
-        return this.files.delete(name, logical_name);
+        const result = this.files.delete(name, logical_name);
+        this.delete_phantom_toplevel();
+        return result;
+    }
+
+    delete_file_by_logical_name(logical_name: string) {
+        const result = this.files.delete_by_logical_name(logical_name);
+        this.delete_phantom_toplevel();
+        return result;
+    }
+
+    add_logical(logical_name: string) {
+        return this.files.add_logical(logical_name);
+    }
+
+    delete_phantom_toplevel() {
+        this.toplevel_path.get().forEach(toplevel => {
+            if (this.check_if_path_in_project(toplevel) === false) {
+                this.delete_toplevel_path(toplevel);
+            }
+        });
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -210,10 +385,12 @@ export class Project_manager {
             hook_manager: this.hooks,
             parameter_manager: this.parameters,
             toplevel_path_manager: this.toplevel_path,
+            watcher_manager: this.watchers,
             config_manager: current_config_manager
         };
         return prj_definition;
     }
+
     public check_if_file_in_project(name: string, logical_name: string): boolean {
         const file_list = this.files.get();
         let return_value = false;
@@ -223,6 +400,21 @@ export class Project_manager {
             }
         });
         return return_value;
+    }
+
+    public check_if_path_in_project(name: string): boolean {
+        const file_list = this.files.get();
+        let return_value = false;
+        file_list.forEach(file_inst => {
+            if (file_inst.name === name) {
+                return_value = true;
+            }
+        });
+        return return_value;
+    }
+
+    public get_edam_json() {
+        return utils.get_edam_json(this.get_project_definition(), undefined);
     }
 
     ////////////////////////////////////////////////////////////////////////////

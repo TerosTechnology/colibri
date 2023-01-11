@@ -24,6 +24,7 @@ import { get_os } from "../process/utils";
 import { OS } from "../process/common";
 import * as path_lib from "path";
 import * as logger from "../logger/logger";
+import { t_file } from "../project_manager/common";
 
 export abstract class Base_linter {
     abstract binary_linux: string;
@@ -90,6 +91,12 @@ export abstract class Base_linter {
     }
 
     abstract lint(file: string, options: common.l_options): Promise<common.l_error[]>;
+
     abstract delete_previus_lint(): void;
+
+    public async lint_from_project(file_path: string, _prj_file_list: t_file[],
+        options: common.l_options): Promise<common.l_error[]> {
+        return await this.lint_from_file(file_path, options);
+    }
 }
 

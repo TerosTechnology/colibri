@@ -2,7 +2,7 @@
     "name": "colibri2",
     "author": "Carlos Alberto Ruiz Naranjo <carlosruiznaranjo@gmail.com>, Ismael Perez Rojo <ismaelprojo@gmail.com >",
     "homepage": "https://terostechnology.github.io",
-    "version": "1.6.0",
+    "version": "1.8.3",
     "description": "TerosHDL backend",
     "main": "out/index.js",
     "oclif": {
@@ -40,9 +40,12 @@
         "copy-dependency": "shx cp -R ./src/project_manager/dependency/*.py ./out/project_manager/dependency",
         "copy-templates": "shx cp -R ./src/template/helpers ./out/template",
         "copy-reporter": "shx cp -R ./src/reporter/html_detailed_formatter/helpers ./out/reporter/html_detailed_formatter",
-        "copy-files": "npm run copy-parser && npm run copy-dependency && npm run copy-templates && npm run copy-reporter && npm run copy-documenter",
+        "copy-project-manager-edalize": "shx cp -R ./src/project_manager/tool/edalize ./out/project_manager/tool",
+        "copy-project-manager-vunit": "shx cp -R ./src/project_manager/tool/vunit ./out/project_manager/tool",
+        "copy-project-manager-loaders": "shx cp -R ./src/project_manager/prj_loaders/ ./out/project_manager/",
+        "copy-files": "npm run copy-parser && npm run copy-dependency && npm run copy-templates && npm run copy-reporter && npm run copy-documenter && npm run copy-project-manager-edalize && npm run copy-project-manager-vunit && npm run copy-project-manager-loaders",
         "lint": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' eslint . --quiet --ext .ts",
-        "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha --colors --exlude tests/linter/linter.spec.ts --reporter mocha-multi-reporters --reporter-options configFile=config.json -r ts-node/register 'tests/**/*.ts'"
+        "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha --colors --exlude tests/linter/linter.spec.ts --reporter mocha-multi-reporters --reporter-options configFile=config.json -r ts-node/register 'tests/**/*.ts' --exit"
     },
     "directories": {
         "lib": "./lib",
@@ -60,6 +63,7 @@
         "clone": "^2.1.2",
         "console-table-printer": "^2.11.0",
         "fast-xml-parser": "4.0.10",
+        "js-yaml": "^4.1.0",
         "json5": "2.1.3",
         "lodash": "^4.17.21",
         "nunjucks": "^3.2.0",
@@ -72,7 +76,8 @@
         "temp": "0.9.4",
         "tiny-glob": "^0.2.9",
         "wavedrom": "2.6.8",
-        "web-tree-sitter": "^0.16.2"
+        "web-tree-sitter": "^0.16.2",
+        "chokidar": "3.5.3"
     },
     "devDependencies": {
         "@oclif/test": "^2",
@@ -80,6 +85,7 @@
         "@types/chai": "^4",
         "@types/cli-color": "^2.0.2",
         "@types/expect": "^24.3.0",
+        "@types/js-yaml": "^4.0.5",
         "@types/mocha": "^9.1.1",
         "@typescript-eslint/eslint-plugin": "^5.27.0",
         "@typescript-eslint/parser": "^5.27.0",
