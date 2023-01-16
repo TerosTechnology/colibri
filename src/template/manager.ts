@@ -129,6 +129,31 @@ export class Template_manager {
 
         const name = code_tree.name;
         const generic = this.adapt_port(code_tree.get_generic_array(), template_type, true);
+        // Set default value to generics
+        for (let i = 0; i < generic.length; i++) {
+            const element = generic[i];
+            if (element.default_value.trim() === "") {
+                const normalized_type = element.type.replace(/\s/g, '').toLowerCase();
+                if (normalized_type === "integer") {
+                    element.default_value = "0";
+                }
+                else if (normalized_type === "signed" || normalized_type === "unsigned") {
+                    element.default_value = "(others => '0')";
+                }
+                else if (normalized_type === "string") {
+                    element.default_value = '""';
+                }
+                else if (normalized_type === "boolean") {
+                    element.default_value = "false";
+                }
+                else if (normalized_type.includes("std_logic_vector")) {
+                    element.default_value = "(others => '0')";
+                }
+                else if (normalized_type === "std_logic") {
+                    element.default_value = "'0'";
+                }
+            }
+        }
         const port = this.adapt_port(code_tree.get_port_array(), template_type, false);
 
         template = nunjucks.render(template_path, {

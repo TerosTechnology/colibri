@@ -5,11 +5,7 @@ module {{ name }}_tb;
 
 {{ indent[1] }}// Parameters
 {% for generic_inst in generic -%}
-{% if generic_inst['default_value'] == "" -%}
-{{ indent[1] }}localparam {{generic_inst['type']}} {{generic_inst['info']['name']}};
-{% else -%}
-{{ indent[1] }}localparam {{generic_inst['type']}} {{generic_inst['info']['name']}} = {{generic_inst['default_value']}};
-{% endif -%}
+{{ indent[1] }}localparam {{generic_inst['type']}} {{generic_inst['info']['name']}} = 0;
 {% endfor %}
 {{ indent[1] }}//Ports
 {% for port_inst in port -%}

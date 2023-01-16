@@ -175,18 +175,14 @@ export class Vunit extends Generic_tool_handler {
         return exec_i;
     }
 
-    get_simulator_installation_path(_prj: t_project_definition): string {
-        // const config = prj.config_manager.get_config();
-        // const simulator_name = config.tools.vunit.simulator_name;
-        // const tools = config.tools;
-        const installation_path = "";
+    get_simulator_installation_path(prj: t_project_definition): string {
+        const config = prj.config_manager.get_config();
+        const simulator_name = prj.config_manager.get_config().tools.vunit.simulator_name;
 
-        // Object.entries(tools).forEach(([key, value]) => {
-        //     if ((installation_path in value) && key === simulator_name) {
-        //         installation_path = value.installation_path;
-        //     }
-        // });
-
+        let installation_path = "";
+        try {
+            installation_path = (<any>config.tools)[simulator_name].installation_path;
+        } catch (error) { /* empty */ }
         return installation_path;
     }
 

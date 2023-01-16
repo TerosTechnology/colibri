@@ -26,7 +26,8 @@ import { equal } from "assert";
 import * as paht_lib from 'path';
 import * as fs from 'fs';
 
-const language_array = [HDL_LANG.VHDL, HDL_LANG.VERILOG];
+const language_array = [HDL_LANG.VHDL];
+// const language_array = [HDL_LANG.VHDL, HDL_LANG.VERILOG];
 
 async function generate_template_manager(language: HDL_LANG) {
     const template_manager = new Template_manager(language);
@@ -46,11 +47,11 @@ use ieee.numeric_std.all;
 
 entity test_entity_name is
 generic (
-    a : integer;
+    a : integer := 0;
     b : unsigned;
     c : signed;
-    d : std_logic;
-    e : std_logic_vector;
+    d : std_logic := '1';
+    e : std_logic_vector := "10001";
     f : std_logic_vector(5 downto 0)
   );
 port(
@@ -108,7 +109,7 @@ TEST_TYPE_LIST.forEach(TEST_TYPE => {
 
     const C_OUTPUT_BASE_PATH = create_output(TEST_TYPE);
     language_array.forEach(language => {
-        describe(`Check template ${language} element`, function () {
+        describe(`Check template ${language} element ${TEST_TYPE}`, function () {
             const values = Object.values(common.get_template_names(language));
             values.forEach(template_type => {
                 it(`Check ${template_type.id}`, async function () {

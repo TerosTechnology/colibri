@@ -18,8 +18,12 @@ architecture bench of {{ name }}_tb is
 {{ indent[1] }}-- Clock period
 {{ indent[1] }}constant clk_period : time := 5 ns;
 {{ indent[1] }}-- Generics
-{% for generic_inst in generic -%}
-{{ indent[1] }}constant {{generic_inst['info']['name']}} : {{generic_inst['type']}};
+{% for element in generic -%}
+{% if element['default_value'] != "" -%}
+{{ indent[1] }}constant {{element['info']['name']}} : {{element['type']}} := {{element['default_value']|safe}};
+{% else -%}
+{{ indent[1] }}constant {{element['info']['name']}} : {{element['type']}};
+{% endif -%}
 {% endfor -%}
 {{ indent[1] }}-- Ports
 {% for port_inst in port -%}

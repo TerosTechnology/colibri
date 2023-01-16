@@ -255,3 +255,18 @@ tools:
       title: OpenFPGA
       description: "The award-winning OpenFPGA framework is the first open-source FPGA IP generator with silicon proofs supporting highly-customizable FPGA architectures."
       page: ./configs/tools/yosys.yml
+
+    activehdl:
+      title: Active-HDL
+      description: "Active-HDL™ is a Windows based, integrated FPGA Design Creation and Simulation solution for team-based environments."
+      page: ./configs/tools/activehdl.yml
+
+    nvc:
+      title: NVC
+      description: "NVC is a VHDL compiler and simulator. NVC supports almost all of VHDL-2002 and it has been successfully used to simulate several real-world designs."
+      page: ./configs/tools/nvc.yml
+
+    questa:
+      title: Questa Advanced Simulator
+      description: "The Questa advanced simulator is the core simulation and debug engine of the Questa verification solution."
+      page: ./configs/tools/questa.yml

@@ -15,7 +15,7 @@ simulator_name:
     activehdl: "Aldec Active-HDL"
     ghdl: "GHDL"
     nvc: "NVC"
-    riviera: "Aldec Riviera-PRO"
+    rivierapro: "Aldec Riviera-PRO"
     questa: "Mentor/Siemens EDA Questa"
     modelsim: "Mentor/Siemens EDA ModelSim"
     vcs: "VCS"
