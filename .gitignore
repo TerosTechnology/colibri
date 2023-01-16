@@ -6,3 +6,4 @@ mochawesome-report
 out_doc_api
 dist
 tmp
+out_*

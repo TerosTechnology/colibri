@@ -1,5 +1,5 @@
+- Project examples como submodulo
 - Borrar las carpetas de out de los tests
-- Templates fallan cuando no hay generics.
 - Default value para generics en los tests de templates.
 - Diferentes versiones de puertos ANSI y no ANSI.
 - Types elements.
@@ -39,3 +39,4 @@ https://code.visualstudio.com/api/references/activation-events#Start-up
 
 - Añadir un logger global
 - Project manager no acepta nombres con espacio?
+- Los tools cuando se ejecutan debeŕian coger en installation path de la configuración
