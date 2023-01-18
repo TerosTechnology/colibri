@@ -118,6 +118,7 @@ describe('Check entity Verilog', async function () {
         equal(actual.info.name, expected.info.name);
         equal(actual.direction, expected.direction);
         equal(actual.type, expected.type);
+        equal(actual.info.description, expected.info.description);
         // equal(actual.default_value, expected.default_value);
     }
 
@@ -141,6 +142,8 @@ describe('Check entity Verilog', async function () {
                     name: "a",
                     description: ""
                 },
+                inline_comment: "",
+                over_comment: "",
                 direction: "",
                 default_value: "8",
                 type: "",
@@ -160,6 +163,8 @@ describe('Check entity Verilog', async function () {
                     name: "b",
                     description: ""
                 },
+                inline_comment: "",
+                over_comment: "",
                 direction: "",
                 default_value: "9",
                 type: "",
@@ -179,6 +184,8 @@ describe('Check entity Verilog', async function () {
                     name: "c",
                     description: ""
                 },
+                inline_comment: "",
+                over_comment: "",
                 direction: "",
                 default_value: "10",
                 type: "",
@@ -198,6 +205,8 @@ describe('Check entity Verilog', async function () {
                     name: "d",
                     description: ""
                 },
+                inline_comment: "",
+                over_comment: "",
                 direction: "",
                 default_value: "11",
                 type: "",
@@ -215,6 +224,7 @@ describe('Check entity Verilog', async function () {
         equal(actual.direction, expected.direction);
         equal(actual.type, expected.type);
         equal(actual.default_value, expected.default_value);
+        equal(actual.info.description, expected.info.description);
     }
 
     describe('Check port.', async function () {
@@ -237,6 +247,8 @@ describe('Check entity Verilog', async function () {
                     name: "e",
                     description: ""
                 },
+                inline_comment: "",
+                over_comment: "",
                 direction: "input",
                 default_value: "",
                 type: "",
@@ -256,6 +268,8 @@ describe('Check entity Verilog', async function () {
                     name: "f",
                     description: ""
                 },
+                inline_comment: "",
+                over_comment: "",
                 direction: "output",
                 default_value: "",
                 type: "",
@@ -275,6 +289,8 @@ describe('Check entity Verilog', async function () {
                     name: "g",
                     description: ""
                 },
+                inline_comment: "",
+                over_comment: "",
                 direction: "input",
                 default_value: "",
                 type: "",
@@ -294,6 +310,8 @@ describe('Check entity Verilog', async function () {
                     name: "h",
                     description: ""
                 },
+                inline_comment: "",
+                over_comment: "",
                 direction: "input",
                 default_value: "",
                 type: "wire",
@@ -313,6 +331,8 @@ describe('Check entity Verilog', async function () {
                     name: "i",
                     description: ""
                 },
+                inline_comment: "",
+                over_comment: "",
                 direction: "input",
                 default_value: "",
                 type: "[7:0]",
@@ -333,6 +353,8 @@ describe('Check entity Verilog', async function () {
                     name: "j",
                     description: ""
                 },
+                inline_comment: "",
+                over_comment: "",
                 direction: "input",
                 default_value: "",
                 type: "[7:0]",
@@ -352,6 +374,8 @@ describe('Check entity Verilog', async function () {
                     name: "k",
                     description: ""
                 },
+                inline_comment: "",
+                over_comment: "",
                 direction: "input",
                 default_value: "",
                 type: "wire [9:0]",
@@ -372,6 +396,8 @@ describe('Check entity Verilog', async function () {
                     name: "l",
                     description: ""
                 },
+                inline_comment: "",
+                over_comment: "",
                 direction: "output",
                 default_value: "",
                 type: "wire [9:0]",
@@ -387,6 +413,7 @@ describe('Check entity Verilog', async function () {
     function check_signal(actual: common.Signal_hdl, expected: common.Signal_hdl) {
         equal(actual.info.name, expected.info.name);
         equal(actual.type, expected.type);
+        equal(actual.info.description, expected.info.description);
         // equal(actual.default_value, expected.default_value);
     }
 
@@ -470,6 +497,7 @@ describe('Check entity Verilog', async function () {
         equal(actual.info.name, expected.info.name);
         equal(actual.type, expected.type);
         equal(actual.default_value, expected.default_value);
+        equal(actual.info.description, expected.info.description);
     }
 
     describe('Check constant.', async function () {
@@ -507,6 +535,7 @@ describe('Check entity Verilog', async function () {
         equal(actual.type, expected.type);
         equal(actual.arguments, expected.arguments);
         equal(actual.return, expected.return);
+        equal(actual.info.description, expected.info.description);
     }
 
     describe('Check function.', async function () {
@@ -542,6 +571,7 @@ describe('Check entity Verilog', async function () {
     function check_process(actual: common.Process_hdl, expected: common.Process_hdl) {
         equal(actual.info.name, expected.info.name);
         equal(actual.sens_list, expected.sens_list);
+        equal(actual.info.description, expected.info.description);
     }
 
     describe('Check always.', async function () {
@@ -627,6 +657,7 @@ describe('Check entity Verilog', async function () {
     function check_instantiation(actual: common.Instantiation_hdl, expected: common.Instantiation_hdl) {
         equal(actual.info.name, expected.info.name);
         equal(actual.type, expected.type);
+        equal(actual.info.description, expected.info.description);
     }
 
     describe('Check instantiation.', async function () {

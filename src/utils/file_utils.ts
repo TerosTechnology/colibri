@@ -174,3 +174,20 @@ export function remove_file(file_path: string) {
     // eslint-disable-next-line no-empty
     catch (err) { }
 }
+
+
+/**
+ * Get all files in a directory
+ * @param  {string} dirname Directory path
+ */
+export function read_directory(dirname: string): string[] {
+    let result: string[] = [];
+    if (check_if_path_exist(dirname)) {
+        result = fs.readdirSync(dirname);
+    }
+    for (let index = 0; index < result.length; index++) {
+        const element = result[index];
+        result[index] = path_lib.join(dirname, element);
+    }
+    return result;
+}

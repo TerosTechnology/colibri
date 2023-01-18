@@ -27,7 +27,7 @@ import * as elements_hdl from "./elements";
 import { HDL_LANG } from "../../common/general";
 import { Parser_interface } from "./parser_interface";
 import * as common_hdl from "../common";
-
+import * as Parser from "web-tree-sitter";
 
 export class Verilog_parser extends Ts_base_parser implements Parser_base {
     comment_symbol = "";
@@ -44,7 +44,6 @@ export class Verilog_parser extends Ts_base_parser implements Parser_base {
     async init() {
         try {
             if (this.loaded === false) {
-                const Parser = require('web-tree-sitter');
                 await Parser.init();
                 this.parser = new Parser();
                 const lang = await Parser.Language.load(path.join(__dirname, "..",
@@ -125,10 +124,155 @@ export class Verilog_parser extends Ts_base_parser implements Parser_base {
         // Process
         cursor.gotoFirstChild();
         do {
-            if (cursor.nodeType === 'module_or_generate_item' || cursor.nodeType === 'package_item') {
+            if (cursor.nodeType === 'module_or_generate_item' || cursor.nodeType === 'package_item'
+                || cursor.nodeType === 'package_declaration') {
                 cursor.gotoFirstChild();
+
+
+
+
+
                 do {
-                    if (cursor.nodeType === 'always_construct') {
+                    if (cursor.nodeType === 'package_or_generate_item_declaration') {
+                        cursor.gotoFirstChild();
+
+                        do {
+
+
+                            if (cursor.nodeType === 'net_declaration'
+                                || cursor.nodeType === 'data_declaration') {
+                                last_element_position = cursor.startPosition.row;
+                                let new_signals: common_hdl.Signal_hdl[] =
+                                    elements_hdl.get_signals(cursor.currentNode(), lines, general_comments);
+
+                                new_signals = utils.set_description_to_array(new_signals,
+                                    comments, general_comments, this.comment_symbol);
+
+                                signals_array = signals_array.concat(new_signals);
+
+                                if (new_signals.length === 0 && enable_package === true
+                                    || enable_package === undefined) {
+                                    let new_types: common_hdl.Type_hdl[] =
+                                        elements_hdl.get_types_pkg(cursor.currentNode(), lines);
+
+                                    new_types = utils.set_description_to_array(new_types,
+                                        comments, general_comments, this.comment_symbol);
+                                    types_array = types_array.concat(new_types);
+                                }
+                                comments = '';
+                            } else if (cursor.nodeType === 'function_identifier' ||
+                                cursor.nodeType === 'function_declaration') {
+
+                                last_element_position = cursor.startPosition.row;
+                                let new_functions: common_hdl.Function_hdl[] =
+                                    elements_hdl.get_functions(cursor.currentNode(), lines);
+
+                                new_functions = utils.set_description_to_array(new_functions,
+                                    comments, general_comments, this.comment_symbol);
+
+                                functions_array = functions_array.concat(new_functions);
+                                comments = '';
+
+                            }
+                            else if (cursor.nodeType === 'any_parameter_declaration') {
+                                last_element_position = cursor.startPosition.row;
+                                // let new_constants: common_hdl.Constant_hdl[] =
+                                //     elements_hdl.get_constants(cursor.currentNode(), lines);
+
+                                // new_constants = utils.set_description_to_array(new_constants,
+                                //     comments, general_comments, this.comment_symbol);
+                                // constants_array = constants_array.concat(new_constants);
+
+                                // if (new_constants.length === 0) {
+                                let new_generics: common_hdl.Port_hdl[] =
+                                    elements_hdl.get_generics(cursor.currentNode(),
+                                        lines, general_comments, 0, this.comment_symbol);
+
+                                new_generics = utils.set_description_to_array(new_generics,
+                                    comments, general_comments, this.comment_symbol);
+                                generics_array = generics_array.concat(new_generics);
+                                // }
+                                // if (new_constants.length === 0 && enable_package === true) {
+                                //     const new_item_generic = elements_hdl.get_generics(
+                                //         cursor.currentNode(), lines, general_comments, 0, this.comment_symbol);
+
+                                //     new_constants = [];
+                                //     new_item_generic.forEach(element => {
+                                //         const item: common_hdl.Constant_hdl = {
+                                //             hdl_element_type: common_hdl.TYPE_HDL_ELEMENT.CONSTANT,
+                                //             info: element.info,
+                                //             type: element.type,
+                                //             default_value: element.default_value,
+                                //         };
+                                //         new_constants.push(item);
+                                //     });
+
+                                //     new_constants = utils.set_description_to_array(new_constants,
+                                //         comments, general_comments, this.comment_symbol);
+                                //     constants_array = constants_array.concat(new_constants);
+                                // }
+
+                                comments = '';
+                            }
+                            else if (cursor.nodeType === 'local_parameter_declaration'
+                                || cursor.nodeType === 'parameter_declaration') {
+                                last_element_position = cursor.startPosition.row;
+                                let new_constants: common_hdl.Constant_hdl[] =
+                                    elements_hdl.get_constants(cursor.currentNode(), lines);
+
+                                new_constants = utils.set_description_to_array(new_constants,
+                                    comments, general_comments, this.comment_symbol);
+                                constants_array = constants_array.concat(new_constants);
+
+                                // if (new_constants.length === 0) {
+                                //     let new_generics: common_hdl.Port_hdl[] =
+                                //         elements_hdl.get_generics(cursor.currentNode(),
+                                //             lines, general_comments, 0, this.comment_symbol);
+
+                                //     new_generics = utils.set_description_to_array(new_generics,
+                                //         comments, general_comments, this.comment_symbol);
+                                //     generics_array = generics_array.concat(new_generics);
+                                // }
+                                // if (new_constants.length === 0 && enable_package === true) {
+                                //     const new_item_generic = elements_hdl.get_generics(
+                                //         cursor.currentNode(), lines, general_comments, 0, this.comment_symbol);
+
+                                //     new_constants = [];
+                                //     new_item_generic.forEach(element => {
+                                //         const item: common_hdl.Constant_hdl = {
+                                //             hdl_element_type: common_hdl.TYPE_HDL_ELEMENT.CONSTANT,
+                                //             info: element.info,
+                                //             type: element.type,
+                                //             default_value: element.default_value,
+                                //         };
+                                //         new_constants.push(item);
+                                //     });
+
+                                //     new_constants = utils.set_description_to_array(new_constants,
+                                //         comments, general_comments, this.comment_symbol);
+                                //     constants_array = constants_array.concat(new_constants);
+                                // }
+
+                                comments = '';
+                            } else if (cursor.nodeType === 'type_declaration') {
+                                last_element_position = cursor.startPosition.row;
+                                let new_types: common_hdl.Type_hdl[] =
+                                    elements_hdl.get_types_pkg(cursor.currentNode(), lines);
+
+                                new_types = utils.set_description_to_array(new_types,
+                                    comments, general_comments, this.comment_symbol);
+                                types_array = types_array.concat(new_types);
+                                comments = '';
+                            }
+                            else {
+                                comments = '';
+                            }
+                        }
+                        while (cursor.gotoNextSibling() !== false);
+                        cursor.gotoParent();
+
+                    }
+                    else if (cursor.nodeType === 'always_construct') {
                         last_element_position = cursor.startPosition.row;
                         let new_processes: common_hdl.Process_hdl[] =
                             elements_hdl.get_processes(cursor.currentNode(), lines);
@@ -138,87 +282,8 @@ export class Verilog_parser extends Ts_base_parser implements Parser_base {
 
                         process_array = process_array.concat(new_processes);
                         comments = '';
-
-                    } else if (cursor.nodeType === 'net_declaration' || cursor.nodeType === 'data_declaration') {
-                        last_element_position = cursor.startPosition.row;
-                        let new_signals: common_hdl.Signal_hdl[] =
-                            elements_hdl.get_signals(cursor.currentNode(), lines, general_comments);
-
-                        new_signals = utils.set_description_to_array(new_signals,
-                            comments, general_comments, this.comment_symbol);
-
-                        signals_array = signals_array.concat(new_signals);
-
-                        if (new_signals.length === 0 && enable_package === true || enable_package === undefined) {
-                            let new_types: common_hdl.Type_hdl[] =
-                                elements_hdl.get_types_pkg(cursor.currentNode(), lines);
-
-                            new_types = utils.set_description_to_array(new_types,
-                                comments, general_comments, this.comment_symbol);
-                            types_array = types_array.concat(new_types);
-                        }
-                        comments = '';
-                    } else if (cursor.nodeType === 'function_identifier' ||
-                        cursor.nodeType === 'function_declaration') {
-
-                        last_element_position = cursor.startPosition.row;
-                        let new_functions: common_hdl.Function_hdl[] =
-                            elements_hdl.get_functions(cursor.currentNode(), lines);
-
-                        new_functions = utils.set_description_to_array(new_functions,
-                            comments, general_comments, this.comment_symbol);
-
-                        functions_array = functions_array.concat(new_functions);
-                        comments = '';
-
-                    } else if (cursor.nodeType === 'any_parameter_declaration') {
-                        last_element_position = cursor.startPosition.row;
-                        let new_constants: common_hdl.Constant_hdl[] =
-                            elements_hdl.get_constants(cursor.currentNode(), lines);
-
-                        new_constants = utils.set_description_to_array(new_constants,
-                            comments, general_comments, this.comment_symbol);
-                        constants_array = constants_array.concat(new_constants);
-
-                        if (new_constants.length === 0) {
-                            let new_generics: common_hdl.Port_hdl[] =
-                                elements_hdl.get_generics(cursor.currentNode(),
-                                    lines, general_comments, 0, this.comment_symbol);
-
-                            new_generics = utils.set_description_to_array(new_generics,
-                                comments, general_comments, this.comment_symbol);
-                            generics_array = generics_array.concat(new_generics);
-                        }
-                        if (new_constants.length === 0 && enable_package === true) {
-                            const new_item_generic = elements_hdl.get_generics(
-                                cursor.currentNode(), lines, general_comments, 0, this.comment_symbol);
-
-                            new_constants = [];
-                            new_item_generic.forEach(element => {
-                                const item: common_hdl.Constant_hdl = {
-                                    hdl_element_type: common_hdl.TYPE_HDL_ELEMENT.CONSTANT,
-                                    info: element.info,
-                                    type: element.type,
-                                    default_value: element.default_value,
-                                };
-                                new_constants.push(item);
-                            });
-
-                            new_constants = utils.set_description_to_array(new_constants,
-                                comments, general_comments, this.comment_symbol);
-                            constants_array = constants_array.concat(new_constants);
-                        }
-
-                        comments = '';
-                    } else if (cursor.nodeType === 'type_declaration') {
-                        last_element_position = cursor.startPosition.row;
-                        let new_types: common_hdl.Type_hdl[] = elements_hdl.get_types_pkg(cursor.currentNode(), lines);
-
-                        new_types = utils.set_description_to_array(new_types,
-                            comments, general_comments, this.comment_symbol);
-                        types_array = types_array.concat(new_types);
-                        comments = '';
-                    } else if (cursor.nodeType === 'module_instantiation') {
+                    }
+                    else if (cursor.nodeType === 'module_instantiation') {
                         last_element_position = cursor.startPosition.row;
                         let new_instantiations: common_hdl.Instantiation_hdl[] =
                             elements_hdl.get_instantiations(cursor.currentNode(), lines);
@@ -227,12 +292,22 @@ export class Verilog_parser extends Ts_base_parser implements Parser_base {
                             comments, general_comments, this.comment_symbol);
                         instantiations_array = instantiations_array.concat(new_instantiations);
                         comments = '';
-                    } else {
-                        comments = '';
                     }
                 }
                 while (cursor.gotoNextSibling() !== false);
                 cursor.gotoParent();
+
+
+
+
+
+
+
+
+
+
+
+
             } else if (cursor.nodeType === 'module_ansi_header') {
                 const new_ports: common_hdl.Port_hdl[] =
                     elements_hdl.get_ansi_ports(cursor.currentNode(), lines, general_comments, this.comment_symbol);
@@ -243,10 +318,10 @@ export class Verilog_parser extends Ts_base_parser implements Parser_base {
 
                 generics_array = generics_array.concat(new_generics);
 
-                const new_constants: common_hdl.Constant_hdl[] = elements_hdl.get_ansi_constants(
-                    cursor.currentNode(), lines, general_comments, this.comment_symbol);
+                // const new_constants: common_hdl.Constant_hdl[] = elements_hdl.get_ansi_constants(
+                //     cursor.currentNode(), lines, general_comments, this.comment_symbol);
 
-                constants_array = constants_array.concat(new_constants);
+                // constants_array = constants_array.concat(new_constants);
                 comments = '';
             } else if (cursor.nodeType === 'port_declaration') {
                 last_element_position = cursor.startPosition.row;

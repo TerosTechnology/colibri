@@ -52,7 +52,7 @@ export function get_processes(tree: any, lines: any): common_hdl.Process_hdl[] {
 
 function get_process_label(p: any) {
     let label_txt = '';
-    const label = utils_hdl.get_item_from_childs(p, "block_identifier");
+    const label = utils_hdl.get_item_from_childs(p, "simple_identifier");
     if (label === undefined) {
         label_txt = 'unnamed';
     } else {
@@ -148,13 +148,12 @@ function get_type_type_pkg(input: any) {
     return name;
 }
 
-function get_type_name_pkg(input: any, lines: any) {
-    const arr = utils_hdl.search_multiple_in_tree(input, 'type_identifier');
-    if (arr.length === 0) {
+function get_type_name_pkg(input: any, _lines: any) {
+    const arr = utils_hdl.get_item_from_childs(input, 'simple_identifier');
+    if (arr === undefined) {
         return "undefined";
     }
-    const input_name = utils_hdl.extract_data(arr[0], lines);
-    return input_name;
+    return arr.text;
 }
 
 //******************************************************************************
@@ -231,7 +230,7 @@ function get_signal_type(input: any, lines: any, command: any) {
 }
 
 function get_signal_name(input: any, lines: any) {
-    const arr = utils_hdl.search_multiple_in_tree(input, 'net_identifier');
+    const arr = utils_hdl.search_multiple_in_tree(input, 'simple_identifier');
     const names: any[] = [];
     let name;
     if (arr.length === 0) {
@@ -254,6 +253,11 @@ function get_signal_name(input: any, lines: any) {
     return names;
 }
 
+//******************************************************************************
+//******************************************************************************
+// Type
+//******************************************************************************
+//******************************************************************************
 export function get_types(tree: any, lines: any): common_hdl.Signal_hdl[] {
     const items: common_hdl.Signal_hdl[] = [];
     const start_line = tree.startPosition.row;
@@ -372,7 +376,7 @@ export function get_constants(tree: any, lines: any): common_hdl.Constant_hdl[] 
     const items = [];
     const start_line = tree.startPosition.row;
 
-    const inputs = utils_hdl.search_multiple_in_tree(tree, 'local_parameter_declaration');
+    const inputs = utils_hdl.search_multiple_in_tree(tree, 'list_of_param_assignments');
     for (let x = 0; x < inputs.length; ++x) {
         const arr2 = utils_hdl.search_multiple_in_tree(inputs[x], 'param_assignment');
         for (let x2 = 0; x2 < arr2.length; ++x2) {
@@ -662,6 +666,8 @@ function add_port(element: any, key: any, name: any, direction: any, type: any, 
                 },
                 type: typeVar,
                 subtype: subtype,
+                inline_comment: "",
+                over_comment: "",
                 direction: ((ansi === true) ? directionVar : direction),
                 default_value: ""
             };
@@ -782,6 +788,8 @@ export function get_generics(tree: any, lines: any, comments: any, ansi: any, co
             type: get_generic_kind(inputs[x], lines),
             subtype: "",
             direction: "",
+            inline_comment: "",
+            over_comment: "",
             default_value: get_generic_default(inputs[x], lines),
         };
 

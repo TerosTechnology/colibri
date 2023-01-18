@@ -524,6 +524,8 @@ export class Parser_interface {
                             description: ""
                         },
                         type: '',
+                        inline_comment: "",
+                        over_comment: "",
                         subtype: "",
                         direction: direction_item[0].text,
                         default_value: ''

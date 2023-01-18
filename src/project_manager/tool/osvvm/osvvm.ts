@@ -195,7 +195,7 @@ export class Osvvm extends Generic_tool_handler {
         else if (simulator_name === e_tools_osvvm_simulator_name.nvc) {
             config_simulator_tcl = path_lib.join(scripts_base_dir, 'StartNVC.tcl');
         }
-        else if (simulator_name === e_tools_osvvm_simulator_name.riviera) {
+        else if (simulator_name === e_tools_osvvm_simulator_name.rivierapro) {
             config_simulator_tcl = path_lib.join(scripts_base_dir, 'StartUp.tcl');
         }
         else if (simulator_name === e_tools_osvvm_simulator_name.questa) {

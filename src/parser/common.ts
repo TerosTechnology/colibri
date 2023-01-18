@@ -92,6 +92,8 @@ export type Virtual_bus_hdl = {
 export type Port_hdl = {
     hdl_element_type: TYPE_HDL_ELEMENT.PORT;
     info: Common_info;
+    over_comment: string;
+    inline_comment: string;
     direction: string;
     default_value: string;
     type: string;

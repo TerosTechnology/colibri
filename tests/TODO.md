@@ -7,7 +7,7 @@
 - Documenter section test fsm
 - Documenter section test custom section
 - En documenter revisar todos el svg_path
-
+- Test completos del documenter con casos de prueba
 
 
 
@@ -27,8 +27,8 @@
 - Modelsim linter falla con path con espacio
 ## Project manager
 - Project manager no acepta nombres con espacio?
-- Los tools cuando se ejecutan debeŕian coger en installation path de la configuración
-
+## Config html
+- Que no se rompa según el tamaño de la pantalla
 
 
 

@@ -25,6 +25,7 @@ import { Ts_base_parser } from "../ts_base_parser";
 import * as elements_hdl from "./elements";
 import { HDL_LANG } from "../../common/general";
 import * as common_hdl from "../common";
+import * as Parser from "web-tree-sitter";
 
 export class Vhdl_parser extends Ts_base_parser implements Parser_base {
     comment_symbol = "";
@@ -41,7 +42,6 @@ export class Vhdl_parser extends Ts_base_parser implements Parser_base {
     public async init() {
         try {
             if (this.loaded !== true) {
-                const Parser = require('web-tree-sitter');
                 await Parser.init();
                 this.parser = new Parser();
                 const lang = await Parser.Language.load(path.join(__dirname, "..", "parsers", "tree-sitter-vhdl.wasm"));
@@ -139,7 +139,7 @@ export class Vhdl_parser extends Ts_base_parser implements Parser_base {
                             if (cursor.nodeType === 'identifier') {
                                 entity_name = cursor.nodeText;
                             }
-                            else if (cursor.nodeType === 'header') {
+                            else if (cursor.nodeType === 'entity_header') {
                                 result = elements_hdl.get_generics_and_ports(cursor.currentNode(), this.comment_symbol);
                             }
                         }
@@ -312,7 +312,8 @@ export class Vhdl_parser extends Ts_base_parser implements Parser_base {
                 }
                 comments = '';
             }
-            else if (cursor.nodeType === 'subprogram_body' || cursor.nodeType === 'subprogram_declaration') {
+            else if (cursor.nodeType === 'function_body' || cursor.nodeType === 'subprogram_body'
+                || cursor.nodeType === 'subprogram_declaration' || cursor.nodeType === 'procedure_declaration') {
                 const elements: common_hdl.Function_hdl[] = elements_hdl.get_function_body(cursor.currentNode());
                 for (let i = 0; i < elements.length; ++i) {
                     elements[i].info.description = comments;
