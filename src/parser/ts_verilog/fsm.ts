@@ -19,6 +19,7 @@
 
 import { Parser_fsm_base } from "../fsm_base_parser";
 import * as path from "path";
+import * as Parser from "web-tree-sitter";
 
 export class Paser_fsm_verilog extends Parser_fsm_base {
     private parser: any;
@@ -40,7 +41,6 @@ export class Paser_fsm_verilog extends Parser_fsm_base {
     async init() {
         if (this.loaded_wasm !== true) {
             try {
-                const Parser = require('web-tree-sitter');
                 await Parser.init();
                 this.parser = new Parser();
                 const lang = await Parser.Language.load(
@@ -445,7 +445,8 @@ export class Paser_fsm_verilog extends Parser_fsm_base {
                                 ifs.push(if_item_else);
                             }
                             else {
-                                const nonblocking_assignment = this.get_item_from_childs(statement_item, 'nonblocking_assignment');
+                                const nonblocking_assignment = this.get_item_from_childs(
+                                    statement_item, 'nonblocking_assignment');
                                 if (nonblocking_assignment !== undefined) {
                                     if (block_item !== undefined) {
                                         if_item_else.code = block_item;
@@ -474,7 +475,11 @@ export class Paser_fsm_verilog extends Parser_fsm_base {
                 };
                 while (break_p === false && cursor.gotoNextSibling() !== false) {
                     if (cursor.nodeType === 'cond_predicate') {
-                        const item = this.get_item_from_childs(cursor.currentNode(), 'expression_or_cond_pattern');
+                        let item = this.get_item_from_childs(cursor.currentNode(), 'expression');
+                        if (item === undefined) {
+                            item = this.get_item_from_childs(cursor.currentNode(), 'cond_pattern');
+                        }
+
                         if (item !== undefined) {
                             if_item.condition = item.text;
                             if_item.start_position = item.startPosition;
