@@ -189,6 +189,7 @@ export class Documenter extends section_creator.Creator {
         ////////////////////////////////////////////////////////////////////////
         if (output_type === common_documenter.doc_output_type.HTML) {
             document += `
+        <br><br><br><br><br><br>
     </article class="markdown-body">
     </body>
     `;

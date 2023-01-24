@@ -67,7 +67,9 @@ export class Parser_interface {
                         ports = elements_hdl.get_ansi_ports(cursor.currentNode(), lines, general_comments,
                             comment_symbol);
 
-                    } else if (cursor.nodeType === 'interface_item' || cursor.nodeType === 'non_port_interface_item') {
+                    } else if (cursor.nodeType === 'interface_item' || cursor.nodeType === 'non_port_interface_item'
+                        || cursor.nodeType === 'interface_or_generate_item'
+                        || cursor.nodeType === 'modport_declaration') {
                         last_element_position = cursor.startPosition.row;
 
                         const new_interface_items = this.get_interface_items(cursor.currentNode(),
@@ -129,7 +131,7 @@ export class Parser_interface {
                 interface_array.push(interface_i);
                 comments_description = '';
             }
-            else if (cursor.nodeType === 'package_item') {
+            else if (cursor.nodeType === 'package_or_generate_item_declaration') {
                 const new_type = this.get_types(cursor.currentNode());
 
                 const data_types = this.get_data_from_type(cursor.currentNode(), general_comments, comment_symbol);
@@ -282,8 +284,8 @@ export class Parser_interface {
         const net_declaration = utils.search_multiple_in_tree(tree, 'net_declaration');
         if (net_declaration.length === 1) {
             const item_name = utils.search_multiple_in_tree(net_declaration[0], 'list_of_net_decl_assignments');
-            const item_type = utils.search_multiple_in_tree(net_declaration[0], 'net_type_identifier');
-            if (item_name.length === 1 && item_type.length === 1) {
+            const item_type = utils.get_item_from_childs(data_declaration[0], 'simple_identifier');
+            if (item_name.length === 1 && item_type !== undefined) {
                 const item_names = item_name[0].text.split(',');
                 for (const name_inst of item_names) {
                     const start_line = item_name[0].startPosition.row;
@@ -299,7 +301,7 @@ export class Parser_interface {
                                 name: name_inst,
                                 description: ""
                             },
-                            type: item_type[0].text
+                            type: item_type.text
                         };
                         items.push(custom_item);
                     }
@@ -315,8 +317,8 @@ export class Parser_interface {
 
         if (data_declaration.length === 1) {
             const item_name = utils.search_multiple_in_tree(data_declaration[0], 'list_of_variable_decl_assignments');
-            const item_type = utils.search_multiple_in_tree(data_declaration[0], 'data_type_or_implicit1');
-            if (item_name.length === 1 && item_type.length === 1) {
+            const item_type = utils.get_item_from_childs(data_declaration[0], 'simple_identifier');
+            if (item_name.length === 1 && item_type !== undefined) {
                 const item_names = item_name[0].text.split(',');
                 for (const name_inst of item_names) {
                     const start_line = item_name[0].startPosition.row;
@@ -331,7 +333,7 @@ export class Parser_interface {
                                 name: name_inst,
                                 description: ""
                             },
-                            type: item_type[0].text
+                            type: item_type.text
                         };
                         items.push(custom_item);
                     }
@@ -343,8 +345,8 @@ export class Parser_interface {
         const net_declaration = utils.search_multiple_in_tree(tree, 'net_declaration');
         if (net_declaration.length === 1) {
             const item_name = utils.search_multiple_in_tree(net_declaration[0], 'list_of_net_decl_assignments');
-            const item_type = utils.search_multiple_in_tree(net_declaration[0], 'net_type_identifier');
-            if (item_name.length === 1 && item_type.length === 1) {
+            const item_type = utils.get_item_from_childs(net_declaration[0], 'simple_identifier');
+            if (item_name.length === 1 && item_type !== undefined) {
                 const item_names = item_name[0].text.split(',');
                 for (const name_inst of item_names) {
                     const start_line = item_name[0].startPosition.row;
@@ -360,7 +362,7 @@ export class Parser_interface {
                                 name: name_inst,
                                 description: ""
                             },
-                            type: item_type[0].text
+                            type: item_type.text
                         };
                         items.push(custom_item);
                     }
@@ -524,6 +526,8 @@ export class Parser_interface {
                             description: ""
                         },
                         type: '',
+                        inline_comment: "",
+                        over_comment: "",
                         subtype: "",
                         direction: direction_item[0].text,
                         default_value: ''
@@ -549,17 +553,17 @@ export class Parser_interface {
 
             const typedef = utils.search_multiple_in_tree(data_declaration_inst, 'typedef');
             const type = utils.search_multiple_in_tree(data_declaration_inst, 'data_type');
-            const name = utils.search_multiple_in_tree(data_declaration_inst, 'type_identifier');
+            const name = utils.get_item_from_childs(data_declaration_inst, 'simple_identifier');
 
-            if (typedef.length === 1 && type.length === 1 && name.length === 1) {
+            if (typedef.length === 1 && type.length === 1 && name !== undefined) {
                 const type_item: common_hdl.Type_hdl = {
                     hdl_element_type: common_hdl.TYPE_HDL_ELEMENT.TYPE,
                     info: {
                         position: {
-                            line: name[0].startPosition.row,
+                            line: name.startPosition.row,
                             column: 0
                         },
-                        name: name[0].text,
+                        name: name.text,
                         description: ""
                     },
                     type: type[0].text,

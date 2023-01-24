@@ -19,6 +19,7 @@
 
 import { Parser_fsm_base } from "../fsm_base_parser";
 import * as path from "path";
+import * as Parser from "web-tree-sitter";
 
 export class Paser_fsm_vhdl extends Parser_fsm_base {
     private parser: any;
@@ -36,7 +37,6 @@ export class Paser_fsm_vhdl extends Parser_fsm_base {
     async init() {
         if (this.loaded_wasm !== true) {
             try {
-                const Parser = require('web-tree-sitter');
                 await Parser.init();
                 this.parser = new Parser();
                 const lang = await Parser.Language.load(path.join(__dirname, "..", "parsers", "tree-sitter-vhdl.wasm"));
@@ -611,11 +611,18 @@ export class Paser_fsm_vhdl extends Parser_fsm_base {
         cursor.gotoFirstChild();
         do {
             if (cursor.nodeType === 'relation' || cursor.nodeType === 'logical_expression' ||
-                cursor.nodeType === 'parenthesized_expression') {
-                if (cursor.nodeType === 'parenthesized_expression') {
-                    condition = this.get_relation_of_parenthesized_expression(cursor.currentNode());
+                cursor.nodeType === 'parenthesized_expression' || cursor.nodeType === 'conditional_expression') {
+                if (cursor.nodeType === 'conditional_expression') {
+                    const ch = this.get_item_from_childs(cursor.currentNode(), 'parenthesized_expression');
+                    if (ch !== undefined) {
+                        condition = this.get_relation_of_parenthesized_expression(ch);
+                    }
+                    else {
+                        const simple_name = this.get_item_from_childs(cursor.currentNode(), 'simple_name');
+                        condition = simple_name.text;
+                    }
                 } else {
-                    condition = cursor.nodeText;
+                    condition = this.get_relation_of_parenthesized_expression(cursor.currentNode());
                 }
                 s_position = cursor.startPosition;
                 e_position = cursor.endPosition;
@@ -655,6 +662,9 @@ export class Paser_fsm_vhdl extends Parser_fsm_base {
             }
         }
         while (cursor.gotoNextSibling() !== false && break_p === false);
+        if (relation === undefined) {
+            relation = p.text;
+        }
         return relation;
     }
 
@@ -683,7 +693,7 @@ export class Paser_fsm_vhdl extends Parser_fsm_base {
         const cursor = p.walk();
         cursor.gotoFirstChild();
         do {
-            if (cursor.nodeType === 'simple_name') {
+            if (cursor.nodeType === 'simple_name' || cursor.nodeType === 'expression') {
                 state_variable_name = cursor.nodeText;
             } else if (cursor.nodeType === 'parenthesized_expression') {
                 state_variable_name = cursor.nodeText.replace('(', '').replace(')', '');

@@ -19,7 +19,7 @@
 import * as common_hdl from "../parser/common";
 
 export const DOXYGEN_FIELD_ARRAY = ['author', 'version', 'project', 'copyright', 'brief', 'details',
-    'custom_section_begin', 'custom_section_end'];
+    'custom_section_begin', 'custom_section_end', 'file', 'title', 'date'];
 
 export type Doxygen_element = {
     field: string;
@@ -168,6 +168,8 @@ export function get_virtual_bus(port_list: common_hdl.Port_hdl[]) {
                         name: port_i.info.name,
                         description: ""
                     },
+                    inline_comment: "",
+                    over_comment: "",
                     direction: port_i.direction,
                     default_value: port_i.default_value,
                     type: port_i.type,
@@ -201,6 +203,8 @@ export function get_virtual_bus(port_list: common_hdl.Port_hdl[]) {
                         name: port_i.info.name,
                         description: virtual_port_end.text
                     },
+                    inline_comment: "",
+                    over_comment: "",
                     direction: port_i.direction,
                     default_value: port_i.default_value,
                     type: port_i.type,
@@ -241,6 +245,8 @@ export function get_virtual_bus(port_list: common_hdl.Port_hdl[]) {
                         name: port_i.info.name,
                         description: ""
                     },
+                    inline_comment: "",
+                    over_comment: "",
                     direction: port_i.direction,
                     default_value: port_i.default_value,
                     type: port_i.type,

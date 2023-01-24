@@ -172,27 +172,27 @@ export function get_function_body(p: any): common_hdl.Function_hdl[] {
     const cursor = p.walk();
     element.info.position.line = cursor.startPosition.row;
     cursor.gotoFirstChild();
+    // do {
+    //     if (cursor.nodeType === 'pure_function_specification' || cursor.nodeType === 'procedure_specification') {
+    //         cursor.gotoFirstChild();
     do {
-        if (cursor.nodeType === 'pure_function_specification' || cursor.nodeType === 'procedure_specification') {
-            cursor.gotoFirstChild();
-            do {
-                if (cursor.nodeType === 'identifier') {
-                    element.info.name = cursor.nodeText;
-                }
-                else if (cursor.nodeType === 'formal_procedure_parameter_clause' ||
-                    cursor.nodeType === 'formal_function_parameter_clause') {
-                    const return_arguments = cursor.nodeText;
-                    element.arguments = utils_hdl.remove_break_line(utils_hdl.remove_comments(return_arguments)).trim();
-                }
-                else if (cursor.nodeType === 'return') {
-                    const return_definitions = cursor.nodeText;
-                    element.return = utils_hdl.remove_break_line(utils_hdl.remove_comments(return_definitions)).trim();
-                }
-            }
-            while (cursor.gotoNextSibling() === true && break_p === false);
+        if (cursor.nodeType === 'identifier') {
+            element.info.name = cursor.nodeText;
+        }
+        else if (cursor.nodeType === 'procedure_parameter_clause' ||
+            cursor.nodeType === 'function_parameter_clause') {
+            const return_arguments = cursor.nodeText;
+            element.arguments = utils_hdl.remove_break_line(utils_hdl.remove_comments(return_arguments)).trim();
+        }
+        else if (cursor.nodeType === 'return') {
+            const return_definitions = cursor.nodeText;
+            element.return = utils_hdl.remove_break_line(utils_hdl.remove_comments(return_definitions)).trim();
         }
     }
     while (cursor.gotoNextSibling() === true && break_p === false);
+    // }
+    // }
+    // while (cursor.gotoNextSibling() === true && break_p === false);
     return [element];
 }
 
@@ -323,18 +323,20 @@ export function get_generics_or_ports(p: any, comment_symbol: string): common_hd
 
     cursor.gotoFirstChild();
     do {
-        if (cursor.nodeType === 'interface_constant_declaration') {
+        if (cursor.nodeType === 'constant_interface_declaration') {
             const elements: common_hdl.Port_hdl[] = get_port_generic_element(cursor.currentNode());
             for (let i = 0; i < elements.length; ++i) {
-                elements[i].info.description = comments;
+                elements[i].info.description = comments.trimStart();
+                elements[i].over_comment = comments.trimStart();
                 elements_array.push(elements[i]);
             }
             comments = '';
         }
-        else if (cursor.nodeType === 'interface_signal_declaration') {
+        else if (cursor.nodeType === 'signal_interface_declaration') {
             const elements: common_hdl.Port_hdl[] = get_port_generic_element(cursor.currentNode());
             for (let i = 0; i < elements.length; ++i) {
-                elements[i].info.description = comments;
+                elements[i].info.description = comments.trimStart();
+                elements[i].over_comment = comments.trimStart();
                 elements_array.push(elements[i]);
             }
             comments = '';
@@ -352,10 +354,12 @@ export function get_generics_or_ports(p: any, comment_symbol: string): common_hd
                 for (let i = 0; i < elements_array.length; ++i) {
                     if (comment_line === elements_array[i].info.position.line) {
                         if (comment_symbol === '') {
-                            elements_array[i].info.description = txt_comment;
+                            elements_array[i].info.description = txt_comment.trimStart();
+                            elements_array[i].inline_comment = txt_comment.trimStart();
                         }
                         else {
-                            elements_array[i].info.description = txt_comment.slice(1);
+                            elements_array[i].info.description = txt_comment.slice(1).trimStart();
+                            elements_array[i].inline_comment = txt_comment.slice(1).trimStart();
                         }
                         check = true;
                     }
@@ -419,6 +423,8 @@ function get_port_generic_element(p: any): common_hdl.Port_hdl[] {
             },
             type: type,
             subtype: "",
+            inline_comment: "",
+            over_comment: "",
             direction: direction.toLocaleLowerCase(),
             default_value: default_value
         };

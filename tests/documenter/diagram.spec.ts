@@ -1,3 +1,21 @@
+// Copyright 2022 
+// Carlos Alberto Ruiz Naranjo [carlosruiznaranjo@gmail.com]
+//
+// This file is part of colibri2
+//
+// Colibri is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Colibri is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with colibri2.  If not, see <https://www.gnu.org/licenses/>.
+
 import * as fs from 'fs';
 import * as paht_lib from 'path';
 import * as common_hdl from "../../src/parser/common";
@@ -21,7 +39,9 @@ const port_input: common_hdl.Port_hdl = {
     direction: "input",
     default_value: "8",
     type: "std_logic_vector(1 downto 0)",
-    subtype: ""
+    subtype: "",
+    over_comment: '',
+    inline_comment: ''
 };
 
 const port_output: common_hdl.Port_hdl = {
@@ -37,7 +57,9 @@ const port_output: common_hdl.Port_hdl = {
     direction: "output",
     default_value: "11",
     type: "std_logic_vector(22 downto 0)",
-    subtype: ""
+    subtype: "",
+    over_comment: '',
+    inline_comment: ''
 };
 
 const generic_0: common_hdl.Port_hdl = {
@@ -53,7 +75,9 @@ const generic_0: common_hdl.Port_hdl = {
     direction: "",
     default_value: "8",
     type: "integer",
-    subtype: ""
+    subtype: "",
+    over_comment: '',
+    inline_comment: ''
 };
 
 const generic_1: common_hdl.Port_hdl = {
@@ -69,7 +93,9 @@ const generic_1: common_hdl.Port_hdl = {
     direction: "",
     default_value: "8",
     type: "std_logic",
-    subtype: ""
+    subtype: "",
+    over_comment: '',
+    inline_comment: ''
 };
 
 function check_test(test_index: number) {

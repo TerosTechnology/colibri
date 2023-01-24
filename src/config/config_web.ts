@@ -359,6 +359,9 @@ input[type='input'] {
         <a style="color:black" id="btn-tools-xsim">XSIM</a>
         <a style="color:black" id="btn-tools-yosys">Yosys</a>
         <a style="color:black" id="btn-tools-openfpga">OpenFPGA</a>
+        <a style="color:black" id="btn-tools-activehdl">Active-HDL</a>
+        <a style="color:black" id="btn-tools-nvc">NVC</a>
+        <a style="color:black" id="btn-tools-questa">Questa Advanced Simulator</a>
     </div>
 </div>
 
@@ -936,7 +939,7 @@ input[type='input'] {
                 <option value='activehdl'>Aldec Active-HDL</option>
                 <option value='ghdl'>GHDL</option>
                 <option value='nvc'>NVC</option>
-                <option value='riviera'>Aldec Riviera-PRO</option>
+                <option value='rivierapro'>Aldec Riviera-PRO</option>
                 <option value='questa'>Mentor/Siemens EDA Questa</option>
                 <option value='modelsim'>Mentor/Siemens EDA ModelSim</option>
                 <option value='vcs'>VCS</option>
@@ -1745,6 +1748,45 @@ input[type='input'] {
     <label></label>
       <br><br>
   </div>
+  <div id="tools-activehdl" class='main'>
+    <h3>Tools: Active-HDL</h3>
+    <hr></hr>
+    <p><i>Active-HDL™ is a Windows based, integrated FPGA Design Creation and Simulation solution for team-based environments.</i></p>
+    <label>Installation path:</label>
+      <br>
+      <input type='input' id='tools-activehdl-installation_path' class='radio-button'>
+      <br><br>
+    <label></label>
+      <br><br>
+    <label></label>
+      <br><br>
+  </div>
+  <div id="tools-nvc" class='main'>
+    <h3>Tools: NVC</h3>
+    <hr></hr>
+    <p><i>NVC is a VHDL compiler and simulator. NVC supports almost all of VHDL-2002 and it has been successfully used to simulate several real-world designs.</i></p>
+    <label>Installation path:</label>
+      <br>
+      <input type='input' id='tools-nvc-installation_path' class='radio-button'>
+      <br><br>
+    <label></label>
+      <br><br>
+    <label></label>
+      <br><br>
+  </div>
+  <div id="tools-questa" class='main'>
+    <h3>Tools: Questa Advanced Simulator</h3>
+    <hr></hr>
+    <p><i>The Questa advanced simulator is the core simulation and debug engine of the Questa verification solution.</i></p>
+    <label>Installation path:</label>
+      <br>
+      <input type='input' id='tools-questa-installation_path' class='radio-button'>
+      <br><br>
+    <label></label>
+      <br><br>
+    <label></label>
+      <br><br>
+  </div>
 
 </article> 
 
@@ -2048,6 +2090,24 @@ input[type='input'] {
   else{
     document.getElementById("tools-openfpga").style.visibility = "hidden"; 
   }
+  if ("tools" == tp0 && "activehdl" == tp1){
+    document.getElementById("tools-activehdl").style.visibility = "visible"; 
+  }
+  else{
+    document.getElementById("tools-activehdl").style.visibility = "hidden"; 
+  }
+  if ("tools" == tp0 && "nvc" == tp1){
+    document.getElementById("tools-nvc").style.visibility = "visible"; 
+  }
+  else{
+    document.getElementById("tools-nvc").style.visibility = "hidden"; 
+  }
+  if ("tools" == tp0 && "questa" == tp1){
+    document.getElementById("tools-questa").style.visibility = "visible"; 
+  }
+  else{
+    document.getElementById("tools-questa").style.visibility = "hidden"; 
+  }
   }
 
   enable_tab('general', 'general');
@@ -2242,6 +2302,18 @@ input[type='input'] {
 
   document.getElementById("btn-tools-openfpga").addEventListener("click", function() {
     enable_tab("tools","openfpga")
+  });
+
+  document.getElementById("btn-tools-activehdl").addEventListener("click", function() {
+    enable_tab("tools","activehdl")
+  });
+
+  document.getElementById("btn-tools-nvc").addEventListener("click", function() {
+    enable_tab("tools","nvc")
+  });
+
+  document.getElementById("btn-tools-questa").addEventListener("click", function() {
+    enable_tab("tools","questa")
   });
 
   /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - 
@@ -2769,6 +2841,15 @@ input[type='input'] {
     config["tools"]["openfpga"]["script_name"] = element_value
     element_value = document.getElementById("tools-openfpga-yosys_synth_options").value.split(',');
     config["tools"]["openfpga"]["yosys_synth_options"] = element_value
+    config["tools"]["activehdl"] = {}
+    element_value = document.getElementById("tools-activehdl-installation_path").value;
+    config["tools"]["activehdl"]["installation_path"] = element_value
+    config["tools"]["nvc"] = {}
+    element_value = document.getElementById("tools-nvc-installation_path").value;
+    config["tools"]["nvc"]["installation_path"] = element_value
+    config["tools"]["questa"] = {}
+    element_value = document.getElementById("tools-questa-installation_path").value;
+    config["tools"]["questa"]["installation_path"] = element_value
     return config;
   }
 
@@ -2974,6 +3055,9 @@ input[type='input'] {
     document.getElementById("tools-openfpga-makefile_name").value = config["tools"]["openfpga"]["makefile_name"];
     document.getElementById("tools-openfpga-script_name").value = config["tools"]["openfpga"]["script_name"];
     element_value = document.getElementById("tools-openfpga-yosys_synth_options").value = String(config["tools"]["openfpga"]["yosys_synth_options"]);
+    document.getElementById("tools-activehdl-installation_path").value = config["tools"]["activehdl"]["installation_path"];
+    document.getElementById("tools-nvc-installation_path").value = config["tools"]["nvc"]["installation_path"];
+    document.getElementById("tools-questa-installation_path").value = config["tools"]["questa"]["installation_path"];
   }
 
   function open_submenu_icon(x) {

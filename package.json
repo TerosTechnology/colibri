@@ -76,7 +76,7 @@
         "temp": "0.9.4",
         "tiny-glob": "^0.2.9",
         "wavedrom": "2.6.8",
-        "web-tree-sitter": "^0.16.2",
+        "web-tree-sitter": "^0.20.7",
         "chokidar": "3.5.3"
     },
     "devDependencies": {

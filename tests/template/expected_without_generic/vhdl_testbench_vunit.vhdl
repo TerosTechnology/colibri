@@ -17,12 +17,6 @@ architecture bench of test_entity_name_tb is
   -- Clock period
   constant clk_period : time := 5 ns;
   -- Generics
-  constant a : integer;
-  constant b : unsigned;
-  constant c : signed;
-  constant d : std_logic;
-  constant e : std_logic_vector;
-  constant f : std_logic_vector(5 downto 0);
   -- Ports
   signal g : std_logic;
   signal h : std_logic;
@@ -30,14 +24,6 @@ architecture bench of test_entity_name_tb is
 begin
 
   test_entity_name_inst : entity work.test_entity_name
-  generic map (
-    a => a,
-    b => b,
-    c => c,
-    d => d,
-    e => e,
-    f => f
-  )
   port map (
     g => g,
     h => h,

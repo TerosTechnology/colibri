@@ -32,12 +32,15 @@ generic (
     c, d : std_logic_vector(1 downto 0)
   );
 port(
+  --! over comment 0
   x: in std_logic;
-  y: out std_logic;
+  y: out std_logic; --! inline comment 0
   z: inout std_logic;
-  m: in std_logic_vector(31 downto 0);
+  --! over comment 1
+  m: in std_logic_vector(31 downto 0); --! inline comment
   b: in std_logic_vector(31 downto 0) := "0010";
-  c,d : in std_logic := '1'
+  --! over comment 2
+  c,d : in std_logic := '1' --! inline comment 2
 );
 end test_entity_name;  
 
@@ -127,6 +130,8 @@ describe('Check entity VHDL', async function () {
                     description: ""
                 },
                 direction: "",
+                inline_comment: "",
+                over_comment: "",
                 default_value: "",
                 type: "integer",
                 subtype: ""
@@ -146,6 +151,8 @@ describe('Check entity VHDL', async function () {
                     description: ""
                 },
                 direction: "",
+                inline_comment: "",
+                over_comment: "",
                 default_value: "'1'",
                 type: "std_logic",
                 subtype: ""
@@ -165,6 +172,8 @@ describe('Check entity VHDL', async function () {
                     description: ""
                 },
                 direction: "",
+                inline_comment: "",
+                over_comment: "",
                 default_value: '"1"',
                 type: "std_logic_vector(1 downto 0)",
                 subtype: ""
@@ -184,6 +193,8 @@ describe('Check entity VHDL', async function () {
                     description: ""
                 },
                 direction: "",
+                inline_comment: "",
+                over_comment: "",
                 default_value: '"1"',
                 type: "std_logic_vector(1 downto 0)",
                 subtype: ""
@@ -200,6 +211,8 @@ describe('Check entity VHDL', async function () {
         equal(actual.direction, expected.direction);
         equal(actual.type, expected.type);
         equal(actual.default_value, expected.default_value);
+        equal(actual.inline_comment.trim(), expected.inline_comment.trim());
+        equal(actual.over_comment.trim(), expected.over_comment.trim());
     }
 
     describe('Check port.', async function () {
@@ -220,9 +233,11 @@ describe('Check entity VHDL', async function () {
                         column: 0
                     },
                     name: "x",
-                    description: ""
+                    description: "over comment 0"
                 },
                 direction: "in",
+                inline_comment: "",
+                over_comment: "over comment 0",
                 default_value: "",
                 type: "std_logic",
                 subtype: ""
@@ -239,9 +254,11 @@ describe('Check entity VHDL', async function () {
                         column: 0
                     },
                     name: "y",
-                    description: ""
+                    description: "inline comment 0"
                 },
                 direction: "out",
+                inline_comment: "inline comment 0",
+                over_comment: "",
                 default_value: "",
                 type: "std_logic",
                 subtype: ""
@@ -261,6 +278,8 @@ describe('Check entity VHDL', async function () {
                     description: ""
                 },
                 direction: "inout",
+                inline_comment: "",
+                over_comment: "",
                 default_value: "",
                 type: "std_logic",
                 subtype: ""
@@ -277,9 +296,11 @@ describe('Check entity VHDL', async function () {
                         column: 0
                     },
                     name: "m",
-                    description: ""
+                    description: "inline comment"
                 },
                 direction: "in",
+                inline_comment: "inline comment",
+                over_comment: "over comment 1",
                 default_value: "",
                 type: "std_logic_vector(31 downto 0)",
                 subtype: ""
@@ -299,6 +320,8 @@ describe('Check entity VHDL', async function () {
                     description: ""
                 },
                 direction: "in",
+                inline_comment: "",
+                over_comment: "",
                 default_value: '"0010"',
                 type: "std_logic_vector(31 downto 0)",
                 subtype: ""
@@ -315,9 +338,11 @@ describe('Check entity VHDL', async function () {
                         column: 0
                     },
                     name: "c",
-                    description: ""
+                    description: "inline comment 2"
                 },
                 direction: "in",
+                inline_comment: "inline comment 2",
+                over_comment: "over comment 2",
                 default_value: "'1'",
                 type: "std_logic",
                 subtype: ""
@@ -334,9 +359,11 @@ describe('Check entity VHDL', async function () {
                         column: 0
                     },
                     name: "d",
-                    description: ""
+                    description: "inline comment 2"
                 },
                 direction: "in",
+                inline_comment: "inline comment 2",
+                over_comment: "over comment 2",
                 default_value: "'1'",
                 type: "std_logic",
                 subtype: ""
@@ -351,6 +378,7 @@ describe('Check entity VHDL', async function () {
     function check_signal(actual: common.Signal_hdl, expected: common.Signal_hdl) {
         equal(actual.info.name, expected.info.name);
         equal(actual.type, expected.type);
+        equal(actual.info.description, expected.info.description);
         // equal(actual.default_value, expected.default_value);
     }
 
@@ -418,6 +446,7 @@ describe('Check entity VHDL', async function () {
         equal(actual.info.name, expected.info.name);
         equal(actual.type, expected.type);
         equal(actual.default_value, expected.default_value);
+        equal(actual.info.description, expected.info.description);
     }
 
     describe('Check constant.', async function () {
@@ -428,25 +457,25 @@ describe('Check entity VHDL', async function () {
             result = await parse();
             element_array = result.get_constant_array();
         });
-        // it(`Check simple`, function () {
-        //     let actual = element_array[0];
-        //     let expected: Constant_hdl = {
-        //         hdl_element_type: TYPE_HDL_ELEMENT.CONSTANT,
-        //         info: {
-        //             position: {
-        //                 line: 0,
-        //                 column: 0
-        //             },
-        //             name: "a",
-        //             description: ""
-        //         },
-        //         type: "integer",
-        //         default_value: ""
-        //     };
-        //     check_constant(actual, expected)
-        // });
-        it(`Check multimple declaration in one line 0`, function () {
+        it(`Check simple`, function () {
             const actual = element_array[0];
+            const expected: common.Constant_hdl = {
+                hdl_element_type: common.TYPE_HDL_ELEMENT.CONSTANT,
+                info: {
+                    position: {
+                        line: 0,
+                        column: 0
+                    },
+                    name: "d",
+                    description: ""
+                },
+                type: "integer",
+                default_value: ""
+            };
+            check_constant(actual, expected);
+        });
+        it(`Check multimple declaration in one line 0`, function () {
+            const actual = element_array[1];
             const expected: common.Constant_hdl = {
                 hdl_element_type: common.TYPE_HDL_ELEMENT.CONSTANT,
                 info: {
@@ -463,7 +492,7 @@ describe('Check entity VHDL', async function () {
             check_constant(actual, expected);
         });
         it(`Check multimple declaration in one line 1`, function () {
-            const actual = element_array[1];
+            const actual = element_array[2];
             const expected: common.Constant_hdl = {
                 hdl_element_type: common.TYPE_HDL_ELEMENT.CONSTANT,
                 info: {
@@ -486,6 +515,7 @@ describe('Check entity VHDL', async function () {
     function check_type(actual: common.Type_hdl, expected: common.Type_hdl) {
         equal(actual.info.name, expected.info.name);
         equal(actual.type, expected.type);
+        equal(actual.info.description, expected.info.description);
     }
 
     describe('Check type.', async function () {
@@ -523,6 +553,7 @@ describe('Check entity VHDL', async function () {
         equal(actual.type, expected.type);
         equal(actual.arguments, expected.arguments);
         equal(actual.return, expected.return);
+        equal(actual.info.description, expected.info.description);
     }
 
     describe('Check function.', async function () {
@@ -558,6 +589,7 @@ describe('Check entity VHDL', async function () {
     function check_process(actual: common.Process_hdl, expected: common.Process_hdl) {
         equal(actual.info.name, expected.info.name);
         equal(actual.sens_list, expected.sens_list);
+        equal(actual.info.description, expected.info.description);
     }
 
     describe('Check process.', async function () {
@@ -626,6 +658,7 @@ describe('Check entity VHDL', async function () {
     function check_instantiation(actual: common.Instantiation_hdl, expected: common.Instantiation_hdl) {
         equal(actual.info.name, expected.info.name);
         equal(actual.type, expected.type);
+        equal(actual.info.description, expected.info.description);
     }
 
     describe('Check instantiation.', async function () {

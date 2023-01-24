@@ -195,7 +195,7 @@ export class Osvvm extends Generic_tool_handler {
         else if (simulator_name === e_tools_osvvm_simulator_name.nvc) {
             config_simulator_tcl = path_lib.join(scripts_base_dir, 'StartNVC.tcl');
         }
-        else if (simulator_name === e_tools_osvvm_simulator_name.riviera) {
+        else if (simulator_name === e_tools_osvvm_simulator_name.rivierapro) {
             config_simulator_tcl = path_lib.join(scripts_base_dir, 'StartUp.tcl');
         }
         else if (simulator_name === e_tools_osvvm_simulator_name.questa) {
@@ -247,7 +247,6 @@ exit
         });
         callback_stream(exec_i);
     }
-
 
     get_test_result(working_folder: string, project_name: string, toplevel: string): t_yaml_result[] {
         const result_path = path_lib.join(working_folder, `${project_name}.yml`);
@@ -312,4 +311,14 @@ exit
         return result;
     }
 
+    get_simulator_installation_path(prj: t_project_definition): string {
+        const config = prj.config_manager.get_config();
+        const simulator_name = prj.config_manager.get_config().tools.osvvm.simulator_name;
+
+        let installation_path = "";
+        try {
+            installation_path = (<any>config.tools)[simulator_name].installation_path;
+        } catch (error) { /* empty */ }
+        return installation_path;
+    }
 }

@@ -1,6 +1,23 @@
+// Copyright 2022 
+// Carlos Alberto Ruiz Naranjo [carlosruiznaranjo@gmail.com]
+//
+// This file is part of colibri2
+//
+// Colibri is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Colibri is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with colibri2.  If not, see <https://www.gnu.org/licenses/>.
+
 import * as fs from 'fs';
 import * as paht_lib from 'path';
-// import * as common_hdl from "../../src/parser/common";
 import * as common_documenter from "../../src/documenter/common";
 import { Documenter } from "../../src/documenter/documenter";
 import { HDL_LANG } from "../../src/common/general";
@@ -8,6 +25,7 @@ import * as common_process from "../../src/process/common";
 import { get_os } from "../../src/process/utils";
 import * as cfg from "../../src/config/config_declaration";
 import { t_documenter_options } from "../../src/config/auxiliar_config";
+import { equal } from "assert";
 
 const C_OUTPUT_BASE_PATH = paht_lib.join(__dirname, 'complete');
 
@@ -66,8 +84,20 @@ async function run(hdl_type: string, hdl_lang: HDL_LANG, output_type_inst: commo
     const documenter = new Documenter();
     const output_path = get_output_path(output_type_inst, hdl_type, hdl_lang);
     await documenter.save_document(input.hdl_code, hdl_lang, configuration, input.path, output_path, output_type_inst);
+    if (output_type_inst === common_documenter.doc_output_type.HTML) {
+        check_html(hdl_type, hdl_lang);
+    }
 }
 
+function check_html(hdl_type: string, hdl_lang: HDL_LANG) {
+    const expected_path = paht_lib.join(C_OUTPUT_BASE_PATH, 'expected', `${hdl_type}_${hdl_lang}_html`, 'output.html');
+    const output_path = paht_lib.join(C_OUTPUT_BASE_PATH, 'out', `${hdl_type}_${hdl_lang}_html`, 'output.html');
+
+    const expected_content = fs.readFileSync(expected_path).toString('utf8');
+    const output_content = fs.readFileSync(output_path).toString('utf8');
+
+    equal(expected_content, output_content);
+}
 
 function get_input(hdl_type: string, hdl_lang: HDL_LANG) {
     const input_path =

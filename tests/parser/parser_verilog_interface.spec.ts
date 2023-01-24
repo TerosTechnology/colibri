@@ -98,6 +98,8 @@ const parameter_item: common.Port_hdl = {
     type: "",
     subtype: "",
     direction: "",
+    over_comment: "",
+    inline_comment: "",
     default_value: "15",
 };
 //Interface logic
@@ -152,6 +154,8 @@ const port_item_0: common.Port_hdl = {
     type: "",
     subtype: "",
     direction: "input",
+    over_comment: "",
+    inline_comment: "",
     default_value: ""
 };
 const port_item_1: common.Port_hdl = {
@@ -167,7 +171,9 @@ const port_item_1: common.Port_hdl = {
     type: "",
     subtype: "",
     direction: "output",
-    default_value: ""
+    default_value: "",
+    over_comment: "",
+    inline_comment: ""
 };
 const port_array = [port_item_0, port_item_1];
 

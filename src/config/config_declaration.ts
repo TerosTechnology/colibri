@@ -81,6 +81,9 @@ export type e_config = {
         "xsim" : e_tools_xsim,
         "yosys" : e_tools_yosys,
         "openfpga" : e_tools_openfpga,
+        "activehdl" : e_tools_activehdl,
+        "nvc" : e_tools_nvc,
+        "questa" : e_tools_questa,
     }
 };
 export type e_general_general = {
@@ -428,6 +431,18 @@ export type e_tools_openfpga = {
     yosys_synth_options : any[],
 };
     
+export type e_tools_activehdl = {
+    installation_path : string,
+};
+    
+export type e_tools_nvc = {
+    installation_path : string,
+};
+    
+export type e_tools_questa = {
+    installation_path : string,
+};
+    
 export enum e_documentation_general_language {
     english = "english",
     russian = "russian",
@@ -590,7 +605,7 @@ export enum e_tools_osvvm_simulator_name {
     activehdl = "activehdl",
     ghdl = "ghdl",
     nvc = "nvc",
-    riviera = "riviera",
+    rivierapro = "rivierapro",
     questa = "questa",
     modelsim = "modelsim",
     vcs = "vcs",
@@ -1006,6 +1021,15 @@ export function get_default_config(): e_config {
                 makefile_name : "",
                 script_name : "",
                 yosys_synth_options : [],
+            },
+            activehdl: {
+                installation_path : "",
+            },
+            nvc: {
+                installation_path : "",
+            },
+            questa: {
+                installation_path : "",
             },
         },
     };
@@ -1647,8 +1671,8 @@ export function get_config_from_json(json_config: any): e_config {
     if ( current_value_68 === "nvc"){
         default_config['tools']['osvvm']['simulator_name'] = e_tools_osvvm_simulator_name.nvc;
     }
-    if ( current_value_68 === "riviera"){
-        default_config['tools']['osvvm']['simulator_name'] = e_tools_osvvm_simulator_name.riviera;
+    if ( current_value_68 === "rivierapro"){
+        default_config['tools']['osvvm']['simulator_name'] = e_tools_osvvm_simulator_name.rivierapro;
     }
     if ( current_value_68 === "questa"){
         default_config['tools']['osvvm']['simulator_name'] = e_tools_osvvm_simulator_name.questa;
@@ -2579,6 +2603,24 @@ export function get_config_from_json(json_config: any): e_config {
     const current_value_200 = json_config['tools']['openfpga']['yosys_synth_options'];
     if (Array.isArray(current_value_200)){
         default_config['tools']['openfpga']['yosys_synth_options'] = current_value_200;
+    }
+            
+    // tools -> activehdl -> installation_path
+    const current_value_201 = json_config['tools']['activehdl']['installation_path'];
+    if (typeof current_value_201 === 'string'){
+        default_config['tools']['activehdl']['installation_path'] = current_value_201;
+    }
+            
+    // tools -> nvc -> installation_path
+    const current_value_202 = json_config['tools']['nvc']['installation_path'];
+    if (typeof current_value_202 === 'string'){
+        default_config['tools']['nvc']['installation_path'] = current_value_202;
+    }
+            
+    // tools -> questa -> installation_path
+    const current_value_203 = json_config['tools']['questa']['installation_path'];
+    if (typeof current_value_203 === 'string'){
+        default_config['tools']['questa']['installation_path'] = current_value_203;
     }
             
 
