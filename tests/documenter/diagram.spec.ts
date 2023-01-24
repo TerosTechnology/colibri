@@ -39,7 +39,9 @@ const port_input: common_hdl.Port_hdl = {
     direction: "input",
     default_value: "8",
     type: "std_logic_vector(1 downto 0)",
-    subtype: ""
+    subtype: "",
+    over_comment: '',
+    inline_comment: ''
 };
 
 const port_output: common_hdl.Port_hdl = {
@@ -55,7 +57,9 @@ const port_output: common_hdl.Port_hdl = {
     direction: "output",
     default_value: "11",
     type: "std_logic_vector(22 downto 0)",
-    subtype: ""
+    subtype: "",
+    over_comment: '',
+    inline_comment: ''
 };
 
 const generic_0: common_hdl.Port_hdl = {
@@ -71,7 +75,9 @@ const generic_0: common_hdl.Port_hdl = {
     direction: "",
     default_value: "8",
     type: "integer",
-    subtype: ""
+    subtype: "",
+    over_comment: '',
+    inline_comment: ''
 };
 
 const generic_1: common_hdl.Port_hdl = {
@@ -87,7 +93,9 @@ const generic_1: common_hdl.Port_hdl = {
     direction: "",
     default_value: "8",
     type: "std_logic",
-    subtype: ""
+    subtype: "",
+    over_comment: '',
+    inline_comment: ''
 };
 
 function check_test(test_index: number) {

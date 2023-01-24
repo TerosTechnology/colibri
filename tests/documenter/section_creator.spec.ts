@@ -225,7 +225,9 @@ function create_hdl_element(): common_hdl.Hdl_element {
         direction: "input",
         default_value: "8",
         type: "std_logic_vector(1 downto 0)",
-        subtype: ""
+        subtype: "",
+        over_comment: '',
+        inline_comment: ''
     };
     hdl_element.add_port(port_0);
 
@@ -242,7 +244,9 @@ function create_hdl_element(): common_hdl.Hdl_element {
         direction: "output",
         default_value: "11",
         type: "std_logic_vector(22 downto 0)",
-        subtype: ""
+        subtype: "",
+        over_comment: '',
+        inline_comment: ''
     };
     hdl_element.add_port(port_1);
     ////////////////////////////////////////////////////////////////////////////
@@ -261,7 +265,9 @@ function create_hdl_element(): common_hdl.Hdl_element {
         direction: "",
         default_value: "8",
         type: "integer",
-        subtype: ""
+        subtype: "",
+        over_comment: '',
+        inline_comment: ''
     };
     hdl_element.add_generic(generic_0);
 
@@ -278,7 +284,9 @@ function create_hdl_element(): common_hdl.Hdl_element {
         direction: "",
         default_value: "8",
         type: "std_logic",
-        subtype: ""
+        subtype: "",
+        over_comment: '',
+        inline_comment: ''
     };
     hdl_element.add_generic(generic_1);
     ////////////////////////////////////////////////////////////////////////////
