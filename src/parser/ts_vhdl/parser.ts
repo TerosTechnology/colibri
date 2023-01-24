@@ -201,8 +201,8 @@ export class Vhdl_parser extends Ts_base_parser implements Parser_base {
     private get_architecture_body_elements(code: string, hdl_element: Hdl_element) {
         try {
             const arch_body = this.get_architecture_body(code);
-            const cursor = arch_body.walk();
-            let comments = '';
+            const cursor = arch_body.declaration.walk();
+            let comments = arch_body.comment;
 
             cursor.gotoFirstChild();
             do {
@@ -239,6 +239,7 @@ export class Vhdl_parser extends Ts_base_parser implements Parser_base {
     private get_architecture_body(code: string) {
         const tree = this.parse(code);
 
+        let description = "";
         let break_p = false;
         let counter = 0;
         let arch_body = undefined;
@@ -257,6 +258,12 @@ export class Vhdl_parser extends Ts_base_parser implements Parser_base {
                                     arch_body = cursor.currentNode();
                                     break_p = true;
                                 }
+                                else if (cursor.nodeType === 'comment') {
+                                    description += this.get_comment(cursor.nodeText);
+                                }
+                                else {
+                                    description = "";
+                                }
                             }
                             while (cursor.gotoNextSibling() === true && break_p === false);
                         }
@@ -266,7 +273,7 @@ export class Vhdl_parser extends Ts_base_parser implements Parser_base {
             }
         }
         while (cursor.gotoNextSibling() === true && break_p === false);
-        return arch_body;
+        return { "declaration": arch_body, "comment": description };
     }
 
     //**************************************************************************
@@ -287,12 +294,12 @@ export class Vhdl_parser extends Ts_base_parser implements Parser_base {
         const constants_array: common_hdl.Constant_hdl[] = [];
         const functions_array: common_hdl.Function_hdl[] = [];
 
-        if (top_declaration === undefined) {
+        if (top_declaration.declaration === undefined) {
             return;
         }
 
-        const cursor = top_declaration.walk();
-        let comments = '';
+        const cursor = top_declaration.declaration.walk();
+        let comments = top_declaration.comment;
 
         cursor.gotoFirstChild();
         do {
@@ -405,6 +412,7 @@ export class Vhdl_parser extends Ts_base_parser implements Parser_base {
     private get_architecture_declaration(code: string) {
         const tree = this.parse(code);
 
+        let description = "";
         let break_p = false;
         let counter = 0;
         let arch_declaration = undefined;
@@ -423,6 +431,12 @@ export class Vhdl_parser extends Ts_base_parser implements Parser_base {
                                     arch_declaration = cursor.currentNode();
                                     break_p = true;
                                 }
+                                else if (cursor.nodeType === 'comment') {
+                                    description += this.get_comment(cursor.nodeText);
+                                }
+                                else {
+                                    description = "";
+                                }
                             }
                             while (cursor.gotoNextSibling() === true && break_p === false);
                         }
@@ -432,7 +446,7 @@ export class Vhdl_parser extends Ts_base_parser implements Parser_base {
             }
         }
         while (cursor.gotoNextSibling() === true && break_p === false);
-        return arch_declaration;
+        return { "declaration": arch_declaration, "comment": description };
     }
 
     //**************************************************************************
@@ -502,6 +516,7 @@ export class Vhdl_parser extends Ts_base_parser implements Parser_base {
         const tree = this.parse(code);
 
         let declaration = undefined;
+        let description = "";
 
         let break_p = false;
         const cursor = tree.walk();
@@ -516,6 +531,12 @@ export class Vhdl_parser extends Ts_base_parser implements Parser_base {
                             if (cursor.nodeType === 'declarative_part') {
                                 declaration = cursor.currentNode();
                                 break_p = true;
+                            }
+                            else if (cursor.nodeType === 'comment') {
+                                description += this.get_comment(cursor.nodeText);
+                            }
+                            else {
+                                description = "";
                             }
                         }
                         while (cursor.gotoNextSibling() === true && break_p === false);
@@ -535,7 +556,7 @@ export class Vhdl_parser extends Ts_base_parser implements Parser_base {
             }
         }
         while (cursor.gotoNextSibling() === true && break_p === false);
-        return declaration;
+        return { "declaration": declaration, "comment": description };
     }
 }
 
