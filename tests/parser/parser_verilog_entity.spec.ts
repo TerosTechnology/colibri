@@ -48,7 +48,7 @@ module test_entity_name
 
     wire m;
     wire n, p;
-    reg [1:0] q;
+    reg [$clog2(clk_freq_hz)] q;
 
     localparam r = 2;
 
