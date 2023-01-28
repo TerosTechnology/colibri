@@ -230,7 +230,10 @@ function get_signal_type(input: any, lines: any, command: any) {
 }
 
 function get_signal_name(input: any, lines: any) {
-    const arr = utils_hdl.search_multiple_in_tree(input, 'simple_identifier');
+    let arr = utils_hdl.search_multiple_in_tree(input, 'variable_decl_assignment');
+    if (arr.length === 0) {
+        arr = utils_hdl.search_multiple_in_tree(input, 'net_decl_assignment');
+    }
     const names: any[] = [];
     let name;
     if (arr.length === 0) {
