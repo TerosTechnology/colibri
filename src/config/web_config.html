@@ -1460,20 +1460,6 @@ input[type='input'] {
       <br>
       <input type='input' id='tools-veriblelint-installation_path' class='radio-button'>
       <br><br>
-    <label>Ruleset.</label>
-        <br>
-        <select name='select' id='tools-veriblelint-ruleset'>
-                <option value='default'>Default</option>
-                <option value='all'>All</option>
-                <option value='none'>None</option>
-        </select>
-      <br><br>
-    <label>Extra command line arguments passed to the Verible tool.</label>
-      <input type='input' id='tools-veriblelint-verible_lint_args' class='radio-button'>
-      <br><br>
-    <label>What rules to use. Prefix a rule name with “-” to disable it.</label>
-      <input type='input' id='tools-veriblelint-rules' class='radio-button'>
-      <br><br>
     <label></label>
       <br><br>
     <label></label>
@@ -2720,12 +2706,6 @@ input[type='input'] {
     config["tools"]["veriblelint"] = {}
     element_value = document.getElementById("tools-veriblelint-installation_path").value;
     config["tools"]["veriblelint"]["installation_path"] = element_value
-    element_value = document.getElementById("tools-veriblelint-ruleset").value;
-    config["tools"]["veriblelint"]["ruleset"] = element_value
-    element_value = document.getElementById("tools-veriblelint-verible_lint_args").value.split(',');
-    config["tools"]["veriblelint"]["verible_lint_args"] = element_value
-    element_value = document.getElementById("tools-veriblelint-rules").value.split(',');
-    config["tools"]["veriblelint"]["rules"] = element_value
     config["tools"]["verilator"] = {}
     element_value = document.getElementById("tools-verilator-installation_path").value;
     config["tools"]["verilator"]["installation_path"] = element_value
@@ -2988,9 +2968,6 @@ input[type='input'] {
     element_value = document.getElementById("tools-vcs-vcs_options").value = String(config["tools"]["vcs"]["vcs_options"]);
     element_value = document.getElementById("tools-vcs-run_options").value = String(config["tools"]["vcs"]["run_options"]);
     document.getElementById("tools-veriblelint-installation_path").value = config["tools"]["veriblelint"]["installation_path"];
-    document.getElementById("tools-veriblelint-ruleset").value = config["tools"]["veriblelint"]["ruleset"];
-    element_value = document.getElementById("tools-veriblelint-verible_lint_args").value = String(config["tools"]["veriblelint"]["verible_lint_args"]);
-    element_value = document.getElementById("tools-veriblelint-rules").value = String(config["tools"]["veriblelint"]["rules"]);
     document.getElementById("tools-verilator-installation_path").value = config["tools"]["verilator"]["installation_path"];
     document.getElementById("tools-verilator-mode").value = config["tools"]["verilator"]["mode"];
     element_value = document.getElementById("tools-verilator-libs").value = String(config["tools"]["verilator"]["libs"]);

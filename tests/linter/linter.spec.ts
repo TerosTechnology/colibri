@@ -260,3 +260,42 @@ describe('Check Vivado verilog', function () {
         deepEqual(actual_errors, expected_errors);
     });
 });
+
+describe('Check verible', function () {
+    const LINTER_NAME = cfg.e_linter_general_lstyle_verilog.verible;
+
+    it(`Check error messages with linter in system path`, async function () {
+        const file = path_lib.join(__dirname, 'helpers', 'xvlog_v.out');
+        const fs = require('fs');
+        const content = fs.readFileSync(file, 'utf8');
+
+        const expected_errors: common.l_error[] = [];
+
+        const linter = get_linter();
+        const actual_errors = await linter.lint_from_file(LINTER_NAME, file, linter_options);
+
+        expected_errors.push(
+            {
+                severity: common.LINTER_ERROR_SEVERITY.ERROR,
+                description: "syntax error near 'assign'",
+                code: 'VRFC 10-4982',
+                location: {
+                    file: file,
+                    position: [4, 0]
+                }
+            }
+        );
+        expected_errors.push(
+            {
+                severity: common.LINTER_ERROR_SEVERITY.ERROR,
+                description: "Verilog 2000 keyword assign used in incorrect context",
+                code: 'VRFC 10-2790',
+                location: {
+                    file: file,
+                    position: [4, 0]
+                }
+            }
+        );
+        deepEqual(actual_errors, expected_errors);
+    });
+});

@@ -61,7 +61,8 @@ export function extract_data(node: any, lines: string[]) {
 
 export function set_description_to_array(arr: any, txt: string, general_comments: any, comment_symbol: string) {
     for (let i = 0; i < arr.length; ++i) {
-        const comment_candidate = general_comments[arr[i].start_line];
+        const position = arr[i].info.position.line;
+        const comment_candidate = general_comments[position];
         if (comment_candidate !== undefined) {
             const result = check_comment(comment_candidate, comment_symbol);
             if (result.check === true) {

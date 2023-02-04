@@ -50,7 +50,10 @@ module test_entity_name
     wire n, p;
     reg [$clog2(clk_freq_hz)] q;
 
+    //! Description localparam 0
     localparam r = 2;
+
+    localparam r_0 = 5; //! Description localparam 1
 
     always @(posedge a) begin : label_0
     end
@@ -64,14 +67,15 @@ module test_entity_name
     always_latch begin
     end
 
-    test_entity_name 
+    //! Instantiation description
+    test_entity_name_0
     #(
       .a(a ),
       .b(b ),
       .c(c ),
       .d (d )
     )
-    test_entity_name_dut (
+    test_entity_name_dut_0 (
       .e (e ),
       .f (f ),
       .g (g ),
@@ -81,6 +85,27 @@ module test_entity_name
       .k (k ),
       .l  ( l)
     );
+
+    test_entity_name_1
+    test_entity_name_dut_1 (
+      .e (e ),
+      .f (f ),
+      .g (g ),
+      .h (h ),
+      .i (i ),
+      .j (j ),
+      .k (k ),
+      .l  ( l)
+    );
+
+    test_entity_name_2
+    #(
+      .a(a ),
+      .b(b ),
+      .c(c ),
+      .d (d )
+    )
+    test_entity_name_dut_2();
   
 endmodule
 `;
@@ -485,7 +510,7 @@ describe('Check entity Verilog', async function () {
                     name: "q",
                     description: ""
                 },
-                type: "reg [1:0]"
+                type: "reg [$clog2(clk_freq_hz)]"
             };
             check_signal(actual, expected);
         });
@@ -497,7 +522,7 @@ describe('Check entity Verilog', async function () {
         equal(actual.info.name, expected.info.name);
         equal(actual.type, expected.type);
         equal(actual.default_value, expected.default_value);
-        equal(actual.info.description, expected.info.description);
+        equal(actual.info.description.trim(), expected.info.description.trim());
     }
 
     describe('Check constant.', async function () {
@@ -508,7 +533,7 @@ describe('Check entity Verilog', async function () {
             result = await parse();
             element_array = result.get_constant_array();
         });
-        it(`Check simple`, function () {
+        it(`Check simple 0`, function () {
             const actual = element_array[0];
             const expected: common.Constant_hdl = {
                 hdl_element_type: common.TYPE_HDL_ELEMENT.CONSTANT,
@@ -518,10 +543,27 @@ describe('Check entity Verilog', async function () {
                         column: 0
                     },
                     name: "r",
-                    description: ""
+                    description: "Description localparam 0"
                 },
                 type: "",
                 default_value: "2"
+            };
+            check_constant(actual, expected);
+        });
+        it(`Check simple 1`, function () {
+            const actual = element_array[1];
+            const expected: common.Constant_hdl = {
+                hdl_element_type: common.TYPE_HDL_ELEMENT.CONSTANT,
+                info: {
+                    position: {
+                        line: 0,
+                        column: 0
+                    },
+                    name: "r_0",
+                    description: "Description localparam 1"
+                },
+                type: "",
+                default_value: "5"
             };
             check_constant(actual, expected);
         });
@@ -657,7 +699,7 @@ describe('Check entity Verilog', async function () {
     function check_instantiation(actual: common.Instantiation_hdl, expected: common.Instantiation_hdl) {
         equal(actual.info.name, expected.info.name);
         equal(actual.type, expected.type);
-        equal(actual.info.description, expected.info.description);
+        equal(actual.info.description.trim(), expected.info.description.trim());
     }
 
     describe('Check instantiation.', async function () {
@@ -668,7 +710,7 @@ describe('Check entity Verilog', async function () {
             result = await parse();
             element_array = result.get_instantiation_array();
         });
-        it(`Check with label`, function () {
+        it(`Check with generics and ports`, function () {
             const actual = element_array[0];
             const expected: common.Instantiation_hdl = {
                 hdl_element_type: common.TYPE_HDL_ELEMENT.INSTANTIATION,
@@ -677,12 +719,47 @@ describe('Check entity Verilog', async function () {
                         line: 0,
                         column: 0
                     },
-                    name: "test_entity_name_dut",
-                    description: ""
+                    name: "test_entity_name_dut_0",
+                    description: " Instantiation description"
                 },
-                type: "test_entity_name"
+                type: "test_entity_name_0"
             };
             check_instantiation(actual, expected);
         });
+
+        it(`Check with ports`, function () {
+            const actual = element_array[1];
+            const expected: common.Instantiation_hdl = {
+                hdl_element_type: common.TYPE_HDL_ELEMENT.INSTANTIATION,
+                info: {
+                    position: {
+                        line: 0,
+                        column: 0
+                    },
+                    name: "test_entity_name_dut_1",
+                    description: ""
+                },
+                type: "test_entity_name_1"
+            };
+            check_instantiation(actual, expected);
+        });
+
+        it(`Check with generics`, function () {
+            const actual = element_array[2];
+            const expected: common.Instantiation_hdl = {
+                hdl_element_type: common.TYPE_HDL_ELEMENT.INSTANTIATION,
+                info: {
+                    position: {
+                        line: 0,
+                        column: 0
+                    },
+                    name: "test_entity_name_dut_2",
+                    description: ""
+                },
+                type: "test_entity_name_2"
+            };
+            check_instantiation(actual, expected);
+        });
+
     });
 });
