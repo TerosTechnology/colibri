@@ -62,3 +62,8 @@ https://code.visualstudio.com/api/references/activation-events#Start-up
 # Project manager
 - Project documentation
 - Schematic con project maanger
+
+
+
+
+(node:157849) [DEP0147] DeprecationWarning: In future versions of Node.js, fs.rmdir(path, { recursive: true }) will be removed. Use fs.rm(path, { recursive: true }) instead

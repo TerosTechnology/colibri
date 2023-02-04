@@ -782,7 +782,7 @@ export function get_generics(tree: any, lines: any, comments: any, ansi: any, co
             hdl_element_type: common_hdl.TYPE_HDL_ELEMENT.PORT,
             info: {
                 position: {
-                    line: 0,
+                    line: inputs[x].startPosition.row,
                     column: 0
                 },
                 name: get_generic_name(inputs[x], lines),

@@ -23,6 +23,7 @@ import * as common from "../../src/parser/common";
 
 //// Verilog-2001 ANSI-style
 const code_hdl = `
+//! mymodule design
 module test_entity_name 
     #(
         parameter a=8,
