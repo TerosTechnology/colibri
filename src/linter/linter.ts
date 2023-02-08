@@ -23,6 +23,7 @@ import { Verilator } from "./verilator";
 import { Vivado } from "./vivado";
 import { Modelsim } from "./modelsim";
 import { Verible } from "./verible";
+import { Vsg } from "./vsg";
 import * as common from "./common";
 import * as cfg from "../config/config_declaration";
 import { t_file } from "../project_manager/common";
@@ -55,6 +56,9 @@ export class Linter {
         }
         else if (linter_name === cfg.e_linter_general_lstyle_verilog.verible) {
             return new Verible();
+        }
+        else if (linter_name === cfg.e_linter_general_lstyle_vhdl.vsg) {
+            return new Vsg();
         }
         else {
             return new Ghdl();
