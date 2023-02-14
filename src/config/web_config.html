@@ -1,1768 +1,2265 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sidebars/">
+    <link href="./sidebar/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
 <style>
 
-body {
-  font-family: 'Open Sans', sans-serif;
-  background-color: white;
-  color: black;
-  
-}
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
 
-h3 {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
 
-/*style the items (options), including the selected item:*/
-select{
-  width:50%;
-  padding: 8px 16px;
-  cursor: pointer;
-  padding-right: 29px;
-  margin-top: 8px;
-}
+        .b-example-divider {
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
 
-input[type='input'] {
-  width:60%;
-  margin-top: 8px;
-  padding: 8px 16px;
-  padding-right: 29px;
-}
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
 
-/* Style the sidenav links and the dropdown button */
-.dropdown-btn {
-  padding: 6px 8px 6px 16px;
-  text-decoration: none;
-  font-size: 20px;
-  display: block;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  outline: none;
-  margin-top: 10px;
-}
-/* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
-.dropdown-container {
-  display: none;
-  background-color: #ccc;
-  padding-left: 8px;
-}
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
 
-/* Fixed sidenav, full height */
-.sidenav {
-  height: 100%;
-  width: 250px;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: #f1f1f1;
-  overflow-x: hidden;
-  padding-top: 20px;
-  border: 3px solid #ccc;
-}
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
 
-.sidenav a {
-  padding: 6px 8px 6px 16px;
-  text-decoration: none;
-  font-size: 20px;
-  display: block;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  outline: none;
-}
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
 
-/* On mouse-over */
-.sidenav a:hover {
-  background: #fcffd9;
-}
+        .main {
+            float: left;
+            padding: 0px 12px;
+            
+            
+            
+            
+            
+            overflow-y: scroll;
 
-.main {
-  float: left;
-  padding: 0px 12px;
-  border: 3px solid #ccc;
-  width: 70%;
-  border-left: none;
-  height: 500px;
-  border-left: 20px;
-  overflow-y: scroll;
-
-  border-right: 3px solid #ccc;
-  margin-left: 300px; /* Same as the width of the sidenav */
-  font-size: 20px; /* Increased text to enable scrolling */
-  padding: 0px 10px;
-  position: absolute;
-  top: 0;
-  left: 0 !important;
-}
-
-/* Add an active class to the active dropdown button */
-.active {
-  background-color: grey;
-  color: white;
-}
-
-/* Optional: Style the caret down icon */
-.fa-caret-down {
-  float: right;
-  padding-right: 8px;
-}
-
-/* Some media queries for responsiveness */
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
-}
-
-#div_button {
-  height: 200px;
-  position: relative;
-  margin-top: 520px;
-  width: 70%;
-  margin-left: 300px;
-}
-
-.button {
-  border: none;
-  color: white;
-  padding: 11px 25px;
-  text-align: center;
-  text-decoration: none;
-  font-size: 13px;
-  margin: 4px 2px;
-  cursor: pointer;
-  float: right;
-}
-
-#button_load {
-  background-color: #B0BEC5; 
-  margin-right: 15px;
-}
-
-#button_export {
-  background-color: #B0BEC5;
-}
-
-#button_apply {
-  background-color: #4CAF50; 
-}
-
-#button_apply_close {
-  background-color: #4c7aaf; 
-}
-
-#button_cancel {
-  background-color: #ff5a31;
-}
-
-#button_load:hover { 
-    background-color: grey!important;
-}
-
-#button_export:hover { 
-    background-color: grey!important;
-}
-
-#button_apply:hover { 
-    background-color: green!important;
-}
-
-#button_apply_close:hover { 
-    background-color: blue!important;
-}
-
-#button_cancel:hover { 
-    background-color: red!important;
-}
-
-.container {
-  display: inline-block;
-  cursor: pointer;
-  float: right;
-}
-
-.bar1,
-.bar2,
-.bar3 {
-  width: 20px;
-  height: 3px;
-  background-color: #333;
-  margin: 2px 0;
-  transition: 0.4s;
-}
-
-.change .bar1 {
-  transform: translate(0, 5px) rotate(-45deg);
-}
-
-.change .bar2 {
-  opacity: 0;
-}
-
-.change .bar3 {
-  transform: translate(0, -5px) rotate(45deg);
-}
+            
+            margin-left: 300px; /* Same as the width of the sidenav */
+            
+            padding: 0px 10px;
+            position: absolute;
+            top: 0;
+            left: 0 !important;
+        }
 
 </style>
+<link href="./sidebar/sidebars.css" rel="stylesheet">
 </head>
 <body>
 
-<div class="sidenav">
-    <button class="dropdown-btn" onclick="open_submenu_icon(this)">General 
-      <div class="container" onclick="open_submenu_icon(this)">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-      </div>
-    </button>
-    <div class="dropdown-container">
-        <a style="color:black" id="btn-general-general">General</a>
+
+    </svg>
+
+    <main class="d-flex flex-nowrap">
+        <h1 class="visually-hidden">Sidebars examples</h1>
+
+        <div class="flex-shrink-0 p-3 bg-white overflow-auto" style="width: 280px;">
+            <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+                <svg class="bi pe-none me-2" width="30" height="24">
+                    <use xlink:href="#bootstrap" />
+                </svg>
+                <div class="fs-5 fw-semibold sidebar-heading">Configuration</div>
+            </a>
+            <ul class="list-unstyled ps-0">
+                <li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                        data-bs-toggle="collapse" data-bs-target="#General" aria-expanded="false">
+                        General
+                    </button>
+                    <div class="collapse" id="General">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a id="btn-general-general" href="#" class="link-dark d-inline-flex text-decoration-none rounded">General</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                        data-bs-toggle="collapse" data-bs-target="#Documentation" aria-expanded="false">
+                        Documentation
+                    </button>
+                    <div class="collapse" id="Documentation">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a id="btn-documentation-general" href="#" class="link-dark d-inline-flex text-decoration-none rounded">General</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                        data-bs-toggle="collapse" data-bs-target="#Editor" aria-expanded="false">
+                        Editor
+                    </button>
+                    <div class="collapse" id="Editor">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a id="btn-editor-general" href="#" class="link-dark d-inline-flex text-decoration-none rounded">General</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                        data-bs-toggle="collapse" data-bs-target="#Formatter" aria-expanded="false">
+                        Formatter
+                    </button>
+                    <div class="collapse" id="Formatter">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a id="btn-formatter-general" href="#" class="link-dark d-inline-flex text-decoration-none rounded">General</a></li>
+                            <li><a id="btn-formatter-istyle" href="#" class="link-dark d-inline-flex text-decoration-none rounded">iStyle</a></li>
+                            <li><a id="btn-formatter-s3sv" href="#" class="link-dark d-inline-flex text-decoration-none rounded">s3sv</a></li>
+                            <li><a id="btn-formatter-verible" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Verible</a></li>
+                            <li><a id="btn-formatter-standalone" href="#" class="link-dark d-inline-flex text-decoration-none rounded">VHDL standalone</a></li>
+                            <li><a id="btn-formatter-svg" href="#" class="link-dark d-inline-flex text-decoration-none rounded">VHDL VSG</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                        data-bs-toggle="collapse" data-bs-target="#Linter-settings" aria-expanded="false">
+                        Linter settings
+                    </button>
+                    <div class="collapse" id="Linter-settings">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a id="btn-linter-general" href="#" class="link-dark d-inline-flex text-decoration-none rounded">General</a></li>
+                            <li><a id="btn-linter-ghdl" href="#" class="link-dark d-inline-flex text-decoration-none rounded">GHDL linter</a></li>
+                            <li><a id="btn-linter-icarus" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Icarus linter</a></li>
+                            <li><a id="btn-linter-modelsim" href="#" class="link-dark d-inline-flex text-decoration-none rounded">ModelSim linter</a></li>
+                            <li><a id="btn-linter-verible" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Verible linter</a></li>
+                            <li><a id="btn-linter-verilator" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Verilator linter</a></li>
+                            <li><a id="btn-linter-vivado" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Vivado linter</a></li>
+                            <li><a id="btn-linter-vsg" href="#" class="link-dark d-inline-flex text-decoration-none rounded">VSG linter</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                        data-bs-toggle="collapse" data-bs-target="#Schematic-viewer" aria-expanded="false">
+                        Schematic viewer
+                    </button>
+                    <div class="collapse" id="Schematic-viewer">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a id="btn-schematic-general" href="#" class="link-dark d-inline-flex text-decoration-none rounded">General</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                        data-bs-toggle="collapse" data-bs-target="#Templates" aria-expanded="false">
+                        Templates
+                    </button>
+                    <div class="collapse" id="Templates">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a id="btn-templates-general" href="#" class="link-dark d-inline-flex text-decoration-none rounded">General</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                        data-bs-toggle="collapse" data-bs-target="#Tools" aria-expanded="false">
+                        Tools
+                    </button>
+                    <div class="collapse" id="Tools">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a id="btn-tools-general" href="#" class="link-dark d-inline-flex text-decoration-none rounded">General</a></li>
+                            <li><a id="btn-tools-osvvm" href="#" class="link-dark d-inline-flex text-decoration-none rounded">OSVVM</a></li>
+                            <li><a id="btn-tools-ascenlint" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Ascenlint</a></li>
+                            <li><a id="btn-tools-cocotb" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Cocotb</a></li>
+                            <li><a id="btn-tools-diamond" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Diamond</a></li>
+                            <li><a id="btn-tools-ghdl" href="#" class="link-dark d-inline-flex text-decoration-none rounded">GHDL</a></li>
+                            <li><a id="btn-tools-icarus" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Icarus</a></li>
+                            <li><a id="btn-tools-icestorm" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Icestorm</a></li>
+                            <li><a id="btn-tools-ise" href="#" class="link-dark d-inline-flex text-decoration-none rounded">ISE</a></li>
+                            <li><a id="btn-tools-isem" href="#" class="link-dark d-inline-flex text-decoration-none rounded">ISIM</a></li>
+                            <li><a id="btn-tools-modelsim" href="#" class="link-dark d-inline-flex text-decoration-none rounded">ModelSim</a></li>
+                            <li><a id="btn-tools-morty" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Morty</a></li>
+                            <li><a id="btn-tools-quartus" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Quartus</a></li>
+                            <li><a id="btn-tools-radiant" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Radiant</a></li>
+                            <li><a id="btn-tools-rivierapro" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Rivierapro</a></li>
+                            <li><a id="btn-tools-siliconcompiler" href="#" class="link-dark d-inline-flex text-decoration-none rounded">SiliconCompiler</a></li>
+                            <li><a id="btn-tools-spyglass" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Spyglass</a></li>
+                            <li><a id="btn-tools-symbiyosys" href="#" class="link-dark d-inline-flex text-decoration-none rounded">SymbiYosys</a></li>
+                            <li><a id="btn-tools-symbiflow" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Symbiflow</a></li>
+                            <li><a id="btn-tools-trellis" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Trellis</a></li>
+                            <li><a id="btn-tools-vcs" href="#" class="link-dark d-inline-flex text-decoration-none rounded">VCS</a></li>
+                            <li><a id="btn-tools-veriblelint" href="#" class="link-dark d-inline-flex text-decoration-none rounded">VeribleLint</a></li>
+                            <li><a id="btn-tools-verilator" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Verilator</a></li>
+                            <li><a id="btn-tools-vivado" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Vivado</a></li>
+                            <li><a id="btn-tools-vunit" href="#" class="link-dark d-inline-flex text-decoration-none rounded">VUnit</a></li>
+                            <li><a id="btn-tools-xcelium" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Xcelium</a></li>
+                            <li><a id="btn-tools-xsim" href="#" class="link-dark d-inline-flex text-decoration-none rounded">XSIM</a></li>
+                            <li><a id="btn-tools-yosys" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Yosys</a></li>
+                            <li><a id="btn-tools-openfpga" href="#" class="link-dark d-inline-flex text-decoration-none rounded">OpenFPGA</a></li>
+                            <li><a id="btn-tools-activehdl" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Active-HDL</a></li>
+                            <li><a id="btn-tools-nvc" href="#" class="link-dark d-inline-flex text-decoration-none rounded">NVC</a></li>
+                            <li><a id="btn-tools-questa" href="#" class="link-dark d-inline-flex text-decoration-none rounded">Questa Advanced Simulator</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+
+
+<div class="flex-shrink-0 p-3 bg-white overflow-auto">
+    <div id="general-general" class='main'>
+      <h1>General: General</h1>
+
+      
+
+      
+
+
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="general-general-logging">
+            <label class="form-check-label" for="general-general-logging">
+              Enable show TerosHDL console with each message.
+            </label>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="general-general-pypath" class="form-label">Python3 binary path (e.g.: /usr/bin/python3). Empty if you want to use the system path. <strong>Install teroshdl. E.g: pip3 install teroshdl</strong></label>
+            <input class="form-control" id="general-general-pypath" rows="3"></input>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="general-general-go_to_definition_vhdl">
+            <label class="form-check-label" for="general-general-go_to_definition_vhdl">
+              Activate go to definition feature for VHDL (you need to restart VSCode).
+            </label>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="general-general-go_to_definition_verilog">
+            <label class="form-check-label" for="general-general-go_to_definition_verilog">
+              Activate go to definition feature for Verilog/SV (you need to restart VSCode).
+            </label>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="general-general-developer_mode">
+            <label class="form-check-label" for="general-general-developer_mode">
+              Developer mode: be careful!!
+            </label>
+          </div>
+          
+          
+          
     </div>
-    <button class="dropdown-btn" onclick="open_submenu_icon(this)">Documentation 
-      <div class="container" onclick="open_submenu_icon(this)">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-      </div>
-    </button>
-    <div class="dropdown-container">
-        <a style="color:black" id="btn-documentation-general">General</a>
+    <div id="documentation-general" class='main'>
+      <h1>Documentation: General</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="documentation-general-language" class="form-label">Documentation language:</label>
+            <select class="form-select" aria-label="Documentation language:" id="documentation-general-language">
+                    <option value='english'>English</option>
+                    <option value='russian'>Russian</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="documentation-general-symbol_vhdl" class="form-label">Special VHDL symbol at the begin of the comment to extract documentation. Example: <code>--! Code comment</code></label>
+            <input class="form-control" id="documentation-general-symbol_vhdl" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="documentation-general-symbol_verilog" class="form-label">Special Verilog symbol at the begin of the comment to extract documentation. Example: <code>//! Code comment</code></label>
+            <input class="form-control" id="documentation-general-symbol_verilog" rows="3"></input>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="documentation-general-dependency_graph">
+            <label class="form-check-label" for="documentation-general-dependency_graph">
+              Include dependency graph:
+            </label>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="documentation-general-self_contained">
+            <label class="form-check-label" for="documentation-general-self_contained">
+              HTML documentation self contained:
+            </label>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="documentation-general-fsm">
+            <label class="form-check-label" for="documentation-general-fsm">
+              Include FSM:
+            </label>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="documentation-general-ports" class="form-label">Include ports:</label>
+            <select class="form-select" aria-label="Include ports:" id="documentation-general-ports">
+                    <option value='all'>All</option>
+                    <option value='only_commented'>Only commented</option>
+                    <option value='none'>None</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="documentation-general-generics" class="form-label">Include generics:</label>
+            <select class="form-select" aria-label="Include generics:" id="documentation-general-generics">
+                    <option value='all'>All</option>
+                    <option value='only_commented'>Only commented</option>
+                    <option value='none'>None</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="documentation-general-instantiations" class="form-label">Include instantiations:</label>
+            <select class="form-select" aria-label="Include instantiations:" id="documentation-general-instantiations">
+                    <option value='all'>All</option>
+                    <option value='only_commented'>Only commented</option>
+                    <option value='none'>None</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="documentation-general-signals" class="form-label">Include signals:</label>
+            <select class="form-select" aria-label="Include signals:" id="documentation-general-signals">
+                    <option value='all'>All</option>
+                    <option value='only_commented'>Only commented</option>
+                    <option value='none'>None</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="documentation-general-constants" class="form-label">Include consants:</label>
+            <select class="form-select" aria-label="Include consants:" id="documentation-general-constants">
+                    <option value='all'>All</option>
+                    <option value='only_commented'>Only commented</option>
+                    <option value='none'>None</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="documentation-general-types" class="form-label">Include types:</label>
+            <select class="form-select" aria-label="Include types:" id="documentation-general-types">
+                    <option value='all'>All</option>
+                    <option value='only_commented'>Only commented</option>
+                    <option value='none'>None</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="documentation-general-process" class="form-label">Include always/processes:</label>
+            <select class="form-select" aria-label="Include always/processes:" id="documentation-general-process">
+                    <option value='all'>All</option>
+                    <option value='only_commented'>Only commented</option>
+                    <option value='none'>None</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="documentation-general-functions" class="form-label">Include functions:</label>
+            <select class="form-select" aria-label="Include functions:" id="documentation-general-functions">
+                    <option value='all'>All</option>
+                    <option value='only_commented'>Only commented</option>
+                    <option value='none'>None</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="documentation-general-magic_config_path" class="form-label">Magic config file path</label>
+            <input class="form-control" id="documentation-general-magic_config_path" rows="3"></input>
+          </div>
+          
+          
+          
     </div>
-    <button class="dropdown-btn" onclick="open_submenu_icon(this)">Editor 
-      <div class="container" onclick="open_submenu_icon(this)">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-      </div>
-    </button>
-    <div class="dropdown-container">
-        <a style="color:black" id="btn-editor-general">General</a>
+    <div id="editor-general" class='main'>
+      <h1>Editor: General</h1>
+
+      
+
+      
+
+
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="editor-general-continue_comment">
+            <label class="form-check-label" for="editor-general-continue_comment">
+              An enter keypress at the end of a line that contains a non-empty comment will continue the comment on the next line. This can be cancelled by pressing enter again. You must also set <code>"editor.formatOnType": true"</code>
+            </label>
+          </div>
+          
+          
+          
     </div>
-    <button class="dropdown-btn" onclick="open_submenu_icon(this)">Formatter 
-      <div class="container" onclick="open_submenu_icon(this)">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-      </div>
-    </button>
-    <div class="dropdown-container">
-        <a style="color:black" id="btn-formatter-general">General</a>
-        <a style="color:black" id="btn-formatter-istyle">iStyle</a>
-        <a style="color:black" id="btn-formatter-s3sv">s3sv</a>
-        <a style="color:black" id="btn-formatter-verible">Verible</a>
-        <a style="color:black" id="btn-formatter-standalone">VHDL standalone</a>
-        <a style="color:black" id="btn-formatter-svg">VHDL VSG</a>
+    <div id="formatter-general" class='main'>
+      <h1>Formatter: General</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="formatter-general-formatter_verilog" class="form-label">Verilog/SV formatter:</label>
+            <select class="form-select" aria-label="Verilog/SV formatter:" id="formatter-general-formatter_verilog">
+                    <option value='istyle'>iStyle</option>
+                    <option value='s3sv'>s3sv</option>
+                    <option value='verible'>Verible</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="formatter-general-formatter_vhdl" class="form-label">VHDL formatter:</label>
+            <select class="form-select" aria-label="VHDL formatter:" id="formatter-general-formatter_vhdl">
+                    <option value='standalone'>Standalone</option>
+                    <option value='vsg'>VSG</option>
+            </select>
+          </div>
+          
+          
+          
     </div>
-    <button class="dropdown-btn" onclick="open_submenu_icon(this)">Linter settings 
-      <div class="container" onclick="open_submenu_icon(this)">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-      </div>
-    </button>
-    <div class="dropdown-container">
-        <a style="color:black" id="btn-linter-general">General</a>
-        <a style="color:black" id="btn-linter-ghdl">GHDL linter</a>
-        <a style="color:black" id="btn-linter-icarus">Icarus linter</a>
-        <a style="color:black" id="btn-linter-modelsim">ModelSim linter</a>
-        <a style="color:black" id="btn-linter-verible">Verible linter</a>
-        <a style="color:black" id="btn-linter-verilator">Verilator linter</a>
-        <a style="color:black" id="btn-linter-vivado">Vivado linter</a>
-        <a style="color:black" id="btn-linter-vsg">VSG linter</a>
+    <div id="formatter-istyle" class='main'>
+      <h1>Formatter: iStyle</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="formatter-istyle-style" class="form-label">Predefined Styling options.</label>
+            <select class="form-select" aria-label="Predefined Styling options." id="formatter-istyle-style">
+                    <option value='ansi'>ANSI</option>
+                    <option value='kr'>Kernighan&Ritchie</option>
+                    <option value='gnu'>GNU</option>
+                    <option value='indent_only'>Indent only</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="formatter-istyle-indentation_size" class="form-label">Indentation size in number of characters.</label>
+            <input type='number' class="form-control" id="formatter-istyle-indentation_size" rows="3"></input>
+          </div>
+          
+          
+          
     </div>
-    <button class="dropdown-btn" onclick="open_submenu_icon(this)">Schematic viewer 
-      <div class="container" onclick="open_submenu_icon(this)">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-      </div>
-    </button>
-    <div class="dropdown-container">
-        <a style="color:black" id="btn-schematic-general">General</a>
+    <div id="formatter-s3sv" class='main'>
+      <h1>Formatter: s3sv</h1>
+
+      
+
+      
+
+
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="formatter-s3sv-one_bind_per_line">
+            <label class="form-check-label" for="formatter-s3sv-one_bind_per_line">
+              Force one binding per line in instanciations statements.
+            </label>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="formatter-s3sv-one_declaration_per_line">
+            <label class="form-check-label" for="formatter-s3sv-one_declaration_per_line">
+              Force one declaration per line.
+            </label>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="formatter-s3sv-use_tabs">
+            <label class="form-check-label" for="formatter-s3sv-use_tabs">
+              Use tabs instead of spaces for indentation.
+            </label>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="formatter-s3sv-indentation_size" class="form-label">Indentation size in number of characters.</label>
+            <input type='number' class="form-control" id="formatter-s3sv-indentation_size" rows="3"></input>
+          </div>
+          
+          
+          
     </div>
-    <button class="dropdown-btn" onclick="open_submenu_icon(this)">Templates 
-      <div class="container" onclick="open_submenu_icon(this)">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-      </div>
-    </button>
-    <div class="dropdown-container">
-        <a style="color:black" id="btn-templates-general">General</a>
+    <div id="formatter-verible" class='main'>
+      <h1>Formatter: Verible</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="formatter-verible-path" class="form-label">Verible formatter binary path. E.g: /home/user/Downloads/verible-v0.0-1296/bin/verible-verilog-format</label>
+            <input class="form-control" id="formatter-verible-path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="formatter-verible-format_args" class="form-label">Extra command line arguments passed to the Verible tool</label>
+            <input class="form-control" id="formatter-verible-format_args" rows="3"></input>
+          </div>
+          
+          
+          
     </div>
-    <button class="dropdown-btn" onclick="open_submenu_icon(this)">Tools 
-      <div class="container" onclick="open_submenu_icon(this)">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-      </div>
-    </button>
-    <div class="dropdown-container">
-        <a style="color:black" id="btn-tools-general">General</a>
-        <a style="color:black" id="btn-tools-osvvm">OSVVM</a>
-        <a style="color:black" id="btn-tools-ascenlint">Ascenlint</a>
-        <a style="color:black" id="btn-tools-cocotb">Cocotb</a>
-        <a style="color:black" id="btn-tools-diamond">Diamond</a>
-        <a style="color:black" id="btn-tools-ghdl">GHDL</a>
-        <a style="color:black" id="btn-tools-icarus">Icarus</a>
-        <a style="color:black" id="btn-tools-icestorm">Icestorm</a>
-        <a style="color:black" id="btn-tools-ise">ISE</a>
-        <a style="color:black" id="btn-tools-isem">ISIM</a>
-        <a style="color:black" id="btn-tools-modelsim">ModelSim</a>
-        <a style="color:black" id="btn-tools-morty">Morty</a>
-        <a style="color:black" id="btn-tools-quartus">Quartus</a>
-        <a style="color:black" id="btn-tools-radiant">Radiant</a>
-        <a style="color:black" id="btn-tools-rivierapro">Rivierapro</a>
-        <a style="color:black" id="btn-tools-siliconcompiler">SiliconCompiler</a>
-        <a style="color:black" id="btn-tools-spyglass">Spyglass</a>
-        <a style="color:black" id="btn-tools-symbiyosys">SymbiYosys</a>
-        <a style="color:black" id="btn-tools-symbiflow">Symbiflow</a>
-        <a style="color:black" id="btn-tools-trellis">Trellis</a>
-        <a style="color:black" id="btn-tools-vcs">VCS</a>
-        <a style="color:black" id="btn-tools-veriblelint">VeribleLint</a>
-        <a style="color:black" id="btn-tools-verilator">Verilator</a>
-        <a style="color:black" id="btn-tools-vivado">Vivado</a>
-        <a style="color:black" id="btn-tools-vunit">VUnit</a>
-        <a style="color:black" id="btn-tools-xcelium">Xcelium</a>
-        <a style="color:black" id="btn-tools-xsim">XSIM</a>
-        <a style="color:black" id="btn-tools-yosys">Yosys</a>
-        <a style="color:black" id="btn-tools-openfpga">OpenFPGA</a>
-        <a style="color:black" id="btn-tools-activehdl">Active-HDL</a>
-        <a style="color:black" id="btn-tools-nvc">NVC</a>
-        <a style="color:black" id="btn-tools-questa">Questa Advanced Simulator</a>
+    <div id="formatter-standalone" class='main'>
+      <h1>Formatter: VHDL standalone</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="formatter-standalone-keyword_case" class="form-label">Keyword case. e.g. begin, case, when </label>
+            <select class="form-select" aria-label="Keyword case. e.g. begin, case, when " id="formatter-standalone-keyword_case">
+                    <option value='lowercase'>LowerCase</option>
+                    <option value='uppercase'>UpperCase</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="formatter-standalone-name_case" class="form-label">Type name case. e.g. boolean, natural, string </label>
+            <select class="form-select" aria-label="Type name case. e.g. boolean, natural, string " id="formatter-standalone-name_case">
+                    <option value='lowercase'>LowerCase</option>
+                    <option value='uppercase'>UpperCase</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="formatter-standalone-indentation" class="form-label">Indentation.</label>
+            <input class="form-control" id="formatter-standalone-indentation" rows="3"></input>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="formatter-standalone-align_port_generic">
+            <label class="form-check-label" for="formatter-standalone-align_port_generic">
+              Align signs in ports and generics.
+            </label>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="formatter-standalone-align_comment">
+            <label class="form-check-label" for="formatter-standalone-align_comment">
+              Align comments.
+            </label>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="formatter-standalone-remove_comments">
+            <label class="form-check-label" for="formatter-standalone-remove_comments">
+              Remove comments.
+            </label>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="formatter-standalone-remove_reports">
+            <label class="form-check-label" for="formatter-standalone-remove_reports">
+              Remove reports.
+            </label>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="formatter-standalone-check_alias">
+            <label class="form-check-label" for="formatter-standalone-check_alias">
+              All long names will be replaced by ALIAS names.
+            </label>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="formatter-standalone-new_line_after_then" class="form-label">New line after THEN.</label>
+            <select class="form-select" aria-label="New line after THEN." id="formatter-standalone-new_line_after_then">
+                    <option value='new_line'>New line</option>
+                    <option value='no_new_line'>No new line</option>
+                    <option value='none'>None</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="formatter-standalone-new_line_after_semicolon" class="form-label">New line after semicolon ';'.</label>
+            <select class="form-select" aria-label="New line after semicolon ';'." id="formatter-standalone-new_line_after_semicolon">
+                    <option value='new_line'>New line</option>
+                    <option value='no_new_line'>No new line</option>
+                    <option value='none'>None</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="formatter-standalone-new_line_after_else" class="form-label">New line after ELSE.</label>
+            <select class="form-select" aria-label="New line after ELSE." id="formatter-standalone-new_line_after_else">
+                    <option value='new_line'>New line</option>
+                    <option value='no_new_line'>No new line</option>
+                    <option value='none'>None</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="formatter-standalone-new_line_after_port" class="form-label">New line after PORT | PORT MAP.</label>
+            <select class="form-select" aria-label="New line after PORT | PORT MAP." id="formatter-standalone-new_line_after_port">
+                    <option value='new_line'>New line</option>
+                    <option value='no_new_line'>No new line</option>
+                    <option value='none'>None</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="formatter-standalone-new_line_after_generic" class="form-label">New line after GENERIC.</label>
+            <select class="form-select" aria-label="New line after GENERIC." id="formatter-standalone-new_line_after_generic">
+                    <option value='new_line'>New line</option>
+                    <option value='no_new_line'>No new line</option>
+                    <option value='none'>None</option>
+            </select>
+          </div>
+          
+          
+          
     </div>
+    <div id="formatter-svg" class='main'>
+      <h1>Formatter: VHDL VSG</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="formatter-svg-configuration" class="form-label">JSON or YAML configuration file.</label>
+            <input class="form-control" id="formatter-svg-configuration" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+    <div id="linter-general" class='main'>
+      <h1>Linter settings: General</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="linter-general-linter_vhdl" class="form-label">VHDL linter: disable VHDL-LS needs restart VSCode.</label>
+            <select class="form-select" aria-label="VHDL linter: disable VHDL-LS needs restart VSCode." id="linter-general-linter_vhdl">
+                    <option value='disabled'>Disabled</option>
+                    <option value='ghdl'>GHDL</option>
+                    <option value='modelsim'>Modelsim</option>
+                    <option value='vivado'>Vivado (xvhdl)</option>
+                    <option value='none'>VHDL-LS</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="linter-general-linter_verilog" class="form-label">Verilog/SV linter:</label>
+            <select class="form-select" aria-label="Verilog/SV linter:" id="linter-general-linter_verilog">
+                    <option value='disabled'>Disabled</option>
+                    <option value='icarus'>Icarus</option>
+                    <option value='modelsim'>Modelsim</option>
+                    <option value='verilator'>Verilator</option>
+                    <option value='vivado'>Vivado (xvlog)</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="linter-general-lstyle_verilog" class="form-label">Verilog/SV style checker:</label>
+            <select class="form-select" aria-label="Verilog/SV style checker:" id="linter-general-lstyle_verilog">
+                    <option value='verible'>Verible</option>
+                    <option value='disabled'>Disabled</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="linter-general-lstyle_vhdl" class="form-label">VHDL style checker:</label>
+            <select class="form-select" aria-label="VHDL style checker:" id="linter-general-lstyle_vhdl">
+                    <option value='vsg'>VSG</option>
+                    <option value='disabled'>Disabled</option>
+            </select>
+          </div>
+          
+          
+          
+    </div>
+    <div id="linter-ghdl" class='main'>
+      <h1>Linter settings: GHDL linter</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="linter-ghdl-arguments" class="form-label">Arguments.</label>
+            <input class="form-control" id="linter-ghdl-arguments" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+    <div id="linter-icarus" class='main'>
+      <h1>Linter settings: Icarus linter</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="linter-icarus-arguments" class="form-label">Arguments.</label>
+            <input class="form-control" id="linter-icarus-arguments" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+    <div id="linter-modelsim" class='main'>
+      <h1>Linter settings: ModelSim linter</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="linter-modelsim-vhdl_arguments" class="form-label">VHDL linter arguments.</label>
+            <input class="form-control" id="linter-modelsim-vhdl_arguments" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="linter-modelsim-verilog_arguments" class="form-label">Verilog linter arguments.</label>
+            <input class="form-control" id="linter-modelsim-verilog_arguments" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+    <div id="linter-verible" class='main'>
+      <h1>Linter settings: Verible linter</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="linter-verible-arguments" class="form-label">Arguments.</label>
+            <input class="form-control" id="linter-verible-arguments" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+    <div id="linter-verilator" class='main'>
+      <h1>Linter settings: Verilator linter</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="linter-verilator-arguments" class="form-label">Arguments.</label>
+            <input class="form-control" id="linter-verilator-arguments" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+    <div id="linter-vivado" class='main'>
+      <h1>Linter settings: Vivado linter</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="linter-vivado-vhdl_arguments" class="form-label">VHDL linter arguments.</label>
+            <input class="form-control" id="linter-vivado-vhdl_arguments" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="linter-vivado-verilog_arguments" class="form-label">Verilog linter arguments.</label>
+            <input class="form-control" id="linter-vivado-verilog_arguments" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+    <div id="linter-vsg" class='main'>
+      <h1>Linter settings: VSG linter</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="linter-vsg-arguments" class="form-label">Arguments.</label>
+            <input class="form-control" id="linter-vsg-arguments" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+    <div id="schematic-general" class='main'>
+      <h1>Schematic viewer: General</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="schematic-general-backend" class="form-label">Select the backend:</label>
+            <select class="form-select" aria-label="Select the backend:" id="schematic-general-backend">
+                    <option value='yowasp'>YoWASP</option>
+                    <option value='yosys'>Yosys</option>
+                    <option value='yosys_ghdl'>GHDL + Yosys</option>
+                    <option value='yosys_ghdl_module'>GHDL (module) + Yosys</option>
+            </select>
+          </div>
+          
+          
+          
+    </div>
+    <div id="templates-general" class='main'>
+      <h1>Templates: General</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="templates-general-header_file_path" class="form-label">File path with your configurable header. E.g. your company license. It will be inserted at the beginning of the template</label>
+            <input class="form-control" id="templates-general-header_file_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="templates-general-indent" class="form-label">Indent</label>
+            <input class="form-control" id="templates-general-indent" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="templates-general-clock_generation_style" class="form-label">Clock generation style:</label>
+            <select class="form-select" aria-label="Clock generation style:" id="templates-general-clock_generation_style">
+                    <option value='inline'>Inline</option>
+                    <option value='ifelse'>if/else</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="templates-general-instance_style" class="form-label">Instantiation style:</label>
+            <select class="form-select" aria-label="Instantiation style:" id="templates-general-instance_style">
+                    <option value='inline'>Inline</option>
+                    <option value='separate'>Separate</option>
+            </select>
+          </div>
+          
+          
+          
+    </div>
+    <div id="tools-general" class='main'>
+      <h1>Tools: General</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-general-select_tool" class="form-label">Select a tool, framework, simulator...</label>
+            <select class="form-select" aria-label="Select a tool, framework, simulator..." id="tools-general-select_tool">
+                    <option value='osvvm'>OSVVM</option>
+                    <option value='vunit'>VUnit</option>
+                    <option value='ghdl'>GHDL</option>
+                    <option value='cocotb'>cocotb</option>
+                    <option value='icarus'>Icarus</option>
+                    <option value='icestorm'>Icestorm</option>
+                    <option value='ise'>ISE</option>
+                    <option value='isim'>ISIM</option>
+                    <option value='modelsim'>ModelSim</option>
+                    <option value='openfpga'>OpenFPGA</option>
+                    <option value='quartus'>Quartus</option>
+                    <option value='rivierapro'>Riviera-PRO</option>
+                    <option value='spyglass'>SpyGlass</option>
+                    <option value='trellis'>Trellis</option>
+                    <option value='vcs'>VCS</option>
+                    <option value='verilator'>Verilator</option>
+                    <option value='vivado'>Vivado</option>
+                    <option value='xcelium'>Xcelium</option>
+                    <option value='xsim'>XSIM</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-general-execution_mode" class="form-label">Select the execution mode.</label>
+            <select class="form-select" aria-label="Select the execution mode." id="tools-general-execution_mode">
+                    <option value='gui'>GUI</option>
+                    <option value='cmd'>Command line</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-general-waveform_viewer" class="form-label">Select the waveform viewer. For GTKWave you need to install it.</label>
+            <select class="form-select" aria-label="Select the waveform viewer. For GTKWave you need to install it." id="tools-general-waveform_viewer">
+                    <option value='tool'>Tool GUI</option>
+                    <option value='vcdrom'>VCDrom</option>
+                    <option value='gtkwave'>GTKWave</option>
+            </select>
+          </div>
+          
+          
+          
+    </div>
+    <div id="tools-osvvm" class='main'>
+      <h1>Tools: OSVVM</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-osvvm-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-osvvm-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-osvvm-tclsh_binary" class="form-label">tclsh binary path. E.g: /usr/bin/tclsh8.6</label>
+            <input class="form-control" id="tools-osvvm-tclsh_binary" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-osvvm-simulator_name" class="form-label">Selects which simulator to use.</label>
+            <select class="form-select" aria-label="Selects which simulator to use." id="tools-osvvm-simulator_name">
+                    <option value='activehdl'>Aldec Active-HDL</option>
+                    <option value='ghdl'>GHDL</option>
+                    <option value='nvc'>NVC</option>
+                    <option value='rivierapro'>Aldec Riviera-PRO</option>
+                    <option value='questa'>Mentor/Siemens EDA Questa</option>
+                    <option value='modelsim'>Mentor/Siemens EDA ModelSim</option>
+                    <option value='vcs'>VCS</option>
+                    <option value='xsim'>XSIM</option>
+                    <option value='xcelium'>Xcelium</option>
+            </select>
+          </div>
+          
+          
+          
+    </div>
+    <div id="tools-ascenlint" class='main'>
+      <h1>Tools: Ascenlint</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-ascenlint-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-ascenlint-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-ascenlint-ascentlint_options" class="form-label">Additional run options for ascentlint.</label>
+            <input class="form-control" id="tools-ascenlint-ascentlint_options" rows="3"></input>
+          </div>
+          
+          
+    </div>
+    <div id="tools-cocotb" class='main'>
+      <h1>Tools: Cocotb</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-cocotb-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-cocotb-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-cocotb-simulator_name" class="form-label">Selects which simulator Makefile to use. Attempts to include a simulator specific makefile from cocotb/share/makefiles/simulators/makefile.$(SIM)</label>
+            <select class="form-select" aria-label="Selects which simulator Makefile to use. Attempts to include a simulator specific makefile from cocotb/share/makefiles/simulators/makefile.$(SIM)" id="tools-cocotb-simulator_name">
+                    <option value='icarus'>icarus</option>
+                    <option value='verilator'>Verilator</option>
+                    <option value='vcs'>Synopsys VCS</option>
+                    <option value='riviera'>Aldec Riviera-PRO</option>
+                    <option value='activehdl'>Aldec Active-HDL</option>
+                    <option value='questa'>Mentor/Siemens EDA Questa</option>
+                    <option value='modelsim'>Mentor/Siemens EDA ModelSim</option>
+                    <option value='ius'>Cadence Incisive</option>
+                    <option value='xcelium'>Cadence Xcelium</option>
+                    <option value='ghdl'>GHDL</option>
+                    <option value='cvc'>Tachyon DA CVC</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-cocotb-compile_args" class="form-label">Any arguments or flags to pass to the compile stage of the simulation.</label>
+            <input class="form-control" id="tools-cocotb-compile_args" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-cocotb-run_args" class="form-label">Any argument to be passed to the “first” invocation of a simulator that runs via a TCL script. One motivating usage is to pass -noautoldlibpath to Questa to prevent it from loading the out-of-date libraries it ships with. Used by Aldec Riviera-PRO and Mentor Graphics Questa simulator.</label>
+            <input class="form-control" id="tools-cocotb-run_args" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-cocotb-plusargs" class="form-label">They are options that are starting with a plus (+) sign. They are passed to the simulator and are also available within cocotb as cocotb.plusargs. In the simulator, they can be read by the Verilog/SystemVerilog system functions $test$plusargs and $value$plusargs. The special plusargs +ntb_random_seed and +seed, if present, are evaluated to set the random seed value if RANDOM_SEED is not set. If both +ntb_random_seed and +seed are set, +ntb_random_seed is used.</label>
+            <input class="form-control" id="tools-cocotb-plusargs" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+    <div id="tools-diamond" class='main'>
+      <h1>Tools: Diamond</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-diamond-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-diamond-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-diamond-part" class="form-label">FPGA part number (e.g. LFE5U-45F-6BG381C).</label>
+            <input class="form-control" id="tools-diamond-part" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+    <div id="tools-ghdl" class='main'>
+      <h1>Tools: GHDL</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-ghdl-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-ghdl-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-ghdl-waveform" class="form-label">Waveform output format:</label>
+            <select class="form-select" aria-label="Waveform output format:" id="tools-ghdl-waveform">
+                    <option value='vcd'>VCD</option>
+                    <option value='ghw'>GHW</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-ghdl-analyze_options" class="form-label">analyze options. Extra options used for the GHDL analyze stage (ghdl -a).</label>
+            <input class="form-control" id="tools-ghdl-analyze_options" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-ghdl-run_options" class="form-label">Run options. Extra options used when running GHDL simulations (ghdl -r).</label>
+            <input class="form-control" id="tools-ghdl-run_options" rows="3"></input>
+          </div>
+          
+          
+    </div>
+    <div id="tools-icarus" class='main'>
+      <h1>Tools: Icarus</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-icarus-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-icarus-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-icarus-timescale" class="form-label">Default timescale.</label>
+            <input class="form-control" id="tools-icarus-timescale" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-icarus-iverilog_options" class="form-label">Additional options for iverilog.</label>
+            <input class="form-control" id="tools-icarus-iverilog_options" rows="3"></input>
+          </div>
+          
+          
+    </div>
+    <div id="tools-icestorm" class='main'>
+      <h1>Tools: Icestorm</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-icestorm-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-icestorm-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-icestorm-pnr" class="form-label">Select P&R tool. Valid values are arachne and next. Default is arachne.</label>
+            <select class="form-select" aria-label="Select P&R tool. Valid values are arachne and next. Default is arachne." id="tools-icestorm-pnr">
+                    <option value='arachne'>Arachne-pnr</option>
+                    <option value='next'>nextpnr</option>
+                    <option value='none'>Only perform synthesis</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-icestorm-arch" class="form-label">Target architecture.</label>
+            <select class="form-select" aria-label="Target architecture." id="tools-icestorm-arch">
+                    <option value='xilinx'>Xilinx</option>
+                    <option value='ice40'>ICE40</option>
+                    <option value='ecp5'>ECP5</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-icestorm-output_format" class="form-label">Output file format.</label>
+            <select class="form-select" aria-label="Output file format." id="tools-icestorm-output_format">
+                    <option value='json'>JSON</option>
+                    <option value='edif'>EDIF</option>
+                    <option value='blif'>BLIF</option>
+            </select>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="tools-icestorm-yosys_as_subtool">
+            <label class="form-check-label" for="tools-icestorm-yosys_as_subtool">
+              Determines if Yosys is run as a part of bigger toolchain, or as a standalone tool.
+            </label>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-icestorm-makefile_name" class="form-label">Generated makefile name, defaults to $name.mk</label>
+            <input class="form-control" id="tools-icestorm-makefile_name" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-icestorm-arachne_pnr_options" class="form-label">Options for ArachnePNR Place & Route.</label>
+            <input class="form-control" id="tools-icestorm-arachne_pnr_options" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-icestorm-nextpnr_options" class="form-label">Options for NextPNR Place & Route.</label>
+            <input class="form-control" id="tools-icestorm-nextpnr_options" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-icestorm-yosys_synth_options" class="form-label">Additional options for the synth_ice40 command.</label>
+            <input class="form-control" id="tools-icestorm-yosys_synth_options" rows="3"></input>
+          </div>
+          
+          
+    </div>
+    <div id="tools-ise" class='main'>
+      <h1>Tools: ISE</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-ise-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-ise-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-ise-family" class="form-label">FPGA family (e.g. spartan6).</label>
+            <input class="form-control" id="tools-ise-family" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-ise-device" class="form-label">FPGA device (e.g. xc6slx45).</label>
+            <input class="form-control" id="tools-ise-device" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-ise-package" class="form-label">FPGA package (e.g. csg324).</label>
+            <input class="form-control" id="tools-ise-package" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-ise-speed" class="form-label">FPGA speed grade (e.g. -2).</label>
+            <input class="form-control" id="tools-ise-speed" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+    <div id="tools-isem" class='main'>
+      <h1>Tools: ISIM</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-isem-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-isem-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-isem-fuse_options" class="form-label">Additional options for compilation with FUSE.</label>
+            <input class="form-control" id="tools-isem-fuse_options" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-isem-isim_options" class="form-label">Additional run options for ISim.</label>
+            <input class="form-control" id="tools-isem-isim_options" rows="3"></input>
+          </div>
+          
+          
+    </div>
+    <div id="tools-modelsim" class='main'>
+      <h1>Tools: ModelSim</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-modelsim-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-modelsim-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-modelsim-vcom_options" class="form-label">Additional options for compilation with vcom.</label>
+            <input class="form-control" id="tools-modelsim-vcom_options" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-modelsim-vlog_options" class="form-label">Additional options for compilation with vlog.</label>
+            <input class="form-control" id="tools-modelsim-vlog_options" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-modelsim-vsim_options" class="form-label">Additional run options for vsim.</label>
+            <input class="form-control" id="tools-modelsim-vsim_options" rows="3"></input>
+          </div>
+          
+          
+    </div>
+    <div id="tools-morty" class='main'>
+      <h1>Tools: Morty</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-morty-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-morty-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-morty-morty_options" class="form-label">Run-time options passed to morty..</label>
+            <input class="form-control" id="tools-morty-morty_options" rows="3"></input>
+          </div>
+          
+          
+    </div>
+    <div id="tools-quartus" class='main'>
+      <h1>Tools: Quartus</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-quartus-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-quartus-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-quartus-family" class="form-label">FPGA family (e.g. Cyclone V).</label>
+            <input class="form-control" id="tools-quartus-family" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-quartus-device" class="form-label">FPGA device (e.g. 5CSXFC6D6F31C8ES).</label>
+            <input class="form-control" id="tools-quartus-device" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-quartus-cable" class="form-label">Specifies the FPGA’s JTAG programming cable. Use the tool jtagconfig to determine the available cables.</label>
+            <input class="form-control" id="tools-quartus-cable" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-quartus-board_device_index" class="form-label">Specifies the FPGA’s device number in the JTAG chain. The device index specifies the device where the flash programmer looks for the Nios® II JTAG debug module. JTAG devices are numbered relative to the JTAG chain, starting at 1. Use the tool jtagconfig to determine the index.</label>
+            <input class="form-control" id="tools-quartus-board_device_index" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-quartus-pnr" class="form-label">P&R tool. one (to just run synthesis).</label>
+            <select class="form-select" aria-label="P&R tool. one (to just run synthesis)." id="tools-quartus-pnr">
+                    <option value='default'>Default</option>
+                    <option value='dse'>Run Design Space Explorer</option>
+                    <option value='none'>Run synthesis</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-quartus-dse_options" class="form-label">Command-line options for Design Space Explorer.</label>
+            <input class="form-control" id="tools-quartus-dse_options" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-quartus-quartus_options" class="form-label">Extra command-line options for Quartus.</label>
+            <input class="form-control" id="tools-quartus-quartus_options" rows="3"></input>
+          </div>
+          
+          
+    </div>
+    <div id="tools-radiant" class='main'>
+      <h1>Tools: Radiant</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-radiant-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-radiant-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-radiant-part" class="form-label">FPGA part number (e.g. LIFCL-40-9BG400C).</label>
+            <input class="form-control" id="tools-radiant-part" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+    <div id="tools-rivierapro" class='main'>
+      <h1>Tools: Rivierapro</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-rivierapro-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-rivierapro-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-rivierapro-compilation_mode" class="form-label">Common or separate compilation, sep - for separate compilation, common - for common compilation.</label>
+            <input class="form-control" id="tools-rivierapro-compilation_mode" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-rivierapro-vlog_options" class="form-label">Additional options for compilation with vlog.</label>
+            <input class="form-control" id="tools-rivierapro-vlog_options" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-rivierapro-vsim_options" class="form-label">Additional run options for vsim.</label>
+            <input class="form-control" id="tools-rivierapro-vsim_options" rows="3"></input>
+          </div>
+          
+          
+    </div>
+    <div id="tools-siliconcompiler" class='main'>
+      <h1>Tools: SiliconCompiler</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-siliconcompiler-installation_path" class="form-label"></label>
+            <input class="form-control" id="tools-siliconcompiler-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-siliconcompiler-target" class="form-label">Compilation target separated by a single underscore, specified as '<process>_<edaflow>' for ASIC compilation and '<partname>_<edaflow>'' for FPGA compilation. The process, edaflow, partname fields must be alphanumeric and cannot contain underscores. E.g: asicflow_freepdk45</label>
+            <input class="form-control" id="tools-siliconcompiler-target" rows="3"></input>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="tools-siliconcompiler-server_enable">
+            <label class="form-check-label" for="tools-siliconcompiler-server_enable">
+              Enable remote server.
+            </label>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-siliconcompiler-server_address" class="form-label">Remote server address (e.g: https://server.siliconcompiler.com):</label>
+            <input class="form-control" id="tools-siliconcompiler-server_address" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-siliconcompiler-server_username" class="form-label">Remote server user:</label>
+            <input class="form-control" id="tools-siliconcompiler-server_username" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-siliconcompiler-server_password" class="form-label">Remote server password:</label>
+            <input class="form-control" id="tools-siliconcompiler-server_password" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+    <div id="tools-spyglass" class='main'>
+      <h1>Tools: Spyglass</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-spyglass-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-spyglass-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-spyglass-methodology" class="form-label"></label>
+            <input class="form-control" id="tools-spyglass-methodology" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-spyglass-goals" class="form-label"></label>
+            <input class="form-control" id="tools-spyglass-goals" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-spyglass-spyglass_options" class="form-label"></label>
+            <input class="form-control" id="tools-spyglass-spyglass_options" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-spyglass-rule_parameters" class="form-label"></label>
+            <input class="form-control" id="tools-spyglass-rule_parameters" rows="3"></input>
+          </div>
+          
+          
+    </div>
+    <div id="tools-symbiyosys" class='main'>
+      <h1>Tools: SymbiYosys</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-symbiyosys-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-symbiyosys-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-symbiyosys-tasknames" class="form-label">A list of the .sby file’s tasks to run. Passed on the sby command line..</label>
+            <input class="form-control" id="tools-symbiyosys-tasknames" rows="3"></input>
+          </div>
+          
+          
+    </div>
+    <div id="tools-symbiflow" class='main'>
+      <h1>Tools: Symbiflow</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-symbiflow-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-symbiflow-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-symbiflow-package" class="form-label">FPGA chip package (e.g. clg400-1).</label>
+            <input class="form-control" id="tools-symbiflow-package" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-symbiflow-part" class="form-label">FPGA part type (e.g. xc7a50t).</label>
+            <input class="form-control" id="tools-symbiflow-part" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-symbiflow-vendor" class="form-label">Target architecture. Currently only “xilinx” is supported.</label>
+            <input class="form-control" id="tools-symbiflow-vendor" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-symbiflow-pnr" class="form-label">Place and Route tool. Currently only “vpr” is supported.</label>
+            <select class="form-select" aria-label="Place and Route tool. Currently only “vpr” is supported." id="tools-symbiflow-pnr">
+                    <option value='vpr'>VPR</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-symbiflow-vpr_options" class="form-label">Additional vpr tool options. If not used, default options for the tool will be used.</label>
+            <input class="form-control" id="tools-symbiflow-vpr_options" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-symbiflow-environment_script" class="form-label">Optional bash script that will be sourced before each build step..</label>
+            <input class="form-control" id="tools-symbiflow-environment_script" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+    <div id="tools-trellis" class='main'>
+      <h1>Tools: Trellis</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-trellis-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-trellis-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-trellis-arch" class="form-label">Target architecture.</label>
+            <select class="form-select" aria-label="Target architecture." id="tools-trellis-arch">
+                    <option value='xilinx'>Xilinx</option>
+                    <option value='ice40'>ICE40</option>
+                    <option value='ecp5'>ECP5</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-trellis-output_format" class="form-label">Output file format.</label>
+            <select class="form-select" aria-label="Output file format." id="tools-trellis-output_format">
+                    <option value='json'>JSON</option>
+                    <option value='edif'>EDIF</option>
+                    <option value='blif'>BLIF</option>
+            </select>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="tools-trellis-yosys_as_subtool">
+            <label class="form-check-label" for="tools-trellis-yosys_as_subtool">
+              Determines if Yosys is run as a part of bigger toolchain, or as a standalone tool.
+            </label>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-trellis-makefile_name" class="form-label">Generated makefile name, defaults to $name.mk</label>
+            <input class="form-control" id="tools-trellis-makefile_name" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-trellis-script_name" class="form-label">Generated tcl script filename, defaults to $name.mk</label>
+            <input class="form-control" id="tools-trellis-script_name" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-trellis-nextpnr_options" class="form-label">Options for NextPNR Place & Route.</label>
+            <input class="form-control" id="tools-trellis-nextpnr_options" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-trellis-yosys_synth_options" class="form-label">Additional options for the synth_ice40 command.</label>
+            <input class="form-control" id="tools-trellis-yosys_synth_options" rows="3"></input>
+          </div>
+          
+          
+    </div>
+    <div id="tools-vcs" class='main'>
+      <h1>Tools: VCS</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-vcs-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-vcs-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-vcs-vcs_options" class="form-label">Compile time options passed to vcs</label>
+            <input class="form-control" id="tools-vcs-vcs_options" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-vcs-run_options" class="form-label">Runtime options passed to the simulation</label>
+            <input class="form-control" id="tools-vcs-run_options" rows="3"></input>
+          </div>
+          
+          
+    </div>
+    <div id="tools-veriblelint" class='main'>
+      <h1>Tools: VeribleLint</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-veriblelint-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-veriblelint-installation_path" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+    <div id="tools-verilator" class='main'>
+      <h1>Tools: Verilator</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-verilator-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-verilator-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-verilator-mode" class="form-label">Select compilation mode. Legal values are cc for C++ testbenches, sc for SystemC testbenches or lint-only to only perform linting on the Verilog code.</label>
+            <select class="form-select" aria-label="Select compilation mode. Legal values are cc for C++ testbenches, sc for SystemC testbenches or lint-only to only perform linting on the Verilog code." id="tools-verilator-mode">
+                    <option value='cc'>cc</option>
+                    <option value='sc'>sc</option>
+                    <option value='lint-only'>lint-only</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-verilator-libs" class="form-label">Extra libraries for the verilated model to link against.</label>
+            <input class="form-control" id="tools-verilator-libs" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-verilator-verilator_options" class="form-label">Additional options for verilator.</label>
+            <input class="form-control" id="tools-verilator-verilator_options" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-verilator-make_options" class="form-label">Additional arguments passed to make when compiling the simulation. This is commonly used to set OPT/OPT_FAST/OPT_SLOW.</label>
+            <input class="form-control" id="tools-verilator-make_options" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-verilator-run_options" class="form-label">Additional arguments directly passed to the verilated model.</label>
+            <input class="form-control" id="tools-verilator-run_options" rows="3"></input>
+          </div>
+          
+          
+    </div>
+    <div id="tools-vivado" class='main'>
+      <h1>Tools: Vivado</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-vivado-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-vivado-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-vivado-part" class="form-label">Part. Device identifier. e.g. xc7a35tcsg324-1.</label>
+            <input class="form-control" id="tools-vivado-part" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-vivado-synth" class="form-label">Synthesis tool. Allowed values are vivado (default) and yosys..</label>
+            <input class="form-control" id="tools-vivado-synth" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-vivado-pnr" class="form-label">Choose only synthesis or place and route and bitstream generation:</label>
+            <select class="form-select" aria-label="Choose only synthesis or place and route and bitstream generation:" id="tools-vivado-pnr">
+                    <option value='vivado'>Place and route</option>
+                    <option value='none'>Only synthesis</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-vivado-jtag_freq" class="form-label">The frequency for jtag communication.</label>
+            <input type='number' class="form-control" id="tools-vivado-jtag_freq" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-vivado-hw_target" class="form-label">Board identifier (e.g. */xilinx_tcf/Digilent/123456789123A.</label>
+            <input class="form-control" id="tools-vivado-hw_target" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+    <div id="tools-vunit" class='main'>
+      <h1>Tools: VUnit</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-vunit-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-vunit-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-vunit-simulator_name" class="form-label">VUnit simulator:</label>
+            <select class="form-select" aria-label="VUnit simulator:" id="tools-vunit-simulator_name">
+                    <option value='rivierapro'>Aldec Riviera-PRO</option>
+                    <option value='activehdl'>Aldec Active-HDL</option>
+                    <option value='ghdl'>GHDL</option>
+                    <option value='modelsim'>Mentor Graphics ModelSim/Questa</option>
+                    <option value='xsim'>XSIM (Not supported in official VUnit)</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-vunit-runpy_mode" class="form-label">runpy mode:</label>
+            <select class="form-select" aria-label="runpy mode:" id="tools-vunit-runpy_mode">
+                    <option value='standalone'>Standalone</option>
+                    <option value='creation'>Creation</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-vunit-extra_options" class="form-label">VUnit options. Extra options for the VUnit test runner.</label>
+            <input class="form-control" id="tools-vunit-extra_options" rows="3"></input>
+          </div>
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_array_util_lib">
+            <label class="form-check-label" for="tools-vunit-enable_array_util_lib">
+              Enable array util library in non standalone mode
+            </label>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_com_lib">
+            <label class="form-check-label" for="tools-vunit-enable_com_lib">
+              Enable com library in non standalone mode
+            </label>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_json4vhdl_lib">
+            <label class="form-check-label" for="tools-vunit-enable_json4vhdl_lib">
+              Enable json4vhdl library in non standalone mode
+            </label>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_osvvm_lib">
+            <label class="form-check-label" for="tools-vunit-enable_osvvm_lib">
+              Enable OSVVM library in non standalone mode
+            </label>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_random_lib">
+            <label class="form-check-label" for="tools-vunit-enable_random_lib">
+              Enable random library in non standalone mode
+            </label>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_verification_components_lib">
+            <label class="form-check-label" for="tools-vunit-enable_verification_components_lib">
+              Enable verification components library in non standalone mode
+            </label>
+          </div>
+          
+          
+          
+    </div>
+    <div id="tools-xcelium" class='main'>
+      <h1>Tools: Xcelium</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-xcelium-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-xcelium-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-xcelium-xmvhdl_options" class="form-label">Additional options for compilation with xmvhdl.</label>
+            <input class="form-control" id="tools-xcelium-xmvhdl_options" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-xcelium-xmvlog_options" class="form-label">Additional options for compilation with xmvlog.</label>
+            <input class="form-control" id="tools-xcelium-xmvlog_options" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-xcelium-xmsim_options" class="form-label">Additional run options for xmsim.</label>
+            <input class="form-control" id="tools-xcelium-xmsim_options" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-xcelium-xrun_options" class="form-label">Additional run options for xrun.</label>
+            <input class="form-control" id="tools-xcelium-xrun_options" rows="3"></input>
+          </div>
+          
+          
+    </div>
+    <div id="tools-xsim" class='main'>
+      <h1>Tools: XSIM</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-xsim-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-xsim-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-xsim-xelab_options" class="form-label">Additional options for compilation with xelab.</label>
+            <input class="form-control" id="tools-xsim-xelab_options" rows="3"></input>
+          </div>
+          
+          <div class="mb-3">
+            <label for="tools-xsim-xsim_options" class="form-label">Additional run options for XSim.</label>
+            <input class="form-control" id="tools-xsim-xsim_options" rows="3"></input>
+          </div>
+          
+          
+    </div>
+    <div id="tools-yosys" class='main'>
+      <h1>Tools: Yosys</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-yosys-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-yosys-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-yosys-arch" class="form-label">Target architecture.</label>
+            <select class="form-select" aria-label="Target architecture." id="tools-yosys-arch">
+                    <option value='xilinx'>Xilinx</option>
+                    <option value='ice40'>ICE40</option>
+                    <option value='ecp5'>ECP5</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-yosys-output_format" class="form-label">Output file format.</label>
+            <select class="form-select" aria-label="Output file format." id="tools-yosys-output_format">
+                    <option value='json'>JSON</option>
+                    <option value='edif'>EDIF</option>
+                    <option value='blif'>BLIF</option>
+            </select>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="tools-yosys-yosys_as_subtool">
+            <label class="form-check-label" for="tools-yosys-yosys_as_subtool">
+              Determines if Yosys is run as a part of bigger toolchain, or as a standalone tool.
+            </label>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-yosys-makefile_name" class="form-label">Generated makefile name, defaults to $name.mk</label>
+            <input class="form-control" id="tools-yosys-makefile_name" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-yosys-script_name" class="form-label">Generated tcl script filename, defaults to $name.mk</label>
+            <input class="form-control" id="tools-yosys-script_name" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-yosys-yosys_synth_options" class="form-label">Additional options for the synth_ice40 command.</label>
+            <input class="form-control" id="tools-yosys-yosys_synth_options" rows="3"></input>
+          </div>
+          
+          
+    </div>
+    <div id="tools-openfpga" class='main'>
+      <h1>Tools: OpenFPGA</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-openfpga-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-openfpga-installation_path" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-openfpga-arch" class="form-label">Target architecture.</label>
+            <select class="form-select" aria-label="Target architecture." id="tools-openfpga-arch">
+                    <option value='xilinx'>Xilinx</option>
+                    <option value='ice40'>ICE40</option>
+                    <option value='ecp5'>ECP5</option>
+            </select>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-openfpga-output_format" class="form-label">Output file format.</label>
+            <select class="form-select" aria-label="Output file format." id="tools-openfpga-output_format">
+                    <option value='json'>JSON</option>
+                    <option value='edif'>EDIF</option>
+                    <option value='blif'>BLIF</option>
+            </select>
+          </div>
+          
+          
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="tools-openfpga-yosys_as_subtool">
+            <label class="form-check-label" for="tools-openfpga-yosys_as_subtool">
+              Determines if Yosys is run as a part of bigger toolchain, or as a standalone tool.
+            </label>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-openfpga-makefile_name" class="form-label">Generated makefile name, defaults to $name.mk</label>
+            <input class="form-control" id="tools-openfpga-makefile_name" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-openfpga-script_name" class="form-label">Generated tcl script filename, defaults to $name.mk</label>
+            <input class="form-control" id="tools-openfpga-script_name" rows="3"></input>
+          </div>
+          
+          
+          <div class="mb-3">
+            <label for="tools-openfpga-yosys_synth_options" class="form-label">Additional options for the synth_ice40 command.</label>
+            <input class="form-control" id="tools-openfpga-yosys_synth_options" rows="3"></input>
+          </div>
+          
+          
+    </div>
+    <div id="tools-activehdl" class='main'>
+      <h1>Tools: Active-HDL</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-activehdl-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-activehdl-installation_path" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+    <div id="tools-nvc" class='main'>
+      <h1>Tools: NVC</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-nvc-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-nvc-installation_path" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+    <div id="tools-questa" class='main'>
+      <h1>Tools: Questa Advanced Simulator</h1>
+
+      
+
+      
+
+
+          
+          <div class="mb-3">
+            <label for="tools-questa-installation_path" class="form-label">Installation path:</label>
+            <input class="form-control" id="tools-questa-installation_path" rows="3"></input>
+          </div>
+          
+          
+          
+    </div>
+
+  
 </div>
 
-<article class="markdown-body">
-  <div id="general-general" class='main'>
-    <h3>General: General</h3>
-    <hr></hr>
-    <p><i></i></p>
-    <label>Enable show TerosHDL console with each message.</label>
-      <input class='radio-button' id='general-general-logging' type='checkbox'>
-      <br><br>
-    <label>Python3 binary path (e.g.: /usr/bin/python3). Empty if you want to use the system path. <strong>Install teroshdl. E.g: pip3 install teroshdl</strong></label>
-      <br>
-      <input type='input' id='general-general-pypath' class='radio-button'>
-      <br><br>
-    <label>Activate go to definition feature for VHDL (you need to restart VSCode).</label>
-      <input class='radio-button' id='general-general-go_to_definition_vhdl' type='checkbox'>
-      <br><br>
-    <label>Activate go to definition feature for Verilog/SV (you need to restart VSCode).</label>
-      <input class='radio-button' id='general-general-go_to_definition_verilog' type='checkbox'>
-      <br><br>
-    <label>Developer mode: be careful!!</label>
-      <input class='radio-button' id='general-general-developer_mode' type='checkbox'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="documentation-general" class='main'>
-    <h3>Documentation: General</h3>
-    <hr></hr>
-    <p><i></i></p>
-    <label>Documentation language:</label>
-        <br>
-        <select name='select' id='documentation-general-language'>
-                <option value='english'>English</option>
-                <option value='russian'>Russian</option>
-        </select>
-      <br><br>
-    <label>Special VHDL symbol at the begin of the comment to extract documentation. Example: <code>--! Code comment</code></label>
-      <br>
-      <input type='input' id='documentation-general-symbol_vhdl' class='radio-button'>
-      <br><br>
-    <label>Special Verilog symbol at the begin of the comment to extract documentation. Example: <code>//! Code comment</code></label>
-      <br>
-      <input type='input' id='documentation-general-symbol_verilog' class='radio-button'>
-      <br><br>
-    <label>Include dependency graph:</label>
-      <input class='radio-button' id='documentation-general-dependency_graph' type='checkbox'>
-      <br><br>
-    <label>HTML documentation self contained:</label>
-      <input class='radio-button' id='documentation-general-self_contained' type='checkbox'>
-      <br><br>
-    <label>Include FSM:</label>
-      <input class='radio-button' id='documentation-general-fsm' type='checkbox'>
-      <br><br>
-    <label>Include ports:</label>
-        <br>
-        <select name='select' id='documentation-general-ports'>
-                <option value='all'>All</option>
-                <option value='only_commented'>Only commented</option>
-                <option value='none'>None</option>
-        </select>
-      <br><br>
-    <label>Include generics:</label>
-        <br>
-        <select name='select' id='documentation-general-generics'>
-                <option value='all'>All</option>
-                <option value='only_commented'>Only commented</option>
-                <option value='none'>None</option>
-        </select>
-      <br><br>
-    <label>Include instantiations:</label>
-        <br>
-        <select name='select' id='documentation-general-instantiations'>
-                <option value='all'>All</option>
-                <option value='only_commented'>Only commented</option>
-                <option value='none'>None</option>
-        </select>
-      <br><br>
-    <label>Include signals:</label>
-        <br>
-        <select name='select' id='documentation-general-signals'>
-                <option value='all'>All</option>
-                <option value='only_commented'>Only commented</option>
-                <option value='none'>None</option>
-        </select>
-      <br><br>
-    <label>Include consants:</label>
-        <br>
-        <select name='select' id='documentation-general-constants'>
-                <option value='all'>All</option>
-                <option value='only_commented'>Only commented</option>
-                <option value='none'>None</option>
-        </select>
-      <br><br>
-    <label>Include types:</label>
-        <br>
-        <select name='select' id='documentation-general-types'>
-                <option value='all'>All</option>
-                <option value='only_commented'>Only commented</option>
-                <option value='none'>None</option>
-        </select>
-      <br><br>
-    <label>Include always/processes:</label>
-        <br>
-        <select name='select' id='documentation-general-process'>
-                <option value='all'>All</option>
-                <option value='only_commented'>Only commented</option>
-                <option value='none'>None</option>
-        </select>
-      <br><br>
-    <label>Include functions:</label>
-        <br>
-        <select name='select' id='documentation-general-functions'>
-                <option value='all'>All</option>
-                <option value='only_commented'>Only commented</option>
-                <option value='none'>None</option>
-        </select>
-      <br><br>
-    <label>Magic config file path</label>
-      <br>
-      <input type='input' id='documentation-general-magic_config_path' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="editor-general" class='main'>
-    <h3>Editor: General</h3>
-    <hr></hr>
-    <p><i></i></p>
-    <label>An enter keypress at the end of a line that contains a non-empty comment will continue the comment on the next line. This can be cancelled by pressing enter again. You must also set <code>"editor.formatOnType": true"</code></label>
-      <input class='radio-button' id='editor-general-continue_comment' type='checkbox'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="formatter-general" class='main'>
-    <h3>Formatter: General</h3>
-    <hr></hr>
-    <p><i></i></p>
-    <label>Verilog/SV formatter:</label>
-        <br>
-        <select name='select' id='formatter-general-formatter_verilog'>
-                <option value='istyle'>iStyle</option>
-                <option value='s3sv'>s3sv</option>
-                <option value='verible'>Verible</option>
-        </select>
-      <br><br>
-    <label>VHDL formatter:</label>
-        <br>
-        <select name='select' id='formatter-general-formatter_vhdl'>
-                <option value='standalone'>Standalone</option>
-                <option value='vsg'>VSG</option>
-        </select>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="formatter-istyle" class='main'>
-    <h3>Formatter: iStyle</h3>
-    <hr></hr>
-    <p><i>Verilog/SV iStyle formatter</i></p>
-    <label>Predefined Styling options.</label>
-        <br>
-        <select name='select' id='formatter-istyle-style'>
-                <option value='ansi'>ANSI</option>
-                <option value='kr'>Kernighan&Ritchie</option>
-                <option value='gnu'>GNU</option>
-                <option value='indent_only'>Indent only</option>
-        </select>
-      <br><br>
-    <label>Indentation size in number of characters.</label>
-      <input type='number' id='formatter-istyle-indentation_size' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="formatter-s3sv" class='main'>
-    <h3>Formatter: s3sv</h3>
-    <hr></hr>
-    <p><i>Verilog/SV S3SV formatter</i></p>
-    <label>Force one binding per line in instanciations statements.</label>
-      <input class='radio-button' id='formatter-s3sv-one_bind_per_line' type='checkbox'>
-      <br><br>
-    <label>Force one declaration per line.</label>
-      <input class='radio-button' id='formatter-s3sv-one_declaration_per_line' type='checkbox'>
-      <br><br>
-    <label>Use tabs instead of spaces for indentation.</label>
-      <input class='radio-button' id='formatter-s3sv-use_tabs' type='checkbox'>
-      <br><br>
-    <label>Indentation size in number of characters.</label>
-      <input type='number' id='formatter-s3sv-indentation_size' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="formatter-verible" class='main'>
-    <h3>Formatter: Verible</h3>
-    <hr></hr>
-    <p><i>Verilog/SV Verible formatter</i></p>
-    <label>Verible formatter binary path. E.g: /home/user/Downloads/verible-v0.0-1296/bin/verible-verilog-format</label>
-      <br>
-      <input type='input' id='formatter-verible-path' class='radio-button'>
-      <br><br>
-    <label>Extra command line arguments passed to the Verible tool</label>
-      <br>
-      <input type='input' id='formatter-verible-format_args' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="formatter-standalone" class='main'>
-    <h3>Formatter: VHDL standalone</h3>
-    <hr></hr>
-    <p><i>VHDL standalone formatter</i></p>
-    <label>Keyword case. e.g. begin, case, when </label>
-        <br>
-        <select name='select' id='formatter-standalone-keyword_case'>
-                <option value='lowercase'>LowerCase</option>
-                <option value='uppercase'>UpperCase</option>
-        </select>
-      <br><br>
-    <label>Type name case. e.g. boolean, natural, string </label>
-        <br>
-        <select name='select' id='formatter-standalone-name_case'>
-                <option value='lowercase'>LowerCase</option>
-                <option value='uppercase'>UpperCase</option>
-        </select>
-      <br><br>
-    <label>Indentation.</label>
-      <br>
-      <input type='input' id='formatter-standalone-indentation' class='radio-button'>
-      <br><br>
-    <label>Align signs in ports and generics.</label>
-      <input class='radio-button' id='formatter-standalone-align_port_generic' type='checkbox'>
-      <br><br>
-    <label>Align comments.</label>
-      <input class='radio-button' id='formatter-standalone-align_comment' type='checkbox'>
-      <br><br>
-    <label>Remove comments.</label>
-      <input class='radio-button' id='formatter-standalone-remove_comments' type='checkbox'>
-      <br><br>
-    <label>Remove reports.</label>
-      <input class='radio-button' id='formatter-standalone-remove_reports' type='checkbox'>
-      <br><br>
-    <label>All long names will be replaced by ALIAS names.</label>
-      <input class='radio-button' id='formatter-standalone-check_alias' type='checkbox'>
-      <br><br>
-    <label>New line after THEN.</label>
-        <br>
-        <select name='select' id='formatter-standalone-new_line_after_then'>
-                <option value='new_line'>New line</option>
-                <option value='no_new_line'>No new line</option>
-                <option value='none'>None</option>
-        </select>
-      <br><br>
-    <label>New line after semicolon ';'.</label>
-        <br>
-        <select name='select' id='formatter-standalone-new_line_after_semicolon'>
-                <option value='new_line'>New line</option>
-                <option value='no_new_line'>No new line</option>
-                <option value='none'>None</option>
-        </select>
-      <br><br>
-    <label>New line after ELSE.</label>
-        <br>
-        <select name='select' id='formatter-standalone-new_line_after_else'>
-                <option value='new_line'>New line</option>
-                <option value='no_new_line'>No new line</option>
-                <option value='none'>None</option>
-        </select>
-      <br><br>
-    <label>New line after PORT | PORT MAP.</label>
-        <br>
-        <select name='select' id='formatter-standalone-new_line_after_port'>
-                <option value='new_line'>New line</option>
-                <option value='no_new_line'>No new line</option>
-                <option value='none'>None</option>
-        </select>
-      <br><br>
-    <label>New line after GENERIC.</label>
-        <br>
-        <select name='select' id='formatter-standalone-new_line_after_generic'>
-                <option value='new_line'>New line</option>
-                <option value='no_new_line'>No new line</option>
-                <option value='none'>None</option>
-        </select>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="formatter-svg" class='main'>
-    <h3>Formatter: VHDL VSG</h3>
-    <hr></hr>
-    <p><i>VHDL Style Guide. Analyzes VHDL files for style guide violations.</i></p>
-    <label>JSON or YAML configuration file.</label>
-      <br>
-      <input type='input' id='formatter-svg-configuration' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="linter-general" class='main'>
-    <h3>Linter settings: General</h3>
-    <hr></hr>
-    <p><i></i></p>
-    <label>VHDL linter: disable VHDL-LS needs restart VSCode.</label>
-        <br>
-        <select name='select' id='linter-general-linter_vhdl'>
-                <option value='disabled'>Disabled</option>
-                <option value='ghdl'>GHDL</option>
-                <option value='modelsim'>Modelsim</option>
-                <option value='vivado'>Vivado (xvhdl)</option>
-                <option value='none'>VHDL-LS</option>
-        </select>
-      <br><br>
-    <label>Verilog/SV linter:</label>
-        <br>
-        <select name='select' id='linter-general-linter_verilog'>
-                <option value='disabled'>Disabled</option>
-                <option value='icarus'>Icarus</option>
-                <option value='modelsim'>Modelsim</option>
-                <option value='verilator'>Verilator</option>
-                <option value='vivado'>Vivado (xvlog)</option>
-        </select>
-      <br><br>
-    <label>Verilog/SV style checker:</label>
-        <br>
-        <select name='select' id='linter-general-lstyle_verilog'>
-                <option value='verible'>Verible</option>
-                <option value='disabled'>Disabled</option>
-        </select>
-      <br><br>
-    <label>VHDL style checker:</label>
-        <br>
-        <select name='select' id='linter-general-lstyle_vhdl'>
-                <option value='vsg'>VSG</option>
-                <option value='disabled'>Disabled</option>
-        </select>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="linter-ghdl" class='main'>
-    <h3>Linter settings: GHDL linter</h3>
-    <hr></hr>
-    <p><i></i></p>
-    <label>Arguments.</label>
-      <br>
-      <input type='input' id='linter-ghdl-arguments' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="linter-icarus" class='main'>
-    <h3>Linter settings: Icarus linter</h3>
-    <hr></hr>
-    <p><i></i></p>
-    <label>Arguments.</label>
-      <br>
-      <input type='input' id='linter-icarus-arguments' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="linter-modelsim" class='main'>
-    <h3>Linter settings: ModelSim linter</h3>
-    <hr></hr>
-    <p><i></i></p>
-    <label>VHDL linter arguments.</label>
-      <br>
-      <input type='input' id='linter-modelsim-vhdl_arguments' class='radio-button'>
-      <br><br>
-    <label>Verilog linter arguments.</label>
-      <br>
-      <input type='input' id='linter-modelsim-verilog_arguments' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="linter-verible" class='main'>
-    <h3>Linter settings: Verible linter</h3>
-    <hr></hr>
-    <p><i></i></p>
-    <label>Arguments.</label>
-      <br>
-      <input type='input' id='linter-verible-arguments' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="linter-verilator" class='main'>
-    <h3>Linter settings: Verilator linter</h3>
-    <hr></hr>
-    <p><i></i></p>
-    <label>Arguments.</label>
-      <br>
-      <input type='input' id='linter-verilator-arguments' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="linter-vivado" class='main'>
-    <h3>Linter settings: Vivado linter</h3>
-    <hr></hr>
-    <p><i></i></p>
-    <label>VHDL linter arguments.</label>
-      <br>
-      <input type='input' id='linter-vivado-vhdl_arguments' class='radio-button'>
-      <br><br>
-    <label>Verilog linter arguments.</label>
-      <br>
-      <input type='input' id='linter-vivado-verilog_arguments' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="linter-vsg" class='main'>
-    <h3>Linter settings: VSG linter</h3>
-    <hr></hr>
-    <p><i></i></p>
-    <label>Arguments.</label>
-      <br>
-      <input type='input' id='linter-vsg-arguments' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="schematic-general" class='main'>
-    <h3>Schematic viewer: General</h3>
-    <hr></hr>
-    <p><i></i></p>
-    <label>Select the backend:</label>
-        <br>
-        <select name='select' id='schematic-general-backend'>
-                <option value='yowasp'>YoWASP</option>
-                <option value='yosys'>Yosys</option>
-                <option value='yosys_ghdl'>GHDL + Yosys</option>
-                <option value='yosys_ghdl_module'>GHDL (module) + Yosys</option>
-        </select>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="templates-general" class='main'>
-    <h3>Templates: General</h3>
-    <hr></hr>
-    <p><i></i></p>
-    <label>File path with your configurable header. E.g. your company license. It will be inserted at the beginning of the template</label>
-      <br>
-      <input type='input' id='templates-general-header_file_path' class='radio-button'>
-      <br><br>
-    <label>Indent</label>
-      <br>
-      <input type='input' id='templates-general-indent' class='radio-button'>
-      <br><br>
-    <label>Clock generation style:</label>
-        <br>
-        <select name='select' id='templates-general-clock_generation_style'>
-                <option value='inline'>Inline</option>
-                <option value='ifelse'>if/else</option>
-        </select>
-      <br><br>
-    <label>Instantiation style:</label>
-        <br>
-        <select name='select' id='templates-general-instance_style'>
-                <option value='inline'>Inline</option>
-                <option value='separate'>Separate</option>
-        </select>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-general" class='main'>
-    <h3>Tools: General</h3>
-    <hr></hr>
-    <p><i></i></p>
-    <label>Select a tool, framework, simulator...</label>
-        <br>
-        <select name='select' id='tools-general-select_tool'>
-                <option value='osvvm'>OSVVM</option>
-                <option value='vunit'>VUnit</option>
-                <option value='ghdl'>GHDL</option>
-                <option value='cocotb'>cocotb</option>
-                <option value='icarus'>Icarus</option>
-                <option value='icestorm'>Icestorm</option>
-                <option value='ise'>ISE</option>
-                <option value='isim'>ISIM</option>
-                <option value='modelsim'>ModelSim</option>
-                <option value='openfpga'>OpenFPGA</option>
-                <option value='quartus'>Quartus</option>
-                <option value='rivierapro'>Riviera-PRO</option>
-                <option value='spyglass'>SpyGlass</option>
-                <option value='trellis'>Trellis</option>
-                <option value='vcs'>VCS</option>
-                <option value='verilator'>Verilator</option>
-                <option value='vivado'>Vivado</option>
-                <option value='xcelium'>Xcelium</option>
-                <option value='xsim'>XSIM</option>
-        </select>
-      <br><br>
-    <label>Select the execution mode.</label>
-        <br>
-        <select name='select' id='tools-general-execution_mode'>
-                <option value='gui'>GUI</option>
-                <option value='cmd'>Command line</option>
-        </select>
-      <br><br>
-    <label>Select the waveform viewer. For GTKWave you need to install it.</label>
-        <br>
-        <select name='select' id='tools-general-waveform_viewer'>
-                <option value='tool'>Tool GUI</option>
-                <option value='vcdrom'>VCDrom</option>
-                <option value='gtkwave'>GTKWave</option>
-        </select>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-osvvm" class='main'>
-    <h3>Tools: OSVVM</h3>
-    <hr></hr>
-    <p><i>OSVVM is an advanced verification methodology that defines a VHDL verification framework, verification utility library, verification component library, and a scripting flow that simplifies your FPGA or ASIC verification project from start to finish. Using these libraries you can create a simple, readable, and powerful testbench that is suitable for either a simple FPGA block or a complex ASIC.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-osvvm-installation_path' class='radio-button'>
-      <br><br>
-    <label>tclsh binary path. E.g: /usr/bin/tclsh8.6</label>
-      <br>
-      <input type='input' id='tools-osvvm-tclsh_binary' class='radio-button'>
-      <br><br>
-    <label>Selects which simulator to use.</label>
-        <br>
-        <select name='select' id='tools-osvvm-simulator_name'>
-                <option value='activehdl'>Aldec Active-HDL</option>
-                <option value='ghdl'>GHDL</option>
-                <option value='nvc'>NVC</option>
-                <option value='rivierapro'>Aldec Riviera-PRO</option>
-                <option value='questa'>Mentor/Siemens EDA Questa</option>
-                <option value='modelsim'>Mentor/Siemens EDA ModelSim</option>
-                <option value='vcs'>VCS</option>
-                <option value='xsim'>XSIM</option>
-                <option value='xcelium'>Xcelium</option>
-        </select>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-ascenlint" class='main'>
-    <h3>Tools: Ascenlint</h3>
-    <hr></hr>
-    <p><i>Ascent Lint performs static source code analysis on HDL code and checks for common coding errors or coding style violations.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-ascenlint-installation_path' class='radio-button'>
-      <br><br>
-    <label>Additional run options for ascentlint.</label>
-      <input type='input' id='tools-ascenlint-ascentlint_options' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-cocotb" class='main'>
-    <h3>Tools: Cocotb</h3>
-    <hr></hr>
-    <p><i></i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-cocotb-installation_path' class='radio-button'>
-      <br><br>
-    <label>Selects which simulator Makefile to use. Attempts to include a simulator specific makefile from cocotb/share/makefiles/simulators/makefile.$(SIM)</label>
-        <br>
-        <select name='select' id='tools-cocotb-simulator_name'>
-                <option value='icarus'>icarus</option>
-                <option value='verilator'>Verilator</option>
-                <option value='vcs'>Synopsys VCS</option>
-                <option value='riviera'>Aldec Riviera-PRO</option>
-                <option value='activehdl'>Aldec Active-HDL</option>
-                <option value='questa'>Mentor/Siemens EDA Questa</option>
-                <option value='modelsim'>Mentor/Siemens EDA ModelSim</option>
-                <option value='ius'>Cadence Incisive</option>
-                <option value='xcelium'>Cadence Xcelium</option>
-                <option value='ghdl'>GHDL</option>
-                <option value='cvc'>Tachyon DA CVC</option>
-        </select>
-      <br><br>
-    <label>Any arguments or flags to pass to the compile stage of the simulation.</label>
-      <br>
-      <input type='input' id='tools-cocotb-compile_args' class='radio-button'>
-      <br><br>
-    <label>Any argument to be passed to the “first” invocation of a simulator that runs via a TCL script. One motivating usage is to pass -noautoldlibpath to Questa to prevent it from loading the out-of-date libraries it ships with. Used by Aldec Riviera-PRO and Mentor Graphics Questa simulator.</label>
-      <br>
-      <input type='input' id='tools-cocotb-run_args' class='radio-button'>
-      <br><br>
-    <label>They are options that are starting with a plus (+) sign. They are passed to the simulator and are also available within cocotb as cocotb.plusargs. In the simulator, they can be read by the Verilog/SystemVerilog system functions $test$plusargs and $value$plusargs. The special plusargs +ntb_random_seed and +seed, if present, are evaluated to set the random seed value if RANDOM_SEED is not set. If both +ntb_random_seed and +seed are set, +ntb_random_seed is used.</label>
-      <br>
-      <input type='input' id='tools-cocotb-plusargs' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-diamond" class='main'>
-    <h3>Tools: Diamond</h3>
-    <hr></hr>
-    <p><i>Backend for Lattice Diamond.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-diamond-installation_path' class='radio-button'>
-      <br><br>
-    <label>FPGA part number (e.g. LFE5U-45F-6BG381C).</label>
-      <br>
-      <input type='input' id='tools-diamond-part' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-ghdl" class='main'>
-    <h3>Tools: GHDL</h3>
-    <hr></hr>
-    <p><i>GHDL is an open source VHDL simulator, which fully supports IEEE 1076-1987, IEEE 1076-1993, IEE 1076-2002 and partially the 1076-2008 version of VHDL.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-ghdl-installation_path' class='radio-button'>
-      <br><br>
-    <label>Waveform output format:</label>
-        <br>
-        <select name='select' id='tools-ghdl-waveform'>
-                <option value='vcd'>VCD</option>
-                <option value='ghw'>GHW</option>
-        </select>
-      <br><br>
-    <label>analyze options. Extra options used for the GHDL analyze stage (ghdl -a).</label>
-      <input type='input' id='tools-ghdl-analyze_options' class='radio-button'>
-      <br><br>
-    <label>Run options. Extra options used when running GHDL simulations (ghdl -r).</label>
-      <input type='input' id='tools-ghdl-run_options' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-icarus" class='main'>
-    <h3>Tools: Icarus</h3>
-    <hr></hr>
-    <p><i>Icarus Verilog is a Verilog simulation and synthesis tool. It operates as a compiler, compiling source code written in Verilog (IEEE-1364) into some target format.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-icarus-installation_path' class='radio-button'>
-      <br><br>
-    <label>Default timescale.</label>
-      <br>
-      <input type='input' id='tools-icarus-timescale' class='radio-button'>
-      <br><br>
-    <label>Additional options for iverilog.</label>
-      <input type='input' id='tools-icarus-iverilog_options' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-icestorm" class='main'>
-    <h3>Tools: Icestorm</h3>
-    <hr></hr>
-    <p><i>Open source toolchain for Lattice iCE40 FPGAs. Uses yosys for synthesis and arachne-pnr or nextpnr for Place & Route.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-icestorm-installation_path' class='radio-button'>
-      <br><br>
-    <label>Select P&R tool. Valid values are arachne and next. Default is arachne.</label>
-        <br>
-        <select name='select' id='tools-icestorm-pnr'>
-                <option value='arachne'>Arachne-pnr</option>
-                <option value='next'>nextpnr</option>
-                <option value='none'>Only perform synthesis</option>
-        </select>
-      <br><br>
-    <label>Target architecture.</label>
-        <br>
-        <select name='select' id='tools-icestorm-arch'>
-                <option value='xilinx'>Xilinx</option>
-                <option value='ice40'>ICE40</option>
-                <option value='ecp5'>ECP5</option>
-        </select>
-      <br><br>
-    <label>Output file format.</label>
-        <br>
-        <select name='select' id='tools-icestorm-output_format'>
-                <option value='json'>JSON</option>
-                <option value='edif'>EDIF</option>
-                <option value='blif'>BLIF</option>
-        </select>
-      <br><br>
-    <label>Determines if Yosys is run as a part of bigger toolchain, or as a standalone tool.</label>
-      <input class='radio-button' id='tools-icestorm-yosys_as_subtool' type='checkbox'>
-      <br><br>
-    <label>Generated makefile name, defaults to $name.mk</label>
-      <br>
-      <input type='input' id='tools-icestorm-makefile_name' class='radio-button'>
-      <br><br>
-    <label>Options for ArachnePNR Place & Route.</label>
-      <input type='input' id='tools-icestorm-arachne_pnr_options' class='radio-button'>
-      <br><br>
-    <label>Options for NextPNR Place & Route.</label>
-      <input type='input' id='tools-icestorm-nextpnr_options' class='radio-button'>
-      <br><br>
-    <label>Additional options for the synth_ice40 command.</label>
-      <input type='input' id='tools-icestorm-yosys_synth_options' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-ise" class='main'>
-    <h3>Tools: ISE</h3>
-    <hr></hr>
-    <p><i>Xilinx ISE Design Suite.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-ise-installation_path' class='radio-button'>
-      <br><br>
-    <label>FPGA family (e.g. spartan6).</label>
-      <br>
-      <input type='input' id='tools-ise-family' class='radio-button'>
-      <br><br>
-    <label>FPGA device (e.g. xc6slx45).</label>
-      <br>
-      <input type='input' id='tools-ise-device' class='radio-button'>
-      <br><br>
-    <label>FPGA package (e.g. csg324).</label>
-      <br>
-      <input type='input' id='tools-ise-package' class='radio-button'>
-      <br><br>
-    <label>FPGA speed grade (e.g. -2).</label>
-      <br>
-      <input type='input' id='tools-ise-speed' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-isem" class='main'>
-    <h3>Tools: ISIM</h3>
-    <hr></hr>
-    <p><i>Xilinx ISim simulator from ISE design suite.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-isem-installation_path' class='radio-button'>
-      <br><br>
-    <label>Additional options for compilation with FUSE.</label>
-      <input type='input' id='tools-isem-fuse_options' class='radio-button'>
-      <br><br>
-    <label>Additional run options for ISim.</label>
-      <input type='input' id='tools-isem-isim_options' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-modelsim" class='main'>
-    <h3>Tools: ModelSim</h3>
-    <hr></hr>
-    <p><i>ModelSim simulator from Mentor Graphics.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-modelsim-installation_path' class='radio-button'>
-      <br><br>
-    <label>Additional options for compilation with vcom.</label>
-      <input type='input' id='tools-modelsim-vcom_options' class='radio-button'>
-      <br><br>
-    <label>Additional options for compilation with vlog.</label>
-      <input type='input' id='tools-modelsim-vlog_options' class='radio-button'>
-      <br><br>
-    <label>Additional run options for vsim.</label>
-      <input type='input' id='tools-modelsim-vsim_options' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-morty" class='main'>
-    <h3>Tools: Morty</h3>
-    <hr></hr>
-    <p><i>Run the (System-) Verilog pickle tool called morty.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-morty-installation_path' class='radio-button'>
-      <br><br>
-    <label>Run-time options passed to morty..</label>
-      <input type='input' id='tools-morty-morty_options' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-quartus" class='main'>
-    <h3>Tools: Quartus</h3>
-    <hr></hr>
-    <p><i>The Quartus backend supports Intel Quartus Std and Pro editions to build systems and program the FPGA.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-quartus-installation_path' class='radio-button'>
-      <br><br>
-    <label>FPGA family (e.g. Cyclone V).</label>
-      <br>
-      <input type='input' id='tools-quartus-family' class='radio-button'>
-      <br><br>
-    <label>FPGA device (e.g. 5CSXFC6D6F31C8ES).</label>
-      <br>
-      <input type='input' id='tools-quartus-device' class='radio-button'>
-      <br><br>
-    <label>Specifies the FPGA’s JTAG programming cable. Use the tool jtagconfig to determine the available cables.</label>
-      <br>
-      <input type='input' id='tools-quartus-cable' class='radio-button'>
-      <br><br>
-    <label>Specifies the FPGA’s device number in the JTAG chain. The device index specifies the device where the flash programmer looks for the Nios® II JTAG debug module. JTAG devices are numbered relative to the JTAG chain, starting at 1. Use the tool jtagconfig to determine the index.</label>
-      <br>
-      <input type='input' id='tools-quartus-board_device_index' class='radio-button'>
-      <br><br>
-    <label>P&R tool. one (to just run synthesis).</label>
-        <br>
-        <select name='select' id='tools-quartus-pnr'>
-                <option value='default'>Default</option>
-                <option value='dse'>Run Design Space Explorer</option>
-                <option value='none'>Run synthesis</option>
-        </select>
-      <br><br>
-    <label>Command-line options for Design Space Explorer.</label>
-      <input type='input' id='tools-quartus-dse_options' class='radio-button'>
-      <br><br>
-    <label>Extra command-line options for Quartus.</label>
-      <input type='input' id='tools-quartus-quartus_options' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-radiant" class='main'>
-    <h3>Tools: Radiant</h3>
-    <hr></hr>
-    <p><i>Backend for Lattice Radiant.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-radiant-installation_path' class='radio-button'>
-      <br><br>
-    <label>FPGA part number (e.g. LIFCL-40-9BG400C).</label>
-      <br>
-      <input type='input' id='tools-radiant-part' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-rivierapro" class='main'>
-    <h3>Tools: Rivierapro</h3>
-    <hr></hr>
-    <p><i>Riviera Pro simulator from Aldec.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-rivierapro-installation_path' class='radio-button'>
-      <br><br>
-    <label>Common or separate compilation, sep - for separate compilation, common - for common compilation.</label>
-      <br>
-      <input type='input' id='tools-rivierapro-compilation_mode' class='radio-button'>
-      <br><br>
-    <label>Additional options for compilation with vlog.</label>
-      <input type='input' id='tools-rivierapro-vlog_options' class='radio-button'>
-      <br><br>
-    <label>Additional run options for vsim.</label>
-      <input type='input' id='tools-rivierapro-vsim_options' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-siliconcompiler" class='main'>
-    <h3>Tools: SiliconCompiler</h3>
-    <hr></hr>
-    <p><i>SiliconCompiler is an open source compiler framework that automates translation from source code to silicon. Check the project documentation: <a href="https://docs.siliconcompiler.com/en/latest/">https://docs.siliconcompiler.com/en/latest/</a></i></p>
-    <label></label>
-      <br>
-      <input type='input' id='tools-siliconcompiler-installation_path' class='radio-button'>
-      <br><br>
-    <label>Compilation target separated by a single underscore, specified as '<process>_<edaflow>' for ASIC compilation and '<partname>_<edaflow>'' for FPGA compilation. The process, edaflow, partname fields must be alphanumeric and cannot contain underscores. E.g: asicflow_freepdk45</label>
-      <br>
-      <input type='input' id='tools-siliconcompiler-target' class='radio-button'>
-      <br><br>
-    <label>Enable remote server.</label>
-      <input class='radio-button' id='tools-siliconcompiler-server_enable' type='checkbox'>
-      <br><br>
-    <label>Remote server address (e.g: https://server.siliconcompiler.com):</label>
-      <br>
-      <input type='input' id='tools-siliconcompiler-server_address' class='radio-button'>
-      <br><br>
-    <label>Remote server user:</label>
-      <br>
-      <input type='input' id='tools-siliconcompiler-server_username' class='radio-button'>
-      <br><br>
-    <label>Remote server password:</label>
-      <br>
-      <input type='input' id='tools-siliconcompiler-server_password' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-spyglass" class='main'>
-    <h3>Tools: Spyglass</h3>
-    <hr></hr>
-    <p><i>Synopsys (formerly Atrenta) Spyglass Backend. Spyglass performs static source code analysis on HDL code and checks for common coding errors or coding style violations.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-spyglass-installation_path' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br>
-      <input type='input' id='tools-spyglass-methodology' class='radio-button'>
-      <br><br>
-    <label></label>
-      <input type='input' id='tools-spyglass-goals' class='radio-button'>
-      <br><br>
-    <label></label>
-      <input type='input' id='tools-spyglass-spyglass_options' class='radio-button'>
-      <br><br>
-    <label></label>
-      <input type='input' id='tools-spyglass-rule_parameters' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-symbiyosys" class='main'>
-    <h3>Tools: SymbiYosys</h3>
-    <hr></hr>
-    <p><i>SymbiYosys formal verification wrapper for Yosys.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-symbiyosys-installation_path' class='radio-button'>
-      <br><br>
-    <label>A list of the .sby file’s tasks to run. Passed on the sby command line..</label>
-      <input type='input' id='tools-symbiyosys-tasknames' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-symbiflow" class='main'>
-    <h3>Tools: Symbiflow</h3>
-    <hr></hr>
-    <p><i>VHDL Style Guide. Analyzes VHDL files for style guide violations.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-symbiflow-installation_path' class='radio-button'>
-      <br><br>
-    <label>FPGA chip package (e.g. clg400-1).</label>
-      <br>
-      <input type='input' id='tools-symbiflow-package' class='radio-button'>
-      <br><br>
-    <label>FPGA part type (e.g. xc7a50t).</label>
-      <br>
-      <input type='input' id='tools-symbiflow-part' class='radio-button'>
-      <br><br>
-    <label>Target architecture. Currently only “xilinx” is supported.</label>
-      <br>
-      <input type='input' id='tools-symbiflow-vendor' class='radio-button'>
-      <br><br>
-    <label>Place and Route tool. Currently only “vpr” is supported.</label>
-        <br>
-        <select name='select' id='tools-symbiflow-pnr'>
-                <option value='vpr'>VPR</option>
-        </select>
-      <br><br>
-    <label>Additional vpr tool options. If not used, default options for the tool will be used.</label>
-      <br>
-      <input type='input' id='tools-symbiflow-vpr_options' class='radio-button'>
-      <br><br>
-    <label>Optional bash script that will be sourced before each build step..</label>
-      <br>
-      <input type='input' id='tools-symbiflow-environment_script' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-trellis" class='main'>
-    <h3>Tools: Trellis</h3>
-    <hr></hr>
-    <p><i>Project Trellis enables a fully open-source flow for ECP5 FPGAs using Yosys for Verilog synthesis and nextpnr for place and route.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-trellis-installation_path' class='radio-button'>
-      <br><br>
-    <label>Target architecture.</label>
-        <br>
-        <select name='select' id='tools-trellis-arch'>
-                <option value='xilinx'>Xilinx</option>
-                <option value='ice40'>ICE40</option>
-                <option value='ecp5'>ECP5</option>
-        </select>
-      <br><br>
-    <label>Output file format.</label>
-        <br>
-        <select name='select' id='tools-trellis-output_format'>
-                <option value='json'>JSON</option>
-                <option value='edif'>EDIF</option>
-                <option value='blif'>BLIF</option>
-        </select>
-      <br><br>
-    <label>Determines if Yosys is run as a part of bigger toolchain, or as a standalone tool.</label>
-      <input class='radio-button' id='tools-trellis-yosys_as_subtool' type='checkbox'>
-      <br><br>
-    <label>Generated makefile name, defaults to $name.mk</label>
-      <br>
-      <input type='input' id='tools-trellis-makefile_name' class='radio-button'>
-      <br><br>
-    <label>Generated tcl script filename, defaults to $name.mk</label>
-      <br>
-      <input type='input' id='tools-trellis-script_name' class='radio-button'>
-      <br><br>
-    <label>Options for NextPNR Place & Route.</label>
-      <input type='input' id='tools-trellis-nextpnr_options' class='radio-button'>
-      <br><br>
-    <label>Additional options for the synth_ice40 command.</label>
-      <input type='input' id='tools-trellis-yosys_synth_options' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-vcs" class='main'>
-    <h3>Tools: VCS</h3>
-    <hr></hr>
-    <p><i>Synopsys VCS Backend</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-vcs-installation_path' class='radio-button'>
-      <br><br>
-    <label>Compile time options passed to vcs</label>
-      <input type='input' id='tools-vcs-vcs_options' class='radio-button'>
-      <br><br>
-    <label>Runtime options passed to the simulation</label>
-      <input type='input' id='tools-vcs-run_options' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-veriblelint" class='main'>
-    <h3>Tools: VeribleLint</h3>
-    <hr></hr>
-    <p><i>Verible lint backend (verible-verilog-lint).</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-veriblelint-installation_path' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-verilator" class='main'>
-    <h3>Tools: Verilator</h3>
-    <hr></hr>
-    <p><i>Verible lint backend (verible-verilog-lint).</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-verilator-installation_path' class='radio-button'>
-      <br><br>
-    <label>Select compilation mode. Legal values are cc for C++ testbenches, sc for SystemC testbenches or lint-only to only perform linting on the Verilog code.</label>
-        <br>
-        <select name='select' id='tools-verilator-mode'>
-                <option value='cc'>cc</option>
-                <option value='sc'>sc</option>
-                <option value='lint-only'>lint-only</option>
-        </select>
-      <br><br>
-    <label>Extra libraries for the verilated model to link against.</label>
-      <input type='input' id='tools-verilator-libs' class='radio-button'>
-      <br><br>
-    <label>Additional options for verilator.</label>
-      <input type='input' id='tools-verilator-verilator_options' class='radio-button'>
-      <br><br>
-    <label>Additional arguments passed to make when compiling the simulation. This is commonly used to set OPT/OPT_FAST/OPT_SLOW.</label>
-      <input type='input' id='tools-verilator-make_options' class='radio-button'>
-      <br><br>
-    <label>Additional arguments directly passed to the verilated model.</label>
-      <input type='input' id='tools-verilator-run_options' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-vivado" class='main'>
-    <h3>Tools: Vivado</h3>
-    <hr></hr>
-    <p><i>The Vivado backend executes Xilinx Vivado to build systems and program the FPGA.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-vivado-installation_path' class='radio-button'>
-      <br><br>
-    <label>Part. Device identifier. e.g. xc7a35tcsg324-1.</label>
-      <br>
-      <input type='input' id='tools-vivado-part' class='radio-button'>
-      <br><br>
-    <label>Synthesis tool. Allowed values are vivado (default) and yosys..</label>
-      <br>
-      <input type='input' id='tools-vivado-synth' class='radio-button'>
-      <br><br>
-    <label>Choose only synthesis or place and route and bitstream generation:</label>
-        <br>
-        <select name='select' id='tools-vivado-pnr'>
-                <option value='vivado'>Place and route</option>
-                <option value='none'>Only synthesis</option>
-        </select>
-      <br><br>
-    <label>The frequency for jtag communication.</label>
-      <input type='number' id='tools-vivado-jtag_freq' class='radio-button'>
-      <br><br>
-    <label>Board identifier (e.g. */xilinx_tcf/Digilent/123456789123A.</label>
-      <br>
-      <input type='input' id='tools-vivado-hw_target' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-vunit" class='main'>
-    <h3>Tools: VUnit</h3>
-    <hr></hr>
-    <p><i>VUnit testing framework.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-vunit-installation_path' class='radio-button'>
-      <br><br>
-    <label>VUnit simulator:</label>
-        <br>
-        <select name='select' id='tools-vunit-simulator_name'>
-                <option value='rivierapro'>Aldec Riviera-PRO</option>
-                <option value='activehdl'>Aldec Active-HDL</option>
-                <option value='ghdl'>GHDL</option>
-                <option value='modelsim'>Mentor Graphics ModelSim/Questa</option>
-                <option value='xsim'>XSIM (Not supported in official VUnit)</option>
-        </select>
-      <br><br>
-    <label>runpy mode:</label>
-        <br>
-        <select name='select' id='tools-vunit-runpy_mode'>
-                <option value='standalone'>Standalone</option>
-                <option value='creation'>Creation</option>
-        </select>
-      <br><br>
-    <label>VUnit options. Extra options for the VUnit test runner.</label>
-      <input type='input' id='tools-vunit-extra_options' class='radio-button'>
-      <br><br>
-    <label>Enable array util library in non standalone mode</label>
-      <input class='radio-button' id='tools-vunit-enable_array_util_lib' type='checkbox'>
-      <br><br>
-    <label>Enable com library in non standalone mode</label>
-      <input class='radio-button' id='tools-vunit-enable_com_lib' type='checkbox'>
-      <br><br>
-    <label>Enable json4vhdl library in non standalone mode</label>
-      <input class='radio-button' id='tools-vunit-enable_json4vhdl_lib' type='checkbox'>
-      <br><br>
-    <label>Enable OSVVM library in non standalone mode</label>
-      <input class='radio-button' id='tools-vunit-enable_osvvm_lib' type='checkbox'>
-      <br><br>
-    <label>Enable random library in non standalone mode</label>
-      <input class='radio-button' id='tools-vunit-enable_random_lib' type='checkbox'>
-      <br><br>
-    <label>Enable verification components library in non standalone mode</label>
-      <input class='radio-button' id='tools-vunit-enable_verification_components_lib' type='checkbox'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-xcelium" class='main'>
-    <h3>Tools: Xcelium</h3>
-    <hr></hr>
-    <p><i>Xcelium simulator from Cadence Design Systems.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-xcelium-installation_path' class='radio-button'>
-      <br><br>
-    <label>Additional options for compilation with xmvhdl.</label>
-      <input type='input' id='tools-xcelium-xmvhdl_options' class='radio-button'>
-      <br><br>
-    <label>Additional options for compilation with xmvlog.</label>
-      <input type='input' id='tools-xcelium-xmvlog_options' class='radio-button'>
-      <br><br>
-    <label>Additional run options for xmsim.</label>
-      <input type='input' id='tools-xcelium-xmsim_options' class='radio-button'>
-      <br><br>
-    <label>Additional run options for xrun.</label>
-      <input type='input' id='tools-xcelium-xrun_options' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-xsim" class='main'>
-    <h3>Tools: XSIM</h3>
-    <hr></hr>
-    <p><i>XSim simulator from the Xilinx Vivado suite.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-xsim-installation_path' class='radio-button'>
-      <br><br>
-    <label>Additional options for compilation with xelab.</label>
-      <input type='input' id='tools-xsim-xelab_options' class='radio-button'>
-      <br><br>
-    <label>Additional run options for XSim.</label>
-      <input type='input' id='tools-xsim-xsim_options' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-yosys" class='main'>
-    <h3>Tools: Yosys</h3>
-    <hr></hr>
-    <p><i>Open source synthesis tool targeting many different FPGAs.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-yosys-installation_path' class='radio-button'>
-      <br><br>
-    <label>Target architecture.</label>
-        <br>
-        <select name='select' id='tools-yosys-arch'>
-                <option value='xilinx'>Xilinx</option>
-                <option value='ice40'>ICE40</option>
-                <option value='ecp5'>ECP5</option>
-        </select>
-      <br><br>
-    <label>Output file format.</label>
-        <br>
-        <select name='select' id='tools-yosys-output_format'>
-                <option value='json'>JSON</option>
-                <option value='edif'>EDIF</option>
-                <option value='blif'>BLIF</option>
-        </select>
-      <br><br>
-    <label>Determines if Yosys is run as a part of bigger toolchain, or as a standalone tool.</label>
-      <input class='radio-button' id='tools-yosys-yosys_as_subtool' type='checkbox'>
-      <br><br>
-    <label>Generated makefile name, defaults to $name.mk</label>
-      <br>
-      <input type='input' id='tools-yosys-makefile_name' class='radio-button'>
-      <br><br>
-    <label>Generated tcl script filename, defaults to $name.mk</label>
-      <br>
-      <input type='input' id='tools-yosys-script_name' class='radio-button'>
-      <br><br>
-    <label>Additional options for the synth_ice40 command.</label>
-      <input type='input' id='tools-yosys-yosys_synth_options' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-openfpga" class='main'>
-    <h3>Tools: OpenFPGA</h3>
-    <hr></hr>
-    <p><i>The award-winning OpenFPGA framework is the first open-source FPGA IP generator with silicon proofs supporting highly-customizable FPGA architectures.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-openfpga-installation_path' class='radio-button'>
-      <br><br>
-    <label>Target architecture.</label>
-        <br>
-        <select name='select' id='tools-openfpga-arch'>
-                <option value='xilinx'>Xilinx</option>
-                <option value='ice40'>ICE40</option>
-                <option value='ecp5'>ECP5</option>
-        </select>
-      <br><br>
-    <label>Output file format.</label>
-        <br>
-        <select name='select' id='tools-openfpga-output_format'>
-                <option value='json'>JSON</option>
-                <option value='edif'>EDIF</option>
-                <option value='blif'>BLIF</option>
-        </select>
-      <br><br>
-    <label>Determines if Yosys is run as a part of bigger toolchain, or as a standalone tool.</label>
-      <input class='radio-button' id='tools-openfpga-yosys_as_subtool' type='checkbox'>
-      <br><br>
-    <label>Generated makefile name, defaults to $name.mk</label>
-      <br>
-      <input type='input' id='tools-openfpga-makefile_name' class='radio-button'>
-      <br><br>
-    <label>Generated tcl script filename, defaults to $name.mk</label>
-      <br>
-      <input type='input' id='tools-openfpga-script_name' class='radio-button'>
-      <br><br>
-    <label>Additional options for the synth_ice40 command.</label>
-      <input type='input' id='tools-openfpga-yosys_synth_options' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-activehdl" class='main'>
-    <h3>Tools: Active-HDL</h3>
-    <hr></hr>
-    <p><i>Active-HDL™ is a Windows based, integrated FPGA Design Creation and Simulation solution for team-based environments.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-activehdl-installation_path' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-nvc" class='main'>
-    <h3>Tools: NVC</h3>
-    <hr></hr>
-    <p><i>NVC is a VHDL compiler and simulator. NVC supports almost all of VHDL-2002 and it has been successfully used to simulate several real-world designs.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-nvc-installation_path' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
-  <div id="tools-questa" class='main'>
-    <h3>Tools: Questa Advanced Simulator</h3>
-    <hr></hr>
-    <p><i>The Questa advanced simulator is the core simulation and debug engine of the Questa verification solution.</i></p>
-    <label>Installation path:</label>
-      <br>
-      <input type='input' id='tools-questa-installation_path' class='radio-button'>
-      <br><br>
-    <label></label>
-      <br><br>
-    <label></label>
-      <br><br>
-  </div>
 
-</article> 
 
-<div id="div_button">
-  <button id="button_cancel" class="button" type="button" onclick="close_panel(event)">Close</button>
-  <button id="button_apply" class="button" type="button" onclick="send_config(event)">Apply</button>
-  <button id="button_apply_close" class="button" type="button" onclick="send_config_and_close(event)">Apply and close</button>
-  
-  
+<div class="container">
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="col">
+    </div>
+    <div class="col">
+    </div>
+    <div class="col">
+    </div>
+    <div class="col">
+    </div>
+    <div class="col-2">
+        <button id="button_cancel" class="btn btn-danger" type="button" onclick="close_panel(event)">Close</button>
+    </div>
+    <div class="col-2">
+        <button id="button_apply" class="btn btn-success" type="button" onclick="send_config(event)">Apply</button>
+    </div>
+    <div class="col-2">
+        <button id="button_apply_close" class="btn btn-primary" type="button" onclick="send_config_and_close(event)">Apply and close</button>
+    </div>
+  </div>
 </div>
+
+    </main>
+
 
 <script>
   
@@ -3021,6 +3518,7 @@ input[type='input'] {
     x.classList.toggle("change");
   }
 </script>
-
+    <script src="./sidebar/assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./sidebar/sidebars.js"></script>
 </body>
-</html> 
+</html>

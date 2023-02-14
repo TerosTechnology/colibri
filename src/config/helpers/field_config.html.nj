@@ -1,0 +1,111 @@
+
+
+
+<div class="flex-shrink-0 p-3 bg-white overflow-auto">
+
+  {%- for tp0 in type_declaration %}
+      {%- for tp1 in type_declaration[tp0]["pages"] %}
+    <div id="{{tp0}}-{{tp1}}" class='main'>
+      <h1>{{type_declaration[tp0]["title"]}}: {{type_declaration[tp0]["pages"][tp1]["title"]}}</h1>
+
+      {# <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">{{type_declaration[tp0]["title"]}}</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{type_declaration[tp0]["pages"][tp1]["title"]}}</li>
+        </ol>
+      </nav> #}
+
+      {# <hr></hr> 
+      <p><i>{{type_declaration[tp0]["pages"][tp1]["description"]}}</i></p>
+      <hr></hr> #}
+
+{# <div class="alert alert-secondary" role="alert">
+  {{type_declaration[tp0]["pages"][tp1]["description"]}}
+</div> #}
+
+        {%- for tp2 in type_declaration[tp0]["pages"][tp1] %}
+          {# Options #}
+          {%- if "options" in type_declaration[tp0]["pages"][tp1][tp2] %}
+          <div class="mb-3">
+            <label for="{{tp0}}-{{tp1}}-{{tp2}}" class="form-label">{{type_declaration[tp0]["pages"][tp1][tp2]["description"]}}</label>
+            <select class="form-select" aria-label="{{type_declaration[tp0]["pages"][tp1][tp2]["description"]}}" id="{{tp0}}-{{tp1}}-{{tp2}}">
+                  {%- for option in type_declaration[tp0]["pages"][tp1][tp2]["options"] %}
+                    <option value='{{option}}'>{{type_declaration[tp0]["pages"][tp1][tp2]["options"][option]}}</option>
+                  {%- endfor %}
+            </select>
+          </div>
+          {# Boolean #}
+          {%- elif type_declaration[tp0]["pages"][tp1][tp2]["type"] == "boolean" %}
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="{{tp0}}-{{tp1}}-{{tp2}}">
+            <label class="form-check-label" for="{{tp0}}-{{tp1}}-{{tp2}}">
+              {{type_declaration[tp0]["pages"][tp1][tp2]["description"]}}
+            </label>
+          </div>
+          {# String #}
+          {%- elif type_declaration[tp0]["pages"][tp1][tp2]["type"] == "string" %}
+          <div class="mb-3">
+            <label for="{{tp0}}-{{tp1}}-{{tp2}}" class="form-label">{{type_declaration[tp0]["pages"][tp1][tp2]["description"]}}</label>
+            <input class="form-control" id="{{tp0}}-{{tp1}}-{{tp2}}" rows="3"></input>
+          </div>
+          {# Number #}
+          {%- elif type_declaration[tp0]["pages"][tp1][tp2]["type"] == "number" %}
+          <div class="mb-3">
+            <label for="{{tp0}}-{{tp1}}-{{tp2}}" class="form-label">{{type_declaration[tp0]["pages"][tp1][tp2]["description"]}}</label>
+            <input type='number' class="form-control" id="{{tp0}}-{{tp1}}-{{tp2}}" rows="3"></input>
+          </div>
+          {# Array #}
+          {%- elif type_declaration[tp0]["pages"][tp1][tp2]["type"] == "array" %}
+          <div class="mb-3">
+            <label for="{{tp0}}-{{tp1}}-{{tp2}}" class="form-label">{{type_declaration[tp0]["pages"][tp1][tp2]["description"]}}</label>
+            <input class="form-control" id="{{tp0}}-{{tp1}}-{{tp2}}" rows="3"></input>
+          </div>
+          {%- else %}
+          {%- endif %}
+        {%- endfor %}
+    </div>
+      {%- endfor %}
+  {%- endfor %}
+
+  {# <div class="btn-group float-end" role="group" aria-label="Basic example">
+    <button type="button" class="btn btn-primary">Left</button>
+    <button type="button" class="btn btn-primary">Middle</button>
+    <button type="button" class="btn btn-primary">Right</button>
+  </div> #}
+</div>
+
+{# <div class="container">
+  <div class="row">
+    <div class="col-sm-7">
+      <div class="btn-group float-end" role="group" aria-label="Basic example">
+        <button id="button_cancel" class="btn btn-danger" type="button" onclick="close_panel(event)">Close</button>
+        <button id="button_apply" class="btn btn-success" type="button" onclick="send_config(event)">Apply</button>
+        <button id="button_apply_close" class="btn btn-primary" type="button" onclick="send_config_and_close(event)">Apply and close</button>
+      </div
+    </div>
+  </div>
+</div> #}
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="col">
+    </div>
+    <div class="col">
+    </div>
+    <div class="col">
+    </div>
+    <div class="col">
+    </div>
+    <div class="col-2">
+        <button id="button_cancel" class="btn btn-danger" type="button" onclick="close_panel(event)">Close</button>
+    </div>
+    <div class="col-2">
+        <button id="button_apply" class="btn btn-success" type="button" onclick="send_config(event)">Apply</button>
+    </div>
+    <div class="col-2">
+        <button id="button_apply_close" class="btn btn-primary" type="button" onclick="send_config_and_close(event)">Apply and close</button>
+    </div>
+  </div>
+</div>

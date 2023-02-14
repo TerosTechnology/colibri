@@ -1,20 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sidebars/">
+    <link href="./sidebar/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
 <style>
 
 {% include 'web_css.nj' %}
 
 </style>
+<link href="./sidebar/sidebars.css" rel="stylesheet">
 </head>
 <body>
 
-{% include 'web_config_html.nj' %}
+
+    </svg>
+
+    <main class="d-flex flex-nowrap">
+        <h1 class="visually-hidden">Sidebars examples</h1>
+
+{% include 'sidebar.html.nj' %}
+{% include 'field_config.html.nj' %}
+
+    </main>
+
 
 <script>
 {% include 'web_config_js.nj' %}
 </script>
-
+    <script src="./sidebar/assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./sidebar/sidebars.js"></script>
 </body>
-</html> 
+</html>

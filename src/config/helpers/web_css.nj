@@ -1,211 +1,69 @@
-body {
-  font-family: 'Open Sans', sans-serif;
-  background-color: white;
-  color: black;
-  {# max-width: 100%;
-  overflow-x: hidden; #}
-}
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
 
-h3 {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
 
-/*style the items (options), including the selected item:*/
-select{
-  width:50%;
-  padding: 8px 16px;
-  cursor: pointer;
-  padding-right: 29px;
-  margin-top: 8px;
-}
+        .b-example-divider {
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
 
-input[type='input'] {
-  width:60%;
-  margin-top: 8px;
-  padding: 8px 16px;
-  padding-right: 29px;
-}
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
 
-/* Style the sidenav links and the dropdown button */
-.dropdown-btn {
-  padding: 6px 8px 6px 16px;
-  text-decoration: none;
-  font-size: 20px;
-  display: block;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  outline: none;
-  margin-top: 10px;
-}
-/* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
-.dropdown-container {
-  display: none;
-  background-color: #ccc;
-  padding-left: 8px;
-}
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
 
-/* Fixed sidenav, full height */
-.sidenav {
-  height: 100%;
-  width: 250px;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: #f1f1f1;
-  overflow-x: hidden;
-  padding-top: 20px;
-  border: 3px solid #ccc;
-}
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
 
-.sidenav a {
-  padding: 6px 8px 6px 16px;
-  text-decoration: none;
-  font-size: 20px;
-  display: block;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  outline: none;
-}
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
 
-/* On mouse-over */
-.sidenav a:hover {
-  background: #fcffd9;
-}
+        .main {
+            float: left;
+            padding: 0px 12px;
+            {# border: 3px solid #ccc; #}
+            {# width: 70%; #}
+            {# border-left: none; #}
+            {# height: 500px; #}
+            {# border-left: 20px; #}
+            overflow-y: scroll;
 
-.main {
-  float: left;
-  padding: 0px 12px;
-  border: 3px solid #ccc;
-  width: 70%;
-  border-left: none;
-  height: 500px;
-  border-left: 20px;
-  overflow-y: scroll;
-
-  border-right: 3px solid #ccc;
-  margin-left: 300px; /* Same as the width of the sidenav */
-  font-size: 20px; /* Increased text to enable scrolling */
-  padding: 0px 10px;
-  position: absolute;
-  top: 0;
-  left: 0 !important;
-}
-
-/* Add an active class to the active dropdown button */
-.active {
-  background-color: grey;
-  color: white;
-}
-
-/* Optional: Style the caret down icon */
-.fa-caret-down {
-  float: right;
-  padding-right: 8px;
-}
-
-/* Some media queries for responsiveness */
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
-}
-
-#div_button {
-  height: 200px;
-  position: relative;
-  margin-top: 520px;
-  width: 70%;
-  margin-left: 300px;
-}
-
-.button {
-  border: none;
-  color: white;
-  padding: 11px 25px;
-  text-align: center;
-  text-decoration: none;
-  font-size: 13px;
-  margin: 4px 2px;
-  cursor: pointer;
-  float: right;
-}
-
-#button_load {
-  background-color: #B0BEC5; 
-  margin-right: 15px;
-}
-
-#button_export {
-  background-color: #B0BEC5;
-}
-
-#button_apply {
-  background-color: #4CAF50; 
-}
-
-#button_apply_close {
-  background-color: #4c7aaf; 
-}
-
-#button_cancel {
-  background-color: #ff5a31;
-}
-
-#button_load:hover { 
-    background-color: grey!important;
-}
-
-#button_export:hover { 
-    background-color: grey!important;
-}
-
-#button_apply:hover { 
-    background-color: green!important;
-}
-
-#button_apply_close:hover { 
-    background-color: blue!important;
-}
-
-#button_cancel:hover { 
-    background-color: red!important;
-}
-
-.container {
-  display: inline-block;
-  cursor: pointer;
-  float: right;
-}
-
-.bar1,
-.bar2,
-.bar3 {
-  width: 20px;
-  height: 3px;
-  background-color: #333;
-  margin: 2px 0;
-  transition: 0.4s;
-}
-
-.change .bar1 {
-  transform: translate(0, 5px) rotate(-45deg);
-}
-
-.change .bar2 {
-  opacity: 0;
-}
-
-.change .bar3 {
-  transform: translate(0, -5px) rotate(45deg);
-}
+            {# border-right: 3px solid #ccc; #}
+            margin-left: 300px; /* Same as the width of the sidenav */
+            {# font-size: 20px; /* Increased text to enable scrolling */ #}
+            padding: 0px 10px;
+            position: absolute;
+            top: 0;
+            left: 0 !important;
+        }
