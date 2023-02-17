@@ -1,27 +1,17 @@
 
+<div class="container">
 
-
-<div class="flex-shrink-0 p-3 bg-white overflow-auto">
+<div class="container">
+{# <div class="flex-shrink-0 p-3 bg-white overflow-auto"> #}
 
   {%- for tp0 in type_declaration %}
       {%- for tp1 in type_declaration[tp0]["pages"] %}
-    <div id="{{tp0}}-{{tp1}}" class='main'>
-      <h1>{{type_declaration[tp0]["title"]}}: {{type_declaration[tp0]["pages"][tp1]["title"]}}</h1>
-
-      {# <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">{{type_declaration[tp0]["title"]}}</a></li>
-          <li class="breadcrumb-item active" aria-current="page">{{type_declaration[tp0]["pages"][tp1]["title"]}}</li>
-        </ol>
-      </nav> #}
-
-      {# <hr></hr> 
-      <p><i>{{type_declaration[tp0]["pages"][tp1]["description"]}}</i></p>
-      <hr></hr> #}
-
-{# <div class="alert alert-secondary" role="alert">
-  {{type_declaration[tp0]["pages"][tp1]["description"]}}
-</div> #}
+    <div class="card position-absolute w-100 h-100" id="{{tp0}}-{{tp1}}">
+      <h1 class="card-title">{{type_declaration[tp0]["title"]}}: {{type_declaration[tp0]["pages"][tp1]["title"]}}</h1>
+      <h6 class="card-subtitle mb-2 text-muted">{{type_declaration[tp0]["pages"][tp1]["description"]}}</h6>
+      <div class='card-body overflow-auto'>
+      <br>
+      {# <h1>{{type_declaration[tp0]["title"]}}: {{type_declaration[tp0]["pages"][tp1]["title"]}}</h1> #}
 
         {%- for tp2 in type_declaration[tp0]["pages"][tp1] %}
           {# Options #}
@@ -63,16 +53,15 @@
           {%- else %}
           {%- endif %}
         {%- endfor %}
-    </div>
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
       {%- endfor %}
   {%- endfor %}
-
-  {# <div class="btn-group float-end" role="group" aria-label="Basic example">
-    <button type="button" class="btn btn-primary">Left</button>
-    <button type="button" class="btn btn-primary">Middle</button>
-    <button type="button" class="btn btn-primary">Right</button>
-  </div> #}
-</div>
 
 {# <div class="container">
   <div class="row">
@@ -86,6 +75,12 @@
   </div>
 </div> #}
 
+{# 
+<div class="container">
+        <button type="button" class="align-self-end btn btn-lg btn-block btn-primary" style="margin-top: auto;">Get started</button>
+</div> #}
+
+{# 
 <div class="container">
   <div class="row">
     <div class="col">
@@ -108,4 +103,4 @@
         <button id="button_apply_close" class="btn btn-primary" type="button" onclick="send_config_and_close(event)">Apply and close</button>
     </div>
   </div>
-</div>
+</div> #}

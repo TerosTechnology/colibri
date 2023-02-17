@@ -48,22 +48,3 @@
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
         }
-
-        .main {
-            float: left;
-            padding: 0px 12px;
-            {# border: 3px solid #ccc; #}
-            {# width: 70%; #}
-            {# border-left: none; #}
-            {# height: 500px; #}
-            {# border-left: 20px; #}
-            overflow-y: scroll;
-
-            {# border-right: 3px solid #ccc; #}
-            margin-left: 300px; /* Same as the width of the sidenav */
-            {# font-size: 20px; /* Increased text to enable scrolling */ #}
-            padding: 0px 10px;
-            position: absolute;
-            top: 0;
-            left: 0 !important;
-        }

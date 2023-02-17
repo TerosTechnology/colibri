@@ -22,8 +22,9 @@ export const WEB_CONFIG = `
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sidebars/">
-    <link href="./sidebar/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{css_0}}" rel="stylesheet">
+    <link href="{{css_1}}" rel="stylesheet">
+    <script src="{{js_0}}"></script>
 
 <style>
 
@@ -78,35 +79,15 @@ export const WEB_CONFIG = `
             -webkit-overflow-scrolling: touch;
         }
 
-        .main {
-            float: left;
-            padding: 0px 12px;
-            
-            
-            
-            
-            
-            overflow-y: scroll;
-
-            
-            margin-left: 300px; /* Same as the width of the sidenav */
-            
-            padding: 0px 10px;
-            position: absolute;
-            top: 0;
-            left: 0 !important;
-        }
-
 </style>
-<link href="./sidebar/sidebars.css" rel="stylesheet">
 </head>
 <body>
 
 
-    </svg>
 
     <main class="d-flex flex-nowrap">
         <h1 class="visually-hidden">Sidebars examples</h1>
+        
 
         <div class="flex-shrink-0 p-3 bg-white overflow-auto" style="width: 280px;">
             <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
@@ -249,18 +230,19 @@ export const WEB_CONFIG = `
                 </li>
             </ul>
         </div>
+        
 
 
+<div class="container">
 
-<div class="flex-shrink-0 p-3 bg-white overflow-auto">
-    <div id="general-general" class='main'>
-      <h1>General: General</h1>
+<div class="container">
 
+    <div class="card position-absolute w-100 h-100" id="general-general">
+      <h1 class="card-title">General: General</h1>
+      <h6 class="card-subtitle mb-2 text-muted"></h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="general-general-logging">
@@ -301,15 +283,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="documentation-general" class='main'>
-      <h1>Documentation: General</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="documentation-general">
+      <h1 class="card-title">Documentation: General</h1>
+      <h6 class="card-subtitle mb-2 text-muted"></h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="documentation-general-language" class="form-label">Documentation language:</label>
@@ -443,15 +429,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="editor-general" class='main'>
-      <h1>Editor: General</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="editor-general">
+      <h1 class="card-title">Editor: General</h1>
+      <h6 class="card-subtitle mb-2 text-muted"></h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="editor-general-continue_comment">
@@ -462,15 +452,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="formatter-general" class='main'>
-      <h1>Formatter: General</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="formatter-general">
+      <h1 class="card-title">Formatter: General</h1>
+      <h6 class="card-subtitle mb-2 text-muted"></h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="formatter-general-formatter_verilog" class="form-label">Verilog/SV formatter:</label>
@@ -492,15 +486,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="formatter-istyle" class='main'>
-      <h1>Formatter: iStyle</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="formatter-istyle">
+      <h1 class="card-title">Formatter: iStyle</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Verilog/SV iStyle formatter</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="formatter-istyle-style" class="form-label">Predefined Styling options.</label>
@@ -520,15 +518,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="formatter-s3sv" class='main'>
-      <h1>Formatter: s3sv</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="formatter-s3sv">
+      <h1 class="card-title">Formatter: s3sv</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Verilog/SV S3SV formatter</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="formatter-s3sv-one_bind_per_line">
@@ -561,15 +563,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="formatter-verible" class='main'>
-      <h1>Formatter: Verible</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="formatter-verible">
+      <h1 class="card-title">Formatter: Verible</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Verilog/SV Verible formatter</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="formatter-verible-path" class="form-label">Verible formatter binary path. E.g: /home/user/Downloads/verible-v0.0-1296/bin/verible-verilog-format</label>
@@ -584,15 +590,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="formatter-standalone" class='main'>
-      <h1>Formatter: VHDL standalone</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="formatter-standalone">
+      <h1 class="card-title">Formatter: VHDL standalone</h1>
+      <h6 class="card-subtitle mb-2 text-muted">VHDL standalone formatter</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="formatter-standalone-keyword_case" class="form-label">Keyword case. e.g. begin, case, when </label>
@@ -709,15 +719,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="formatter-svg" class='main'>
-      <h1>Formatter: VHDL VSG</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="formatter-svg">
+      <h1 class="card-title">Formatter: VHDL VSG</h1>
+      <h6 class="card-subtitle mb-2 text-muted">VHDL Style Guide. Analyzes VHDL files for style guide violations.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="formatter-svg-configuration" class="form-label">JSON or YAML configuration file.</label>
@@ -726,15 +740,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="linter-general" class='main'>
-      <h1>Linter settings: General</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="linter-general">
+      <h1 class="card-title">Linter settings: General</h1>
+      <h6 class="card-subtitle mb-2 text-muted"></h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="linter-general-linter_vhdl" class="form-label">VHDL linter: disable VHDL-LS needs restart VSCode.</label>
@@ -779,15 +797,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="linter-ghdl" class='main'>
-      <h1>Linter settings: GHDL linter</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="linter-ghdl">
+      <h1 class="card-title">Linter settings: GHDL linter</h1>
+      <h6 class="card-subtitle mb-2 text-muted"></h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="linter-ghdl-arguments" class="form-label">Arguments.</label>
@@ -796,15 +818,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="linter-icarus" class='main'>
-      <h1>Linter settings: Icarus linter</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="linter-icarus">
+      <h1 class="card-title">Linter settings: Icarus linter</h1>
+      <h6 class="card-subtitle mb-2 text-muted"></h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="linter-icarus-arguments" class="form-label">Arguments.</label>
@@ -813,15 +839,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="linter-modelsim" class='main'>
-      <h1>Linter settings: ModelSim linter</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="linter-modelsim">
+      <h1 class="card-title">Linter settings: ModelSim linter</h1>
+      <h6 class="card-subtitle mb-2 text-muted"></h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="linter-modelsim-vhdl_arguments" class="form-label">VHDL linter arguments.</label>
@@ -836,15 +866,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="linter-verible" class='main'>
-      <h1>Linter settings: Verible linter</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="linter-verible">
+      <h1 class="card-title">Linter settings: Verible linter</h1>
+      <h6 class="card-subtitle mb-2 text-muted"></h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="linter-verible-arguments" class="form-label">Arguments.</label>
@@ -853,15 +887,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="linter-verilator" class='main'>
-      <h1>Linter settings: Verilator linter</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="linter-verilator">
+      <h1 class="card-title">Linter settings: Verilator linter</h1>
+      <h6 class="card-subtitle mb-2 text-muted"></h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="linter-verilator-arguments" class="form-label">Arguments.</label>
@@ -870,15 +908,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="linter-vivado" class='main'>
-      <h1>Linter settings: Vivado linter</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="linter-vivado">
+      <h1 class="card-title">Linter settings: Vivado linter</h1>
+      <h6 class="card-subtitle mb-2 text-muted"></h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="linter-vivado-vhdl_arguments" class="form-label">VHDL linter arguments.</label>
@@ -893,15 +935,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="linter-vsg" class='main'>
-      <h1>Linter settings: VSG linter</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="linter-vsg">
+      <h1 class="card-title">Linter settings: VSG linter</h1>
+      <h6 class="card-subtitle mb-2 text-muted"></h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="linter-vsg-arguments" class="form-label">Arguments.</label>
@@ -910,15 +956,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="schematic-general" class='main'>
-      <h1>Schematic viewer: General</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="schematic-general">
+      <h1 class="card-title">Schematic viewer: General</h1>
+      <h6 class="card-subtitle mb-2 text-muted"></h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="schematic-general-backend" class="form-label">Select the backend:</label>
@@ -932,15 +982,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="templates-general" class='main'>
-      <h1>Templates: General</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="templates-general">
+      <h1 class="card-title">Templates: General</h1>
+      <h6 class="card-subtitle mb-2 text-muted"></h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="templates-general-header_file_path" class="form-label">File path with your configurable header. E.g. your company license. It will be inserted at the beginning of the template</label>
@@ -973,15 +1027,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="tools-general" class='main'>
-      <h1>Tools: General</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-general">
+      <h1 class="card-title">Tools: General</h1>
+      <h6 class="card-subtitle mb-2 text-muted"></h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-general-select_tool" class="form-label">Select a tool, framework, simulator...</label>
@@ -1029,15 +1087,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="tools-osvvm" class='main'>
-      <h1>Tools: OSVVM</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-osvvm">
+      <h1 class="card-title">Tools: OSVVM</h1>
+      <h6 class="card-subtitle mb-2 text-muted">OSVVM is an advanced verification methodology that defines a VHDL verification framework, verification utility library, verification component library, and a scripting flow that simplifies your FPGA or ASIC verification project from start to finish. Using these libraries you can create a simple, readable, and powerful testbench that is suitable for either a simple FPGA block or a complex ASIC.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-osvvm-installation_path" class="form-label">Installation path:</label>
@@ -1068,15 +1130,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="tools-ascenlint" class='main'>
-      <h1>Tools: Ascenlint</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-ascenlint">
+      <h1 class="card-title">Tools: Ascenlint</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Ascent Lint performs static source code analysis on HDL code and checks for common coding errors or coding style violations.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-ascenlint-installation_path" class="form-label">Installation path:</label>
@@ -1090,15 +1156,19 @@ export const WEB_CONFIG = `
           </div>
           
           
-    </div>
-    <div id="tools-cocotb" class='main'>
-      <h1>Tools: Cocotb</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-cocotb">
+      <h1 class="card-title">Tools: Cocotb</h1>
+      <h6 class="card-subtitle mb-2 text-muted"></h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-cocotb-installation_path" class="form-label">Installation path:</label>
@@ -1143,15 +1213,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="tools-diamond" class='main'>
-      <h1>Tools: Diamond</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-diamond">
+      <h1 class="card-title">Tools: Diamond</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Backend for Lattice Diamond.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-diamond-installation_path" class="form-label">Installation path:</label>
@@ -1166,15 +1240,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="tools-ghdl" class='main'>
-      <h1>Tools: GHDL</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-ghdl">
+      <h1 class="card-title">Tools: GHDL</h1>
+      <h6 class="card-subtitle mb-2 text-muted">GHDL is an open source VHDL simulator, which fully supports IEEE 1076-1987, IEEE 1076-1993, IEE 1076-2002 and partially the 1076-2008 version of VHDL.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-ghdl-installation_path" class="form-label">Installation path:</label>
@@ -1202,15 +1280,19 @@ export const WEB_CONFIG = `
           </div>
           
           
-    </div>
-    <div id="tools-icarus" class='main'>
-      <h1>Tools: Icarus</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-icarus">
+      <h1 class="card-title">Tools: Icarus</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Icarus Verilog is a Verilog simulation and synthesis tool. It operates as a compiler, compiling source code written in Verilog (IEEE-1364) into some target format.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-icarus-installation_path" class="form-label">Installation path:</label>
@@ -1230,15 +1312,19 @@ export const WEB_CONFIG = `
           </div>
           
           
-    </div>
-    <div id="tools-icestorm" class='main'>
-      <h1>Tools: Icestorm</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-icestorm">
+      <h1 class="card-title">Tools: Icestorm</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Open source toolchain for Lattice iCE40 FPGAs. Uses yosys for synthesis and arachne-pnr or nextpnr for Place & Route.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-icestorm-installation_path" class="form-label">Installation path:</label>
@@ -1306,15 +1392,19 @@ export const WEB_CONFIG = `
           </div>
           
           
-    </div>
-    <div id="tools-ise" class='main'>
-      <h1>Tools: ISE</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-ise">
+      <h1 class="card-title">Tools: ISE</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Xilinx ISE Design Suite.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-ise-installation_path" class="form-label">Installation path:</label>
@@ -1347,15 +1437,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="tools-isem" class='main'>
-      <h1>Tools: ISIM</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-isem">
+      <h1 class="card-title">Tools: ISIM</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Xilinx ISim simulator from ISE design suite.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-isem-installation_path" class="form-label">Installation path:</label>
@@ -1374,15 +1468,19 @@ export const WEB_CONFIG = `
           </div>
           
           
-    </div>
-    <div id="tools-modelsim" class='main'>
-      <h1>Tools: ModelSim</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-modelsim">
+      <h1 class="card-title">Tools: ModelSim</h1>
+      <h6 class="card-subtitle mb-2 text-muted">ModelSim simulator from Mentor Graphics.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-modelsim-installation_path" class="form-label">Installation path:</label>
@@ -1406,15 +1504,19 @@ export const WEB_CONFIG = `
           </div>
           
           
-    </div>
-    <div id="tools-morty" class='main'>
-      <h1>Tools: Morty</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-morty">
+      <h1 class="card-title">Tools: Morty</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Run the (System-) Verilog pickle tool called morty.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-morty-installation_path" class="form-label">Installation path:</label>
@@ -1428,15 +1530,19 @@ export const WEB_CONFIG = `
           </div>
           
           
-    </div>
-    <div id="tools-quartus" class='main'>
-      <h1>Tools: Quartus</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-quartus">
+      <h1 class="card-title">Tools: Quartus</h1>
+      <h6 class="card-subtitle mb-2 text-muted">The Quartus backend supports Intel Quartus Std and Pro editions to build systems and program the FPGA.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-quartus-installation_path" class="form-label">Installation path:</label>
@@ -1489,15 +1595,19 @@ export const WEB_CONFIG = `
           </div>
           
           
-    </div>
-    <div id="tools-radiant" class='main'>
-      <h1>Tools: Radiant</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-radiant">
+      <h1 class="card-title">Tools: Radiant</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Backend for Lattice Radiant.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-radiant-installation_path" class="form-label">Installation path:</label>
@@ -1512,15 +1622,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="tools-rivierapro" class='main'>
-      <h1>Tools: Rivierapro</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-rivierapro">
+      <h1 class="card-title">Tools: Rivierapro</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Riviera Pro simulator from Aldec.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-rivierapro-installation_path" class="form-label">Installation path:</label>
@@ -1545,15 +1659,19 @@ export const WEB_CONFIG = `
           </div>
           
           
-    </div>
-    <div id="tools-siliconcompiler" class='main'>
-      <h1>Tools: SiliconCompiler</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-siliconcompiler">
+      <h1 class="card-title">Tools: SiliconCompiler</h1>
+      <h6 class="card-subtitle mb-2 text-muted">SiliconCompiler is an open source compiler framework that automates translation from source code to silicon. Check the project documentation: <a href="https://docs.siliconcompiler.com/en/latest/">https://docs.siliconcompiler.com/en/latest/</a></h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-siliconcompiler-installation_path" class="form-label"></label>
@@ -1594,15 +1712,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="tools-spyglass" class='main'>
-      <h1>Tools: Spyglass</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-spyglass">
+      <h1 class="card-title">Tools: Spyglass</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Synopsys (formerly Atrenta) Spyglass Backend. Spyglass performs static source code analysis on HDL code and checks for common coding errors or coding style violations.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-spyglass-installation_path" class="form-label">Installation path:</label>
@@ -1632,15 +1754,19 @@ export const WEB_CONFIG = `
           </div>
           
           
-    </div>
-    <div id="tools-symbiyosys" class='main'>
-      <h1>Tools: SymbiYosys</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-symbiyosys">
+      <h1 class="card-title">Tools: SymbiYosys</h1>
+      <h6 class="card-subtitle mb-2 text-muted">SymbiYosys formal verification wrapper for Yosys.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-symbiyosys-installation_path" class="form-label">Installation path:</label>
@@ -1654,15 +1780,19 @@ export const WEB_CONFIG = `
           </div>
           
           
-    </div>
-    <div id="tools-symbiflow" class='main'>
-      <h1>Tools: Symbiflow</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-symbiflow">
+      <h1 class="card-title">Tools: Symbiflow</h1>
+      <h6 class="card-subtitle mb-2 text-muted">VHDL Style Guide. Analyzes VHDL files for style guide violations.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-symbiflow-installation_path" class="form-label">Installation path:</label>
@@ -1709,15 +1839,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="tools-trellis" class='main'>
-      <h1>Tools: Trellis</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-trellis">
+      <h1 class="card-title">Tools: Trellis</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Project Trellis enables a fully open-source flow for ECP5 FPGAs using Yosys for Verilog synthesis and nextpnr for place and route.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-trellis-installation_path" class="form-label">Installation path:</label>
@@ -1776,15 +1910,19 @@ export const WEB_CONFIG = `
           </div>
           
           
-    </div>
-    <div id="tools-vcs" class='main'>
-      <h1>Tools: VCS</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-vcs">
+      <h1 class="card-title">Tools: VCS</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Synopsys VCS Backend</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-vcs-installation_path" class="form-label">Installation path:</label>
@@ -1803,15 +1941,19 @@ export const WEB_CONFIG = `
           </div>
           
           
-    </div>
-    <div id="tools-veriblelint" class='main'>
-      <h1>Tools: VeribleLint</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-veriblelint">
+      <h1 class="card-title">Tools: VeribleLint</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Verible lint backend (verible-verilog-lint).</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-veriblelint-installation_path" class="form-label">Installation path:</label>
@@ -1820,15 +1962,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="tools-verilator" class='main'>
-      <h1>Tools: Verilator</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-verilator">
+      <h1 class="card-title">Tools: Verilator</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Verible lint backend (verible-verilog-lint).</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-verilator-installation_path" class="form-label">Installation path:</label>
@@ -1867,15 +2013,19 @@ export const WEB_CONFIG = `
           </div>
           
           
-    </div>
-    <div id="tools-vivado" class='main'>
-      <h1>Tools: Vivado</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-vivado">
+      <h1 class="card-title">Tools: Vivado</h1>
+      <h6 class="card-subtitle mb-2 text-muted">The Vivado backend executes Xilinx Vivado to build systems and program the FPGA.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-vivado-installation_path" class="form-label">Installation path:</label>
@@ -1917,15 +2067,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="tools-vunit" class='main'>
-      <h1>Tools: VUnit</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-vunit">
+      <h1 class="card-title">Tools: VUnit</h1>
+      <h6 class="card-subtitle mb-2 text-muted">VUnit testing framework.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-vunit-installation_path" class="form-label">Installation path:</label>
@@ -2008,15 +2162,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="tools-xcelium" class='main'>
-      <h1>Tools: Xcelium</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-xcelium">
+      <h1 class="card-title">Tools: Xcelium</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Xcelium simulator from Cadence Design Systems.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-xcelium-installation_path" class="form-label">Installation path:</label>
@@ -2045,15 +2203,19 @@ export const WEB_CONFIG = `
           </div>
           
           
-    </div>
-    <div id="tools-xsim" class='main'>
-      <h1>Tools: XSIM</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-xsim">
+      <h1 class="card-title">Tools: XSIM</h1>
+      <h6 class="card-subtitle mb-2 text-muted">XSim simulator from the Xilinx Vivado suite.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-xsim-installation_path" class="form-label">Installation path:</label>
@@ -2072,15 +2234,19 @@ export const WEB_CONFIG = `
           </div>
           
           
-    </div>
-    <div id="tools-yosys" class='main'>
-      <h1>Tools: Yosys</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-yosys">
+      <h1 class="card-title">Tools: Yosys</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Open source synthesis tool targeting many different FPGAs.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-yosys-installation_path" class="form-label">Installation path:</label>
@@ -2134,15 +2300,19 @@ export const WEB_CONFIG = `
           </div>
           
           
-    </div>
-    <div id="tools-openfpga" class='main'>
-      <h1>Tools: OpenFPGA</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-openfpga">
+      <h1 class="card-title">Tools: OpenFPGA</h1>
+      <h6 class="card-subtitle mb-2 text-muted">The award-winning OpenFPGA framework is the first open-source FPGA IP generator with silicon proofs supporting highly-customizable FPGA architectures.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-openfpga-installation_path" class="form-label">Installation path:</label>
@@ -2196,15 +2366,19 @@ export const WEB_CONFIG = `
           </div>
           
           
-    </div>
-    <div id="tools-activehdl" class='main'>
-      <h1>Tools: Active-HDL</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-activehdl">
+      <h1 class="card-title">Tools: Active-HDL</h1>
+      <h6 class="card-subtitle mb-2 text-muted">Active-HDL™ is a Windows based, integrated FPGA Design Creation and Simulation solution for team-based environments.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-activehdl-installation_path" class="form-label">Installation path:</label>
@@ -2213,15 +2387,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="tools-nvc" class='main'>
-      <h1>Tools: NVC</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-nvc">
+      <h1 class="card-title">Tools: NVC</h1>
+      <h6 class="card-subtitle mb-2 text-muted">NVC is a VHDL compiler and simulator. NVC supports almost all of VHDL-2002 and it has been successfully used to simulate several real-world designs.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-nvc-installation_path" class="form-label">Installation path:</label>
@@ -2230,15 +2408,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-    <div id="tools-questa" class='main'>
-      <h1>Tools: Questa Advanced Simulator</h1>
-
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
+  </div>
+    <div class="card position-absolute w-100 h-100" id="tools-questa">
+      <h1 class="card-title">Tools: Questa Advanced Simulator</h1>
+      <h6 class="card-subtitle mb-2 text-muted">The Questa advanced simulator is the core simulation and debug engine of the Questa verification solution.</h6>
+      <div class='card-body overflow-auto'>
+      <br>
       
-
-      
-
-
           
           <div class="mb-3">
             <label for="tools-questa-installation_path" class="form-label">Installation path:</label>
@@ -2247,36 +2429,19 @@ export const WEB_CONFIG = `
           
           
           
-    </div>
-
-  
-</div>
-
-
-
-<div class="container">
-  <div class="row">
-    <div class="col">
-    </div>
-    <div class="col">
-    </div>
-    <div class="col">
-    </div>
-    <div class="col">
-    </div>
-    <div class="col">
-    </div>
-    <div class="col-2">
-        <button id="button_cancel" class="btn btn-danger" type="button" onclick="close_panel(event)">Close</button>
-    </div>
-    <div class="col-2">
-        <button id="button_apply" class="btn btn-success" type="button" onclick="send_config(event)">Apply</button>
-    </div>
-    <div class="col-2">
-        <button id="button_apply_close" class="btn btn-primary" type="button" onclick="send_config_and_close(event)">Apply and close</button>
-    </div>
+      </div>
+      <div class="card-footer">
+        <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
+        <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
+        <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
+      </div>
   </div>
-</div>
+
+
+
+
+
+
 
     </main>
 
@@ -3538,8 +3703,7 @@ export const WEB_CONFIG = `
     x.classList.toggle("change");
   }
 </script>
-    <script src="./sidebar/assets/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./sidebar/sidebars.js"></script>
+    
 </body>
 </html>
 `;

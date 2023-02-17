@@ -2,25 +2,27 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sidebars/">
-    <link href="./sidebar/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{css_0}}" rel="stylesheet">
+    <link href="{{css_1}}" rel="stylesheet">
+    <script src="{{js_0}}"></script>
 
 <style>
 
 {% include 'web_css.nj' %}
 
 </style>
-<link href="./sidebar/sidebars.css" rel="stylesheet">
 </head>
 <body>
 
 
-    </svg>
 
     <main class="d-flex flex-nowrap">
         <h1 class="visually-hidden">Sidebars examples</h1>
+        {# <div class="a-example-divider b-example-vr"></div> #}
 
 {% include 'sidebar.html.nj' %}
+        {# <div class="a-example-divider b-example-vr"></div> #}
+
 {% include 'field_config.html.nj' %}
 
     </main>
@@ -29,7 +31,7 @@
 <script>
 {% include 'web_config_js.nj' %}
 </script>
-    <script src="./sidebar/assets/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./sidebar/sidebars.js"></script>
+    {# <script src="./sidebar/assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./sidebar/sidebars.js"></script> #}
 </body>
 </html>
