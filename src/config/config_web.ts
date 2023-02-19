@@ -28,6 +28,71 @@ export const WEB_CONFIG = `
 
 <style>
 
+
+
+
+
+
+
+        /* Move down content because we have a fixed navbar that is 50px tall */
+        body {
+            
+        }
+
+
+
+
+
+        
+
+        .sidebar {
+            position: fixed;
+            top: 0px;
+            bottom: 0;
+            left: 0;
+            z-index: 1000;
+            display: block;
+            padding: 20px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            /* Scrollable contents if viewport is shorter than content. */
+            
+            
+            width: 270px;
+        }
+
+
+
+
+
+        
+
+        
+            .main {
+                
+                padding-left: 290px;
+            }
+        
+
+        .main .page-header {
+            margin-top: 0;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         .bd-placeholder-img {
             font-size: 1.125rem;
             text-anchor: middle;
@@ -79,9 +144,14 @@ export const WEB_CONFIG = `
             -webkit-overflow-scrolling: touch;
         }
 
+        html,
+        body {
+            height: 100%;
+            overflow-y: hidden;
+        }
 
-        .card-body{
-            width:100%;
+        .card {
+            height: 100%;
         }
 
 </style>
@@ -90,11 +160,10 @@ export const WEB_CONFIG = `
 
 
 
-    <main class="d-flex flex-nowrap">
-        <h1 class="visually-hidden">Sidebars examples</h1>
-        
+    <div class="container-fluid h-100">
+        <div class="row h-100">
 
-        <div class="flex-shrink-0 p-3 bg-white overflow-auto" style="width: 280px;">
+        <div class="flex-shrink-0 p-3 bg-white overflow-auto sidebar">
             <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
                 <svg class="bi pe-none me-2" width="30" height="24">
                     <use xlink:href="#bootstrap" />
@@ -237,14 +306,14 @@ export const WEB_CONFIG = `
         </div>
         
 
-<div class="container">
-
-    <div class="card position-absolute h-100" id="general-general">
+<div class="col-sm-12 main h-100">
+  <div class="row h-100">
+    <div class="card h-100" id="general-general">
       <div class="card-header">
         <h1 class="card-title">General: General</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -304,12 +373,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="documentation-general">
+    <div class="card h-100" id="documentation-general">
       <div class="card-header">
         <h1 class="card-title">Documentation: General</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -482,12 +551,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="editor-general">
+    <div class="card h-100" id="editor-general">
       <div class="card-header">
         <h1 class="card-title">Editor: General</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -509,12 +578,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="formatter-general">
+    <div class="card h-100" id="formatter-general">
       <div class="card-header">
         <h1 class="card-title">Formatter: General</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -549,12 +618,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="formatter-istyle">
+    <div class="card h-100" id="formatter-istyle">
       <div class="card-header">
         <h1 class="card-title">Formatter: iStyle</h1>
         <h6 class="card-subtitle mb-2 text-muted">Verilog/SV iStyle formatter</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -587,12 +656,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="formatter-s3sv">
+    <div class="card h-100" id="formatter-s3sv">
       <div class="card-header">
         <h1 class="card-title">Formatter: s3sv</h1>
         <h6 class="card-subtitle mb-2 text-muted">Verilog/SV S3SV formatter</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -642,12 +711,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="formatter-verible">
+    <div class="card h-100" id="formatter-verible">
       <div class="card-header">
         <h1 class="card-title">Formatter: Verible</h1>
         <h6 class="card-subtitle mb-2 text-muted">Verilog/SV Verible formatter</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -675,12 +744,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="formatter-standalone">
+    <div class="card h-100" id="formatter-standalone">
       <div class="card-header">
         <h1 class="card-title">Formatter: VHDL standalone</h1>
         <h6 class="card-subtitle mb-2 text-muted">VHDL standalone formatter</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -832,12 +901,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="formatter-svg">
+    <div class="card h-100" id="formatter-svg">
       <div class="card-header">
         <h1 class="card-title">Formatter: VHDL VSG</h1>
         <h6 class="card-subtitle mb-2 text-muted">VHDL Style Guide. Analyzes VHDL files for style guide violations.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -857,12 +926,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="linter-general">
+    <div class="card h-100" id="linter-general">
       <div class="card-header">
         <h1 class="card-title">Linter settings: General</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -924,12 +993,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="linter-ghdl">
+    <div class="card h-100" id="linter-ghdl">
       <div class="card-header">
         <h1 class="card-title">Linter settings: GHDL linter</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -949,12 +1018,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="linter-icarus">
+    <div class="card h-100" id="linter-icarus">
       <div class="card-header">
         <h1 class="card-title">Linter settings: Icarus linter</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -974,12 +1043,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="linter-modelsim">
+    <div class="card h-100" id="linter-modelsim">
       <div class="card-header">
         <h1 class="card-title">Linter settings: ModelSim linter</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1007,12 +1076,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="linter-verible">
+    <div class="card h-100" id="linter-verible">
       <div class="card-header">
         <h1 class="card-title">Linter settings: Verible linter</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1032,12 +1101,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="linter-verilator">
+    <div class="card h-100" id="linter-verilator">
       <div class="card-header">
         <h1 class="card-title">Linter settings: Verilator linter</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1057,12 +1126,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="linter-vivado">
+    <div class="card h-100" id="linter-vivado">
       <div class="card-header">
         <h1 class="card-title">Linter settings: Vivado linter</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1090,12 +1159,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="linter-vsg">
+    <div class="card h-100" id="linter-vsg">
       <div class="card-header">
         <h1 class="card-title">Linter settings: VSG linter</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1115,12 +1184,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="schematic-general">
+    <div class="card h-100" id="schematic-general">
       <div class="card-header">
         <h1 class="card-title">Schematic viewer: General</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1145,12 +1214,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="templates-general">
+    <div class="card h-100" id="templates-general">
       <div class="card-header">
         <h1 class="card-title">Templates: General</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1200,12 +1269,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-general">
+    <div class="card h-100" id="tools-general">
       <div class="card-header">
         <h1 class="card-title">Tools: General</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1268,12 +1337,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-osvvm">
+    <div class="card h-100" id="tools-osvvm">
       <div class="card-header">
         <h1 class="card-title">Tools: OSVVM</h1>
         <h6 class="card-subtitle mb-2 text-muted">OSVVM is an advanced verification methodology that defines a VHDL verification framework, verification utility library, verification component library, and a scripting flow that simplifies your FPGA or ASIC verification project from start to finish. Using these libraries you can create a simple, readable, and powerful testbench that is suitable for either a simple FPGA block or a complex ASIC.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1319,12 +1388,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-ascenlint">
+    <div class="card h-100" id="tools-ascenlint">
       <div class="card-header">
         <h1 class="card-title">Tools: Ascenlint</h1>
         <h6 class="card-subtitle mb-2 text-muted">Ascent Lint performs static source code analysis on HDL code and checks for common coding errors or coding style violations.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1351,12 +1420,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-cocotb">
+    <div class="card h-100" id="tools-cocotb">
       <div class="card-header">
         <h1 class="card-title">Tools: Cocotb</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1420,12 +1489,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-diamond">
+    <div class="card h-100" id="tools-diamond">
       <div class="card-header">
         <h1 class="card-title">Tools: Diamond</h1>
         <h6 class="card-subtitle mb-2 text-muted">Backend for Lattice Diamond.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1453,12 +1522,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-ghdl">
+    <div class="card h-100" id="tools-ghdl">
       <div class="card-header">
         <h1 class="card-title">Tools: GHDL</h1>
         <h6 class="card-subtitle mb-2 text-muted">GHDL is an open source VHDL simulator, which fully supports IEEE 1076-1987, IEEE 1076-1993, IEE 1076-2002 and partially the 1076-2008 version of VHDL.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1503,12 +1572,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-icarus">
+    <div class="card h-100" id="tools-icarus">
       <div class="card-header">
         <h1 class="card-title">Tools: Icarus</h1>
         <h6 class="card-subtitle mb-2 text-muted">Icarus Verilog is a Verilog simulation and synthesis tool. It operates as a compiler, compiling source code written in Verilog (IEEE-1364) into some target format.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1543,12 +1612,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-icestorm">
+    <div class="card h-100" id="tools-icestorm">
       <div class="card-header">
         <h1 class="card-title">Tools: Icestorm</h1>
         <h6 class="card-subtitle mb-2 text-muted">Open source toolchain for Lattice iCE40 FPGAs. Uses yosys for synthesis and arachne-pnr or nextpnr for Place & Route.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1643,12 +1712,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-ise">
+    <div class="card h-100" id="tools-ise">
       <div class="card-header">
         <h1 class="card-title">Tools: ISE</h1>
         <h6 class="card-subtitle mb-2 text-muted">Xilinx ISE Design Suite.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1700,12 +1769,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-isem">
+    <div class="card h-100" id="tools-isem">
       <div class="card-header">
         <h1 class="card-title">Tools: ISIM</h1>
         <h6 class="card-subtitle mb-2 text-muted">Xilinx ISim simulator from ISE design suite.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1739,12 +1808,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-modelsim">
+    <div class="card h-100" id="tools-modelsim">
       <div class="card-header">
         <h1 class="card-title">Tools: ModelSim</h1>
         <h6 class="card-subtitle mb-2 text-muted">ModelSim simulator from Mentor Graphics.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1785,12 +1854,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-morty">
+    <div class="card h-100" id="tools-morty">
       <div class="card-header">
         <h1 class="card-title">Tools: Morty</h1>
         <h6 class="card-subtitle mb-2 text-muted">Run the (System-) Verilog pickle tool called morty.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1817,12 +1886,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-quartus">
+    <div class="card h-100" id="tools-quartus">
       <div class="card-header">
         <h1 class="card-title">Tools: Quartus</h1>
         <h6 class="card-subtitle mb-2 text-muted">The Quartus backend supports Intel Quartus Std and Pro editions to build systems and program the FPGA.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1900,12 +1969,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-radiant">
+    <div class="card h-100" id="tools-radiant">
       <div class="card-header">
         <h1 class="card-title">Tools: Radiant</h1>
         <h6 class="card-subtitle mb-2 text-muted">Backend for Lattice Radiant.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1933,12 +2002,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-rivierapro">
+    <div class="card h-100" id="tools-rivierapro">
       <div class="card-header">
         <h1 class="card-title">Tools: Rivierapro</h1>
         <h6 class="card-subtitle mb-2 text-muted">Riviera Pro simulator from Aldec.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -1980,12 +2049,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-siliconcompiler">
+    <div class="card h-100" id="tools-siliconcompiler">
       <div class="card-header">
         <h1 class="card-title">Tools: SiliconCompiler</h1>
         <h6 class="card-subtitle mb-2 text-muted">SiliconCompiler is an open source compiler framework that automates translation from source code to silicon. Check the project documentation: <a href="https://docs.siliconcompiler.com/en/latest/">https://docs.siliconcompiler.com/en/latest/</a></h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -2047,12 +2116,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-spyglass">
+    <div class="card h-100" id="tools-spyglass">
       <div class="card-header">
         <h1 class="card-title">Tools: Spyglass</h1>
         <h6 class="card-subtitle mb-2 text-muted">Synopsys (formerly Atrenta) Spyglass Backend. Spyglass performs static source code analysis on HDL code and checks for common coding errors or coding style violations.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -2101,12 +2170,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-symbiyosys">
+    <div class="card h-100" id="tools-symbiyosys">
       <div class="card-header">
         <h1 class="card-title">Tools: SymbiYosys</h1>
         <h6 class="card-subtitle mb-2 text-muted">SymbiYosys formal verification wrapper for Yosys.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -2133,12 +2202,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-symbiflow">
+    <div class="card h-100" id="tools-symbiflow">
       <div class="card-header">
         <h1 class="card-title">Tools: Symbiflow</h1>
         <h6 class="card-subtitle mb-2 text-muted">VHDL Style Guide. Analyzes VHDL files for style guide violations.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -2208,12 +2277,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-trellis">
+    <div class="card h-100" id="tools-trellis">
       <div class="card-header">
         <h1 class="card-title">Tools: Trellis</h1>
         <h6 class="card-subtitle mb-2 text-muted">Project Trellis enables a fully open-source flow for ECP5 FPGAs using Yosys for Verilog synthesis and nextpnr for place and route.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -2297,12 +2366,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-vcs">
+    <div class="card h-100" id="tools-vcs">
       <div class="card-header">
         <h1 class="card-title">Tools: VCS</h1>
         <h6 class="card-subtitle mb-2 text-muted">Synopsys VCS Backend</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -2336,12 +2405,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-veriblelint">
+    <div class="card h-100" id="tools-veriblelint">
       <div class="card-header">
         <h1 class="card-title">Tools: VeribleLint</h1>
         <h6 class="card-subtitle mb-2 text-muted">Verible lint backend (verible-verilog-lint).</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -2361,12 +2430,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-verilator">
+    <div class="card h-100" id="tools-verilator">
       <div class="card-header">
         <h1 class="card-title">Tools: Verilator</h1>
         <h6 class="card-subtitle mb-2 text-muted">Verible lint backend (verible-verilog-lint).</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -2426,12 +2495,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-vivado">
+    <div class="card h-100" id="tools-vivado">
       <div class="card-header">
         <h1 class="card-title">Tools: Vivado</h1>
         <h6 class="card-subtitle mb-2 text-muted">The Vivado backend executes Xilinx Vivado to build systems and program the FPGA.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -2494,12 +2563,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-vunit">
+    <div class="card h-100" id="tools-vunit">
       <div class="card-header">
         <h1 class="card-title">Tools: VUnit</h1>
         <h6 class="card-subtitle mb-2 text-muted">VUnit testing framework.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -2611,12 +2680,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-xcelium">
+    <div class="card h-100" id="tools-xcelium">
       <div class="card-header">
         <h1 class="card-title">Tools: Xcelium</h1>
         <h6 class="card-subtitle mb-2 text-muted">Xcelium simulator from Cadence Design Systems.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -2664,12 +2733,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-xsim">
+    <div class="card h-100" id="tools-xsim">
       <div class="card-header">
         <h1 class="card-title">Tools: XSIM</h1>
         <h6 class="card-subtitle mb-2 text-muted">XSim simulator from the Xilinx Vivado suite.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -2703,12 +2772,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-yosys">
+    <div class="card h-100" id="tools-yosys">
       <div class="card-header">
         <h1 class="card-title">Tools: Yosys</h1>
         <h6 class="card-subtitle mb-2 text-muted">Open source synthesis tool targeting many different FPGAs.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -2785,12 +2854,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-openfpga">
+    <div class="card h-100" id="tools-openfpga">
       <div class="card-header">
         <h1 class="card-title">Tools: OpenFPGA</h1>
         <h6 class="card-subtitle mb-2 text-muted">The award-winning OpenFPGA framework is the first open-source FPGA IP generator with silicon proofs supporting highly-customizable FPGA architectures.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -2867,12 +2936,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-activehdl">
+    <div class="card h-100" id="tools-activehdl">
       <div class="card-header">
         <h1 class="card-title">Tools: Active-HDL</h1>
         <h6 class="card-subtitle mb-2 text-muted">Active-HDL™ is a Windows based, integrated FPGA Design Creation and Simulation solution for team-based environments.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -2892,12 +2961,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-nvc">
+    <div class="card h-100" id="tools-nvc">
       <div class="card-header">
         <h1 class="card-title">Tools: NVC</h1>
         <h6 class="card-subtitle mb-2 text-muted">NVC is a VHDL compiler and simulator. NVC supports almost all of VHDL-2002 and it has been successfully used to simulate several real-world designs.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -2917,12 +2986,12 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-    <div class="card position-absolute h-100" id="tools-questa">
+    <div class="card h-100" id="tools-questa">
       <div class="card-header">
         <h1 class="card-title">Tools: Questa Advanced Simulator</h1>
         <h6 class="card-subtitle mb-2 text-muted">The Questa advanced simulator is the core simulation and debug engine of the Questa verification solution.</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       
       <br>
           
@@ -2942,6 +3011,7 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
+  </div>
 </div>
 
 
@@ -2950,7 +3020,8 @@ export const WEB_CONFIG = `
 
 
 
-    </main>
+        </div>
+    </div>
 
 
 <script>
@@ -2958,310 +3029,361 @@ export const WEB_CONFIG = `
   function enable_tab(tp0, tp1){
     const complete = tp0 + "-" + tp1;
   if ("general" == tp0 && "general" == tp1){
-    document.getElementById("general-general").style.visibility = "visible"; 
+    document.getElementById("general-general").classList.remove('d-none');
   }
   else{
-    document.getElementById("general-general").style.visibility = "hidden"; 
+    document.getElementById("general-general").classList.remove('d-none');
+    document.getElementById("general-general").classList.add('d-none');
   }
   if ("documentation" == tp0 && "general" == tp1){
-    document.getElementById("documentation-general").style.visibility = "visible"; 
+    document.getElementById("documentation-general").classList.remove('d-none');
   }
   else{
-    document.getElementById("documentation-general").style.visibility = "hidden"; 
+    document.getElementById("documentation-general").classList.remove('d-none');
+    document.getElementById("documentation-general").classList.add('d-none');
   }
   if ("editor" == tp0 && "general" == tp1){
-    document.getElementById("editor-general").style.visibility = "visible"; 
+    document.getElementById("editor-general").classList.remove('d-none');
   }
   else{
-    document.getElementById("editor-general").style.visibility = "hidden"; 
+    document.getElementById("editor-general").classList.remove('d-none');
+    document.getElementById("editor-general").classList.add('d-none');
   }
   if ("formatter" == tp0 && "general" == tp1){
-    document.getElementById("formatter-general").style.visibility = "visible"; 
+    document.getElementById("formatter-general").classList.remove('d-none');
   }
   else{
-    document.getElementById("formatter-general").style.visibility = "hidden"; 
+    document.getElementById("formatter-general").classList.remove('d-none');
+    document.getElementById("formatter-general").classList.add('d-none');
   }
   if ("formatter" == tp0 && "istyle" == tp1){
-    document.getElementById("formatter-istyle").style.visibility = "visible"; 
+    document.getElementById("formatter-istyle").classList.remove('d-none');
   }
   else{
-    document.getElementById("formatter-istyle").style.visibility = "hidden"; 
+    document.getElementById("formatter-istyle").classList.remove('d-none');
+    document.getElementById("formatter-istyle").classList.add('d-none');
   }
   if ("formatter" == tp0 && "s3sv" == tp1){
-    document.getElementById("formatter-s3sv").style.visibility = "visible"; 
+    document.getElementById("formatter-s3sv").classList.remove('d-none');
   }
   else{
-    document.getElementById("formatter-s3sv").style.visibility = "hidden"; 
+    document.getElementById("formatter-s3sv").classList.remove('d-none');
+    document.getElementById("formatter-s3sv").classList.add('d-none');
   }
   if ("formatter" == tp0 && "verible" == tp1){
-    document.getElementById("formatter-verible").style.visibility = "visible"; 
+    document.getElementById("formatter-verible").classList.remove('d-none');
   }
   else{
-    document.getElementById("formatter-verible").style.visibility = "hidden"; 
+    document.getElementById("formatter-verible").classList.remove('d-none');
+    document.getElementById("formatter-verible").classList.add('d-none');
   }
   if ("formatter" == tp0 && "standalone" == tp1){
-    document.getElementById("formatter-standalone").style.visibility = "visible"; 
+    document.getElementById("formatter-standalone").classList.remove('d-none');
   }
   else{
-    document.getElementById("formatter-standalone").style.visibility = "hidden"; 
+    document.getElementById("formatter-standalone").classList.remove('d-none');
+    document.getElementById("formatter-standalone").classList.add('d-none');
   }
   if ("formatter" == tp0 && "svg" == tp1){
-    document.getElementById("formatter-svg").style.visibility = "visible"; 
+    document.getElementById("formatter-svg").classList.remove('d-none');
   }
   else{
-    document.getElementById("formatter-svg").style.visibility = "hidden"; 
+    document.getElementById("formatter-svg").classList.remove('d-none');
+    document.getElementById("formatter-svg").classList.add('d-none');
   }
   if ("linter" == tp0 && "general" == tp1){
-    document.getElementById("linter-general").style.visibility = "visible"; 
+    document.getElementById("linter-general").classList.remove('d-none');
   }
   else{
-    document.getElementById("linter-general").style.visibility = "hidden"; 
+    document.getElementById("linter-general").classList.remove('d-none');
+    document.getElementById("linter-general").classList.add('d-none');
   }
   if ("linter" == tp0 && "ghdl" == tp1){
-    document.getElementById("linter-ghdl").style.visibility = "visible"; 
+    document.getElementById("linter-ghdl").classList.remove('d-none');
   }
   else{
-    document.getElementById("linter-ghdl").style.visibility = "hidden"; 
+    document.getElementById("linter-ghdl").classList.remove('d-none');
+    document.getElementById("linter-ghdl").classList.add('d-none');
   }
   if ("linter" == tp0 && "icarus" == tp1){
-    document.getElementById("linter-icarus").style.visibility = "visible"; 
+    document.getElementById("linter-icarus").classList.remove('d-none');
   }
   else{
-    document.getElementById("linter-icarus").style.visibility = "hidden"; 
+    document.getElementById("linter-icarus").classList.remove('d-none');
+    document.getElementById("linter-icarus").classList.add('d-none');
   }
   if ("linter" == tp0 && "modelsim" == tp1){
-    document.getElementById("linter-modelsim").style.visibility = "visible"; 
+    document.getElementById("linter-modelsim").classList.remove('d-none');
   }
   else{
-    document.getElementById("linter-modelsim").style.visibility = "hidden"; 
+    document.getElementById("linter-modelsim").classList.remove('d-none');
+    document.getElementById("linter-modelsim").classList.add('d-none');
   }
   if ("linter" == tp0 && "verible" == tp1){
-    document.getElementById("linter-verible").style.visibility = "visible"; 
+    document.getElementById("linter-verible").classList.remove('d-none');
   }
   else{
-    document.getElementById("linter-verible").style.visibility = "hidden"; 
+    document.getElementById("linter-verible").classList.remove('d-none');
+    document.getElementById("linter-verible").classList.add('d-none');
   }
   if ("linter" == tp0 && "verilator" == tp1){
-    document.getElementById("linter-verilator").style.visibility = "visible"; 
+    document.getElementById("linter-verilator").classList.remove('d-none');
   }
   else{
-    document.getElementById("linter-verilator").style.visibility = "hidden"; 
+    document.getElementById("linter-verilator").classList.remove('d-none');
+    document.getElementById("linter-verilator").classList.add('d-none');
   }
   if ("linter" == tp0 && "vivado" == tp1){
-    document.getElementById("linter-vivado").style.visibility = "visible"; 
+    document.getElementById("linter-vivado").classList.remove('d-none');
   }
   else{
-    document.getElementById("linter-vivado").style.visibility = "hidden"; 
+    document.getElementById("linter-vivado").classList.remove('d-none');
+    document.getElementById("linter-vivado").classList.add('d-none');
   }
   if ("linter" == tp0 && "vsg" == tp1){
-    document.getElementById("linter-vsg").style.visibility = "visible"; 
+    document.getElementById("linter-vsg").classList.remove('d-none');
   }
   else{
-    document.getElementById("linter-vsg").style.visibility = "hidden"; 
+    document.getElementById("linter-vsg").classList.remove('d-none');
+    document.getElementById("linter-vsg").classList.add('d-none');
   }
   if ("schematic" == tp0 && "general" == tp1){
-    document.getElementById("schematic-general").style.visibility = "visible"; 
+    document.getElementById("schematic-general").classList.remove('d-none');
   }
   else{
-    document.getElementById("schematic-general").style.visibility = "hidden"; 
+    document.getElementById("schematic-general").classList.remove('d-none');
+    document.getElementById("schematic-general").classList.add('d-none');
   }
   if ("templates" == tp0 && "general" == tp1){
-    document.getElementById("templates-general").style.visibility = "visible"; 
+    document.getElementById("templates-general").classList.remove('d-none');
   }
   else{
-    document.getElementById("templates-general").style.visibility = "hidden"; 
+    document.getElementById("templates-general").classList.remove('d-none');
+    document.getElementById("templates-general").classList.add('d-none');
   }
   if ("tools" == tp0 && "general" == tp1){
-    document.getElementById("tools-general").style.visibility = "visible"; 
+    document.getElementById("tools-general").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-general").style.visibility = "hidden"; 
+    document.getElementById("tools-general").classList.remove('d-none');
+    document.getElementById("tools-general").classList.add('d-none');
   }
   if ("tools" == tp0 && "osvvm" == tp1){
-    document.getElementById("tools-osvvm").style.visibility = "visible"; 
+    document.getElementById("tools-osvvm").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-osvvm").style.visibility = "hidden"; 
+    document.getElementById("tools-osvvm").classList.remove('d-none');
+    document.getElementById("tools-osvvm").classList.add('d-none');
   }
   if ("tools" == tp0 && "ascenlint" == tp1){
-    document.getElementById("tools-ascenlint").style.visibility = "visible"; 
+    document.getElementById("tools-ascenlint").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-ascenlint").style.visibility = "hidden"; 
+    document.getElementById("tools-ascenlint").classList.remove('d-none');
+    document.getElementById("tools-ascenlint").classList.add('d-none');
   }
   if ("tools" == tp0 && "cocotb" == tp1){
-    document.getElementById("tools-cocotb").style.visibility = "visible"; 
+    document.getElementById("tools-cocotb").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-cocotb").style.visibility = "hidden"; 
+    document.getElementById("tools-cocotb").classList.remove('d-none');
+    document.getElementById("tools-cocotb").classList.add('d-none');
   }
   if ("tools" == tp0 && "diamond" == tp1){
-    document.getElementById("tools-diamond").style.visibility = "visible"; 
+    document.getElementById("tools-diamond").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-diamond").style.visibility = "hidden"; 
+    document.getElementById("tools-diamond").classList.remove('d-none');
+    document.getElementById("tools-diamond").classList.add('d-none');
   }
   if ("tools" == tp0 && "ghdl" == tp1){
-    document.getElementById("tools-ghdl").style.visibility = "visible"; 
+    document.getElementById("tools-ghdl").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-ghdl").style.visibility = "hidden"; 
+    document.getElementById("tools-ghdl").classList.remove('d-none');
+    document.getElementById("tools-ghdl").classList.add('d-none');
   }
   if ("tools" == tp0 && "icarus" == tp1){
-    document.getElementById("tools-icarus").style.visibility = "visible"; 
+    document.getElementById("tools-icarus").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-icarus").style.visibility = "hidden"; 
+    document.getElementById("tools-icarus").classList.remove('d-none');
+    document.getElementById("tools-icarus").classList.add('d-none');
   }
   if ("tools" == tp0 && "icestorm" == tp1){
-    document.getElementById("tools-icestorm").style.visibility = "visible"; 
+    document.getElementById("tools-icestorm").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-icestorm").style.visibility = "hidden"; 
+    document.getElementById("tools-icestorm").classList.remove('d-none');
+    document.getElementById("tools-icestorm").classList.add('d-none');
   }
   if ("tools" == tp0 && "ise" == tp1){
-    document.getElementById("tools-ise").style.visibility = "visible"; 
+    document.getElementById("tools-ise").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-ise").style.visibility = "hidden"; 
+    document.getElementById("tools-ise").classList.remove('d-none');
+    document.getElementById("tools-ise").classList.add('d-none');
   }
   if ("tools" == tp0 && "isem" == tp1){
-    document.getElementById("tools-isem").style.visibility = "visible"; 
+    document.getElementById("tools-isem").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-isem").style.visibility = "hidden"; 
+    document.getElementById("tools-isem").classList.remove('d-none');
+    document.getElementById("tools-isem").classList.add('d-none');
   }
   if ("tools" == tp0 && "modelsim" == tp1){
-    document.getElementById("tools-modelsim").style.visibility = "visible"; 
+    document.getElementById("tools-modelsim").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-modelsim").style.visibility = "hidden"; 
+    document.getElementById("tools-modelsim").classList.remove('d-none');
+    document.getElementById("tools-modelsim").classList.add('d-none');
   }
   if ("tools" == tp0 && "morty" == tp1){
-    document.getElementById("tools-morty").style.visibility = "visible"; 
+    document.getElementById("tools-morty").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-morty").style.visibility = "hidden"; 
+    document.getElementById("tools-morty").classList.remove('d-none');
+    document.getElementById("tools-morty").classList.add('d-none');
   }
   if ("tools" == tp0 && "quartus" == tp1){
-    document.getElementById("tools-quartus").style.visibility = "visible"; 
+    document.getElementById("tools-quartus").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-quartus").style.visibility = "hidden"; 
+    document.getElementById("tools-quartus").classList.remove('d-none');
+    document.getElementById("tools-quartus").classList.add('d-none');
   }
   if ("tools" == tp0 && "radiant" == tp1){
-    document.getElementById("tools-radiant").style.visibility = "visible"; 
+    document.getElementById("tools-radiant").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-radiant").style.visibility = "hidden"; 
+    document.getElementById("tools-radiant").classList.remove('d-none');
+    document.getElementById("tools-radiant").classList.add('d-none');
   }
   if ("tools" == tp0 && "rivierapro" == tp1){
-    document.getElementById("tools-rivierapro").style.visibility = "visible"; 
+    document.getElementById("tools-rivierapro").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-rivierapro").style.visibility = "hidden"; 
+    document.getElementById("tools-rivierapro").classList.remove('d-none');
+    document.getElementById("tools-rivierapro").classList.add('d-none');
   }
   if ("tools" == tp0 && "siliconcompiler" == tp1){
-    document.getElementById("tools-siliconcompiler").style.visibility = "visible"; 
+    document.getElementById("tools-siliconcompiler").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-siliconcompiler").style.visibility = "hidden"; 
+    document.getElementById("tools-siliconcompiler").classList.remove('d-none');
+    document.getElementById("tools-siliconcompiler").classList.add('d-none');
   }
   if ("tools" == tp0 && "spyglass" == tp1){
-    document.getElementById("tools-spyglass").style.visibility = "visible"; 
+    document.getElementById("tools-spyglass").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-spyglass").style.visibility = "hidden"; 
+    document.getElementById("tools-spyglass").classList.remove('d-none');
+    document.getElementById("tools-spyglass").classList.add('d-none');
   }
   if ("tools" == tp0 && "symbiyosys" == tp1){
-    document.getElementById("tools-symbiyosys").style.visibility = "visible"; 
+    document.getElementById("tools-symbiyosys").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-symbiyosys").style.visibility = "hidden"; 
+    document.getElementById("tools-symbiyosys").classList.remove('d-none');
+    document.getElementById("tools-symbiyosys").classList.add('d-none');
   }
   if ("tools" == tp0 && "symbiflow" == tp1){
-    document.getElementById("tools-symbiflow").style.visibility = "visible"; 
+    document.getElementById("tools-symbiflow").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-symbiflow").style.visibility = "hidden"; 
+    document.getElementById("tools-symbiflow").classList.remove('d-none');
+    document.getElementById("tools-symbiflow").classList.add('d-none');
   }
   if ("tools" == tp0 && "trellis" == tp1){
-    document.getElementById("tools-trellis").style.visibility = "visible"; 
+    document.getElementById("tools-trellis").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-trellis").style.visibility = "hidden"; 
+    document.getElementById("tools-trellis").classList.remove('d-none');
+    document.getElementById("tools-trellis").classList.add('d-none');
   }
   if ("tools" == tp0 && "vcs" == tp1){
-    document.getElementById("tools-vcs").style.visibility = "visible"; 
+    document.getElementById("tools-vcs").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-vcs").style.visibility = "hidden"; 
+    document.getElementById("tools-vcs").classList.remove('d-none');
+    document.getElementById("tools-vcs").classList.add('d-none');
   }
   if ("tools" == tp0 && "veriblelint" == tp1){
-    document.getElementById("tools-veriblelint").style.visibility = "visible"; 
+    document.getElementById("tools-veriblelint").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-veriblelint").style.visibility = "hidden"; 
+    document.getElementById("tools-veriblelint").classList.remove('d-none');
+    document.getElementById("tools-veriblelint").classList.add('d-none');
   }
   if ("tools" == tp0 && "verilator" == tp1){
-    document.getElementById("tools-verilator").style.visibility = "visible"; 
+    document.getElementById("tools-verilator").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-verilator").style.visibility = "hidden"; 
+    document.getElementById("tools-verilator").classList.remove('d-none');
+    document.getElementById("tools-verilator").classList.add('d-none');
   }
   if ("tools" == tp0 && "vivado" == tp1){
-    document.getElementById("tools-vivado").style.visibility = "visible"; 
+    document.getElementById("tools-vivado").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-vivado").style.visibility = "hidden"; 
+    document.getElementById("tools-vivado").classList.remove('d-none');
+    document.getElementById("tools-vivado").classList.add('d-none');
   }
   if ("tools" == tp0 && "vunit" == tp1){
-    document.getElementById("tools-vunit").style.visibility = "visible"; 
+    document.getElementById("tools-vunit").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-vunit").style.visibility = "hidden"; 
+    document.getElementById("tools-vunit").classList.remove('d-none');
+    document.getElementById("tools-vunit").classList.add('d-none');
   }
   if ("tools" == tp0 && "xcelium" == tp1){
-    document.getElementById("tools-xcelium").style.visibility = "visible"; 
+    document.getElementById("tools-xcelium").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-xcelium").style.visibility = "hidden"; 
+    document.getElementById("tools-xcelium").classList.remove('d-none');
+    document.getElementById("tools-xcelium").classList.add('d-none');
   }
   if ("tools" == tp0 && "xsim" == tp1){
-    document.getElementById("tools-xsim").style.visibility = "visible"; 
+    document.getElementById("tools-xsim").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-xsim").style.visibility = "hidden"; 
+    document.getElementById("tools-xsim").classList.remove('d-none');
+    document.getElementById("tools-xsim").classList.add('d-none');
   }
   if ("tools" == tp0 && "yosys" == tp1){
-    document.getElementById("tools-yosys").style.visibility = "visible"; 
+    document.getElementById("tools-yosys").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-yosys").style.visibility = "hidden"; 
+    document.getElementById("tools-yosys").classList.remove('d-none');
+    document.getElementById("tools-yosys").classList.add('d-none');
   }
   if ("tools" == tp0 && "openfpga" == tp1){
-    document.getElementById("tools-openfpga").style.visibility = "visible"; 
+    document.getElementById("tools-openfpga").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-openfpga").style.visibility = "hidden"; 
+    document.getElementById("tools-openfpga").classList.remove('d-none');
+    document.getElementById("tools-openfpga").classList.add('d-none');
   }
   if ("tools" == tp0 && "activehdl" == tp1){
-    document.getElementById("tools-activehdl").style.visibility = "visible"; 
+    document.getElementById("tools-activehdl").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-activehdl").style.visibility = "hidden"; 
+    document.getElementById("tools-activehdl").classList.remove('d-none');
+    document.getElementById("tools-activehdl").classList.add('d-none');
   }
   if ("tools" == tp0 && "nvc" == tp1){
-    document.getElementById("tools-nvc").style.visibility = "visible"; 
+    document.getElementById("tools-nvc").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-nvc").style.visibility = "hidden"; 
+    document.getElementById("tools-nvc").classList.remove('d-none');
+    document.getElementById("tools-nvc").classList.add('d-none');
   }
   if ("tools" == tp0 && "questa" == tp1){
-    document.getElementById("tools-questa").style.visibility = "visible"; 
+    document.getElementById("tools-questa").classList.remove('d-none');
   }
   else{
-    document.getElementById("tools-questa").style.visibility = "hidden"; 
+    document.getElementById("tools-questa").classList.remove('d-none');
+    document.getElementById("tools-questa").classList.add('d-none');
   }
   }
 

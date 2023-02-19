@@ -16,16 +16,16 @@
 
 
 
-    <main class="d-flex flex-nowrap">
-        <h1 class="visually-hidden">Sidebars examples</h1>
-        {# <div class="a-example-divider b-example-vr"></div> #}
+    <div class="container-fluid h-100">
+        <div class="row h-100">
 
 {% include 'sidebar.html.nj' %}
         {# <div class="a-example-divider b-example-vr"></div> #}
 
 {% include 'field_config.html.nj' %}
 
-    </main>
+        </div>
+    </div>
 
 
 <script>

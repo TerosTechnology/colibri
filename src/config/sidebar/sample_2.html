@@ -103,6 +103,15 @@
         .main .page-header {
             margin-top: 0;
         }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        .card {
+            height: 100%;
+        }
     </style>
 
 
@@ -112,8 +121,8 @@
 
 <body>
 
-    <div class="container-fluid">
-        <div class="row">
+    <div class="container h-100">
+        <div class="row h-100">
 
 
 
@@ -141,34 +150,222 @@
                 </ul>
             </div>
 
-            <div class="col-sm-12 main">
-                <div class="row">
-                    <h1 class="page-header">Dashboard</h1>
+            <div class="col-sm-12 main h-100">
+                <div class="row h-100">
 
 
-                    <div id="div0" class="card overflow-auto">
-                        <div class="card-body overflow-auto">
-                            <div class='overflow-auto'>
-                                <h3>Documentation: General 0</h3>
-                                <hr>
-                                <p><i></i></p>
-                                <label>Documentation language:</label>
-                                <br>
-                                <select name='select' id='documentation-general-language'>
-                                    <option value='english'>English</option>
-                                    <option value='russian'>Russian</option>
-                                </select>
-                                <br><br>
-                                <label>Special VHDL symbol at the begin of the comment to extract documentation.
-                                    Example:
-                                    <code>--! Code comment</code></label>
-                                <br>
-                                <input type='input' id='documentation-general-symbol_vhdl' class='radio-button'>
-                            </div>
+                    <div class="card h-100" id="documentation-general">
+                        <div class="card-header">
+                            <h1 class="card-title">Documentation: General</h1>
+                            <h6 class="card-subtitle mb-2 text-muted"></h6>
+                        </div>
+                        <ul class="list-group overflow-auto h-100">
+
+                            <br>
+
+                            <li class="list-group-item">
+                                <div class="mb-3">
+                                    <label for="documentation-general-language" class="form-label">Documentation
+                                        language:</label>
+                                    <select class="form-select" aria-label="Documentation language:"
+                                        id="documentation-general-language">
+                                        <option value='english'>English</option>
+                                        <option value='russian'>Russian</option>
+                                    </select>
+                                </div>
+                            </li>
+
+
+                            <li class="list-group-item">
+                                <div class="mb-3">
+                                    <label for="documentation-general-symbol_vhdl" class="form-label">Special VHDL
+                                        symbol at the
+                                        begin of the comment to extract documentation. Example:
+                                        <code>--! Code comment</code></label>
+                                    <input class="form-control" id="documentation-general-symbol_vhdl" rows="3"></input>
+                                </div>
+                            </li>
+
+
+                            <li class="list-group-item">
+                                <div class="mb-3">
+                                    <label for="documentation-general-symbol_verilog" class="form-label">Special Verilog
+                                        symbol
+                                        at the begin of the comment to extract documentation. Example:
+                                        <code>//! Code comment</code></label>
+                                    <input class="form-control" id="documentation-general-symbol_verilog"
+                                        rows="3"></input>
+                                </div>
+                            </li>
+
+
+                            <li class="list-group-item">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value=""
+                                        id="documentation-general-dependency_graph">
+                                    <label class="form-check-label" for="documentation-general-dependency_graph">
+                                        Include dependency graph:
+                                    </label>
+                                </div>
+                            </li>
+
+
+                            <li class="list-group-item">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value=""
+                                        id="documentation-general-self_contained">
+                                    <label class="form-check-label" for="documentation-general-self_contained">
+                                        HTML documentation self contained:
+                                    </label>
+                                </div>
+                            </li>
+
+
+                            <li class="list-group-item">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value=""
+                                        id="documentation-general-fsm">
+                                    <label class="form-check-label" for="documentation-general-fsm">
+                                        Include FSM:
+                                    </label>
+                                </div>
+                            </li>
+
+
+                            <li class="list-group-item">
+                                <div class="mb-3">
+                                    <label for="documentation-general-ports" class="form-label">Include ports:</label>
+                                    <select class="form-select" aria-label="Include ports:"
+                                        id="documentation-general-ports">
+                                        <option value='all'>All</option>
+                                        <option value='only_commented'>Only commented</option>
+                                        <option value='none'>None</option>
+                                    </select>
+                                </div>
+                            </li>
+
+
+                            <li class="list-group-item">
+                                <div class="mb-3">
+                                    <label for="documentation-general-generics" class="form-label">Include
+                                        generics:</label>
+                                    <select class="form-select" aria-label="Include generics:"
+                                        id="documentation-general-generics">
+                                        <option value='all'>All</option>
+                                        <option value='only_commented'>Only commented</option>
+                                        <option value='none'>None</option>
+                                    </select>
+                                </div>
+                            </li>
+
+
+                            <li class="list-group-item">
+                                <div class="mb-3">
+                                    <label for="documentation-general-instantiations" class="form-label">Include
+                                        instantiations:</label>
+                                    <select class="form-select" aria-label="Include instantiations:"
+                                        id="documentation-general-instantiations">
+                                        <option value='all'>All</option>
+                                        <option value='only_commented'>Only commented</option>
+                                        <option value='none'>None</option>
+                                    </select>
+                                </div>
+                            </li>
+
+
+                            <li class="list-group-item">
+                                <div class="mb-3">
+                                    <label for="documentation-general-signals" class="form-label">Include
+                                        signals:</label>
+                                    <select class="form-select" aria-label="Include signals:"
+                                        id="documentation-general-signals">
+                                        <option value='all'>All</option>
+                                        <option value='only_commented'>Only commented</option>
+                                        <option value='none'>None</option>
+                                    </select>
+                                </div>
+                            </li>
+
+
+                            <li class="list-group-item">
+                                <div class="mb-3">
+                                    <label for="documentation-general-constants" class="form-label">Include
+                                        consants:</label>
+                                    <select class="form-select" aria-label="Include consants:"
+                                        id="documentation-general-constants">
+                                        <option value='all'>All</option>
+                                        <option value='only_commented'>Only commented</option>
+                                        <option value='none'>None</option>
+                                    </select>
+                                </div>
+                            </li>
+
+
+                            <li class="list-group-item">
+                                <div class="mb-3">
+                                    <label for="documentation-general-types" class="form-label">Include types:</label>
+                                    <select class="form-select" aria-label="Include types:"
+                                        id="documentation-general-types">
+                                        <option value='all'>All</option>
+                                        <option value='only_commented'>Only commented</option>
+                                        <option value='none'>None</option>
+                                    </select>
+                                </div>
+                            </li>
+
+
+                            <li class="list-group-item">
+                                <div class="mb-3">
+                                    <label for="documentation-general-process" class="form-label">Include
+                                        always/processes:</label>
+                                    <select class="form-select" aria-label="Include always/processes:"
+                                        id="documentation-general-process">
+                                        <option value='all'>All</option>
+                                        <option value='only_commented'>Only commented</option>
+                                        <option value='none'>None</option>
+                                    </select>
+                                </div>
+                            </li>
+
+
+                            <li class="list-group-item">
+                                <div class="mb-3">
+                                    <label for="documentation-general-functions" class="form-label">Include
+                                        functions:</label>
+                                    <select class="form-select" aria-label="Include functions:"
+                                        id="documentation-general-functions">
+                                        <option value='all'>All</option>
+                                        <option value='only_commented'>Only commented</option>
+                                        <option value='none'>None</option>
+                                    </select>
+                                </div>
+                            </li>
+
+
+                            <li class="list-group-item">
+                                <div class="mb-3">
+                                    <label for="documentation-general-magic_config_path" class="form-label">Magic config
+                                        file
+                                        path</label>
+                                    <input class="form-control" id="documentation-general-magic_config_path"
+                                        rows="3"></input>
+                                </div>
+                            </li>
+
+
+
+                        </ul>
+                        <div class="card-footer">
+                            <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger"
+                                onclick="close_panel(event)">Close</button>
+                            <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success"
+                                onclick="send_config(event)">Apply</button>
+                            <button type="button_apply_close" class="btn btn-m btn-block btn-primary"
+                                onclick="send_config_and_close(event)">Apply and close</button>
                         </div>
                     </div>
 
-                    <div id="div1" class="card overflow-auto">
+                    <!-- <div id="div1" class="card overflow-auto">
                         <div class="card-body overflow-auto">
                             <div class='overflow-auto'>
                                 <h3>Documentation: General 1</h3>
@@ -188,14 +385,14 @@
                                 <input type='input' id='documentation-general-symbol_vhdl' class='radio-button'>
                             </div>
                         </div>
-                    </div>
-
+                    </div> -->
                 </div>
             </div>
         </div>
-
     </div>
 
+    <!-- </div> -->
+    <!-- 
     <script>
         document.getElementById("bt0").addEventListener("click", function () {
             enable0();
@@ -221,7 +418,7 @@
 
         }
 
-    </script>
+    </script> -->
 
 
     <script src="./assets/dist/js/bootstrap.bundle.min.js"></script>

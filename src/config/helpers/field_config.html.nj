@@ -1,14 +1,14 @@
-<div class="container">
-{# <div class="flex-shrink-0 p-3 bg-white overflow-auto"> #}
+<div class="col-sm-12 main h-100">
+  <div class="row h-100">
 
   {%- for tp0 in type_declaration %}
       {%- for tp1 in type_declaration[tp0]["pages"] %}
-    <div class="card position-absolute h-100" id="{{tp0}}-{{tp1}}">
+    <div class="card h-100" id="{{tp0}}-{{tp1}}">
       <div class="card-header">
         <h1 class="card-title">{{type_declaration[tp0]["title"]}}: {{type_declaration[tp0]["pages"][tp1]["title"]}}</h1>
         <h6 class="card-subtitle mb-2 text-muted">{{type_declaration[tp0]["pages"][tp1]["description"]}}</h6>
       </div>
-      <ul class="list-group overflow-auto w-100 h-100">
+      <ul class="list-group overflow-auto h-100">
       {# <div class='card-body overflow-auto'> #}
       <br>
         {%- for tp2 in type_declaration[tp0]["pages"][tp1] %}
@@ -70,6 +70,7 @@
   </div>
       {%- endfor %}
   {%- endfor %}
+  </div>
 </div>
 
 {# <div class="container">
