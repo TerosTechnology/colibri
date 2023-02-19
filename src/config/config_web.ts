@@ -332,14 +332,12 @@ export const WEB_CONFIG = `
         </div>
 
 <div class="col-sm-12 main h-100">
-  <div class="row h-100">
     <div class="card h-100" id="general-general">
       <div class="card-header">
         <h1 class="card-title">General: General</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -404,7 +402,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -582,7 +579,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -609,7 +605,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -649,7 +644,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Verilog/SV iStyle formatter</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -687,7 +681,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Verilog/SV S3SV formatter</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -742,7 +735,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Verilog/SV Verible formatter</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -775,7 +767,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">VHDL standalone formatter</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -932,7 +923,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">VHDL Style Guide. Analyzes VHDL files for style guide violations.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -957,7 +947,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1024,7 +1013,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1049,7 +1037,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1074,7 +1061,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1107,7 +1093,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1132,7 +1117,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1157,7 +1141,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1190,7 +1173,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1215,7 +1197,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1245,7 +1226,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1300,7 +1280,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1368,7 +1347,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">OSVVM is an advanced verification methodology that defines a VHDL verification framework, verification utility library, verification component library, and a scripting flow that simplifies your FPGA or ASIC verification project from start to finish. Using these libraries you can create a simple, readable, and powerful testbench that is suitable for either a simple FPGA block or a complex ASIC.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1419,7 +1397,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Ascent Lint performs static source code analysis on HDL code and checks for common coding errors or coding style violations.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1451,7 +1428,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1520,7 +1496,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Backend for Lattice Diamond.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1553,7 +1528,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">GHDL is an open source VHDL simulator, which fully supports IEEE 1076-1987, IEEE 1076-1993, IEE 1076-2002 and partially the 1076-2008 version of VHDL.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1603,7 +1577,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Icarus Verilog is a Verilog simulation and synthesis tool. It operates as a compiler, compiling source code written in Verilog (IEEE-1364) into some target format.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1643,7 +1616,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Open source toolchain for Lattice iCE40 FPGAs. Uses yosys for synthesis and arachne-pnr or nextpnr for Place & Route.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1743,7 +1715,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Xilinx ISE Design Suite.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1800,7 +1771,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Xilinx ISim simulator from ISE design suite.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1839,7 +1809,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">ModelSim simulator from Mentor Graphics.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1885,7 +1854,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Run the (System-) Verilog pickle tool called morty.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -1917,7 +1885,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">The Quartus backend supports Intel Quartus Std and Pro editions to build systems and program the FPGA.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -2000,7 +1967,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Backend for Lattice Radiant.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -2033,7 +1999,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Riviera Pro simulator from Aldec.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -2080,7 +2045,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">SiliconCompiler is an open source compiler framework that automates translation from source code to silicon. Check the project documentation: <a href="https://docs.siliconcompiler.com/en/latest/">https://docs.siliconcompiler.com/en/latest/</a></h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -2147,7 +2111,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Synopsys (formerly Atrenta) Spyglass Backend. Spyglass performs static source code analysis on HDL code and checks for common coding errors or coding style violations.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -2201,7 +2164,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">SymbiYosys formal verification wrapper for Yosys.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -2233,7 +2195,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">VHDL Style Guide. Analyzes VHDL files for style guide violations.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -2308,7 +2269,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Project Trellis enables a fully open-source flow for ECP5 FPGAs using Yosys for Verilog synthesis and nextpnr for place and route.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -2397,7 +2357,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Synopsys VCS Backend</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -2436,7 +2395,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Verible lint backend (verible-verilog-lint).</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -2461,7 +2419,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Verible lint backend (verible-verilog-lint).</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -2526,7 +2483,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">The Vivado backend executes Xilinx Vivado to build systems and program the FPGA.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -2594,7 +2550,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">VUnit testing framework.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -2641,7 +2596,7 @@ export const WEB_CONFIG = `
             <div class="form-check">
               <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_array_util_lib">
               <label class="form-check-label" for="tools-vunit-enable_array_util_lib">
-                Enable array util library in non standalone mode
+                Enable array util library in non standalone mode.
               </label>
             </div>
           </li>
@@ -2651,7 +2606,7 @@ export const WEB_CONFIG = `
             <div class="form-check">
               <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_com_lib">
               <label class="form-check-label" for="tools-vunit-enable_com_lib">
-                Enable com library in non standalone mode
+                Enable com library in non standalone mode.
               </label>
             </div>
           </li>
@@ -2661,7 +2616,7 @@ export const WEB_CONFIG = `
             <div class="form-check">
               <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_json4vhdl_lib">
               <label class="form-check-label" for="tools-vunit-enable_json4vhdl_lib">
-                Enable json4vhdl library in non standalone mode
+                Enable json4vhdl library in non standalone mode.
               </label>
             </div>
           </li>
@@ -2671,7 +2626,7 @@ export const WEB_CONFIG = `
             <div class="form-check">
               <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_osvvm_lib">
               <label class="form-check-label" for="tools-vunit-enable_osvvm_lib">
-                Enable OSVVM library in non standalone mode
+                Enable OSVVM library in non standalone mode.
               </label>
             </div>
           </li>
@@ -2681,7 +2636,7 @@ export const WEB_CONFIG = `
             <div class="form-check">
               <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_random_lib">
               <label class="form-check-label" for="tools-vunit-enable_random_lib">
-                Enable random library in non standalone mode
+                Enable random library in non standalone mode.
               </label>
             </div>
           </li>
@@ -2691,7 +2646,7 @@ export const WEB_CONFIG = `
             <div class="form-check">
               <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_verification_components_lib">
               <label class="form-check-label" for="tools-vunit-enable_verification_components_lib">
-                Enable verification components library in non standalone mode
+                Enable verification components library in non standalone mode.
               </label>
             </div>
           </li>
@@ -2711,7 +2666,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Xcelium simulator from Cadence Design Systems.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -2764,7 +2718,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">XSim simulator from the Xilinx Vivado suite.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -2803,7 +2756,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Open source synthesis tool targeting many different FPGAs.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -2885,7 +2837,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">The award-winning OpenFPGA framework is the first open-source FPGA IP generator with silicon proofs supporting highly-customizable FPGA architectures.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -2967,7 +2918,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">Active-HDL™ is a Windows based, integrated FPGA Design Creation and Simulation solution for team-based environments.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -2992,7 +2942,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">NVC is a VHDL compiler and simulator. NVC supports almost all of VHDL-2002 and it has been successfully used to simulate several real-world designs.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -3017,7 +2966,6 @@ export const WEB_CONFIG = `
         <h6 class="card-subtitle mb-2 text-muted">The Questa advanced simulator is the core simulation and debug engine of the Questa verification solution.</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      
       <br>
           
           <li class="list-group-item">
@@ -3036,20 +2984,16 @@ export const WEB_CONFIG = `
         <button type="button_apply_close" class="btn btn-m btn-block btn-primary" onclick="send_config_and_close(event)">Apply and close</button>
       </div>
   </div>
-  </div>
 </div>
-
-
-
-
-
-
 
         </div>
     </div>
 
 
 <script>
+  
+  document.getElementById("btn-general-general").focus();
+  
   
   function enable_tab(tp0, tp1){
     const complete = tp0 + "-" + tp1;

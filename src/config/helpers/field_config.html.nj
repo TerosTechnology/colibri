@@ -1,5 +1,4 @@
 <div class="col-sm-12 main h-100">
-  <div class="row h-100">
 
   {%- for tp0 in type_declaration %}
       {%- for tp1 in type_declaration[tp0]["pages"] %}
@@ -9,7 +8,6 @@
         <h6 class="card-subtitle mb-2 text-muted">{{type_declaration[tp0]["pages"][tp1]["description"]}}</h6>
       </div>
       <ul class="list-group overflow-auto h-100">
-      {# <div class='card-body overflow-auto'> #}
       <br>
         {%- for tp2 in type_declaration[tp0]["pages"][tp1] %}
           {# Options #}
@@ -70,47 +68,4 @@
   </div>
       {%- endfor %}
   {%- endfor %}
-  </div>
 </div>
-
-{# <div class="container">
-  <div class="row">
-    <div class="col-sm-7">
-      <div class="btn-group float-end" role="group" aria-label="Basic example">
-        <button id="button_cancel" class="btn btn-danger" type="button" onclick="close_panel(event)">Close</button>
-        <button id="button_apply" class="btn btn-success" type="button" onclick="send_config(event)">Apply</button>
-        <button id="button_apply_close" class="btn btn-primary" type="button" onclick="send_config_and_close(event)">Apply and close</button>
-      </div
-    </div>
-  </div>
-</div> #}
-
-{# 
-<div class="container">
-        <button type="button" class="align-self-end btn btn-lg btn-block btn-primary" style="margin-top: auto;">Get started</button>
-</div> #}
-
-{# 
-<div class="container">
-  <div class="row">
-    <div class="col">
-    </div>
-    <div class="col">
-    </div>
-    <div class="col">
-    </div>
-    <div class="col">
-    </div>
-    <div class="col">
-    </div>
-    <div class="col-2">
-        <button id="button_cancel" class="btn btn-danger" type="button" onclick="close_panel(event)">Close</button>
-    </div>
-    <div class="col-2">
-        <button id="button_apply" class="btn btn-success" type="button" onclick="send_config(event)">Apply</button>
-    </div>
-    <div class="col-2">
-        <button id="button_apply_close" class="btn btn-primary" type="button" onclick="send_config_and_close(event)">Apply and close</button>
-    </div>
-  </div>
-</div> #}
