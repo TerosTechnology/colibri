@@ -1,59 +1,67 @@
-
-<div class="container">
-
 <div class="container">
 {# <div class="flex-shrink-0 p-3 bg-white overflow-auto"> #}
 
   {%- for tp0 in type_declaration %}
       {%- for tp1 in type_declaration[tp0]["pages"] %}
-    <div class="card position-absolute w-100 h-100" id="{{tp0}}-{{tp1}}">
-      <h1 class="card-title">{{type_declaration[tp0]["title"]}}: {{type_declaration[tp0]["pages"][tp1]["title"]}}</h1>
-      <h6 class="card-subtitle mb-2 text-muted">{{type_declaration[tp0]["pages"][tp1]["description"]}}</h6>
-      <div class='card-body overflow-auto'>
+    <div class="card position-absolute h-100" id="{{tp0}}-{{tp1}}">
+      <div class="card-header">
+        <h1 class="card-title">{{type_declaration[tp0]["title"]}}: {{type_declaration[tp0]["pages"][tp1]["title"]}}</h1>
+        <h6 class="card-subtitle mb-2 text-muted">{{type_declaration[tp0]["pages"][tp1]["description"]}}</h6>
+      </div>
+      <ul class="list-group overflow-auto w-100 h-100">
+      {# <div class='card-body overflow-auto'> #}
       <br>
-      {# <h1>{{type_declaration[tp0]["title"]}}: {{type_declaration[tp0]["pages"][tp1]["title"]}}</h1> #}
-
         {%- for tp2 in type_declaration[tp0]["pages"][tp1] %}
           {# Options #}
           {%- if "options" in type_declaration[tp0]["pages"][tp1][tp2] %}
-          <div class="mb-3">
-            <label for="{{tp0}}-{{tp1}}-{{tp2}}" class="form-label">{{type_declaration[tp0]["pages"][tp1][tp2]["description"]}}</label>
-            <select class="form-select" aria-label="{{type_declaration[tp0]["pages"][tp1][tp2]["description"]}}" id="{{tp0}}-{{tp1}}-{{tp2}}">
-                  {%- for option in type_declaration[tp0]["pages"][tp1][tp2]["options"] %}
-                    <option value='{{option}}'>{{type_declaration[tp0]["pages"][tp1][tp2]["options"][option]}}</option>
-                  {%- endfor %}
-            </select>
-          </div>
+          <li class="list-group-item">
+            <div class="mb-3">
+              <label for="{{tp0}}-{{tp1}}-{{tp2}}" class="form-label">{{type_declaration[tp0]["pages"][tp1][tp2]["description"]}}</label>
+              <select class="form-select" aria-label="{{type_declaration[tp0]["pages"][tp1][tp2]["description"]}}" id="{{tp0}}-{{tp1}}-{{tp2}}">
+                    {%- for option in type_declaration[tp0]["pages"][tp1][tp2]["options"] %}
+                      <option value='{{option}}'>{{type_declaration[tp0]["pages"][tp1][tp2]["options"][option]}}</option>
+                    {%- endfor %}
+              </select>
+            </div>
+          </li>
           {# Boolean #}
           {%- elif type_declaration[tp0]["pages"][tp1][tp2]["type"] == "boolean" %}
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="{{tp0}}-{{tp1}}-{{tp2}}">
-            <label class="form-check-label" for="{{tp0}}-{{tp1}}-{{tp2}}">
-              {{type_declaration[tp0]["pages"][tp1][tp2]["description"]}}
-            </label>
-          </div>
+          <li class="list-group-item">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="{{tp0}}-{{tp1}}-{{tp2}}">
+              <label class="form-check-label" for="{{tp0}}-{{tp1}}-{{tp2}}">
+                {{type_declaration[tp0]["pages"][tp1][tp2]["description"]}}
+              </label>
+            </div>
+          </li>
           {# String #}
           {%- elif type_declaration[tp0]["pages"][tp1][tp2]["type"] == "string" %}
-          <div class="mb-3">
-            <label for="{{tp0}}-{{tp1}}-{{tp2}}" class="form-label">{{type_declaration[tp0]["pages"][tp1][tp2]["description"]}}</label>
-            <input class="form-control" id="{{tp0}}-{{tp1}}-{{tp2}}" rows="3"></input>
-          </div>
+          <li class="list-group-item">
+            <div class="mb-3">
+              <label for="{{tp0}}-{{tp1}}-{{tp2}}" class="form-label">{{type_declaration[tp0]["pages"][tp1][tp2]["description"]}}</label>
+              <input class="form-control" id="{{tp0}}-{{tp1}}-{{tp2}}" rows="3"></input>
+            </div>
+          </li>
           {# Number #}
           {%- elif type_declaration[tp0]["pages"][tp1][tp2]["type"] == "number" %}
-          <div class="mb-3">
-            <label for="{{tp0}}-{{tp1}}-{{tp2}}" class="form-label">{{type_declaration[tp0]["pages"][tp1][tp2]["description"]}}</label>
-            <input type='number' class="form-control" id="{{tp0}}-{{tp1}}-{{tp2}}" rows="3"></input>
-          </div>
+          <li class="list-group-item">
+            <div class="mb-3">
+              <label for="{{tp0}}-{{tp1}}-{{tp2}}" class="form-label">{{type_declaration[tp0]["pages"][tp1][tp2]["description"]}}</label>
+              <input type='number' class="form-control" id="{{tp0}}-{{tp1}}-{{tp2}}" rows="3"></input>
+            </div>
+          </li>
           {# Array #}
           {%- elif type_declaration[tp0]["pages"][tp1][tp2]["type"] == "array" %}
-          <div class="mb-3">
-            <label for="{{tp0}}-{{tp1}}-{{tp2}}" class="form-label">{{type_declaration[tp0]["pages"][tp1][tp2]["description"]}}</label>
-            <input class="form-control" id="{{tp0}}-{{tp1}}-{{tp2}}" rows="3"></input>
-          </div>
+          <li class="list-group-item">
+            <div class="mb-3">
+              <label for="{{tp0}}-{{tp1}}-{{tp2}}" class="form-label">{{type_declaration[tp0]["pages"][tp1][tp2]["description"]}}</label>
+              <input class="form-control" id="{{tp0}}-{{tp1}}-{{tp2}}" rows="3"></input>
+            </div>
+          </li>
           {%- else %}
           {%- endif %}
         {%- endfor %}
-      </div>
+      </ul>
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -62,6 +70,7 @@
   </div>
       {%- endfor %}
   {%- endfor %}
+</div>
 
 {# <div class="container">
   <div class="row">

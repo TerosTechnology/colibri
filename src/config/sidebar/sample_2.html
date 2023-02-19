@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.108.0">
+    <title>Sidebars · Bootstrap v5.3</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sidebars/">
+    <link href="./assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /*
+        * Base structure
+        */
+
+        /* Move down content because we have a fixed navbar that is 50px tall */
+        body {
+            padding-top: 50px;
+        }
+
+
+        /*
+        * Global add-ons
+        */
+
+        .sub-header {
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        /*
+        * Top navigation
+        * Hide default border to remove 1px line.
+        */
+        .navbar-fixed-top {
+            border: 0;
+        }
+
+        /*
+        * Sidebar
+        */
+
+        /* Hide for mobile, show later */
+        .sidebar {
+            display: none;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0px;
+            bottom: 0;
+            left: 0;
+            z-index: 1000;
+            display: block;
+            padding: 20px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            /* Scrollable contents if viewport is shorter than content. */
+            background-color: #f5f5f5;
+            border-right: 1px solid #eee;
+            width: 180px;
+        }
+
+        /* Sidebar navigation */
+        .nav-sidebar {
+            margin-right: -21px;
+            /* 20px padding + 1px border */
+            margin-bottom: 20px;
+            margin-left: -20px;
+        }
+
+        .nav-sidebar>li>a {
+            padding-right: 20px;
+            padding-left: 20px;
+        }
+
+        .nav-sidebar>.active>a,
+        .nav-sidebar>.active>a:hover,
+        .nav-sidebar>.active>a:focus {
+            color: #fff;
+            background-color: #428bca;
+        }
+
+
+        /*
+        * Main content
+        */
+        .main {
+            padding: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .main {
+                padding-right: 10px;
+                padding-left: 200px;
+            }
+        }
+
+        .main .page-header {
+            margin-top: 0;
+        }
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <link href="sidebars.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="row">
+
+
+
+            <div class="b-example-divider b-example-vr"></div>
+
+            <div class="sidebar p-3 bg-white overflow-auto">
+                <div class="sidebar-heading">Start Bootstrap </div>
+                <ul class="list-unstyled ps-0">
+                    <li class="mb-1">
+                        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                            data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                            Home
+                        </button>
+                        <div class="collapse show" id="home-collapse">
+                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                <li><a id="bt0" href="#"
+                                        class="link-dark d-inline-flex text-decoration-none rounded">Overview</a>
+                                </li>
+                                <li><a id="bt1" href="#"
+                                        class="link-dark d-inline-flex text-decoration-none rounded">Updates</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-sm-12 main">
+                <div class="row">
+                    <h1 class="page-header">Dashboard</h1>
+
+
+                    <div id="div0" class="card overflow-auto">
+                        <div class="card-body overflow-auto">
+                            <div class='overflow-auto'>
+                                <h3>Documentation: General 0</h3>
+                                <hr>
+                                <p><i></i></p>
+                                <label>Documentation language:</label>
+                                <br>
+                                <select name='select' id='documentation-general-language'>
+                                    <option value='english'>English</option>
+                                    <option value='russian'>Russian</option>
+                                </select>
+                                <br><br>
+                                <label>Special VHDL symbol at the begin of the comment to extract documentation.
+                                    Example:
+                                    <code>--! Code comment</code></label>
+                                <br>
+                                <input type='input' id='documentation-general-symbol_vhdl' class='radio-button'>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="div1" class="card overflow-auto">
+                        <div class="card-body overflow-auto">
+                            <div class='overflow-auto'>
+                                <h3>Documentation: General 1</h3>
+                                <hr>
+                                <p><i></i></p>
+                                <label>Documentation language:</label>
+                                <br>
+                                <select name='select' id='documentation-general-language'>
+                                    <option value='english'>English</option>
+                                    <option value='russian'>Russian</option>
+                                </select>
+                                <br><br>
+                                <label>Special VHDL symbol at the begin of the comment to extract documentation.
+                                    Example:
+                                    <code>--! Code comment</code></label>
+                                <br>
+                                <input type='input' id='documentation-general-symbol_vhdl' class='radio-button'>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById("bt0").addEventListener("click", function () {
+            enable0();
+        });
+
+        document.getElementById("bt1").addEventListener("click", function () {
+            enable1();
+        });
+
+        function enable0() {
+            document.getElementById("div0").classList.remove('d-none');
+
+            document.getElementById("div1").classList.remove('d-none');
+            document.getElementById("div1").classList.add('d-none');
+        }
+
+
+        function enable1() {
+            document.getElementById("div0").classList.remove('d-none');
+            document.getElementById("div0").classList.add('d-none');
+
+            document.getElementById("div1").classList.remove('d-none');
+
+        }
+
+    </script>
+
+
+    <script src="./assets/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="sidebars.js"></script>
+</body>
+
+</html>

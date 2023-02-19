@@ -48,3 +48,8 @@
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
         }
+
+
+        .card-body{
+            width:100%;
+        }
