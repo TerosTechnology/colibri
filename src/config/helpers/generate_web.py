@@ -39,22 +39,28 @@ for page_name in skeleton:
 ########################################################################################################################
 # Web config HTML
 ########################################################################################################################
+css_0 = "./helpers/sidebar/bootstrap.min.css"
+css_1 = "./helpers/sidebar/sidebars.css"
+js_0 =  "./helpers/sidebar/bootstrap.bundle.min.js"
 template_path = os.path.join(os.path.dirname(__file__), "web_config.nj")
 with open(template_path) as file:
     template_str = file.read()
     template_html = (
         jinja2.Environment(loader=jinja2.FileSystemLoader("./"))
         .from_string(template_str)
-        .render(type_declaration=skeleton)
+        .render(type_declaration=skeleton, css_0=css_0, css_1=css_1, js_0=js_0)
     )
-
 output_path = os.path.join(os.path.dirname(__file__), "..", "web_config.html")
-with open(output_path, mode="w") as file:
+with open(output_path, mode="w", encoding="UTF-8") as file:
     file.write(template_html)
 
 ########################################################################################################################
 # Web config constant
 ########################################################################################################################
+template_html = template_html.replace(css_0, "{{css_0}}")
+template_html = template_html.replace(css_1, "{{css_1}}")
+template_html = template_html.replace(js_0, "{{js_0}}")
+
 template_path = os.path.join(os.path.dirname(__file__), "web_ts.nj")
 with open(template_path) as file:
     template_str = file.read()

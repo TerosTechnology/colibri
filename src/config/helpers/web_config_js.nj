@@ -4,10 +4,11 @@
 {%- for tp0 in type_declaration %}
     {%- for tp1 in type_declaration[tp0]["pages"] %}
   if ("{{tp0}}" == tp0 && "{{tp1}}" == tp1){
-    document.getElementById("{{tp0}}-{{tp1}}").style.visibility = "visible"; 
+    document.getElementById("{{tp0}}-{{tp1}}").classList.remove('d-none');
   }
   else{
-    document.getElementById("{{tp0}}-{{tp1}}").style.visibility = "hidden"; 
+    document.getElementById("{{tp0}}-{{tp1}}").classList.remove('d-none');
+    document.getElementById("{{tp0}}-{{tp1}}").classList.add('d-none');
   }
     {%- endfor %}
 {%- endfor %}

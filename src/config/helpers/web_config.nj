@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{{css_0}}" rel="stylesheet">
+    <link href="{{css_1}}" rel="stylesheet">
+    <script src="{{js_0}}"></script>
+
 <style>
 
 {% include 'web_css.nj' %}
@@ -9,12 +13,19 @@
 </style>
 </head>
 <body>
+    <div class="container-fluid h-100">
+        <div class="row h-100">
 
-{% include 'web_config_html.nj' %}
+{% include 'sidebar.html.nj' %}
+
+{% include 'field_config.html.nj' %}
+
+        </div>
+    </div>
+
 
 <script>
 {% include 'web_config_js.nj' %}
 </script>
-
 </body>
-</html> 
+</html>
