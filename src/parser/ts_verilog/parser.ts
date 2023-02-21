@@ -296,18 +296,6 @@ export class Verilog_parser extends Ts_base_parser implements Parser_base {
                 }
                 while (cursor.gotoNextSibling() !== false);
                 cursor.gotoParent();
-
-
-
-
-
-
-
-
-
-
-
-
             } else if (cursor.nodeType === 'module_ansi_header') {
                 const new_ports: common_hdl.Port_hdl[] =
                     elements_hdl.get_ansi_ports(cursor.currentNode(), lines, general_comments, this.comment_symbol);
@@ -327,7 +315,8 @@ export class Verilog_parser extends Ts_base_parser implements Parser_base {
                 last_element_position = cursor.startPosition.row;
                 let new_ports: common_hdl.Port_hdl[] =
                     elements_hdl.get_ports(cursor.currentNode(), lines, general_comments, this.comment_symbol);
-                new_ports = utils.set_description_to_array(new_ports, comments, general_comments, this.comment_symbol);
+                new_ports = utils.set_description_to_array_port(new_ports, comments, general_comments,
+                    this.comment_symbol);
                 ports_array = ports_array.concat(new_ports);
                 comments = '';
                 last_element_position = cursor.startPosition.row;
@@ -449,7 +438,7 @@ export class Verilog_parser extends Ts_base_parser implements Parser_base {
                 break;
             }
             const comment_str = utils.extract_data(comments[x], lines);
-            description += this.get_comment(comment_str) + '\n';
+            description += this.get_comment(comment_str, false);
         }
         description += '\n';
         hdl_element.description = description;

@@ -3,6 +3,7 @@
 - Diferentes versiones de puertos ANSI y no ANSI.
 - State machines.
 - Interfaces en entity y package.
+- Test over_comment and inline_comment
 ## Documenter
 - Documenter section test fsm
 - Documenter section test custom section

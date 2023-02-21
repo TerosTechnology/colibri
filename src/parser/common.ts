@@ -84,7 +84,7 @@ export type Virtual_bus_hdl = {
     hdl_element_type: TYPE_HDL_ELEMENT.VIRTUAL_BUS;
     info: Common_info;
     direction: string;
-    keepports: boolean;
+    notable: boolean;
     port_list: Port_hdl[];
     type: string;
 };

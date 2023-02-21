@@ -556,7 +556,7 @@ export function get_ansi_ports(p: any, lines: any, general_comments: any,
             last_element_position = cursor.startPosition.row;
 
             let new_ports = get_ports(cursor.currentNode(), lines, general_comments, comment_symbol);
-            new_ports = utils_hdl.set_description_to_array(new_ports, comments, general_comments, comment_symbol);
+            new_ports = utils_hdl.set_description_to_array_port(new_ports, comments, general_comments, comment_symbol);
             ports = ports.concat(new_ports);
             comments = '';
         } else if (cursor.nodeType === 'comment') {

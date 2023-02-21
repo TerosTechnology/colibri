@@ -117,13 +117,13 @@ export class Creator extends Section_creator_interface {
 
     get_description(description: string, svg_path_dir: string,
         image_basename: string, output_type: common_documenter.doc_output_type) {
-        // Remove doxygen
-        const doxygen_description = doxygen.parse_doxygen(description);
         // Parse wavedrom
-        const wavedrom_description_norm = this.parse_wavedrom(doxygen_description.text, svg_path_dir,
+        const wavedrom_description_norm = this.parse_wavedrom(description, svg_path_dir,
             image_basename, output_type);
+        // Remove doxygen
+        const doxygen_description = doxygen.parse_doxygen(wavedrom_description_norm);
         // Normalize
-        const norm_description = utils.normalize_description(wavedrom_description_norm);
+        const norm_description = utils.normalize_description(doxygen_description.text);
         return norm_description;
     }
 
@@ -137,18 +137,20 @@ export class Creator extends Section_creator_interface {
         // Parse wavedrom
         const wavedrom_description = this.get_wavedrom_svg(description);
         let wavedrom_description_norm = wavedrom_description.description;
-        wavedrom_description_norm = this.transform(wavedrom_description_norm, output_type);
+        // wavedrom_description_norm = this.transform(wavedrom_description_norm, output_type);
         for (let i = 0; i < wavedrom_description.wavedrom.length; ++i) {
             const random_id = common_utils.makeid(4);
             if (output_type === common_documenter.doc_output_type.MARKDOWN) {
-                const img = `![alt text](wavedrom_${random_id}${i}.svg "title")`;
-                const path_img = path_lib.join(svg_path_dir, `wavedrom_${svg_prefix_name}_${random_id}${i}.svg`);
+                const file_name = `wavedrom_${random_id}${i}.svg`;
+                const img = `![alt text](${file_name} "title")`;
+                const path_img = path_lib.join(svg_path_dir, file_name);
                 fs.writeFileSync(path_img, wavedrom_description.wavedrom[i]);
-                wavedrom_description_norm = wavedrom_description_norm.replace("$cholosimeone$" + i, img);
+                wavedrom_description_norm = wavedrom_description_norm.replace(
+                    "$cholosimeone$" + i, '\n\n' + img + '\n\n');
             }
             else {
                 wavedrom_description_norm = wavedrom_description_norm.replace(
-                    "$cholosimeone$" + i, wavedrom_description.wavedrom[i]);
+                    "$cholosimeone$" + i, '\n\n' + wavedrom_description.wavedrom[i] + '\n\n');
             }
         }
         return wavedrom_description_norm;
@@ -297,16 +299,13 @@ export class Creator extends Section_creator_interface {
         const generics = hdl_element.get_generic_array();
         const port_list_complete = doxygen.get_virtual_bus(hdl_element.get_port_array());
 
-        let port_list = port_list_complete.port_list;
+        const port_list = port_list_complete.port_list;
         const v_bus_list = port_list_complete.v_port_list;
 
         const virtual_buses_to_show: common_hdl.Virtual_bus_hdl[] = [];
         v_bus_list.forEach(element => {
-            if (element.keepports === false) {
+            if (element.notable === false) {
                 virtual_buses_to_show.push(element);
-            }
-            else {
-                port_list = port_list.concat(element.port_list);
             }
         });
 
@@ -320,7 +319,7 @@ export class Creator extends Section_creator_interface {
         }
         if (port_list.length !== 0) {
             md += `\n## ${translator.get_str('Ports')}\n\n`;
-            md += this.get_doc_ports(port_list, translator);
+            md += this.get_doc_ports(port_list, v_bus_list, translator);
         }
 
         if (virtual_buses_to_show.length > 0) {
@@ -328,7 +327,7 @@ export class Creator extends Section_creator_interface {
             for (let i = 0; i < virtual_buses_to_show.length; i++) {
                 const element = virtual_buses_to_show[i];
                 md += "#### " + element.info.name + "\n\n";
-                md += this.get_doc_ports(element.port_list, translator);
+                md += this.get_doc_ports(element.port_list, [], translator);
             }
         }
         return this.transform(md, output_type);
@@ -552,12 +551,13 @@ export class Creator extends Section_creator_interface {
             section += `\n## ${translator.get_str('State machines')}\n\n`;
             const entity_name = hdl_element.name;
             for (let i = 0; i < fsm_list.length; ++i) {
-                const fsm_path = path_lib.join(svg_output_dir, `fsm_${entity_name}_${i}${i}.svg`);
+                const file_name = `fsm_${entity_name}_${i}${i}.svg`;
+                const fsm_path = path_lib.join(svg_output_dir, file_name);
                 if (fsm_list[i].description !== '') {
                     section += '- ' + fsm_list[i].description;
                 }
                 fs.writeFileSync(fsm_path, fsm_list[i].image);
-                section += `![Diagram_state_machine_${i}]( stm_${entity_name}_${i}${i}.svg "Diagram")`;
+                section += `![Diagram_state_machine_${i}]( ${file_name} "Diagram")`;
             }
         }
         return section;
@@ -630,7 +630,9 @@ export class Creator extends Section_creator_interface {
     ////////////////////////////////////////////////////////////////////////////
     // Elements
     ////////////////////////////////////////////////////////////////////////////
-    get_doc_ports(ports: common_hdl.Port_hdl[], translator: translator_lib.Translator) {
+    get_doc_ports(ports: common_hdl.Port_hdl[], v_bus_list: common_hdl.Virtual_bus_hdl[],
+        translator: translator_lib.Translator) {
+
         const table = [];
         table.push([
             translator.get_str("Port name"),
@@ -660,6 +662,14 @@ export class Creator extends Section_creator_interface {
                 direction,
                 type,
                 description
+            ]);
+        }
+        for (let i = 0; i < v_bus_list.length; ++i) {
+            table.push([
+                this.remove_break_line(v_bus_list[i].info.name),
+                v_bus_list[i].direction,
+                'Virtual bus',
+                v_bus_list[i].info.description
             ]);
         }
         const text = markdown_table.get_table(table, undefined) + '\n';

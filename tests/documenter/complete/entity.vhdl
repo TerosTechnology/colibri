@@ -1,12 +1,11 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
---! This is an entity description
+--! This is an entity description 5
 --! multiline.
 --! @author Miguel de Cervantes
 --! @version 1.0.1
 --! @brief Some description can be added here
---! also in multi-lines
 --!
 --! Example of description beakline
 --!

@@ -177,13 +177,13 @@ export class Vhdl_parser extends Ts_base_parser implements Parser_base {
                     // eslint-disable-next-line no-empty
                     if (cursor.nodeType === 'entity_declaration') { }
                     else if (cursor.nodeType === 'comment') {
-                        entity_description += this.get_comment(cursor.nodeText);
+                        entity_description += this.get_comment(cursor.nodeText, false);
                     }
                 }
                 while (cursor.gotoNextSibling() === true && break_p === false);
             }
             else if (cursor.nodeType === 'comment') {
-                entity_description += this.get_comment(cursor.nodeText);
+                entity_description += this.get_comment(cursor.nodeText, false);
             }
             else {
                 entity_description = '';

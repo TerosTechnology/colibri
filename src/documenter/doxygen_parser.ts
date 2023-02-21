@@ -28,66 +28,90 @@ export type Doxygen_element = {
 
 export function parse_doxygen(text: string) {
     // Always remove carriage return
+    // text_s = text.replace(/\r/gm, "");
+    let text_s_new = "";
+    let doxygen_element_list: Doxygen_element[] = [];
+
     text = text.replace(/\r/gm, "");
 
-    DOXYGEN_FIELD_ARRAY.forEach(function (field: string) {
-        text = text.replace(`@${field}`, `\n@${field}`);
-    });
+    const text_s = text.split('\n');
 
-    let doxygen_element_list: Doxygen_element[] = [];
-    DOXYGEN_FIELD_ARRAY.forEach(function (field: string) {
-        const result = parse_element(field, text);
-        doxygen_element_list = doxygen_element_list.concat(result.element_list);
-        text = result.text;
+    text_s.forEach(function (line: string) {
+        let is_doxy = false;
+        for (let i = 0; i < DOXYGEN_FIELD_ARRAY.length; i++) {
+            const field = DOXYGEN_FIELD_ARRAY[i];
+            const result = parse_element(field, line);
+            doxygen_element_list = doxygen_element_list.concat(result.element_list);
+            text = result.text;
+            if (result.element_list.length !== 0) {
+                is_doxy = true;
+                break;
+            }
+        }
+        if (is_doxy === false) {
+            if (line.trim() === '') {
+                text_s_new += `${line.trim()}\n`;
+            }
+            else {
+                text_s_new += `${line.trim()} `;
+            }
+        }
     });
-    return { 'text': text, 'element_list': doxygen_element_list };
+    return { 'text': text_s_new, 'element_list': doxygen_element_list };
 }
 
-export function parse_virtualbus_init(text: string) {
+export function parse_virtualbus_init(description: string) {
     const result = {
         is_in: false,
         name: '',
         direction: 'in',
-        keepports: false,
-        description: ''
+        notable: false,
+        description: '',
+        to_delete: ''
     };
 
-    text = text.trim();
+    const description_sp = description.split('\n');
+    for (let i = 0; i < description_sp.length; i++) {
+        const text = description_sp[i].trim();
+        result.to_delete = description_sp[i];
 
-    //Keep ports
-    const keep_ports_element = is_keeports(text);
-    let corpus = text;
-    if (keep_ports_element.is_in === true) {
-        result.keepports = true;
-        corpus = keep_ports_element.text;
-    }
+        //Notable ports
+        const notable_element = is_notable(text);
+        let corpus = text;
+        if (notable_element.is_in === true) {
+            result.notable = true;
+            corpus = notable_element.text;
+        }
+        //Port name
+        const virtual_port_element = parse_element('virtualbus', corpus);
+        if (virtual_port_element.element_list.length === 0) {
+            return result;
+        }
+        corpus = virtual_port_element.element_list[0].description.trim();
+        let element_0 = get_first_element(corpus);
+        result.name = element_0.name;
+        result.is_in = true;
+        corpus = element_0.text.trim();
 
-    //Port name
-    const virtual_port_element = parse_element('virtualbus', corpus);
-    if (virtual_port_element.element_list.length === 0) {
-        return result;
+        // Direction
+        const direction_port_element = parse_element('dir', corpus);
+        if (direction_port_element.element_list.length === 0) {
+            result.description = corpus.trim();
+            return result;
+        }
+        corpus = direction_port_element.element_list[0].description.trim();
+        element_0 = get_first_element(corpus);
+        result.direction = element_0.name;
+        result.description = element_0.text.trim();
+        if (result.is_in === true) {
+            return result;
+        }
     }
-    corpus = virtual_port_element.element_list[0].description.trim();
-    let element_0 = get_first_element(corpus);
-    result.name = element_0.name;
-    result.is_in = true;
-    corpus = element_0.text.trim();
-
-    // Direction
-    const direction_port_element = parse_element('dir', corpus);
-    if (direction_port_element.element_list.length === 0) {
-        result.description = corpus.trim();
-        return result;
-    }
-    corpus = direction_port_element.element_list[0].description.trim();
-    element_0 = get_first_element(corpus);
-    result.direction = element_0.name;
-    result.description = element_0.text.trim();
     return result;
 }
 
-function is_keeports(text: string) {
-    const regex = /@keepports/gms;
+function is_notable(text: string) {
+    const regex = /@notable/gms;
     const element_parser = text.match(regex);
     const result = {
         text: text,
@@ -138,12 +162,17 @@ export function get_virtual_bus(port_list: common_hdl.Port_hdl[]) {
     let virtual_bus: common_hdl.Virtual_bus_hdl;
     let double_check = false;
 
-    port_list.forEach(port_i => {
+    const number_of_ports = port_list.length;
+    port_list.forEach(function callback(port_i, index) {
         const port_description = port_i.info.description.trim();
+        const port_description_over = port_i.over_comment.trim();
 
         // Search virtual bus
         if (state === state_e.WAIT_FOR_BUS) {
-            const virtual_port = parse_virtualbus_init(port_description);
+            let virtual_port = parse_virtualbus_init(port_description);
+            if (virtual_port.is_in === false) {
+                virtual_port = parse_virtualbus_init(port_description_over);
+            }
             if (virtual_port.is_in === true) {
                 // Create virtual bus
                 const virtual_port_instance: common_hdl.Virtual_bus_hdl = {
@@ -157,7 +186,7 @@ export function get_virtual_bus(port_list: common_hdl.Port_hdl[]) {
                         description: virtual_port.description
                     },
                     direction: virtual_port.direction,
-                    keepports: virtual_port.keepports,
+                    notable: virtual_port.notable,
                     port_list: [],
                     type: "virtual_bus"
                 };
@@ -166,7 +195,7 @@ export function get_virtual_bus(port_list: common_hdl.Port_hdl[]) {
                     info: {
                         position: port_i.info.position,
                         name: port_i.info.name,
-                        description: ""
+                        description: port_description.replace(virtual_port.to_delete, '')
                     },
                     inline_comment: "",
                     over_comment: "",
@@ -185,8 +214,19 @@ export function get_virtual_bus(port_list: common_hdl.Port_hdl[]) {
         }
         // Search end of virtual bus
         else if (state === state_e.WAIT_FOR_END) {
-            const virtual_port_end = parse_virtualbus_end(port_description);
+            // Search end in current port
+            let virtual_port_end = parse_virtualbus_end(port_description);
             const virtual_port_init = parse_virtualbus_init(port_description);
+            // Search end in next port
+            if (index < number_of_ports - 1 && virtual_port_end.is_in === false) {
+                virtual_port_end = parse_virtualbus_end(port_list[index + 1].over_comment);
+                if (virtual_port_end.is_in === true) {
+                    port_list[index + 1].info.description = port_list[index + 1].info.description.replace('@end', '');
+                }
+            }
+            else if (index === number_of_ports - 1 && virtual_port_end.is_in === false) {
+                virtual_port_end.is_in = true;
+            }
 
             double_check = false;
             // New virtual bus
@@ -201,7 +241,7 @@ export function get_virtual_bus(port_list: common_hdl.Port_hdl[]) {
                     info: {
                         position: port_i.info.position,
                         name: port_i.info.name,
-                        description: virtual_port_end.text
+                        description: port_i.info.description.replace('@end', '')
                     },
                     inline_comment: "",
                     over_comment: "",
@@ -234,7 +274,7 @@ export function get_virtual_bus(port_list: common_hdl.Port_hdl[]) {
                         description: virtual_port.description
                     },
                     direction: virtual_port.direction,
-                    keepports: virtual_port.keepports,
+                    notable: virtual_port.notable,
                     port_list: [],
                     type: "virtual_bus"
                 };
@@ -265,34 +305,22 @@ export function get_virtual_bus(port_list: common_hdl.Port_hdl[]) {
 }
 
 function parse_element(field: string, text: string) {
-    const regex_followed = new RegExp(`^s*[@]${field}\\s.*\n\n`, 'gms');
-    const regex_not_followed = new RegExp(`^s*[@]${field}\\s.*`, 'gms');
-    // const regex_replace = new RegExp(`^s*[@]${field}\\s`, '');
-
+    const regex_field = new RegExp(`^s*[@]${field}\\s.*`, 'gms');
     const doxygen_element_list: Doxygen_element[] = [];
 
-    let element_parser = text.match(regex_followed);
-    if (element_parser === null) {
-        element_parser = text.match(regex_not_followed);
-    }
+    text = text.trim();
+
+    const element_parser = text.match(regex_field);
     if (element_parser !== null) {
-        const stripped_element = element_parser[0].split(/\n[\s]*\n/gm);
-        for (let index = 0; index < stripped_element.length; index++) {
-            if (stripped_element[index] !== undefined && stripped_element[index].match(regex_not_followed) !== null) {
-                // let name = stripped_element[index].replace(regex_replace, "");
-                const description = stripped_element[index].replace(`@${field}`, "").trim();
-                text = text.replace(stripped_element[index], "");
 
-                const doxygen_element: Doxygen_element = {
-                    field: "",
-                    description: ""
-                };
+        const doxygen_element: Doxygen_element = {
+            field: "",
+            description: ""
+        };
 
-                doxygen_element.field = field;
-                doxygen_element.description = description;
-                doxygen_element_list.push(doxygen_element);
-            }
-        }
+        doxygen_element.field = field;
+        doxygen_element.description = text.replace(`@${field}`, '');
+        doxygen_element_list.push(doxygen_element);
     }
     return { 'text': text, 'element_list': doxygen_element_list };
 }

@@ -31,7 +31,7 @@ export enum MODE {
     OUT = "out",
 }
 
-// const DEBUG_SELECTED_FILE = "sample_2.vhd";
+const DEBUG_SELECTED_FILE = "example_2.v";
 
 // Input
 const C_INPUT_BASE_PATH_VHDL = paht_lib.join(__dirname, 'vhdl');
@@ -53,10 +53,10 @@ file_utils.create_directory(C_OUTPUT_BASE_PATH, true);
 describe(`Check documenter`, function () {
     input_total.forEach(input_inst => {
         it(`Check ${input_inst}`, async function () {
-            // const filename = file_utils.get_filename(input_inst);
-            // if (DEBUG_SELECTED_FILE === filename) {
-            await run(input_inst, OUTPUT_TYPE);
-            // }
+            const filename = file_utils.get_filename(input_inst);
+            if (DEBUG_SELECTED_FILE === filename) {
+                await run(input_inst, OUTPUT_TYPE);
+            }
         });
     });
 });

@@ -76,6 +76,25 @@ export function set_description_to_array(arr: any, txt: string, general_comments
     return arr;
 }
 
+export function set_description_to_array_port(arr: any, txt: string, general_comments: any, comment_symbol: string) {
+    for (let i = 0; i < arr.length; ++i) {
+        const position = arr[i].info.position.line;
+        const comment_candidate = general_comments[position];
+        if (comment_candidate !== undefined) {
+            const result = check_comment(comment_candidate, comment_symbol);
+            if (result.check === true) {
+                arr[i].info.description = result.comment;
+                arr[i].inline_comment = result.comment;
+            }
+        }
+        if (arr[i].info.description === '') {
+            arr[i].info.description = txt;
+        }
+        arr[i].over_comment = txt;
+    }
+    return arr;
+}
+
 function check_comment(comment: string, comment_symbol: string) {
     let check = false;
     let result = '';

@@ -20,17 +20,21 @@
 export class Ts_base_parser {
     comment_symbol = "";
 
-    protected get_comment(comment: string) {
+    protected get_comment(comment: string, multiline_delete = true) {
+        let break_line = '\n';
+        if (multiline_delete === true) {
+            break_line = '';
+        }
 
         if (comment === undefined) {
             return '';
         }
         const txt_comment = comment.slice(2);
         if (this.comment_symbol === '') {
-            return txt_comment;
+            return txt_comment + break_line;
         }
         else if (txt_comment[0] === this.comment_symbol) {
-            return txt_comment.slice(1);
+            return txt_comment.slice(1) + break_line;
         }
         return '';
     }
