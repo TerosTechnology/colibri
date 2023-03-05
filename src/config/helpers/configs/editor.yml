@@ -1,24 +1,24 @@
-shutter_comment_shortcuts:
-  description: 'Shutter mode: an enter keypress at the end of a line that contains a non-empty comment will continue the comment on the next line. This can be cancelled by pressing enter again. You must also set <code>"editor.formatOnType": true"</code>'
+stutter_comment_shortcuts:
+  description: 'Stutter mode: an enter keypress at the end of a line that contains a non-empty comment will continue the comment on the next line. This can be cancelled by pressing enter again. You must also set <code>"editor.formatOnType": true"</code>'
   type: boolean
   value: false
 
-shutter_block_width:
+stutter_block_width:
   description: "Width of block comment elements inserted by stutter completions"
   type: number
   value: 80
 
-shutter_max_width:
+stutter_max_width:
   description: "Max width of block comment elements inserted by stutter completions. Set to zero to disable."
   type: number
   value: 0
 
-shutter_delimiters:
-  description: "Shutter mode: enable Delimiter Shortcuts"
+stutter_delimiters:
+  description: "Stutter mode: enable Delimiter Shortcuts"
   type: boolean
   value: false
 
-shutter_bracket_shortcuts:
-  description: "Shutter mode: enable Bracket Shortcuts"
+stutter_bracket_shortcuts:
+  description: "Stutter mode: enable Bracket Shortcuts"
   type: boolean
   value: false

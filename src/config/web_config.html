@@ -563,9 +563,9 @@
           
           <li class="list-group-item">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="editor-general-shutter_comment_shortcuts">
-              <label class="form-check-label" for="editor-general-shutter_comment_shortcuts">
-                Shutter mode: an enter keypress at the end of a line that contains a non-empty comment will continue the comment on the next line. This can be cancelled by pressing enter again. You must also set <code>"editor.formatOnType": true"</code>
+              <input class="form-check-input" type="checkbox" value="" id="editor-general-stutter_comment_shortcuts">
+              <label class="form-check-label" for="editor-general-stutter_comment_shortcuts">
+                Stutter mode: an enter keypress at the end of a line that contains a non-empty comment will continue the comment on the next line. This can be cancelled by pressing enter again. You must also set <code>"editor.formatOnType": true"</code>
               </label>
             </div>
           </li>
@@ -573,25 +573,25 @@
           
           <li class="list-group-item">
             <div class="mb-3">
-              <label for="editor-general-shutter_block_width" class="form-label">Width of block comment elements inserted by stutter completions</label>
-              <input type='number' class="form-control" id="editor-general-shutter_block_width" rows="3"></input>
+              <label for="editor-general-stutter_block_width" class="form-label">Width of block comment elements inserted by stutter completions</label>
+              <input type='number' class="form-control" id="editor-general-stutter_block_width" rows="3"></input>
             </div>
           </li>
           
           
           <li class="list-group-item">
             <div class="mb-3">
-              <label for="editor-general-shutter_max_width" class="form-label">Max width of block comment elements inserted by stutter completions. Set to zero to disable.</label>
-              <input type='number' class="form-control" id="editor-general-shutter_max_width" rows="3"></input>
+              <label for="editor-general-stutter_max_width" class="form-label">Max width of block comment elements inserted by stutter completions. Set to zero to disable.</label>
+              <input type='number' class="form-control" id="editor-general-stutter_max_width" rows="3"></input>
             </div>
           </li>
           
           
           <li class="list-group-item">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="editor-general-shutter_delimiters">
-              <label class="form-check-label" for="editor-general-shutter_delimiters">
-                Shutter mode: enable Delimiter Shortcuts
+              <input class="form-check-input" type="checkbox" value="" id="editor-general-stutter_delimiters">
+              <label class="form-check-label" for="editor-general-stutter_delimiters">
+                Stutter mode: enable Delimiter Shortcuts
               </label>
             </div>
           </li>
@@ -599,9 +599,9 @@
           
           <li class="list-group-item">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="editor-general-shutter_bracket_shortcuts">
-              <label class="form-check-label" for="editor-general-shutter_bracket_shortcuts">
-                Shutter mode: enable Bracket Shortcuts
+              <input class="form-check-input" type="checkbox" value="" id="editor-general-stutter_bracket_shortcuts">
+              <label class="form-check-label" for="editor-general-stutter_bracket_shortcuts">
+                Stutter mode: enable Bracket Shortcuts
               </label>
             </div>
           </li>
@@ -3688,16 +3688,16 @@
     config["documentation"]["general"]["magic_config_path"] = element_value
     config["editor"] = {}
     config["editor"]["general"] = {}
-    element_value = document.getElementById("editor-general-shutter_comment_shortcuts").checked;
-    config["editor"]["general"]["shutter_comment_shortcuts"] = element_value
-    element_value = document.getElementById("editor-general-shutter_block_width").value;
-    config["editor"]["general"]["shutter_block_width"] = element_value
-    element_value = document.getElementById("editor-general-shutter_max_width").value;
-    config["editor"]["general"]["shutter_max_width"] = element_value
-    element_value = document.getElementById("editor-general-shutter_delimiters").checked;
-    config["editor"]["general"]["shutter_delimiters"] = element_value
-    element_value = document.getElementById("editor-general-shutter_bracket_shortcuts").checked;
-    config["editor"]["general"]["shutter_bracket_shortcuts"] = element_value
+    element_value = document.getElementById("editor-general-stutter_comment_shortcuts").checked;
+    config["editor"]["general"]["stutter_comment_shortcuts"] = element_value
+    element_value = document.getElementById("editor-general-stutter_block_width").value;
+    config["editor"]["general"]["stutter_block_width"] = element_value
+    element_value = document.getElementById("editor-general-stutter_max_width").value;
+    config["editor"]["general"]["stutter_max_width"] = element_value
+    element_value = document.getElementById("editor-general-stutter_delimiters").checked;
+    config["editor"]["general"]["stutter_delimiters"] = element_value
+    element_value = document.getElementById("editor-general-stutter_bracket_shortcuts").checked;
+    config["editor"]["general"]["stutter_bracket_shortcuts"] = element_value
     config["formatter"] = {}
     config["formatter"]["general"] = {}
     element_value = document.getElementById("formatter-general-formatter_verilog").value;
@@ -4135,11 +4135,11 @@
     document.getElementById("documentation-general-process").value = config["documentation"]["general"]["process"];
     document.getElementById("documentation-general-functions").value = config["documentation"]["general"]["functions"];
     document.getElementById("documentation-general-magic_config_path").value = config["documentation"]["general"]["magic_config_path"];
-    document.getElementById("editor-general-shutter_comment_shortcuts").checked = config["editor"]["general"]["shutter_comment_shortcuts"];
-    document.getElementById("editor-general-shutter_block_width").value = config["editor"]["general"]["shutter_block_width"];
-    document.getElementById("editor-general-shutter_max_width").value = config["editor"]["general"]["shutter_max_width"];
-    document.getElementById("editor-general-shutter_delimiters").checked = config["editor"]["general"]["shutter_delimiters"];
-    document.getElementById("editor-general-shutter_bracket_shortcuts").checked = config["editor"]["general"]["shutter_bracket_shortcuts"];
+    document.getElementById("editor-general-stutter_comment_shortcuts").checked = config["editor"]["general"]["stutter_comment_shortcuts"];
+    document.getElementById("editor-general-stutter_block_width").value = config["editor"]["general"]["stutter_block_width"];
+    document.getElementById("editor-general-stutter_max_width").value = config["editor"]["general"]["stutter_max_width"];
+    document.getElementById("editor-general-stutter_delimiters").checked = config["editor"]["general"]["stutter_delimiters"];
+    document.getElementById("editor-general-stutter_bracket_shortcuts").checked = config["editor"]["general"]["stutter_bracket_shortcuts"];
     document.getElementById("formatter-general-formatter_verilog").value = config["formatter"]["general"]["formatter_verilog"];
     document.getElementById("formatter-general-formatter_vhdl").value = config["formatter"]["general"]["formatter_vhdl"];
     document.getElementById("formatter-istyle-style").value = config["formatter"]["istyle"]["style"];

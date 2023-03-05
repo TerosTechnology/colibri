@@ -113,11 +113,11 @@ export type e_documentation_general = {
 };
     
 export type e_editor_general = {
-    shutter_comment_shortcuts : boolean,
-    shutter_block_width : number,
-    shutter_max_width : number,
-    shutter_delimiters : boolean,
-    shutter_bracket_shortcuts : boolean,
+    stutter_comment_shortcuts : boolean,
+    stutter_block_width : number,
+    stutter_max_width : number,
+    stutter_delimiters : boolean,
+    stutter_bracket_shortcuts : boolean,
 };
     
 export type e_formatter_general = {
@@ -736,11 +736,11 @@ export function get_default_config(): e_config {
         },
         editor: {
             general: {
-                shutter_comment_shortcuts : false,
-                shutter_block_width : 80,
-                shutter_max_width : 0,
-                shutter_delimiters : false,
-                shutter_bracket_shortcuts : false,
+                stutter_comment_shortcuts : false,
+                stutter_block_width : 80,
+                stutter_max_width : 0,
+                stutter_delimiters : false,
+                stutter_bracket_shortcuts : false,
             },
         },
         formatter: {
@@ -1207,34 +1207,34 @@ export function get_config_from_json(json_config: any): e_config {
         default_config['documentation']['general']['magic_config_path'] = current_value_19;
     }
             
-    // editor -> general -> shutter_comment_shortcuts
-    const current_value_20 = json_config['editor']['general']['shutter_comment_shortcuts'];
+    // editor -> general -> stutter_comment_shortcuts
+    const current_value_20 = json_config['editor']['general']['stutter_comment_shortcuts'];
     if (current_value_20 === true || current_value_20 === false){
-        default_config['editor']['general']['shutter_comment_shortcuts'] = current_value_20;
+        default_config['editor']['general']['stutter_comment_shortcuts'] = current_value_20;
     }
             
-    // editor -> general -> shutter_block_width
-    const current_value_21 = json_config['editor']['general']['shutter_block_width'];
+    // editor -> general -> stutter_block_width
+    const current_value_21 = json_config['editor']['general']['stutter_block_width'];
     if (typeof current_value_21 === 'number'){
-        default_config['editor']['general']['shutter_block_width'] = current_value_21;
+        default_config['editor']['general']['stutter_block_width'] = current_value_21;
     }
             
-    // editor -> general -> shutter_max_width
-    const current_value_22 = json_config['editor']['general']['shutter_max_width'];
+    // editor -> general -> stutter_max_width
+    const current_value_22 = json_config['editor']['general']['stutter_max_width'];
     if (typeof current_value_22 === 'number'){
-        default_config['editor']['general']['shutter_max_width'] = current_value_22;
+        default_config['editor']['general']['stutter_max_width'] = current_value_22;
     }
             
-    // editor -> general -> shutter_delimiters
-    const current_value_23 = json_config['editor']['general']['shutter_delimiters'];
+    // editor -> general -> stutter_delimiters
+    const current_value_23 = json_config['editor']['general']['stutter_delimiters'];
     if (current_value_23 === true || current_value_23 === false){
-        default_config['editor']['general']['shutter_delimiters'] = current_value_23;
+        default_config['editor']['general']['stutter_delimiters'] = current_value_23;
     }
             
-    // editor -> general -> shutter_bracket_shortcuts
-    const current_value_24 = json_config['editor']['general']['shutter_bracket_shortcuts'];
+    // editor -> general -> stutter_bracket_shortcuts
+    const current_value_24 = json_config['editor']['general']['stutter_bracket_shortcuts'];
     if (current_value_24 === true || current_value_24 === false){
-        default_config['editor']['general']['shutter_bracket_shortcuts'] = current_value_24;
+        default_config['editor']['general']['stutter_bracket_shortcuts'] = current_value_24;
     }
             
     // formatter -> general -> formatter_verilog
