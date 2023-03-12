@@ -113,7 +113,6 @@ describe(`Check project manager`, function () {
 
     it(`Set and get config`, async function () {
         const myconfig = cfg.get_default_config();
-        myconfig.editor.general.continue_comment = true;
         myconfig.documentation.general.symbol_vhdl = 'asdf';
 
         // Set config
