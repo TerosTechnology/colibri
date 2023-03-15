@@ -7,3 +7,4 @@ out_doc_api
 dist
 tmp
 out_*
+coverage
