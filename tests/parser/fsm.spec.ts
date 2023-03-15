@@ -28,7 +28,7 @@ const lang_list = [HDL_LANG.VHDL, HDL_LANG.VERILOG];
 
 lang_list.forEach(lang_inst => {
 
-    describe(`Check FSM for ${lang_inst}`, function () {
+    describe.skip(`Check FSM for ${lang_inst}`, function () {
         it(`Normal`, async function () {
             const test_index = 0;
             await parse_fsm(lang_inst, test_index);

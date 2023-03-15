@@ -85,10 +85,8 @@ Test no comment 2`;
 });
 
 describe('Check get top level with regex', function () {
-    it(`From VHDL code`, async function () {
-
-        it(`Get top level VHDL`, async function () {
-            const code_dummy = `
+    it(`Get top level VHDL`, async function () {
+        const code_dummy = `
             library ieee;
             use ieee.std_logic_1164.all;
             use ieee.numeric_std.all;
@@ -115,13 +113,13 @@ describe('Check get top level with regex', function () {
             end e_arch;
             `;
 
-            const expected = 'test_entity_name';
-            const current = await hdl_utils.get_toplevel(code_dummy, HDL_LANG.VHDL);
-            equal(current, expected);
-        });
+        const expected = 'test_entity_name';
+        const current = await hdl_utils.get_toplevel(code_dummy, HDL_LANG.VHDL);
+        equal(current, expected);
+    });
 
-        it(`Get top level Verilog`, async function () {
-            const code_dummy = `
+    it(`Get top level Verilog`, async function () {
+        const code_dummy = `
             module test_entity_name2 
                 #(
                     parameter a=8,
@@ -184,9 +182,8 @@ describe('Check get top level with regex', function () {
             endmodule
             `;
 
-            const expected = 'test_entity_name2';
-            const current = await hdl_utils.get_toplevel(code_dummy, HDL_LANG.VERILOG);
-            equal(current, expected);
-        });
+        const expected = 'test_entity_name2';
+        const current = await hdl_utils.get_toplevel(code_dummy, HDL_LANG.VERILOG);
+        equal(current, expected);
     });
 });

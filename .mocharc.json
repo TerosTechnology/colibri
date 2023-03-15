@@ -1,9 +1,0 @@
-{
-  "extension": [
-    "ts"
-  ],
-  "require": "ts-node/register",
-  "exclude": [
-    "tests/linter/linter.spec.ts"
-  ]
-}

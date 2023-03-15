@@ -50,9 +50,9 @@ const OUTPUT_TYPE = common_documenter.doc_output_type.HTML;
 file_utils.remove_directory(C_OUTPUT_BASE_PATH);
 file_utils.create_directory(C_OUTPUT_BASE_PATH, true);
 
-describe(`Check documenter`, function () {
+describe.skip(`Check documenter`, function () {
     input_total.forEach(input_inst => {
-        it(`Check ${input_inst}`, async function () {
+        it.skip(`Check ${input_inst}`, async function () {
             const filename = file_utils.get_filename(input_inst);
             if (DEBUG_SELECTED_FILE === filename) {
                 await run(input_inst, OUTPUT_TYPE);

@@ -27,14 +27,8 @@ import * as cfg from "../../../src/config/config_declaration";
 
 const C_BASE_DIR = paht_lib.join(__dirname, 'helpers');
 
-function due_skip(tt: Mocha.Context) {
-    tt.skip();
-}
-
-
 describe(`Check Edalize`, function () {
-    it(`Check GHDL`, async function () {
-        due_skip(this);
+    it.skip(`Check GHDL`, async function () {
         // Init
         const C_TOOL_BASE_DIR = paht_lib.join(C_BASE_DIR, 'ghdl');
 
@@ -88,8 +82,7 @@ describe(`Check Edalize`, function () {
 
 describe(`Check VUnit`, function () {
 
-    it(`Check one tests in runpy`, async function () {
-        due_skip(this);
+    it.skip(`Check one tests in runpy`, async function () {
         // Init
         const C_TOOL_BASE_DIR = paht_lib.join(C_BASE_DIR, 'vunit');
 
@@ -134,8 +127,7 @@ describe(`Check VUnit`, function () {
         }
     });
 
-    it(`Check multiple tests in runpy`, async function () {
-        due_skip(this);
+    it.skip(`Check multiple tests in runpy`, async function () {
         // Init
         const C_TOOL_BASE_DIR = paht_lib.join(C_BASE_DIR, 'vunit');
 
@@ -182,8 +174,7 @@ describe(`Check VUnit`, function () {
         }
     });
 
-    it(`Check runpy creation`, async function () {
-        due_skip(this);
+    it.skip(`Check runpy creation`, async function () {
         // Init
         const C_TOOL_BASE_DIR = paht_lib.join(C_BASE_DIR, 'vunit');
 
@@ -250,8 +241,7 @@ describe(`Check VUnit`, function () {
 });
 
 describe(`Check cocotb`, function () {
-    it(`Check multiple tests`, async function () {
-        due_skip(this);
+    it.skip(`Check multiple tests`, async function () {
         // Init
         const C_TOOL_BASE_DIR = paht_lib.join(C_BASE_DIR, 'cocotb');
 
@@ -298,8 +288,7 @@ describe(`Check cocotb`, function () {
 
     });
 
-    it(`Check one test`, async function () {
-        due_skip(this);
+    it.skip(`Check one test`, async function () {
         // Init
         const C_TOOL_BASE_DIR = paht_lib.join(C_BASE_DIR, 'cocotb');
 
@@ -349,8 +338,7 @@ describe(`Check cocotb`, function () {
 });
 
 describe(`Check OSVVM`, function () {
-    it(`Run test`, async function () {
-        due_skip(this);
+    it.skip(`Run test`, async function () {
 
         // Config
         const config = cfg.get_default_config();

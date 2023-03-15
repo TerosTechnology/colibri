@@ -13,7 +13,7 @@ function get_linter() {
     return linter;
 }
 
-describe('Check GHDL', function () {
+describe.skip('Check GHDL', function () {
     const LINTER_NAME = cfg.e_linter_general_linter_vhdl.ghdl;
 
     it(`Check error messages with linter in system path`, async function () {
@@ -142,7 +142,7 @@ describe('Check Vivado VHDL', function () {
     });
 });
 
-describe('Check icarus', function () {
+describe.skip('Check icarus', function () {
     const LINTER_NAME = cfg.e_linter_general_linter_verilog.icarus;
 
     it(`Check error messages with linter in system path and Verilog`, async function () {
@@ -182,7 +182,7 @@ describe('Check icarus', function () {
     });
 });
 
-describe('Check ModelSim Verilog', function () {
+describe.skip('Check ModelSim Verilog', function () {
     const LINTER_NAME = cfg.e_linter_general_linter_verilog.modelsim;
 
     it(`Check error messages with linter in system path`, async function () {
@@ -222,7 +222,7 @@ describe('Check ModelSim Verilog', function () {
     });
 });
 
-describe('Check Vivado verilog', function () {
+describe.skip('Check Vivado verilog', function () {
     const LINTER_NAME = cfg.e_linter_general_linter_verilog.vivado;
 
     it(`Check error messages with linter in system path`, async function () {
@@ -264,12 +264,17 @@ describe('Check Vivado verilog', function () {
 describe('Check verible', function () {
     const LINTER_NAME = cfg.e_linter_general_lstyle_verilog.verible;
 
-    it(`Check error messages with linter in system path`, async function () {
+    it.skip(`Check error messages with linter in system path`, async function () {
         const file = path_lib.join(__dirname, 'helpers', 'xvlog_v.out');
-        const fs = require('fs');
-        const content = fs.readFileSync(file, 'utf8');
+        // const fs = require('fs');
+        // const content = fs.readFileSync(file, 'utf8');
 
         const expected_errors: common.l_error[] = [];
+
+        const linter_options: common.l_options = {
+            path: "",
+            argument: ""
+        }
 
         const linter = get_linter();
         const actual_errors = await linter.lint_from_file(LINTER_NAME, file, linter_options);

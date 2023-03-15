@@ -29,8 +29,7 @@ const C_OUTPUT_BASE_PATH = paht_lib.join(__dirname, 'out');
 fs.mkdirSync(C_OUTPUT_BASE_PATH, { recursive: true });
 
 describe(`Check dependency graph`, function () {
-    it(`Check mixed Verilog, VHDL and VHDL with libraries`, async function () {
-        this.skip();
+    it.skip(`Check mixed Verilog, VHDL and VHDL with libraries`, async function () {
         const prj = new Project_manager("sample-prj");
         const file_list = get_test_files();
         file_list.forEach(file_inst => {
@@ -52,8 +51,7 @@ describe(`Check dependency graph`, function () {
 });
 
 describe(`Check compile order`, function () {
-    it(`Check mixed Verilog, VHDL and VHDL with libraries`, async function () {
-        this.skip();
+    it.skip(`Check mixed Verilog, VHDL and VHDL with libraries`, async function () {
         const prj = new Project_manager("sample-prj");
         const file_list = get_test_files();
         file_list.forEach(file_inst => {
@@ -75,8 +73,7 @@ describe(`Check compile order`, function () {
 });
 
 describe(`Check dependency tree`, function () {
-    it(`Check mixed Verilog, VHDL and VHDL with libraries`, async function () {
-        this.skip();
+    it.skip(`Check mixed Verilog, VHDL and VHDL with libraries`, async function () {
         const prj = new Project_manager("sample-prj");
         const file_list = get_test_files();
         file_list.forEach(file_inst => {

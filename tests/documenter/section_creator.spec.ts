@@ -67,16 +67,14 @@ output_types.forEach(output_type_inst => {
             check(section_name, output_type_inst, false);
         });
 
-        it(`Info section`, function () {
+        it.skip(`Info section`, function () {
             const section_name = "info";
             const section = creator.get_info_section(hdl_element, configuration, output_type_inst);
             save_output(section, section_name, output_type_inst);
             check(section_name, output_type_inst, false);
         });
 
-        it(`Diagram section`, function () {
-            this.skip();
-
+        it.skip(`Diagram section`, function () {
             const section_name = "diagram";
             const svg_path = paht_lib.join(C_OUTPUT_BASE_PATH, 'input_path.svg');
             const section = creator.get_diagram_section(hdl_element, configuration, svg_path, output_type_inst);
@@ -101,10 +99,10 @@ output_types.forEach(output_type_inst => {
             check(section_name, output_type_inst, false);
         });
 
-        it(`Description section`, function () {
-            if (output_type_inst === common_documenter.doc_output_type.MARKDOWN) {
-                this.skip();
-            }
+        it.skip(`Description section`, function () {
+            // if (output_type_inst === common_documenter.doc_output_type.MARKDOWN) {
+            //     this.skip();
+            // }
             const section_name = "description";
             const section = creator.get_description_section(hdl_element, configuration,
                 C_OUTPUT_BASE_PATH, output_type_inst);

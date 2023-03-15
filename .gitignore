@@ -1,7 +1,7 @@
 node_modules
 lib
 out
-mochawesome-report
+test-report
 *.xml
 out_doc_api
 dist

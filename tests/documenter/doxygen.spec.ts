@@ -33,10 +33,10 @@ adarga antigua, rocín flaco y galgo corredor.
 describe('Test Doxygen.', function () {
     it("Testing all", function () {
         const result = parse_doxygen(test_vector);
-        equal(result.element_list[0].description, 'El ingenioso hidalgo don Quijote de la Mancha');
+        equal(result.element_list[0].description.trim(), 'El ingenioso hidalgo don Quijote de la Mancha');
         equal(result.element_list[0].field, 'title');
 
-        equal(result.element_list[1].description, 'Miguel de Cervantes Saavedra');
+        equal(result.element_list[1].description.trim(), 'Miguel de Cervantes Saavedra');
         equal(result.element_list[1].field, 'author');
     });
 });

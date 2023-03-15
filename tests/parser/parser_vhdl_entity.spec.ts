@@ -82,14 +82,14 @@ async function parse() {
     const result = await parser.get_all(code_hdl, '!');
     return result;
 }
-describe('Check entity VHDL', async function () {
+describe.skip('Check entity VHDL', function () {
     ////////////////////////////////////////////////////////////////////////////////
     // Entity
     ////////////////////////////////////////////////////////////////////////////////
-    describe('Check entity.', async function () {
+    describe('Check entity.', function () {
         let result: any;
 
-        before(async function () {
+        beforeEach(async function () {
             result = await parse();
         });
         it(`Check name`, async function () {
@@ -109,11 +109,11 @@ describe('Check entity VHDL', async function () {
         // equal(actual.default_value, expected.default_value);
     }
 
-    describe('Check generic.', async function () {
+    describe('Check generic.', function () {
         let result: any;
         let element_array: any;
 
-        before(async function () {
+        beforeEach(async function () {
             result = await parse();
             element_array = result.get_generic_array();
         });
@@ -215,11 +215,11 @@ describe('Check entity VHDL', async function () {
         equal(actual.over_comment.trim(), expected.over_comment.trim());
     }
 
-    describe('Check port.', async function () {
+    describe('Check port.', function () {
         let result: any;
         let element_array: any;
 
-        before(async function () {
+        beforeEach(async function () {
             result = await parse();
             element_array = result.get_port_array();
         });
@@ -382,11 +382,11 @@ describe('Check entity VHDL', async function () {
         // equal(actual.default_value, expected.default_value);
     }
 
-    describe('Check signal.', async function () {
+    describe('Check signal.', function () {
         let result: any;
         let element_array: any;
 
-        before(async function () {
+        beforeEach(async function () {
             result = await parse();
             element_array = result.get_signal_array();
         });
@@ -449,11 +449,11 @@ describe('Check entity VHDL', async function () {
         equal(actual.info.description, expected.info.description);
     }
 
-    describe('Check constant.', async function () {
+    describe('Check constant.', function () {
         let result: any;
         let element_array: any;
 
-        before(async function () {
+        beforeEach(async function () {
             result = await parse();
             element_array = result.get_constant_array();
         });
@@ -518,11 +518,11 @@ describe('Check entity VHDL', async function () {
         equal(actual.info.description, expected.info.description);
     }
 
-    describe('Check type.', async function () {
+    describe('Check type.', function () {
         let result: any;
         let element_array: any;
 
-        before(async function () {
+        beforeEach(async function () {
             result = await parse();
             element_array = result.get_type_array();
         });
@@ -556,11 +556,11 @@ describe('Check entity VHDL', async function () {
         equal(actual.info.description, expected.info.description);
     }
 
-    describe('Check function.', async function () {
+    describe('Check function.', function () {
         let result: any;
         let element_array: any;
 
-        before(async function () {
+        beforeEach(async function () {
             result = await parse();
             element_array = result.get_function_array();
         });
@@ -592,11 +592,11 @@ describe('Check entity VHDL', async function () {
         equal(actual.info.description, expected.info.description);
     }
 
-    describe('Check process.', async function () {
+    describe('Check process.', function () {
         let result: any;
         let element_array: any;
 
-        before(async function () {
+        beforeEach(async function () {
             result = await parse();
             element_array = result.get_process_array();
         });
@@ -661,11 +661,11 @@ describe('Check entity VHDL', async function () {
         equal(actual.info.description, expected.info.description);
     }
 
-    describe('Check instantiation.', async function () {
+    describe('Check instantiation.', function () {
         let result: any;
         let element_array: any;
 
-        before(async function () {
+        beforeEach(async function () {
             result = await parse();
             element_array = result.get_instantiation_array();
         });

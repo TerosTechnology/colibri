@@ -52,7 +52,7 @@ describe('Test Python utils', function () {
     });
 
     it(`Check get_python3_path in custom path`, async function () {
-        this.timeout(5000);
+        jest.setTimeout(5000);
         const opt: python.python_options = {
             path: "/usr/bin/python3"
         };
