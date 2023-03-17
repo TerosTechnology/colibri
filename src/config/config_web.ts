@@ -337,59 +337,56 @@ export const WEB_CONFIG = `
         <h1 class="card-title">General: General</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="general-general-logging">
-              <label class="form-check-label" for="general-general-logging">
-                Enable show TerosHDL console with each message.
-              </label>
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="general-general-logging">
+                <label class="form-check-label" for="general-general-logging">
+                  Enable show TerosHDL console with each message.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="general-general-pypath" class="form-label">Python3 binary path (e.g.: /usr/bin/python3). Empty if you want to use the system path. <strong>Install teroshdl. E.g: pip3 install teroshdl</strong></label>
               <input class="form-control" id="general-general-pypath" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="general-general-go_to_definition_vhdl">
-              <label class="form-check-label" for="general-general-go_to_definition_vhdl">
-                Activate go to definition feature for VHDL (you need to restart VSCode).
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="general-general-go_to_definition_vhdl">
+                <label class="form-check-label" for="general-general-go_to_definition_vhdl">
+                  Activate go to definition feature for VHDL (you need to restart VSCode).
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="general-general-go_to_definition_verilog">
-              <label class="form-check-label" for="general-general-go_to_definition_verilog">
-                Activate go to definition feature for Verilog/SV (you need to restart VSCode).
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="general-general-go_to_definition_verilog">
+                <label class="form-check-label" for="general-general-go_to_definition_verilog">
+                  Activate go to definition feature for Verilog/SV (you need to restart VSCode).
+                </label>
+              </div>
             </div>
-          </li>
-          
-          
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="general-general-developer_mode">
-              <label class="form-check-label" for="general-general-developer_mode">
-                Developer mode: be careful!!
-              </label>
-            </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -401,10 +398,10 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Documentation: General</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="documentation-general-language" class="form-label">Documentation language:</label>
               <select class="form-select" aria-label="Documentation language:" id="documentation-general-language">
@@ -412,56 +409,62 @@ export const WEB_CONFIG = `
                       <option value='russian'>Russian</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="documentation-general-symbol_vhdl" class="form-label">Special VHDL symbol at the begin of the comment to extract documentation. Example: <code>--! Code comment</code></label>
               <input class="form-control" id="documentation-general-symbol_vhdl" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="documentation-general-symbol_verilog" class="form-label">Special Verilog symbol at the begin of the comment to extract documentation. Example: <code>//! Code comment</code></label>
               <input class="form-control" id="documentation-general-symbol_verilog" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="documentation-general-dependency_graph">
-              <label class="form-check-label" for="documentation-general-dependency_graph">
-                Include dependency graph:
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="documentation-general-dependency_graph">
+                <label class="form-check-label" for="documentation-general-dependency_graph">
+                  Include dependency graph:
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="documentation-general-self_contained">
-              <label class="form-check-label" for="documentation-general-self_contained">
-                HTML documentation self contained:
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="documentation-general-self_contained">
+                <label class="form-check-label" for="documentation-general-self_contained">
+                  HTML documentation self contained:
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="documentation-general-fsm">
-              <label class="form-check-label" for="documentation-general-fsm">
-                Include FSM:
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="documentation-general-fsm">
+                <label class="form-check-label" for="documentation-general-fsm">
+                  Include FSM:
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="documentation-general-ports" class="form-label">Include ports:</label>
               <select class="form-select" aria-label="Include ports:" id="documentation-general-ports">
@@ -470,10 +473,10 @@ export const WEB_CONFIG = `
                       <option value='none'>None</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="documentation-general-generics" class="form-label">Include generics:</label>
               <select class="form-select" aria-label="Include generics:" id="documentation-general-generics">
@@ -482,10 +485,10 @@ export const WEB_CONFIG = `
                       <option value='none'>None</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="documentation-general-instantiations" class="form-label">Include instantiations:</label>
               <select class="form-select" aria-label="Include instantiations:" id="documentation-general-instantiations">
@@ -494,10 +497,10 @@ export const WEB_CONFIG = `
                       <option value='none'>None</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="documentation-general-signals" class="form-label">Include signals:</label>
               <select class="form-select" aria-label="Include signals:" id="documentation-general-signals">
@@ -506,10 +509,10 @@ export const WEB_CONFIG = `
                       <option value='none'>None</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="documentation-general-constants" class="form-label">Include consants:</label>
               <select class="form-select" aria-label="Include consants:" id="documentation-general-constants">
@@ -518,10 +521,10 @@ export const WEB_CONFIG = `
                       <option value='none'>None</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="documentation-general-types" class="form-label">Include types:</label>
               <select class="form-select" aria-label="Include types:" id="documentation-general-types">
@@ -530,10 +533,10 @@ export const WEB_CONFIG = `
                       <option value='none'>None</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="documentation-general-process" class="form-label">Include always/processes:</label>
               <select class="form-select" aria-label="Include always/processes:" id="documentation-general-process">
@@ -542,10 +545,10 @@ export const WEB_CONFIG = `
                       <option value='none'>None</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="documentation-general-functions" class="form-label">Include functions:</label>
               <select class="form-select" aria-label="Include functions:" id="documentation-general-functions">
@@ -554,19 +557,20 @@ export const WEB_CONFIG = `
                       <option value='none'>None</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="documentation-general-magic_config_path" class="form-label">Magic config file path</label>
               <input class="form-control" id="documentation-general-magic_config_path" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -578,57 +582,64 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Editor: General</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="editor-general-stutter_comment_shortcuts">
-              <label class="form-check-label" for="editor-general-stutter_comment_shortcuts">
-                Stutter mode: an enter keypress at the end of a line that contains a non-empty comment will continue the comment on the next line. This can be cancelled by pressing enter again. You must also set <code>"editor.formatOnType": true"</code>
-              </label>
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="editor-general-stutter_comment_shortcuts">
+                <label class="form-check-label" for="editor-general-stutter_comment_shortcuts">
+                  Stutter mode: an enter keypress at the end of a line that contains a non-empty comment will continue the comment on the next line. This can be cancelled by pressing enter again. You must also set <code>"editor.formatOnType": true"</code>
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="editor-general-stutter_block_width" class="form-label">Width of block comment elements inserted by stutter completions</label>
               <input type='number' class="form-control" id="editor-general-stutter_block_width" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="editor-general-stutter_max_width" class="form-label">Max width of block comment elements inserted by stutter completions. Set to zero to disable.</label>
               <input type='number' class="form-control" id="editor-general-stutter_max_width" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="editor-general-stutter_delimiters">
-              <label class="form-check-label" for="editor-general-stutter_delimiters">
-                Stutter mode: enable Delimiter Shortcuts
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="editor-general-stutter_delimiters">
+                <label class="form-check-label" for="editor-general-stutter_delimiters">
+                  Stutter mode: enable Delimiter Shortcuts
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="editor-general-stutter_bracket_shortcuts">
-              <label class="form-check-label" for="editor-general-stutter_bracket_shortcuts">
-                Stutter mode: enable Bracket Shortcuts
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="editor-general-stutter_bracket_shortcuts">
+                <label class="form-check-label" for="editor-general-stutter_bracket_shortcuts">
+                  Stutter mode: enable Bracket Shortcuts
+                </label>
+              </div>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -640,10 +651,10 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Formatter: General</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="formatter-general-formatter_verilog" class="form-label">Verilog/SV formatter:</label>
               <select class="form-select" aria-label="Verilog/SV formatter:" id="formatter-general-formatter_verilog">
@@ -652,10 +663,10 @@ export const WEB_CONFIG = `
                       <option value='verible'>Verible</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="formatter-general-formatter_vhdl" class="form-label">VHDL formatter:</label>
               <select class="form-select" aria-label="VHDL formatter:" id="formatter-general-formatter_vhdl">
@@ -663,11 +674,12 @@ export const WEB_CONFIG = `
                       <option value='vsg'>VSG</option>
               </select>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -679,10 +691,10 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Formatter: iStyle</h1>
         <h6 class="card-subtitle mb-2 text-muted">Verilog/SV iStyle formatter</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="formatter-istyle-style" class="form-label">Predefined Styling options.</label>
               <select class="form-select" aria-label="Predefined Styling options." id="formatter-istyle-style">
@@ -692,19 +704,20 @@ export const WEB_CONFIG = `
                       <option value='indent_only'>Indent only</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="formatter-istyle-indentation_size" class="form-label">Indentation size in number of characters.</label>
               <input type='number' class="form-control" id="formatter-istyle-indentation_size" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -716,49 +729,56 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Formatter: s3sv</h1>
         <h6 class="card-subtitle mb-2 text-muted">Verilog/SV S3SV formatter</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="formatter-s3sv-one_bind_per_line">
-              <label class="form-check-label" for="formatter-s3sv-one_bind_per_line">
-                Force one binding per line in instanciations statements.
-              </label>
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="formatter-s3sv-one_bind_per_line">
+                <label class="form-check-label" for="formatter-s3sv-one_bind_per_line">
+                  Force one binding per line in instanciations statements.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="formatter-s3sv-one_declaration_per_line">
-              <label class="form-check-label" for="formatter-s3sv-one_declaration_per_line">
-                Force one declaration per line.
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="formatter-s3sv-one_declaration_per_line">
+                <label class="form-check-label" for="formatter-s3sv-one_declaration_per_line">
+                  Force one declaration per line.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="formatter-s3sv-use_tabs">
-              <label class="form-check-label" for="formatter-s3sv-use_tabs">
-                Use tabs instead of spaces for indentation.
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="formatter-s3sv-use_tabs">
+                <label class="form-check-label" for="formatter-s3sv-use_tabs">
+                  Use tabs instead of spaces for indentation.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="formatter-s3sv-indentation_size" class="form-label">Indentation size in number of characters.</label>
               <input type='number' class="form-control" id="formatter-s3sv-indentation_size" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -770,27 +790,28 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Formatter: Verible</h1>
         <h6 class="card-subtitle mb-2 text-muted">Verilog/SV Verible formatter</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="formatter-verible-path" class="form-label">Verible formatter binary path. E.g: /home/user/Downloads/verible-v0.0-1296/bin/verible-verilog-format</label>
               <input class="form-control" id="formatter-verible-path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="formatter-verible-format_args" class="form-label">Extra command line arguments passed to the Verible tool</label>
               <input class="form-control" id="formatter-verible-format_args" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -802,10 +823,10 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Formatter: VHDL standalone</h1>
         <h6 class="card-subtitle mb-2 text-muted">VHDL standalone formatter</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="formatter-standalone-keyword_case" class="form-label">Keyword case. e.g. begin, case, when </label>
               <select class="form-select" aria-label="Keyword case. e.g. begin, case, when " id="formatter-standalone-keyword_case">
@@ -813,10 +834,10 @@ export const WEB_CONFIG = `
                       <option value='uppercase'>UpperCase</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="formatter-standalone-name_case" class="form-label">Type name case. e.g. boolean, natural, string </label>
               <select class="form-select" aria-label="Type name case. e.g. boolean, natural, string " id="formatter-standalone-name_case">
@@ -824,68 +845,78 @@ export const WEB_CONFIG = `
                       <option value='uppercase'>UpperCase</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="formatter-standalone-indentation" class="form-label">Indentation.</label>
               <input class="form-control" id="formatter-standalone-indentation" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="formatter-standalone-align_port_generic">
-              <label class="form-check-label" for="formatter-standalone-align_port_generic">
-                Align signs in ports and generics.
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="formatter-standalone-align_port_generic">
+                <label class="form-check-label" for="formatter-standalone-align_port_generic">
+                  Align signs in ports and generics.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="formatter-standalone-align_comment">
-              <label class="form-check-label" for="formatter-standalone-align_comment">
-                Align comments.
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="formatter-standalone-align_comment">
+                <label class="form-check-label" for="formatter-standalone-align_comment">
+                  Align comments.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="formatter-standalone-remove_comments">
-              <label class="form-check-label" for="formatter-standalone-remove_comments">
-                Remove comments.
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="formatter-standalone-remove_comments">
+                <label class="form-check-label" for="formatter-standalone-remove_comments">
+                  Remove comments.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="formatter-standalone-remove_reports">
-              <label class="form-check-label" for="formatter-standalone-remove_reports">
-                Remove reports.
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="formatter-standalone-remove_reports">
+                <label class="form-check-label" for="formatter-standalone-remove_reports">
+                  Remove reports.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="formatter-standalone-check_alias">
-              <label class="form-check-label" for="formatter-standalone-check_alias">
-                All long names will be replaced by ALIAS names.
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="formatter-standalone-check_alias">
+                <label class="form-check-label" for="formatter-standalone-check_alias">
+                  All long names will be replaced by ALIAS names.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="formatter-standalone-new_line_after_then" class="form-label">New line after THEN.</label>
               <select class="form-select" aria-label="New line after THEN." id="formatter-standalone-new_line_after_then">
@@ -894,10 +925,10 @@ export const WEB_CONFIG = `
                       <option value='none'>None</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="formatter-standalone-new_line_after_semicolon" class="form-label">New line after semicolon ';'.</label>
               <select class="form-select" aria-label="New line after semicolon ';'." id="formatter-standalone-new_line_after_semicolon">
@@ -906,10 +937,10 @@ export const WEB_CONFIG = `
                       <option value='none'>None</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="formatter-standalone-new_line_after_else" class="form-label">New line after ELSE.</label>
               <select class="form-select" aria-label="New line after ELSE." id="formatter-standalone-new_line_after_else">
@@ -918,10 +949,10 @@ export const WEB_CONFIG = `
                       <option value='none'>None</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="formatter-standalone-new_line_after_port" class="form-label">New line after PORT | PORT MAP.</label>
               <select class="form-select" aria-label="New line after PORT | PORT MAP." id="formatter-standalone-new_line_after_port">
@@ -930,10 +961,10 @@ export const WEB_CONFIG = `
                       <option value='none'>None</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="formatter-standalone-new_line_after_generic" class="form-label">New line after GENERIC.</label>
               <select class="form-select" aria-label="New line after GENERIC." id="formatter-standalone-new_line_after_generic">
@@ -942,11 +973,12 @@ export const WEB_CONFIG = `
                       <option value='none'>None</option>
               </select>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -958,19 +990,20 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Formatter: VHDL VSG</h1>
         <h6 class="card-subtitle mb-2 text-muted">VHDL Style Guide. Analyzes VHDL files for style guide violations.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="formatter-svg-configuration" class="form-label">JSON or YAML configuration file.</label>
               <input class="form-control" id="formatter-svg-configuration" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -982,10 +1015,10 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Linter settings: General</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="linter-general-linter_vhdl" class="form-label">VHDL linter: disable VHDL-LS needs restart VSCode.</label>
               <select class="form-select" aria-label="VHDL linter: disable VHDL-LS needs restart VSCode." id="linter-general-linter_vhdl">
@@ -996,10 +1029,10 @@ export const WEB_CONFIG = `
                       <option value='none'>VHDL-LS</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="linter-general-linter_verilog" class="form-label">Verilog/SV linter:</label>
               <select class="form-select" aria-label="Verilog/SV linter:" id="linter-general-linter_verilog">
@@ -1010,10 +1043,10 @@ export const WEB_CONFIG = `
                       <option value='vivado'>Vivado (xvlog)</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="linter-general-lstyle_verilog" class="form-label">Verilog/SV style checker:</label>
               <select class="form-select" aria-label="Verilog/SV style checker:" id="linter-general-lstyle_verilog">
@@ -1021,10 +1054,10 @@ export const WEB_CONFIG = `
                       <option value='disabled'>Disabled</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="linter-general-lstyle_vhdl" class="form-label">VHDL style checker:</label>
               <select class="form-select" aria-label="VHDL style checker:" id="linter-general-lstyle_vhdl">
@@ -1032,11 +1065,12 @@ export const WEB_CONFIG = `
                       <option value='disabled'>Disabled</option>
               </select>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1048,19 +1082,20 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Linter settings: GHDL linter</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="linter-ghdl-arguments" class="form-label">Arguments.</label>
               <input class="form-control" id="linter-ghdl-arguments" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1072,19 +1107,20 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Linter settings: Icarus linter</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="linter-icarus-arguments" class="form-label">Arguments.</label>
               <input class="form-control" id="linter-icarus-arguments" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1096,27 +1132,28 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Linter settings: ModelSim linter</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="linter-modelsim-vhdl_arguments" class="form-label">VHDL linter arguments.</label>
               <input class="form-control" id="linter-modelsim-vhdl_arguments" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="linter-modelsim-verilog_arguments" class="form-label">Verilog linter arguments.</label>
               <input class="form-control" id="linter-modelsim-verilog_arguments" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1128,19 +1165,20 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Linter settings: Verible linter</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="linter-verible-arguments" class="form-label">Arguments.</label>
               <input class="form-control" id="linter-verible-arguments" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1152,19 +1190,20 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Linter settings: Verilator linter</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="linter-verilator-arguments" class="form-label">Arguments.</label>
               <input class="form-control" id="linter-verilator-arguments" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1176,27 +1215,28 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Linter settings: Vivado linter</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="linter-vivado-vhdl_arguments" class="form-label">VHDL linter arguments.</label>
               <input class="form-control" id="linter-vivado-vhdl_arguments" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="linter-vivado-verilog_arguments" class="form-label">Verilog linter arguments.</label>
               <input class="form-control" id="linter-vivado-verilog_arguments" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1208,19 +1248,20 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Linter settings: VSG linter</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="linter-vsg-arguments" class="form-label">Arguments.</label>
               <input class="form-control" id="linter-vsg-arguments" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1232,10 +1273,10 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Schematic viewer: General</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="schematic-general-backend" class="form-label">Select the backend:</label>
               <select class="form-select" aria-label="Select the backend:" id="schematic-general-backend">
@@ -1245,11 +1286,12 @@ export const WEB_CONFIG = `
                       <option value='yosys_ghdl_module'>GHDL (module) + Yosys</option>
               </select>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1261,26 +1303,26 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Templates: General</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="templates-general-header_file_path" class="form-label">File path with your configurable header. E.g. your company license. It will be inserted at the beginning of the template</label>
               <input class="form-control" id="templates-general-header_file_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="templates-general-indent" class="form-label">Indent</label>
               <input class="form-control" id="templates-general-indent" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="templates-general-clock_generation_style" class="form-label">Clock generation style:</label>
               <select class="form-select" aria-label="Clock generation style:" id="templates-general-clock_generation_style">
@@ -1288,10 +1330,10 @@ export const WEB_CONFIG = `
                       <option value='ifelse'>if/else</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="templates-general-instance_style" class="form-label">Instantiation style:</label>
               <select class="form-select" aria-label="Instantiation style:" id="templates-general-instance_style">
@@ -1299,11 +1341,12 @@ export const WEB_CONFIG = `
                       <option value='separate'>Separate</option>
               </select>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1315,10 +1358,10 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: General</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-general-select_tool" class="form-label">Select a tool, framework, simulator...</label>
               <select class="form-select" aria-label="Select a tool, framework, simulator..." id="tools-general-select_tool">
@@ -1343,10 +1386,10 @@ export const WEB_CONFIG = `
                       <option value='xsim'>XSIM</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-general-execution_mode" class="form-label">Select the execution mode.</label>
               <select class="form-select" aria-label="Select the execution mode." id="tools-general-execution_mode">
@@ -1354,10 +1397,10 @@ export const WEB_CONFIG = `
                       <option value='cmd'>Command line</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-general-waveform_viewer" class="form-label">Select the waveform viewer. For GTKWave you need to install it.</label>
               <select class="form-select" aria-label="Select the waveform viewer. For GTKWave you need to install it." id="tools-general-waveform_viewer">
@@ -1366,11 +1409,12 @@ export const WEB_CONFIG = `
                       <option value='gtkwave'>GTKWave</option>
               </select>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1382,26 +1426,26 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: OSVVM</h1>
         <h6 class="card-subtitle mb-2 text-muted">OSVVM is an advanced verification methodology that defines a VHDL verification framework, verification utility library, verification component library, and a scripting flow that simplifies your FPGA or ASIC verification project from start to finish. Using these libraries you can create a simple, readable, and powerful testbench that is suitable for either a simple FPGA block or a complex ASIC.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-osvvm-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-osvvm-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-osvvm-tclsh_binary" class="form-label">tclsh binary path. E.g: /usr/bin/tclsh8.6</label>
               <input class="form-control" id="tools-osvvm-tclsh_binary" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-osvvm-simulator_name" class="form-label">Selects which simulator to use.</label>
               <select class="form-select" aria-label="Selects which simulator to use." id="tools-osvvm-simulator_name">
@@ -1416,11 +1460,12 @@ export const WEB_CONFIG = `
                       <option value='xcelium'>Xcelium</option>
               </select>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1432,26 +1477,27 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: Ascenlint</h1>
         <h6 class="card-subtitle mb-2 text-muted">Ascent Lint performs static source code analysis on HDL code and checks for common coding errors or coding style violations.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-ascenlint-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-ascenlint-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-ascenlint-ascentlint_options" class="form-label">Additional run options for ascentlint.</label>
               <input class="form-control" id="tools-ascenlint-ascentlint_options" rows="3"></input>
             </div>
-          </li>
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1463,18 +1509,18 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: Cocotb</h1>
         <h6 class="card-subtitle mb-2 text-muted"></h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-cocotb-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-cocotb-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-cocotb-simulator_name" class="form-label">Selects which simulator Makefile to use. Attempts to include a simulator specific makefile from cocotb/share/makefiles/simulators/makefile.$(SIM)</label>
               <select class="form-select" aria-label="Selects which simulator Makefile to use. Attempts to include a simulator specific makefile from cocotb/share/makefiles/simulators/makefile.$(SIM)" id="tools-cocotb-simulator_name">
@@ -1491,35 +1537,36 @@ export const WEB_CONFIG = `
                       <option value='cvc'>Tachyon DA CVC</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-cocotb-compile_args" class="form-label">Any arguments or flags to pass to the compile stage of the simulation.</label>
               <input class="form-control" id="tools-cocotb-compile_args" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-cocotb-run_args" class="form-label">Any argument to be passed to the “first” invocation of a simulator that runs via a TCL script. One motivating usage is to pass -noautoldlibpath to Questa to prevent it from loading the out-of-date libraries it ships with. Used by Aldec Riviera-PRO and Mentor Graphics Questa simulator.</label>
               <input class="form-control" id="tools-cocotb-run_args" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-cocotb-plusargs" class="form-label">They are options that are starting with a plus (+) sign. They are passed to the simulator and are also available within cocotb as cocotb.plusargs. In the simulator, they can be read by the Verilog/SystemVerilog system functions $test$plusargs and $value$plusargs. The special plusargs +ntb_random_seed and +seed, if present, are evaluated to set the random seed value if RANDOM_SEED is not set. If both +ntb_random_seed and +seed are set, +ntb_random_seed is used.</label>
               <input class="form-control" id="tools-cocotb-plusargs" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1531,27 +1578,28 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: Diamond</h1>
         <h6 class="card-subtitle mb-2 text-muted">Backend for Lattice Diamond.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-diamond-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-diamond-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-diamond-part" class="form-label">FPGA part number (e.g. LFE5U-45F-6BG381C).</label>
               <input class="form-control" id="tools-diamond-part" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1563,18 +1611,18 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: GHDL</h1>
         <h6 class="card-subtitle mb-2 text-muted">GHDL is an open source VHDL simulator, which fully supports IEEE 1076-1987, IEEE 1076-1993, IEE 1076-2002 and partially the 1076-2008 version of VHDL.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-ghdl-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-ghdl-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-ghdl-waveform" class="form-label">Waveform output format:</label>
               <select class="form-select" aria-label="Waveform output format:" id="tools-ghdl-waveform">
@@ -1582,25 +1630,26 @@ export const WEB_CONFIG = `
                       <option value='ghw'>GHW</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-ghdl-analyze_options" class="form-label">analyze options. Extra options used for the GHDL analyze stage (ghdl -a).</label>
               <input class="form-control" id="tools-ghdl-analyze_options" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-ghdl-run_options" class="form-label">Run options. Extra options used when running GHDL simulations (ghdl -r).</label>
               <input class="form-control" id="tools-ghdl-run_options" rows="3"></input>
             </div>
-          </li>
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1612,34 +1661,35 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: Icarus</h1>
         <h6 class="card-subtitle mb-2 text-muted">Icarus Verilog is a Verilog simulation and synthesis tool. It operates as a compiler, compiling source code written in Verilog (IEEE-1364) into some target format.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-icarus-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-icarus-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-icarus-timescale" class="form-label">Default timescale.</label>
               <input class="form-control" id="tools-icarus-timescale" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-icarus-iverilog_options" class="form-label">Additional options for iverilog.</label>
               <input class="form-control" id="tools-icarus-iverilog_options" rows="3"></input>
             </div>
-          </li>
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1651,18 +1701,18 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: Icestorm</h1>
         <h6 class="card-subtitle mb-2 text-muted">Open source toolchain for Lattice iCE40 FPGAs. Uses yosys for synthesis and arachne-pnr or nextpnr for Place & Route.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-icestorm-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-icestorm-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-icestorm-pnr" class="form-label">Select P&R tool. Valid values are arachne and next. Default is arachne.</label>
               <select class="form-select" aria-label="Select P&R tool. Valid values are arachne and next. Default is arachne." id="tools-icestorm-pnr">
@@ -1671,10 +1721,10 @@ export const WEB_CONFIG = `
                       <option value='none'>Only perform synthesis</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-icestorm-arch" class="form-label">Target architecture.</label>
               <select class="form-select" aria-label="Target architecture." id="tools-icestorm-arch">
@@ -1683,10 +1733,10 @@ export const WEB_CONFIG = `
                       <option value='ecp5'>ECP5</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-icestorm-output_format" class="form-label">Output file format.</label>
               <select class="form-select" aria-label="Output file format." id="tools-icestorm-output_format">
@@ -1695,50 +1745,53 @@ export const WEB_CONFIG = `
                       <option value='blif'>BLIF</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="tools-icestorm-yosys_as_subtool">
-              <label class="form-check-label" for="tools-icestorm-yosys_as_subtool">
-                Determines if Yosys is run as a part of bigger toolchain, or as a standalone tool.
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="tools-icestorm-yosys_as_subtool">
+                <label class="form-check-label" for="tools-icestorm-yosys_as_subtool">
+                  Determines if Yosys is run as a part of bigger toolchain, or as a standalone tool.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-icestorm-makefile_name" class="form-label">Generated makefile name, defaults to $name.mk</label>
               <input class="form-control" id="tools-icestorm-makefile_name" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-icestorm-arachne_pnr_options" class="form-label">Options for ArachnePNR Place & Route.</label>
               <input class="form-control" id="tools-icestorm-arachne_pnr_options" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-icestorm-nextpnr_options" class="form-label">Options for NextPNR Place & Route.</label>
               <input class="form-control" id="tools-icestorm-nextpnr_options" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-icestorm-yosys_synth_options" class="form-label">Additional options for the synth_ice40 command.</label>
               <input class="form-control" id="tools-icestorm-yosys_synth_options" rows="3"></input>
             </div>
-          </li>
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1750,51 +1803,52 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: ISE</h1>
         <h6 class="card-subtitle mb-2 text-muted">Xilinx ISE Design Suite.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-ise-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-ise-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-ise-family" class="form-label">FPGA family (e.g. spartan6).</label>
               <input class="form-control" id="tools-ise-family" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-ise-device" class="form-label">FPGA device (e.g. xc6slx45).</label>
               <input class="form-control" id="tools-ise-device" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-ise-package" class="form-label">FPGA package (e.g. csg324).</label>
               <input class="form-control" id="tools-ise-package" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-ise-speed" class="form-label">FPGA speed grade (e.g. -2).</label>
               <input class="form-control" id="tools-ise-speed" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1806,33 +1860,34 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: ISIM</h1>
         <h6 class="card-subtitle mb-2 text-muted">Xilinx ISim simulator from ISE design suite.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-isem-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-isem-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-isem-fuse_options" class="form-label">Additional options for compilation with FUSE.</label>
               <input class="form-control" id="tools-isem-fuse_options" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-isem-isim_options" class="form-label">Additional run options for ISim.</label>
               <input class="form-control" id="tools-isem-isim_options" rows="3"></input>
             </div>
-          </li>
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1844,40 +1899,41 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: ModelSim</h1>
         <h6 class="card-subtitle mb-2 text-muted">ModelSim simulator from Mentor Graphics.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-modelsim-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-modelsim-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-modelsim-vcom_options" class="form-label">Additional options for compilation with vcom.</label>
               <input class="form-control" id="tools-modelsim-vcom_options" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-modelsim-vlog_options" class="form-label">Additional options for compilation with vlog.</label>
               <input class="form-control" id="tools-modelsim-vlog_options" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-modelsim-vsim_options" class="form-label">Additional run options for vsim.</label>
               <input class="form-control" id="tools-modelsim-vsim_options" rows="3"></input>
             </div>
-          </li>
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1889,26 +1945,27 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: Morty</h1>
         <h6 class="card-subtitle mb-2 text-muted">Run the (System-) Verilog pickle tool called morty.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-morty-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-morty-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-morty-morty_options" class="form-label">Run-time options passed to morty..</label>
               <input class="form-control" id="tools-morty-morty_options" rows="3"></input>
             </div>
-          </li>
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -1920,50 +1977,50 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: Quartus</h1>
         <h6 class="card-subtitle mb-2 text-muted">The Quartus backend supports Intel Quartus Std and Pro editions to build systems and program the FPGA.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-quartus-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-quartus-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-quartus-family" class="form-label">FPGA family (e.g. Cyclone V).</label>
               <input class="form-control" id="tools-quartus-family" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-quartus-device" class="form-label">FPGA device (e.g. 5CSXFC6D6F31C8ES).</label>
               <input class="form-control" id="tools-quartus-device" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-quartus-cable" class="form-label">Specifies the FPGA’s JTAG programming cable. Use the tool jtagconfig to determine the available cables.</label>
               <input class="form-control" id="tools-quartus-cable" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-quartus-board_device_index" class="form-label">Specifies the FPGA’s device number in the JTAG chain. The device index specifies the device where the flash programmer looks for the Nios® II JTAG debug module. JTAG devices are numbered relative to the JTAG chain, starting at 1. Use the tool jtagconfig to determine the index.</label>
               <input class="form-control" id="tools-quartus-board_device_index" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-quartus-pnr" class="form-label">P&R tool. one (to just run synthesis).</label>
               <select class="form-select" aria-label="P&R tool. one (to just run synthesis)." id="tools-quartus-pnr">
@@ -1972,25 +2029,26 @@ export const WEB_CONFIG = `
                       <option value='none'>Run synthesis</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-quartus-dse_options" class="form-label">Command-line options for Design Space Explorer.</label>
               <input class="form-control" id="tools-quartus-dse_options" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-quartus-quartus_options" class="form-label">Extra command-line options for Quartus.</label>
               <input class="form-control" id="tools-quartus-quartus_options" rows="3"></input>
             </div>
-          </li>
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -2002,27 +2060,28 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: Radiant</h1>
         <h6 class="card-subtitle mb-2 text-muted">Backend for Lattice Radiant.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-radiant-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-radiant-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-radiant-part" class="form-label">FPGA part number (e.g. LIFCL-40-9BG400C).</label>
               <input class="form-control" id="tools-radiant-part" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -2034,41 +2093,42 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: Rivierapro</h1>
         <h6 class="card-subtitle mb-2 text-muted">Riviera Pro simulator from Aldec.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-rivierapro-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-rivierapro-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-rivierapro-compilation_mode" class="form-label">Common or separate compilation, sep - for separate compilation, common - for common compilation.</label>
               <input class="form-control" id="tools-rivierapro-compilation_mode" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-rivierapro-vlog_options" class="form-label">Additional options for compilation with vlog.</label>
               <input class="form-control" id="tools-rivierapro-vlog_options" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-rivierapro-vsim_options" class="form-label">Additional run options for vsim.</label>
               <input class="form-control" id="tools-rivierapro-vsim_options" rows="3"></input>
             </div>
-          </li>
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -2080,61 +2140,64 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: SiliconCompiler</h1>
         <h6 class="card-subtitle mb-2 text-muted">SiliconCompiler is an open source compiler framework that automates translation from source code to silicon. Check the project documentation: <a href="https://docs.siliconcompiler.com/en/latest/">https://docs.siliconcompiler.com/en/latest/</a></h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-siliconcompiler-installation_path" class="form-label"></label>
               <input class="form-control" id="tools-siliconcompiler-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-siliconcompiler-target" class="form-label">Compilation target separated by a single underscore, specified as '<process>_<edaflow>' for ASIC compilation and '<partname>_<edaflow>'' for FPGA compilation. The process, edaflow, partname fields must be alphanumeric and cannot contain underscores. E.g: asicflow_freepdk45</label>
               <input class="form-control" id="tools-siliconcompiler-target" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="tools-siliconcompiler-server_enable">
-              <label class="form-check-label" for="tools-siliconcompiler-server_enable">
-                Enable remote server.
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="tools-siliconcompiler-server_enable">
+                <label class="form-check-label" for="tools-siliconcompiler-server_enable">
+                  Enable remote server.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-siliconcompiler-server_address" class="form-label">Remote server address (e.g: https://server.siliconcompiler.com):</label>
               <input class="form-control" id="tools-siliconcompiler-server_address" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-siliconcompiler-server_username" class="form-label">Remote server user:</label>
               <input class="form-control" id="tools-siliconcompiler-server_username" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-siliconcompiler-server_password" class="form-label">Remote server password:</label>
               <input class="form-control" id="tools-siliconcompiler-server_password" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -2146,48 +2209,49 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: Spyglass</h1>
         <h6 class="card-subtitle mb-2 text-muted">Synopsys (formerly Atrenta) Spyglass Backend. Spyglass performs static source code analysis on HDL code and checks for common coding errors or coding style violations.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-spyglass-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-spyglass-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-spyglass-methodology" class="form-label"></label>
               <input class="form-control" id="tools-spyglass-methodology" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-spyglass-goals" class="form-label"></label>
               <input class="form-control" id="tools-spyglass-goals" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-spyglass-spyglass_options" class="form-label"></label>
               <input class="form-control" id="tools-spyglass-spyglass_options" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-spyglass-rule_parameters" class="form-label"></label>
               <input class="form-control" id="tools-spyglass-rule_parameters" rows="3"></input>
             </div>
-          </li>
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -2199,26 +2263,27 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: SymbiYosys</h1>
         <h6 class="card-subtitle mb-2 text-muted">SymbiYosys formal verification wrapper for Yosys.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-symbiyosys-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-symbiyosys-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-symbiyosys-tasknames" class="form-label">A list of the .sby file’s tasks to run. Passed on the sby command line..</label>
               <input class="form-control" id="tools-symbiyosys-tasknames" rows="3"></input>
             </div>
-          </li>
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -2230,69 +2295,70 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: Symbiflow</h1>
         <h6 class="card-subtitle mb-2 text-muted">VHDL Style Guide. Analyzes VHDL files for style guide violations.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-symbiflow-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-symbiflow-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-symbiflow-package" class="form-label">FPGA chip package (e.g. clg400-1).</label>
               <input class="form-control" id="tools-symbiflow-package" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-symbiflow-part" class="form-label">FPGA part type (e.g. xc7a50t).</label>
               <input class="form-control" id="tools-symbiflow-part" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-symbiflow-vendor" class="form-label">Target architecture. Currently only “xilinx” is supported.</label>
               <input class="form-control" id="tools-symbiflow-vendor" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-symbiflow-pnr" class="form-label">Place and Route tool. Currently only “vpr” is supported.</label>
               <select class="form-select" aria-label="Place and Route tool. Currently only “vpr” is supported." id="tools-symbiflow-pnr">
                       <option value='vpr'>VPR</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-symbiflow-vpr_options" class="form-label">Additional vpr tool options. If not used, default options for the tool will be used.</label>
               <input class="form-control" id="tools-symbiflow-vpr_options" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-symbiflow-environment_script" class="form-label">Optional bash script that will be sourced before each build step..</label>
               <input class="form-control" id="tools-symbiflow-environment_script" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -2304,18 +2370,18 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: Trellis</h1>
         <h6 class="card-subtitle mb-2 text-muted">Project Trellis enables a fully open-source flow for ECP5 FPGAs using Yosys for Verilog synthesis and nextpnr for place and route.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-trellis-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-trellis-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-trellis-arch" class="form-label">Target architecture.</label>
               <select class="form-select" aria-label="Target architecture." id="tools-trellis-arch">
@@ -2324,10 +2390,10 @@ export const WEB_CONFIG = `
                       <option value='ecp5'>ECP5</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-trellis-output_format" class="form-label">Output file format.</label>
               <select class="form-select" aria-label="Output file format." id="tools-trellis-output_format">
@@ -2336,51 +2402,54 @@ export const WEB_CONFIG = `
                       <option value='blif'>BLIF</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="tools-trellis-yosys_as_subtool">
-              <label class="form-check-label" for="tools-trellis-yosys_as_subtool">
-                Determines if Yosys is run as a part of bigger toolchain, or as a standalone tool.
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="tools-trellis-yosys_as_subtool">
+                <label class="form-check-label" for="tools-trellis-yosys_as_subtool">
+                  Determines if Yosys is run as a part of bigger toolchain, or as a standalone tool.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-trellis-makefile_name" class="form-label">Generated makefile name, defaults to $name.mk</label>
               <input class="form-control" id="tools-trellis-makefile_name" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-trellis-script_name" class="form-label">Generated tcl script filename, defaults to $name.mk</label>
               <input class="form-control" id="tools-trellis-script_name" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-trellis-nextpnr_options" class="form-label">Options for NextPNR Place & Route.</label>
               <input class="form-control" id="tools-trellis-nextpnr_options" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-trellis-yosys_synth_options" class="form-label">Additional options for the synth_ice40 command.</label>
               <input class="form-control" id="tools-trellis-yosys_synth_options" rows="3"></input>
             </div>
-          </li>
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -2392,33 +2461,34 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: VCS</h1>
         <h6 class="card-subtitle mb-2 text-muted">Synopsys VCS Backend</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-vcs-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-vcs-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-vcs-vcs_options" class="form-label">Compile time options passed to vcs</label>
               <input class="form-control" id="tools-vcs-vcs_options" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-vcs-run_options" class="form-label">Runtime options passed to the simulation</label>
               <input class="form-control" id="tools-vcs-run_options" rows="3"></input>
             </div>
-          </li>
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -2430,19 +2500,20 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: VeribleLint</h1>
         <h6 class="card-subtitle mb-2 text-muted">Verible lint backend (verible-verilog-lint).</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-veriblelint-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-veriblelint-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -2454,18 +2525,18 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: Verilator</h1>
         <h6 class="card-subtitle mb-2 text-muted">Verible lint backend (verible-verilog-lint).</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-verilator-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-verilator-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-verilator-mode" class="form-label">Select compilation mode. Legal values are cc for C++ testbenches, sc for SystemC testbenches or lint-only to only perform linting on the Verilog code.</label>
               <select class="form-select" aria-label="Select compilation mode. Legal values are cc for C++ testbenches, sc for SystemC testbenches or lint-only to only perform linting on the Verilog code." id="tools-verilator-mode">
@@ -2474,39 +2545,40 @@ export const WEB_CONFIG = `
                       <option value='lint-only'>lint-only</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-verilator-libs" class="form-label">Extra libraries for the verilated model to link against.</label>
               <input class="form-control" id="tools-verilator-libs" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-verilator-verilator_options" class="form-label">Additional options for verilator.</label>
               <input class="form-control" id="tools-verilator-verilator_options" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-verilator-make_options" class="form-label">Additional arguments passed to make when compiling the simulation. This is commonly used to set OPT/OPT_FAST/OPT_SLOW.</label>
               <input class="form-control" id="tools-verilator-make_options" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-verilator-run_options" class="form-label">Additional arguments directly passed to the verilated model.</label>
               <input class="form-control" id="tools-verilator-run_options" rows="3"></input>
             </div>
-          </li>
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -2518,34 +2590,34 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: Vivado</h1>
         <h6 class="card-subtitle mb-2 text-muted">The Vivado backend executes Xilinx Vivado to build systems and program the FPGA.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-vivado-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-vivado-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-vivado-part" class="form-label">Part. Device identifier. e.g. xc7a35tcsg324-1.</label>
               <input class="form-control" id="tools-vivado-part" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-vivado-synth" class="form-label">Synthesis tool. Allowed values are vivado (default) and yosys..</label>
               <input class="form-control" id="tools-vivado-synth" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-vivado-pnr" class="form-label">Choose only synthesis or place and route and bitstream generation:</label>
               <select class="form-select" aria-label="Choose only synthesis or place and route and bitstream generation:" id="tools-vivado-pnr">
@@ -2553,27 +2625,28 @@ export const WEB_CONFIG = `
                       <option value='none'>Only synthesis</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-vivado-jtag_freq" class="form-label">The frequency for jtag communication.</label>
               <input type='number' class="form-control" id="tools-vivado-jtag_freq" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-vivado-hw_target" class="form-label">Board identifier (e.g. */xilinx_tcf/Digilent/123456789123A.</label>
               <input class="form-control" id="tools-vivado-hw_target" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -2585,18 +2658,18 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: VUnit</h1>
         <h6 class="card-subtitle mb-2 text-muted">VUnit testing framework.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-vunit-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-vunit-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-vunit-simulator_name" class="form-label">VUnit simulator:</label>
               <select class="form-select" aria-label="VUnit simulator:" id="tools-vunit-simulator_name">
@@ -2607,10 +2680,10 @@ export const WEB_CONFIG = `
                       <option value='xsim'>XSIM (Not supported in official VUnit)</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-vunit-runpy_mode" class="form-label">runpy mode:</label>
               <select class="form-select" aria-label="runpy mode:" id="tools-vunit-runpy_mode">
@@ -2618,78 +2691,91 @@ export const WEB_CONFIG = `
                       <option value='creation'>Creation</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-vunit-extra_options" class="form-label">VUnit options. Extra options for the VUnit test runner.</label>
               <input class="form-control" id="tools-vunit-extra_options" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_array_util_lib">
-              <label class="form-check-label" for="tools-vunit-enable_array_util_lib">
-                Enable array util library in non standalone mode.
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_array_util_lib">
+                <label class="form-check-label" for="tools-vunit-enable_array_util_lib">
+                  Enable array util library in non standalone mode.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_com_lib">
-              <label class="form-check-label" for="tools-vunit-enable_com_lib">
-                Enable com library in non standalone mode.
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_com_lib">
+                <label class="form-check-label" for="tools-vunit-enable_com_lib">
+                  Enable com library in non standalone mode.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_json4vhdl_lib">
-              <label class="form-check-label" for="tools-vunit-enable_json4vhdl_lib">
-                Enable json4vhdl library in non standalone mode.
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_json4vhdl_lib">
+                <label class="form-check-label" for="tools-vunit-enable_json4vhdl_lib">
+                  Enable json4vhdl library in non standalone mode.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_osvvm_lib">
-              <label class="form-check-label" for="tools-vunit-enable_osvvm_lib">
-                Enable OSVVM library in non standalone mode.
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_osvvm_lib">
+                <label class="form-check-label" for="tools-vunit-enable_osvvm_lib">
+                  Enable OSVVM library in non standalone mode.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_random_lib">
-              <label class="form-check-label" for="tools-vunit-enable_random_lib">
-                Enable random library in non standalone mode.
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_random_lib">
+                <label class="form-check-label" for="tools-vunit-enable_random_lib">
+                  Enable random library in non standalone mode.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_verification_components_lib">
-              <label class="form-check-label" for="tools-vunit-enable_verification_components_lib">
-                Enable verification components library in non standalone mode.
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="tools-vunit-enable_verification_components_lib">
+                <label class="form-check-label" for="tools-vunit-enable_verification_components_lib">
+                  Enable verification components library in non standalone mode.
+                </label>
+              </div>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -2701,47 +2787,48 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: Xcelium</h1>
         <h6 class="card-subtitle mb-2 text-muted">Xcelium simulator from Cadence Design Systems.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-xcelium-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-xcelium-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-xcelium-xmvhdl_options" class="form-label">Additional options for compilation with xmvhdl.</label>
               <input class="form-control" id="tools-xcelium-xmvhdl_options" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-xcelium-xmvlog_options" class="form-label">Additional options for compilation with xmvlog.</label>
               <input class="form-control" id="tools-xcelium-xmvlog_options" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-xcelium-xmsim_options" class="form-label">Additional run options for xmsim.</label>
               <input class="form-control" id="tools-xcelium-xmsim_options" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-xcelium-xrun_options" class="form-label">Additional run options for xrun.</label>
               <input class="form-control" id="tools-xcelium-xrun_options" rows="3"></input>
             </div>
-          </li>
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -2753,33 +2840,34 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: XSIM</h1>
         <h6 class="card-subtitle mb-2 text-muted">XSim simulator from the Xilinx Vivado suite.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-xsim-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-xsim-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-xsim-xelab_options" class="form-label">Additional options for compilation with xelab.</label>
               <input class="form-control" id="tools-xsim-xelab_options" rows="3"></input>
             </div>
-          </li>
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-xsim-xsim_options" class="form-label">Additional run options for XSim.</label>
               <input class="form-control" id="tools-xsim-xsim_options" rows="3"></input>
             </div>
-          </li>
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -2791,18 +2879,18 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: Yosys</h1>
         <h6 class="card-subtitle mb-2 text-muted">Open source synthesis tool targeting many different FPGAs.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-yosys-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-yosys-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-yosys-arch" class="form-label">Target architecture.</label>
               <select class="form-select" aria-label="Target architecture." id="tools-yosys-arch">
@@ -2811,10 +2899,10 @@ export const WEB_CONFIG = `
                       <option value='ecp5'>ECP5</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-yosys-output_format" class="form-label">Output file format.</label>
               <select class="form-select" aria-label="Output file format." id="tools-yosys-output_format">
@@ -2823,44 +2911,47 @@ export const WEB_CONFIG = `
                       <option value='blif'>BLIF</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="tools-yosys-yosys_as_subtool">
-              <label class="form-check-label" for="tools-yosys-yosys_as_subtool">
-                Determines if Yosys is run as a part of bigger toolchain, or as a standalone tool.
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="tools-yosys-yosys_as_subtool">
+                <label class="form-check-label" for="tools-yosys-yosys_as_subtool">
+                  Determines if Yosys is run as a part of bigger toolchain, or as a standalone tool.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-yosys-makefile_name" class="form-label">Generated makefile name, defaults to $name.mk</label>
               <input class="form-control" id="tools-yosys-makefile_name" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-yosys-script_name" class="form-label">Generated tcl script filename, defaults to $name.mk</label>
               <input class="form-control" id="tools-yosys-script_name" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-yosys-yosys_synth_options" class="form-label">Additional options for the synth_ice40 command.</label>
               <input class="form-control" id="tools-yosys-yosys_synth_options" rows="3"></input>
             </div>
-          </li>
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -2872,18 +2963,18 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: OpenFPGA</h1>
         <h6 class="card-subtitle mb-2 text-muted">The award-winning OpenFPGA framework is the first open-source FPGA IP generator with silicon proofs supporting highly-customizable FPGA architectures.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-openfpga-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-openfpga-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-openfpga-arch" class="form-label">Target architecture.</label>
               <select class="form-select" aria-label="Target architecture." id="tools-openfpga-arch">
@@ -2892,10 +2983,10 @@ export const WEB_CONFIG = `
                       <option value='ecp5'>ECP5</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-openfpga-output_format" class="form-label">Output file format.</label>
               <select class="form-select" aria-label="Output file format." id="tools-openfpga-output_format">
@@ -2904,44 +2995,47 @@ export const WEB_CONFIG = `
                       <option value='blif'>BLIF</option>
               </select>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="tools-openfpga-yosys_as_subtool">
-              <label class="form-check-label" for="tools-openfpga-yosys_as_subtool">
-                Determines if Yosys is run as a part of bigger toolchain, or as a standalone tool.
-              </label>
+          
+          
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="tools-openfpga-yosys_as_subtool">
+                <label class="form-check-label" for="tools-openfpga-yosys_as_subtool">
+                  Determines if Yosys is run as a part of bigger toolchain, or as a standalone tool.
+                </label>
+              </div>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-openfpga-makefile_name" class="form-label">Generated makefile name, defaults to $name.mk</label>
               <input class="form-control" id="tools-openfpga-makefile_name" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-openfpga-script_name" class="form-label">Generated tcl script filename, defaults to $name.mk</label>
               <input class="form-control" id="tools-openfpga-script_name" rows="3"></input>
             </div>
-          </li>
           
           
-          <li class="list-group-item">
+          
+          
             <div class="mb-3">
               <label for="tools-openfpga-yosys_synth_options" class="form-label">Additional options for the synth_ice40 command.</label>
               <input class="form-control" id="tools-openfpga-yosys_synth_options" rows="3"></input>
             </div>
-          </li>
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -2953,19 +3047,20 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: Active-HDL</h1>
         <h6 class="card-subtitle mb-2 text-muted">Active-HDL™ is a Windows based, integrated FPGA Design Creation and Simulation solution for team-based environments.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-activehdl-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-activehdl-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -2977,19 +3072,20 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: NVC</h1>
         <h6 class="card-subtitle mb-2 text-muted">NVC is a VHDL compiler and simulator. NVC supports almost all of VHDL-2002 and it has been successfully used to simulate several real-world designs.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-nvc-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-nvc-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -3001,19 +3097,20 @@ export const WEB_CONFIG = `
         <h1 class="card-title">Tools: Questa Advanced Simulator</h1>
         <h6 class="card-subtitle mb-2 text-muted">The Questa advanced simulator is the core simulation and debug engine of the Questa verification solution.</h6>
       </div>
-      <ul class="list-group overflow-auto h-100">
-      <br>
+      <div class="card-body">
+      
           
-          <li class="list-group-item">
+          
             <div class="mb-3">
               <label for="tools-questa-installation_path" class="form-label">Installation path:</label>
               <input class="form-control" id="tools-questa-installation_path" rows="3"></input>
             </div>
-          </li>
           
           
           
-      </ul>
+          
+      </div>
+      
       <div class="card-footer">
         <button type="button_cancel" class="btn btn-m btn-block btn-primary btn-danger" onclick="close_panel(event)">Close</button>
         <button type="button_apply" class="btn btn-m btn-block btn-primary btn btn-success" onclick="send_config(event)">Apply</button>
@@ -3672,8 +3769,6 @@ export const WEB_CONFIG = `
     config["general"]["general"]["go_to_definition_vhdl"] = element_value
     element_value = document.getElementById("general-general-go_to_definition_verilog").checked;
     config["general"]["general"]["go_to_definition_verilog"] = element_value
-    element_value = document.getElementById("general-general-developer_mode").checked;
-    config["general"]["general"]["developer_mode"] = element_value
     config["documentation"] = {}
     config["documentation"]["general"] = {}
     element_value = document.getElementById("documentation-general-language").value;
@@ -4139,7 +4234,6 @@ export const WEB_CONFIG = `
     document.getElementById("general-general-pypath").value = config["general"]["general"]["pypath"];
     document.getElementById("general-general-go_to_definition_vhdl").checked = config["general"]["general"]["go_to_definition_vhdl"];
     document.getElementById("general-general-go_to_definition_verilog").checked = config["general"]["general"]["go_to_definition_verilog"];
-    document.getElementById("general-general-developer_mode").checked = config["general"]["general"]["developer_mode"];
     document.getElementById("documentation-general-language").value = config["documentation"]["general"]["language"];
     document.getElementById("documentation-general-symbol_vhdl").value = config["documentation"]["general"]["symbol_vhdl"];
     document.getElementById("documentation-general-symbol_verilog").value = config["documentation"]["general"]["symbol_verilog"];
