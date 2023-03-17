@@ -31,7 +31,7 @@ export abstract class Base_linter {
     abstract binary_mac: string;
     abstract binary_windows: string;
 
-    parse_output(_output: string, _file: string): common.l_error[] {
+    parse_output(_result: string, _file: string): common.l_error[] {
         const errors: common.l_error[] = [];
         return errors;
     }

@@ -42,11 +42,38 @@ export class Verilator extends Base_linter {
         if (file_lang === HDL_LANG.SYSTEMVERILOG) {
             options.argument += ` ${this.sv_options} `;
         }
-
         const result = await this.exec_linter(file, options);
+        return this.parse_output(result.stderr, file)
+    }
+
+    split_terms(line: string) {
+        const terms = line.split(':');
+        for (let i = 0; i < terms.length; i++) {
+            if (terms[i] === ' ') {
+                terms.splice(i, 1);
+                i--;
+            }
+            else {
+                terms[i] = terms[i].trim();
+            }
+        }
+        return terms;
+    }
+
+    get_severity(severity_string: string): common.LINTER_ERROR_SEVERITY {
+        let severity = common.LINTER_ERROR_SEVERITY.INFO;
+        if (severity_string.startsWith('Error')) {
+            severity = common.LINTER_ERROR_SEVERITY.ERROR;
+        }
+        else if (severity_string.startsWith('Warning')) {
+            severity = common.LINTER_ERROR_SEVERITY.WARNING;
+        }
+        return severity;
+    }
+
+    parse_output(output: string, file: string): common.l_error[] {
         const file_split_space = file.split('\\ ')[0];
-        const errors_str = result.stderr;
-        const errors_str_lines = errors_str.split(/\r?\n/g);
+        const errors_str_lines = output.split(/\r?\n/g);
         const errors: common.l_error[] = [];
         // Parse output lines
         errors_str_lines.forEach((line) => {
@@ -81,30 +108,5 @@ export class Verilator extends Base_linter {
             }
         });
         return errors;
-    }
-
-    split_terms(line: string) {
-        const terms = line.split(':');
-        for (let i = 0; i < terms.length; i++) {
-            if (terms[i] === ' ') {
-                terms.splice(i, 1);
-                i--;
-            }
-            else {
-                terms[i] = terms[i].trim();
-            }
-        }
-        return terms;
-    }
-
-    get_severity(severity_string: string): common.LINTER_ERROR_SEVERITY {
-        let severity = common.LINTER_ERROR_SEVERITY.INFO;
-        if (severity_string.startsWith('Error')) {
-            severity = common.LINTER_ERROR_SEVERITY.ERROR;
-        }
-        else if (severity_string.startsWith('Warning')) {
-            severity = common.LINTER_ERROR_SEVERITY.WARNING;
-        }
-        return severity;
     }
 }

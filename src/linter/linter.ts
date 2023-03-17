@@ -65,7 +65,7 @@ export class Linter {
         }
     }
 
-    parse_output(linter_name: common.t_linter_name, output: string, file: string) {
+    parse_output(linter_name: common.t_linter_name, output: string, file: string): common.l_error[] {
         const linter = this.get_linter(linter_name);
         const errors = linter.parse_output(output, file);
         return errors;

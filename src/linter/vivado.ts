@@ -72,6 +72,16 @@ export class Vivado extends Base_linter {
         }
     }
 
+    async lint(file: string, options: common.l_options): Promise<common.l_error[]> {
+        this.set_binary(file);
+        const result = await this.exec_linter(file, options);
+        file = file.replace(/\\ /g, ' ');
+        const errors_str = result.stdout;
+        const errors = this.parse_output(errors_str, file);
+
+        return errors;
+    }
+
     parse_output(output: string, file: string) {
         const errors_str_lines = output.split(/\r?\n/g);
         const errors: common.l_error[] = [];
@@ -99,16 +109,6 @@ export class Vivado extends Base_linter {
 
             errors.push(error);
         });
-
-        return errors;
-    }
-
-    async lint(file: string, options: common.l_options): Promise<common.l_error[]> {
-        this.set_binary(file);
-        const result = await this.exec_linter(file, options);
-        file = file.replace(/\\ /g, ' ');
-        const errors_str = result.stdout;
-        const errors = this.parse_output(errors_str, file);
 
         return errors;
     }

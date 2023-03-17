@@ -35,10 +35,15 @@ export class Ghdl extends Base_linter {
 
     async lint(file: string, options: common.l_options): Promise<common.l_error[]> {
         const result = await this.exec_linter(file, options);
+        return this.parse_output(result.stderr, file)
+
+    }
+
+    parse_output(output: string, file: string): common.l_error[] {
         try {
             const errors: common.l_error[] = [];
             file = file.replace(/\\ /g, ' ');
-            const errors_str = result.stderr;
+            const errors_str = output;
 
             // eslint-disable-next-line max-len
             const regex = /^(?<filename>.*):(?=\d)(?<line_number>\d+):(?<column_number>\d+):((?<is_warning>warning:)\s*|\s*)(?<error_message>.*)/gm;

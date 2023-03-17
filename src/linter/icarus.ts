@@ -35,9 +35,13 @@ export class Icarus extends Base_linter {
 
     async lint(file: string, options: common.l_options): Promise<common.l_error[]> {
         const result = await this.exec_linter(file, options);
+        return this.parse_output(result.stderr, file)
+    }
+
+    parse_output(output: string, file: string): common.l_error[] {
         try {
             file = file.replace('\\ ', ' ');
-            const errors_str = result.stderr;
+            const errors_str = output;
             const errors_str_lines = errors_str.split(/\r?\n/g);
             const errors: common.l_error[] = [];
             errors_str_lines.forEach((line) => {
