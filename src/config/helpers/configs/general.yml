@@ -18,7 +18,7 @@ go_to_definition_verilog:
   type: boolean
   value: true
 
-# developer_mode:
-#   description: "Developer mode: be careful!!"
-#   type: boolean
-#   value: false
+developer_mode:
+  description: "Developer mode: be careful!!"
+  type: boolean
+  value: false

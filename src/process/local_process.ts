@@ -2,10 +2,10 @@ import { p_result, p_options } from "./common";
 
 export class Local_process {
 
-    async exec_wait(command: string, _opt: p_options) {
+    async exec_wait(command: string, opt: p_options) {
         const exec = require("child_process").exec;
         return new Promise((resolve) => {
-            exec(command, (error: number, stdout: string, stderr: string) => {
+            exec(command, opt, (error: number, stdout: string, stderr: string) => {
                 let error_code = 0;
                 let successful = true;
                 if (error !== undefined && error !== null) {

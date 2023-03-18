@@ -385,6 +385,18 @@ export const WEB_CONFIG = `
           
           
           
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="general-general-developer_mode">
+                <label class="form-check-label" for="general-general-developer_mode">
+                  Developer mode: be careful!!
+                </label>
+              </div>
+            </div>
+          
+          
+          
+          
       </div>
       
       <div class="card-footer">
@@ -1285,6 +1297,14 @@ export const WEB_CONFIG = `
                       <option value='yosys_ghdl'>GHDL + Yosys</option>
                       <option value='yosys_ghdl_module'>GHDL (module) + Yosys</option>
               </select>
+            </div>
+          
+          
+          
+          
+            <div class="mb-3">
+              <label for="schematic-general-args" class="form-label">Arguments passed to Yosys</label>
+              <input class="form-control" id="schematic-general-args" rows="3"></input>
             </div>
           
           
@@ -3769,6 +3789,8 @@ export const WEB_CONFIG = `
     config["general"]["general"]["go_to_definition_vhdl"] = element_value
     element_value = document.getElementById("general-general-go_to_definition_verilog").checked;
     config["general"]["general"]["go_to_definition_verilog"] = element_value
+    element_value = document.getElementById("general-general-developer_mode").checked;
+    config["general"]["general"]["developer_mode"] = element_value
     config["documentation"] = {}
     config["documentation"]["general"] = {}
     element_value = document.getElementById("documentation-general-language").value;
@@ -3907,6 +3929,8 @@ export const WEB_CONFIG = `
     config["schematic"]["general"] = {}
     element_value = document.getElementById("schematic-general-backend").value;
     config["schematic"]["general"]["backend"] = element_value
+    element_value = document.getElementById("schematic-general-args").value;
+    config["schematic"]["general"]["args"] = element_value
     config["templates"] = {}
     config["templates"]["general"] = {}
     element_value = document.getElementById("templates-general-header_file_path").value;
@@ -4234,6 +4258,7 @@ export const WEB_CONFIG = `
     document.getElementById("general-general-pypath").value = config["general"]["general"]["pypath"];
     document.getElementById("general-general-go_to_definition_vhdl").checked = config["general"]["general"]["go_to_definition_vhdl"];
     document.getElementById("general-general-go_to_definition_verilog").checked = config["general"]["general"]["go_to_definition_verilog"];
+    document.getElementById("general-general-developer_mode").checked = config["general"]["general"]["developer_mode"];
     document.getElementById("documentation-general-language").value = config["documentation"]["general"]["language"];
     document.getElementById("documentation-general-symbol_vhdl").value = config["documentation"]["general"]["symbol_vhdl"];
     document.getElementById("documentation-general-symbol_verilog").value = config["documentation"]["general"]["symbol_verilog"];
@@ -4292,6 +4317,7 @@ export const WEB_CONFIG = `
     document.getElementById("linter-vivado-verilog_arguments").value = config["linter"]["vivado"]["verilog_arguments"];
     document.getElementById("linter-vsg-arguments").value = config["linter"]["vsg"]["arguments"];
     document.getElementById("schematic-general-backend").value = config["schematic"]["general"]["backend"];
+    document.getElementById("schematic-general-args").value = config["schematic"]["general"]["args"];
     document.getElementById("templates-general-header_file_path").value = config["templates"]["general"]["header_file_path"];
     document.getElementById("templates-general-indent").value = config["templates"]["general"]["indent"];
     document.getElementById("templates-general-clock_generation_style").value = config["templates"]["general"]["clock_generation_style"];
