@@ -9,14 +9,12 @@ npm install
 npm run compile
 ```
 
-- With the installers: https://github.com/TerosTechnology/colibri2/releases
-
 ## Formatter
 
 - Arguments:
 
 ```
-carlos@carlos-pc:~/repo/colibri2 ./bin/run teroshdl:formatter --help
+carlos@carlos-pc:~/repo/colibri ./bin/run teroshdl:formatter --help
 Format HDL files.
 
 USAGE
@@ -79,48 +77,48 @@ DESCRIPTION
 ### Output format: Compact
 
 ```
-/home/teroshdl/repo/colibri2/tests/command/linter/helpers/sample_0.vhd: line 13, col 18, Error - ':' is expected instead of ';' (':' is expected instead of ';')
-/home/teroshdl/repo/colibri2/tests/command/linter/helpers/sample_0.vhd: line 13, col 18, Error - type mark expected in a subtype indication (type mark expected in a subtype indication)
-/home/teroshdl/repo/colibri2/tests/command/linter/helpers/sample_0.vhd: line 18, col 0, Error - '<=' is expected instead of 'end' ('<=' is expected instead of 'end')
-/home/teroshdl/repo/colibri2/tests/command/linter/helpers/sample_0.vhd: line 18, col 0, Error - primary expression expected (primary expression expected)
-/home/teroshdl/repo/colibri2/tests/command/linter/helpers/sample_0.vhd: line 16, col 19, Error - ';' expected at end of signal assignment (';' expected at end of signal assignment)
-/home/teroshdl/repo/colibri2/tests/command/linter/helpers/sample_0.vhd: line 16, col 19, Error - (found: 'end') ((found: 'end'))
-/home/teroshdl/repo/colibri2/tests/command/linter/helpers/sample_1.vhd: line 23, col 18, Error - no declaration for "sstd_logic" (no declaration for "sstd_logic")
-/home/teroshdl/repo/colibri2/tests/command/linter/helpers/sample_1.vhd: line 33, col 44, Error - no declaration for "insput2" (no declaration for "insput2")
-/home/teroshdl/repo/colibri2/tests/command/linter/helpers/sample_1.vhd: line 34, col 32, Error - can't associate 'wire' with signal interface "x" (can't associate 'wire' with signal interface "x")
-/home/teroshdl/repo/colibri2/tests/command/linter/helpers/sample_1.vhd: line 34, col 32, Error - (type of 'wire' is std_logic) ((type of 'wire' is std_logic))
-/home/teroshdl/repo/colibri2/tests/command/linter/helpers/sample_1.vhd: line 23, col 12, Error - (type of signal interface "x" is an erroneous type) ((type of signal interface "x" is an erroneous type))
+/home/teroshdl/repo/colibri/tests/command/linter/helpers/sample_0.vhd: line 13, col 18, Error - ':' is expected instead of ';' (':' is expected instead of ';')
+/home/teroshdl/repo/colibri/tests/command/linter/helpers/sample_0.vhd: line 13, col 18, Error - type mark expected in a subtype indication (type mark expected in a subtype indication)
+/home/teroshdl/repo/colibri/tests/command/linter/helpers/sample_0.vhd: line 18, col 0, Error - '<=' is expected instead of 'end' ('<=' is expected instead of 'end')
+/home/teroshdl/repo/colibri/tests/command/linter/helpers/sample_0.vhd: line 18, col 0, Error - primary expression expected (primary expression expected)
+/home/teroshdl/repo/colibri/tests/command/linter/helpers/sample_0.vhd: line 16, col 19, Error - ';' expected at end of signal assignment (';' expected at end of signal assignment)
+/home/teroshdl/repo/colibri/tests/command/linter/helpers/sample_0.vhd: line 16, col 19, Error - (found: 'end') ((found: 'end'))
+/home/teroshdl/repo/colibri/tests/command/linter/helpers/sample_1.vhd: line 23, col 18, Error - no declaration for "sstd_logic" (no declaration for "sstd_logic")
+/home/teroshdl/repo/colibri/tests/command/linter/helpers/sample_1.vhd: line 33, col 44, Error - no declaration for "insput2" (no declaration for "insput2")
+/home/teroshdl/repo/colibri/tests/command/linter/helpers/sample_1.vhd: line 34, col 32, Error - can't associate 'wire' with signal interface "x" (can't associate 'wire' with signal interface "x")
+/home/teroshdl/repo/colibri/tests/command/linter/helpers/sample_1.vhd: line 34, col 32, Error - (type of 'wire' is std_logic) ((type of 'wire' is std_logic))
+/home/teroshdl/repo/colibri/tests/command/linter/helpers/sample_1.vhd: line 23, col 12, Error - (type of signal interface "x" is an erroneous type) ((type of signal interface "x" is an erroneous type))
 
 11 problems
 ```
 
 ### Output format: HTML
 
-You can see an example of the linter report here [here](https://terostechnology.github.io/colibri2/example_report_linter_html.html)
+You can see an example of the linter report here [here](https://terostechnology.github.io/colibri/example_report_linter_html.html)
 
 ### Output format: HTML detailed
 
-You can see an example of the linter report here [here](https://terostechnology.github.io/colibri2/example_report_linter_html_detailed.html)
+You can see an example of the linter report here [here](https://terostechnology.github.io/colibri/example_report_linter_html_detailed.html)
 
 ### Output format: JUnit
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <testsuites>
-<testsuite package="GHDL" time="0" tests="6" errors="6" name="/home/carlos/repo/colibri2/tests/command/linter/helpers/sample_0.vhd">
-<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri2/tests/command/linter/helpers/sample_0"><failure message="&apos;:&apos; is expected instead of &apos;;&apos;"><![CDATA[line 13, col 18, Error - &apos;:&apos; is expected instead of &apos;;&apos; (':' is expected instead of ';')]]></failure></testcase>
-<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri2/tests/command/linter/helpers/sample_0"><failure message="type mark expected in a subtype indication"><![CDATA[line 13, col 18, Error - type mark expected in a subtype indication (type mark expected in a subtype indication)]]></failure></testcase>
-<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri2/tests/command/linter/helpers/sample_0"><failure message="&apos;&lt;=&apos; is expected instead of &apos;end&apos;"><![CDATA[line 18, col 0, Error - &apos;&lt;=&apos; is expected instead of &apos;end&apos; ('<=' is expected instead of 'end')]]></failure></testcase>
-<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri2/tests/command/linter/helpers/sample_0"><failure message="primary expression expected"><![CDATA[line 18, col 0, Error - primary expression expected (primary expression expected)]]></failure></testcase>
-<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri2/tests/command/linter/helpers/sample_0"><failure message="&apos;;&apos; expected at end of signal assignment"><![CDATA[line 16, col 19, Error - &apos;;&apos; expected at end of signal assignment (';' expected at end of signal assignment)]]></failure></testcase>
-<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri2/tests/command/linter/helpers/sample_0"><failure message="(found: &apos;end&apos;)"><![CDATA[line 16, col 19, Error - (found: &apos;end&apos;) ((found: 'end'))]]></failure></testcase>
+<testsuite package="GHDL" time="0" tests="6" errors="6" name="/home/carlos/repo/colibri/tests/command/linter/helpers/sample_0.vhd">
+<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri/tests/command/linter/helpers/sample_0"><failure message="&apos;:&apos; is expected instead of &apos;;&apos;"><![CDATA[line 13, col 18, Error - &apos;:&apos; is expected instead of &apos;;&apos; (':' is expected instead of ';')]]></failure></testcase>
+<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri/tests/command/linter/helpers/sample_0"><failure message="type mark expected in a subtype indication"><![CDATA[line 13, col 18, Error - type mark expected in a subtype indication (type mark expected in a subtype indication)]]></failure></testcase>
+<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri/tests/command/linter/helpers/sample_0"><failure message="&apos;&lt;=&apos; is expected instead of &apos;end&apos;"><![CDATA[line 18, col 0, Error - &apos;&lt;=&apos; is expected instead of &apos;end&apos; ('<=' is expected instead of 'end')]]></failure></testcase>
+<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri/tests/command/linter/helpers/sample_0"><failure message="primary expression expected"><![CDATA[line 18, col 0, Error - primary expression expected (primary expression expected)]]></failure></testcase>
+<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri/tests/command/linter/helpers/sample_0"><failure message="&apos;;&apos; expected at end of signal assignment"><![CDATA[line 16, col 19, Error - &apos;;&apos; expected at end of signal assignment (';' expected at end of signal assignment)]]></failure></testcase>
+<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri/tests/command/linter/helpers/sample_0"><failure message="(found: &apos;end&apos;)"><![CDATA[line 16, col 19, Error - (found: &apos;end&apos;) ((found: 'end'))]]></failure></testcase>
 </testsuite>
-<testsuite package="GHDL" time="0" tests="5" errors="5" name="/home/carlos/repo/colibri2/tests/command/linter/helpers/sample_1.vhd">
-<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri2/tests/command/linter/helpers/sample_1"><failure message="no declaration for &quot;sstd_logic&quot;"><![CDATA[line 23, col 18, Error - no declaration for &quot;sstd_logic&quot; (no declaration for "sstd_logic")]]></failure></testcase>
-<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri2/tests/command/linter/helpers/sample_1"><failure message="no declaration for &quot;insput2&quot;"><![CDATA[line 33, col 44, Error - no declaration for &quot;insput2&quot; (no declaration for "insput2")]]></failure></testcase>
-<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri2/tests/command/linter/helpers/sample_1"><failure message="can&apos;t associate &apos;wire&apos; with signal interface &quot;x&quot;"><![CDATA[line 34, col 32, Error - can&apos;t associate &apos;wire&apos; with signal interface &quot;x&quot; (can't associate 'wire' with signal interface "x")]]></failure></testcase>
-<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri2/tests/command/linter/helpers/sample_1"><failure message="(type of &apos;wire&apos; is std_logic)"><![CDATA[line 34, col 32, Error - (type of &apos;wire&apos; is std_logic) ((type of 'wire' is std_logic))]]></failure></testcase>
-<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri2/tests/command/linter/helpers/sample_1"><failure message="(type of signal interface &quot;x&quot; is an erroneous type)"><![CDATA[line 23, col 12, Error - (type of signal interface &quot;x&quot; is an erroneous type) ((type of signal interface "x" is an erroneous type))]]></failure></testcase>
+<testsuite package="GHDL" time="0" tests="5" errors="5" name="/home/carlos/repo/colibri/tests/command/linter/helpers/sample_1.vhd">
+<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri/tests/command/linter/helpers/sample_1"><failure message="no declaration for &quot;sstd_logic&quot;"><![CDATA[line 23, col 18, Error - no declaration for &quot;sstd_logic&quot; (no declaration for "sstd_logic")]]></failure></testcase>
+<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri/tests/command/linter/helpers/sample_1"><failure message="no declaration for &quot;insput2&quot;"><![CDATA[line 33, col 44, Error - no declaration for &quot;insput2&quot; (no declaration for "insput2")]]></failure></testcase>
+<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri/tests/command/linter/helpers/sample_1"><failure message="can&apos;t associate &apos;wire&apos; with signal interface &quot;x&quot;"><![CDATA[line 34, col 32, Error - can&apos;t associate &apos;wire&apos; with signal interface &quot;x&quot; (can't associate 'wire' with signal interface "x")]]></failure></testcase>
+<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri/tests/command/linter/helpers/sample_1"><failure message="(type of &apos;wire&apos; is std_logic)"><![CDATA[line 34, col 32, Error - (type of &apos;wire&apos; is std_logic) ((type of 'wire' is std_logic))]]></failure></testcase>
+<testcase time="0" name="GHDL" classname="/home/carlos/repo/colibri/tests/command/linter/helpers/sample_1"><failure message="(type of signal interface &quot;x&quot; is an erroneous type)"><![CDATA[line 23, col 12, Error - (type of signal interface &quot;x&quot; is an erroneous type) ((type of signal interface "x" is an erroneous type))]]></failure></testcase>
 </testsuite>
 </testsuites>
 ```
