@@ -113,7 +113,7 @@ Array.prototype.convertToRegexBlockWords = function (): RegExp {
 }
 
 function EscapeComments(arr: Array<string>): Array<string> {
-    var comments = [];
+    var comments : any[] = [];
     var count = 0;
     for (var i = 0; i < arr.length; i++) {
         var line: string = arr[i];
