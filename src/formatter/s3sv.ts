@@ -62,7 +62,7 @@ export class S3sv extends Base_formatter {
         const result_f: common.f_result = {
             code_formatted: "",
             command: result_p.command,
-            successful: false,
+            successful: result_p.successful,
             message: ""
         };
 

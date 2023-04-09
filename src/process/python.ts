@@ -71,7 +71,7 @@ export async function find_python3_in_list(binary: string[]): Promise<python_res
         if (result.successful === true) {
             p_result.python_path = await get_complete_python_path(bin);
             p_result.successful = true;
-            return p_result;
+            break;
         }
     }
     return p_result;
